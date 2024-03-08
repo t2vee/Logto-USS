@@ -4,6 +4,7 @@ compatibility_flags = [ "nodejs_compat" ]
 compatibility_date = "2024-03-04"
 
 [vars]
-LOGTO_DOMAIN = 'https://authen.mxmcoreau01.maxmess.services'
-JWKS_URI = 'https://authen.mxmcoreau01.maxmess.services/oidc/jwks'
-ISSUER = 'https://authen.mxmcoreau01.maxmess.services/oidc'
+LOGTO_DOMAIN = ''
+JWKS_URI = ''
+ISSUER = ''
+CORS = ''

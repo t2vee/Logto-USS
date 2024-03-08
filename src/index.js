@@ -51,6 +51,10 @@ async function verifyAuthToken(request) {
 
 
 
+router.options('*', (request) => corsHeaders(request));
+
+
+
 /**
  * Route handler for checking if a username exists.
  * Verifies the auth token and checks the specified username against the resource server.
@@ -71,11 +75,21 @@ router.get('/api/v1/check-username-exists/:username', async (request, context) =
 		}
 		const resourceResponse = await fetchResource(accessToken, request.params.username);
 		if (resourceResponse === '[]') {
-			return new Response(null, { status: 204 });
+			return new Response(null, {
+				status: 204,
+				headers: { 'Content-Type': 'text/plain',
+					'Access-Control-Allow-Origin': CORS,
+					'Access-Control-Allow-Methods': 'GET, OPTIONS',
+					'Access-Control-Allow-Headers': 'Authorization, Content-Type'
+				}, });
 		} else {
 			return new Response('Username taken', {
 				status: 200,
-				headers: { 'Content-Type': 'text/plain' },
+				headers: { 'Content-Type': 'text/plain',
+					'Access-Control-Allow-Origin': CORS,
+					'Access-Control-Allow-Methods': 'GET, OPTIONS',
+					'Access-Control-Allow-Headers': 'Authorization, Content-Type'
+				},
 			});
 		}
 	} catch (error) {
@@ -147,12 +161,37 @@ async function fetchResource(accessToken, username) {
 
 
 /**
+ * Creates a response with CORS headers.
+ *
+ * @param {Request} request - The incoming request to respond to.
+ * @returns {Response} A response object with appropriate CORS headers.
+ */
+function corsHeaders(request) {
+	const headers = {
+		'Access-Control-Allow-Origin': CORS,
+		'Access-Control-Allow-Methods': 'GET, OPTIONS',
+		'Access-Control-Allow-Headers': 'Authorization, Content-Type',
+		'Access-Control-Max-Age': '86400',
+	};
+	if (request.method === 'OPTIONS') {
+		return new Response(null, { headers });
+	}
+	return new Response(null, {
+		headers: {
+			...headers,
+		},
+	});
+}
+
+
+
+/**
  * Catch-all handler for any requests that do not match the defined routes.
  * This handler returns a 404 Not Found response, indicating that the requested resource does not exist.
  *
  * @returns {Response} A Fetch API response object with a 404 status code and a message indicating that the resource was not found.
  */
-router.all('*', () => new Response('Not Found', { status: 404, headers: { 'Content-Type': 'text/plain' } }));
+router.all('*', () => new Response('Not Found', { status: 404, headers: { 'Content-Type': 'text/plain','Access-Control-Allow-Origin': CORS, 'Access-Control-Allow-Methods': 'GET, OPTIONS', 'Access-Control-Allow-Headers': 'Authorization, Content-Type', 'Access-Control-Max-Age': '86400', } }));
 
 addEventListener('fetch', event => {
 	event.respondWith(router.handle(event.request, event));
