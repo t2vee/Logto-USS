@@ -9,5 +9,10 @@
   },
   "devDependencies": {
     "wrangler": "^3.0.0"
+  },
+  "dependencies": {
+    "itty-router": "^4.0.27",
+    "jose": "^5.2.3",
+    "jsdocs": "^0.0.1"
   }
 }
