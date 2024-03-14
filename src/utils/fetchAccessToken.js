@@ -4,9 +4,9 @@
  * @returns {Promise<string|null>} A promise that resolves with the access token as a string if successful, or null if an error occurs.
  * @throws {{ message: string, status: number }} Throws an error object with a message and status code if fetching the access token fails.
  */
-export default async function fetchAccessToken() {
-	const url = `${LOGTO_DOMAIN}/oidc/token`;
-	const credentials = btoa(`${LOGTO_APP_ID}:${LOGTO_APP_SECRET}`);
+export default async function fetchAccessToken(env) {
+	const url = `${env.LOGTO_DOMAIN}/oidc/token`;
+	const credentials = btoa(`${env.LOGTO_APP_ID}:${env.LOGTO_APP_SECRET}`);
 	const headers = {
 		'Authorization': `Basic ${credentials}`,
 		'Content-Type': 'application/x-www-form-urlencoded'
