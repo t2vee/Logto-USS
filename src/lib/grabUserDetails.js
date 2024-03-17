@@ -7,7 +7,7 @@ export default async function grabUserDetails(env, accessToken, userid) {
 	try {
 		const response = await fetch(url, { method: 'GET', headers });
 		if (!response.ok) {
-			throw { message: 'Failed to access resource due to network error - ERR 2344', status: response.status };
+			throw { message: 'Failed to access resource - ERR 2344', status: response.status };
 		}
 		const data = await response.json();
 		return JSON.stringify(data, null, 2);

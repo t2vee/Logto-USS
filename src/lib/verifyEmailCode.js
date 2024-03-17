@@ -1,4 +1,4 @@
-export default async function verifyEmailCodeFromUserId(env, accessToken, userEmail, verificationCode) {
+export default async function verifyEmailCode(env, accessToken, userEmail, verificationCode) {
 	const url = `${env.LOGTO_DOMAIN}/api/verification-codes/verify`;
 	const headers = {
 		'Authorization': `Bearer ${accessToken}`,

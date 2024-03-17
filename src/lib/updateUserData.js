@@ -8,7 +8,7 @@ export default async function updateUserData(env, accessToken, userData, userId)
 	try {
 		const response = await fetch(url, { method: 'PATCH', headers, body });
 		if (!response.ok) {
-			throw { message: 'Failed to access resource due to network error - ERR 5984', status: response.status };
+			throw { message: 'Failed to access resource - ERR 29034', status: response.status };
 		}
 		return response;
 	} catch (error) {

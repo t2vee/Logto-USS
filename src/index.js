@@ -1,368 +1,54 @@
-import { Router } from 'itty-router';
-import verifyAuthToken from "./utils/verifyAuthToken";
-import fetchAccessToken from "./utils/fetchAccessToken";
-import grabMFAMethods from "./controllers/grabMFAMethods";
-import checkUsernameAvailability from "./controllers/checkUsernameAvailability";
+import { error, json, Router } from 'itty-router'
 
-import updateUserData from "./controllers/updateUserData";
-import grabUserDetails from "./controllers/grabUserDetails";
-import decryptNumber from "./utils/decryptNumber";
+import checkTokenMiddleware from "./middleware/checkBearerTokenMiddleware";
+import withMiddleware from "./middleware/withMiddleware";
+import isMfaRequired from "./handlers/isMfaRequired";
 
-import sendEmailVerificationCodeFromUserId from "./controllers/sendEmailVerificationCodeFromUserId";
-import sendSMSVerificationCode from "./controllers/sendSMSVerificationCode";
 
-import verifySMSCode from "./controllers/verifySMSCode";
-import verifyEmailCodeFromUserId from "./controllers/verifyEmailCodeFromUserId";
-import prepareNumber from "./utils/prepareNumber";
+import pushEmail from "./handlers/mfaFlow/email/push";
+import verifyEmail from "./handlers/mfaFlow/email/verify";
+
+import pushSMS from "./handlers/mfaFlow/sms/push";
+import verifySMS from "./handlers/mfaFlow/sms/verify";
+
+
+import pushNewSMS from "./handlers/newVerifyMethod/sms/push";
+import verifyNewSMS from "./handlers/newVerifyMethod/sms/verify";
+import removeSMS from "./handlers/newVerifyMethod/sms/remove";
+
+import pushNewEmail from "./handlers/newVerifyMethod/email/push";
+import verifyNewEmail from "./handlers/newVerifyMethod/email/verify";
+
+
+import mfaMethods from "./handlers/mfaMethods";
+import usernameExists from "./handlers/usernameExists";
 
 
 const router = Router();
 
-router.options('*', (request) => corsHeaders(request));
+router
+	.all('*', withMiddleware(async (request, env, ctx) => {return checkTokenMiddleware(request, env);}))
+
+router.get('/api/v1/:userid/is-mfa-required', isMfaRequired);
 
 
-router.get('/api/v1/:userid/is-mfa-required', async (request, env) => {
-	if (!request.params || !request.params.userid) {
-		return new Response(JSON.stringify({ message: 'No UserID Provided' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-	}
-	try {
-		await verifyAuthToken(request, env);
-	} catch (e) {
-		return new Response('Token Check Failed', {status: 400});
-	}
-	try {
-		const value = await env.MFARequiredTokens.get(request.params.userid);
-		return value
-			? new Response(JSON.stringify({ status: false }), { status: 200, headers: { 'Content-Type': 'application/json' } })
-			: new Response(JSON.stringify({ status: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-	} catch (error) {
-		return new Response(JSON.stringify({ message: error.message }), { status: error.status || 500, headers: { 'Content-Type': 'application/json' } });
-	}
-});
+router.post('/api/v1/mfa-flow/:userid/push-email', pushEmail);
+router.post('/api/v1/mfa-flow/:userid/verify-email-code', verifyEmail);
+
+router.post('/api/v1/mfa-flow/:userid/push-sms', pushSMS);
+router.post('/api/v1/mfa-flow/:userid/verify-sms-code', verifySMS);
 
 
+router.post('/api/v1/user-data-entry/new-verify-method/push-sms', pushNewSMS);
+router.post('/api/v1/user-data-entry/new-verify-method/verify-sms', verifyNewSMS);
+router.post('/api/v1/user-data-entry/remove-verify-method/remove-sms', removeSMS);
 
-router.post('/api/v1/mfa-flow/:userid/push-email', async (request, env) => {
-	if (!request.params || !request.params.userid) {
-		return new Response(JSON.stringify({ message: 'No UserID Provided' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-	}
-	try {
-		await verifyAuthToken(request, env);
-	} catch (e) {
-		return new Response('Token Check Failed', {status: 400});
-	}
-	try {
-		const accessToken = await fetchAccessToken(env);
-		const userData = await grabUserDetails(env, accessToken, request.params.userid)
-		const usrDObj = JSON.parse(userData)
-		const response = await sendEmailVerificationCodeFromUserId(env, accessToken, usrDObj.primaryEmail);
-		return response.status === 204
-			? new Response(null, {
-			status: 204,
-			headers: { 'Content-Type': 'text/plain',
-				'Access-Control-Allow-Origin': env.CORS,
-				'Access-Control-Allow-Methods': 'POST, OPTIONS',
-				'Access-Control-Allow-Headers': 'Authorization, Content-Type'
-			}, })
-			: new Response(JSON.stringify({ status: 'failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
-	} catch (error) {
-		return new Response(JSON.stringify({ message: error.message }), { status: error.status || 500, headers: { 'Content-Type': 'application/json' } });
-	}
-});
+router.post('/api/v1/user-data-entry/new-verify-method/push-email', pushNewEmail);
+router.post('/api/v1/user-data-entry/new-verify-method/verify-email', verifyNewEmail);
 
 
-
-/**
- * Handles the POST request to verify an email code as part of the multi-factor authentication flow.
- * This route validates the `userid` and `verificationCode` parameters, ensuring the `userid` is a 12-character
- * alphanumeric string without symbols, and the `verificationCode` is a 6-digit code.
- *
- * @param {Request} request The incoming request object. It contains the `userid` as part of the URL path
- *                          and expects a `verification-code` as a URL search parameter.
- * @param {Object} env An object containing environment variables and other server-side configurations.
- *
- * @returns {Response} Returns a `Response` object. If the validation fails, it returns a 400 status code with
- *                     an error message. On successful validation but failed authentication or other errors,
- *                     it returns a 500 status code with an error message. If the verification is successful,
- *                     it returns a 204 status code and optionally updates the MFARequiredTokens state.
- *
- * @route `POST /api/v1/mfa-flow/:userid/verify-email-code`
- *
- * @example
- * // URL format: /api/v1/mfa-flow/a3sv2i21ubfy/verify-email-code?verification-code=123456
- *
- * @validation
- * - `userid` must be a 12-character alphanumeric string, validated against /^[a-zA-Z0-9]{12}$/ regex.
- * - `verificationCode` must be a 6-digit number, validated against /^\d{6}$/ regex.
- *
- * @error Handling
- * - Returns a 400 status code if `userid` or `verification-code` are missing or invalid.
- * - Returns a 500 status code with an error message if there's an error during the verification process or
- *   if the server encounters an unexpected error.
- */
-router.post('/api/v1/mfa-flow/:userid/verify-email-code', async (request, env) => {
-	const userIdPattern = /^[a-zA-Z0-9]{12}$/;
-	if (!request.params || !request.params.userid || !userIdPattern.test(request.params.userid)) {
-		return new Response(JSON.stringify({ message: 'Invalid UserID Provided' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-	}
-
-	const url = new URL(request.url);
-	const verificationCode = url.searchParams.get('verification-code');
-	const verificationCodePattern = /^\d{6}$/;
-	if (!verificationCode || !verificationCodePattern.test(verificationCode)) {
-		return new Response(JSON.stringify({ message: 'Invalid verification code provided' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-	}
-
-	try {
-		await verifyAuthToken(request, env);
-	} catch (e) {
-		return new Response('Token Check Failed', {status: 400});
-	}
-
-	try {
-		const accessToken = await fetchAccessToken(env);
-		const userData = await grabUserDetails(env, accessToken, request.params.userid);
-		const usrDObj = JSON.parse(userData);
-		const response = await verifyEmailCodeFromUserId(env, accessToken, usrDObj.primaryEmail, verificationCode);
-		return response.status === 204
-			? env.MFARequiredTokens.put(request.params.userid, false, {expirationTtl: 9000})  && new Response(null, {
-			status: 204,
-			headers: { 'Content-Type': 'text/plain',
-				'Access-Control-Allow-Origin': env.CORS,
-				'Access-Control-Allow-Methods': 'POST, OPTIONS',
-				'Access-Control-Allow-Headers': 'Authorization, Content-Type'
-			}, })
-			: new Response(JSON.stringify({ status: 'failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
-	} catch (error) {
-		return new Response(JSON.stringify({ message: error.message }), { status: error.status || 500, headers: { 'Content-Type': 'application/json' } });
-	}
-});
-
-
-
-router.post('/api/v1/mfa-flow/:userid/push-sms', async (request, env) => {
-	if (!request.params || !request.params.userid) {
-		return new Response(JSON.stringify({ message: 'No UserID Provided' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-	}
-	try {
-		await verifyAuthToken(request, env);
-	} catch (e) {
-		return new Response('Token Check Failed', {status: 400});
-	}
-	try {
-		const accessToken = await fetchAccessToken(env);
-		const userData = await grabUserDetails(env, accessToken, request.params.userid)
-		const usrDObj = JSON.parse(userData)
-		const response = await sendSMSVerificationCode(env, accessToken, await prepareNumber(usrDObj.primaryPhone));
-		return response.status === 204
-			? new Response(null, {
-				status: 204,
-				headers: { 'Content-Type': 'text/plain',
-					'Access-Control-Allow-Origin': env.CORS,
-					'Access-Control-Allow-Methods': 'POST, OPTIONS',
-					'Access-Control-Allow-Headers': 'Authorization, Content-Type'
-				}, })
-			: new Response(JSON.stringify({ status: 'failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
-	} catch (error) {
-		return new Response(JSON.stringify({ message: error.message }), { status: error.status || 500, headers: { 'Content-Type': 'application/json' } });
-	}
-});
-
-
-
-router.post('/api/v1/mfa-flow/:userid/verify-sms-code', async (request, env) => {
-	const userIdPattern = /^[a-zA-Z0-9]{12}$/;
-	if (!request.params || !request.params.userid || !userIdPattern.test(request.params.userid)) {
-		return new Response(JSON.stringify({ message: 'Invalid UserID Provided' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-	}
-
-	const url = new URL(request.url);
-	const verificationCode = url.searchParams.get('verification-code');
-	const verificationCodePattern = /^\d{6}$/;
-	if (!verificationCode || !verificationCodePattern.test(verificationCode)) {
-		return new Response(JSON.stringify({ message: 'Invalid verification code provided' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-	}
-
-	try {
-		await verifyAuthToken(request, env);
-	} catch (e) {
-		return new Response('Token Check Failed', {status: 400});
-	}
-
-	try {
-		const accessToken = await fetchAccessToken(env);
-		const userData = await grabUserDetails(env, accessToken, request.params.userid);
-		const usrDObj = JSON.parse(userData);
-		const response = await verifySMSCode(env, accessToken, await prepareNumber(usrDObj.primaryPhone), verificationCode);
-		return response.status === 204
-			? env.MFARequiredTokens.put(request.params.userid, false, {expirationTtl: 9000})  && new Response(null, {
-			status: 204,
-			headers: { 'Content-Type': 'text/plain',
-				'Access-Control-Allow-Origin': env.CORS,
-				'Access-Control-Allow-Methods': 'POST, OPTIONS',
-				'Access-Control-Allow-Headers': 'Authorization, Content-Type'
-			}, })
-			: new Response(JSON.stringify({ status: 'failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
-	} catch (error) {
-		return new Response(JSON.stringify({ message: error.message }), { status: error.status || 500, headers: { 'Content-Type': 'application/json' } });
-	}
-});
-
-
-
-router.post('/api/v1/user-data-entry/new-verify-method/verify-sms', async (request, env) => {
-	try {
-		await verifyAuthToken(request, env);
-	} catch (e) {
-		return new Response('Token Check Failed', {status: 400});
-	}
-	const url = new URL(request.url);
-	const verificationCode = url.searchParams.get('verification-code');
-	const userId = url.searchParams.get('user-id');
-	const verificationCodePattern = /^\d{6}$/;
-	if (!verificationCode || !verificationCodePattern.test(verificationCode)) {
-		return new Response(JSON.stringify({ message: 'Invalid verification code provided' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-	}
-	const requestData = await request.json();
-	const encryptedPhoneNumber = requestData.encryptedPhoneNumber;
-	const userNumber = await decryptNumber(env, encryptedPhoneNumber);
-	try {
-		const accessToken = await fetchAccessToken(env);
-		const response = await verifySMSCode(env, accessToken, await prepareNumber(userNumber), verificationCode);
-		if (response.status === 204) {
-			const userData = {
-				"primaryPhone": await prepareNumber(userNumber)
-			}
-			const updateResponse = await updateUserData(env, accessToken, userData, userId)
-			return response.status === 204 && updateResponse.status === 200
-				? new Response(null, {
-					status: 204,
-					headers: { 'Content-Type': 'text/plain',
-						'Access-Control-Allow-Origin': env.CORS,
-						'Access-Control-Allow-Methods': 'POST, OPTIONS',
-						'Access-Control-Allow-Headers': 'Authorization, Content-Type'
-					}, })
-				: new Response(JSON.stringify({ status: 'failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
-		} else {
-			return new Response(JSON.stringify({ status: 'failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
-		}
-	} catch (error) {
-		return new Response(JSON.stringify({ message: error.message }), { status: error.status || 500, headers: { 'Content-Type': 'application/json' } });
-	}
-});
-
-
-
-router.post('/api/v1/user-data-entry/new-verify-method/push-sms', async (request, env) => {
-	try {
-		await verifyAuthToken(request, env);
-	} catch (e) {
-		console.log(e)
-		return new Response('Token Check Failed', {status: 400});
-	}
-	const requestData = await request.json();
-	const encryptedPhoneNumber = requestData.encryptedPhoneNumber;
-
-	try {
-		const accessToken = await fetchAccessToken(env);
-		const userNumber = await decryptNumber(env, encryptedPhoneNumber);
-		const response = await sendSMSVerificationCode(env, accessToken, await prepareNumber(userNumber));
-		return response.status === 204
-			? new Response(null, {
-			status: 204,
-			headers: { 'Content-Type': 'text/plain',
-				'Access-Control-Allow-Origin': env.CORS,
-				'Access-Control-Allow-Methods': 'POST, OPTIONS',
-				'Access-Control-Allow-Headers': 'Authorization, Content-Type'
-			}, })
-			: new Response(JSON.stringify({ status: 'failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
-	} catch (error) {
-		return new Response(JSON.stringify({ message: error.message }), { status: error.status || 500, headers: { 'Content-Type': 'application/json' } });
-	}
-});
-
-
-
-
-router.get('/api/v1/get-user-info/:userid/mfa-methods', async (request, env) => {
-	if (!request.params || !request.params.userid) {
-		return new Response(JSON.stringify({ message: 'No UserID Provided' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-	}
-	try {
-		await verifyAuthToken(request, env);
-	} catch (e) {
-		return new Response('Token Check Failed', {status: 400});
-	}
-	try {
-		const accessToken = await fetchAccessToken(env);
-		const resourceResponse = await grabMFAMethods(env, accessToken, request.params.userid);
-		if (resourceResponse === '[]') {
-			return new Response('User has no MFA verification methods set up.', {
-				status: 200,
-				headers: { 'Content-Type': 'text/plain',
-					'Access-Control-Allow-Origin': env.CORS,
-					'Access-Control-Allow-Methods': 'GET, OPTIONS',
-					'Access-Control-Allow-Headers': 'Authorization, Content-Type'
-				}, });
-		} else {
-			return new Response(resourceResponse, {
-				status: 200,
-				headers: { 'Content-Type': 'text/plain',
-					'Access-Control-Allow-Origin': env.CORS,
-					'Access-Control-Allow-Methods': 'GET, OPTIONS',
-					'Access-Control-Allow-Headers': 'Authorization, Content-Type'
-				},
-			});
-		}
-	} catch (error) {
-		return new Response(JSON.stringify({ message: error.message }), { status: error.status || 500, headers: { 'Content-Type': 'application/json' } });
-	}
-});
-
-
-
-/**
- * Route handler for checking if a username exists.
- * Verifies the auth token and checks the specified username against the resource server.
- *
- * @param {Request} request - The Fetch API request object, expected to contain the username parameter in the URL path.
- * @param {Object} context - An object containing route parameters, among which is the username to check.
- * @returns {Response} A Fetch API response object with the result of the check or an error message.
- */
-router.get('/api/v1/check-username-exists/:username', async (request, env, context) => {
-	if (!request.params || !request.params.username) {
-		return new Response(JSON.stringify({ message: 'No Username Provided' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-	}
-	try {
-		await verifyAuthToken(request, env);
-		const accessToken = await fetchAccessToken(env);
-		if (!accessToken) {
-			return new Response('Failed to fetch access token', { status: 500 });
-		}
-		const resourceResponse = await checkUsernameAvailability(env, accessToken, request.params.username);
-		if (resourceResponse === '[]') {
-			return new Response(null, {
-				status: 204,
-				headers: { 'Content-Type': 'text/plain',
-					'Access-Control-Allow-Origin': env.CORS,
-					'Access-Control-Allow-Methods': 'GET, OPTIONS',
-					'Access-Control-Allow-Headers': 'Authorization, Content-Type'
-				}, });
-		} else {
-			return new Response('Username taken', {
-				status: 200,
-				headers: { 'Content-Type': 'text/plain',
-					'Access-Control-Allow-Origin': env.CORS,
-					'Access-Control-Allow-Methods': 'GET, OPTIONS',
-					'Access-Control-Allow-Headers': 'Authorization, Content-Type'
-				},
-			});
-		}
-	} catch (error) {
-		return new Response(JSON.stringify({ message: error.message }), { status: error.status || 500, headers: { 'Content-Type': 'application/json' } });
-	}
-});
-
+router.get('/api/v1/get-user-info/:userid/mfa-methods', mfaMethods);
+router.get('/api/v1/check-username-exists/:username', usernameExists);
 
 
 /**
@@ -388,8 +74,6 @@ function corsHeaders(request, env) {
 		},
 	});
 }
-
-
 
 /**
  * Catch-all handler for any requests that do not match the defined routes.
