@@ -1,3 +1,4 @@
+
 /**
  * Fetches a resource using the provided access token and checks for a specific username.
  *

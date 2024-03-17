@@ -16,12 +16,8 @@ export default async function verifyAuthToken(request, env) {
 		const JWKS = createRemoteJWKSet(new URL(env.JWKS_URI));
 		const { payload } = await jwtVerify(token, JWKS, {
 			issuer: env.ISSUER,
-			audience: 'https://default.logto.app/api', // Update this with your actual value
+			audience: 'https://default.logto.app/api',
 		});
-		// Optionally, perform additional validations, e.g., RBAC with scope
-		// if (!payload.scope.includes('some_scope')) {
-		//     throw new Error('Insufficient scope');
-		// }
 		return payload;
 	} catch (error) {
 		throw typeof error === 'string' ? { message: error, status: 401 } : error;

@@ -4,7 +4,6 @@ import verifyEmailCode from "../../../lib/verifyEmailCode";
 import checkMfaVerificationCode from "../../../middleware/checkVerificationCodeMiddleware";
 import emptySuccessResponse from "../../../responses/emptySuccessResponse";
 import checkUserIdMiddleware from "../../../middleware/checkUserIdMiddleware";
-
 /**
  * Handles the POST request to verify an email code as part of the multi-factor authentication flow.
  * This route validates the `userid` and `verificationCode` parameters, ensuring the `userid` is a 12-character

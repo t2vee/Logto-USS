@@ -1,3 +1,9 @@
+/**
+ * Converts a string to an ArrayBuffer.
+ *
+ * @param {string} str The string to be converted.
+ * @returns {ArrayBuffer} The ArrayBuffer representation of the input string.
+ */
 function str2ab(str) {
 	const buf = new ArrayBuffer(str.length);
 	const bufView = new Uint8Array(buf);
@@ -6,7 +12,17 @@ function str2ab(str) {
 	}
 	return buf;
 }
-
+/**
+ * Imports an RSA private key for use with the Web Crypto API.
+ *
+ * This function extracts the PEM contents from an environment variable, removes PEM headers and footers,
+ * and converts the base64-encoded private key into an ArrayBuffer using the str2ab function.
+ * It then uses the Web Crypto API to import the key for RSA-OAEP decryption.
+ *
+ * @param {Object} env An object containing environment-specific variables, including `NUMBER_DECRYPT_KEY` which holds the RSA private key in PEM format.
+ * @returns {Promise<CryptoKey>} A promise that resolves to the imported RSA private key as a CryptoKey object.
+ * @throws Will throw an error if the key import fails.
+ */
 export default async function importRsaPrivateKey(env) {
 	const pem = atob(env.NUMBER_DECRYPT_KEY)
 	const pemHeader = "-----BEGIN PRIVATE KEY-----";
