@@ -28,26 +28,36 @@ const router = Router();
 
 router
 	.all('*', withMiddleware(async (request, env, ctx) => {return checkTokenMiddleware(request, env);}))
-
+// Verified and Tested - Success - 18/03/24
 router.get('/api/v1/:userid/is-mfa-required', isMfaRequired);
 
-
+// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/mfa-flow/:userid/push-email', pushEmail);
+// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/mfa-flow/:userid/verify-email-code', verifyEmail);
 
+// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/mfa-flow/:userid/push-sms', pushSMS);
+// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/mfa-flow/:userid/verify-sms-code', verifySMS);
 
 
+// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/user-data-entry/new-verify-method/push-sms', pushNewSMS);
+// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/user-data-entry/new-verify-method/verify-sms', verifyNewSMS);
+// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/user-data-entry/remove-verify-method/remove-sms', removeSMS);
 
+// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/user-data-entry/new-verify-method/push-email', pushNewEmail);
+// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/user-data-entry/new-verify-method/verify-email', verifyNewEmail);
 
 
+// Verified and Tested - Success - 18/03/24
 router.get('/api/v1/get-user-info/:userid/mfa-methods', mfaMethods);
+// Verified and Tested - Success - 18/03/24
 router.get('/api/v1/check-username-exists/:username', usernameExists);
 
 
@@ -81,6 +91,7 @@ function corsHeaders(request, env) {
  *
  * @returns {Response} A Fetch API response object with a 404 status code and a message indicating that the resource was not found.
  */
+// Verified and Tested - Success - 18/03/24
 router.all('*', (env) => new Response('Not Found', { status: 404, headers: { 'Content-Type': 'text/plain','Access-Control-Allow-Origin': env.CORS, 'Access-Control-Allow-Methods': 'GET, OPTIONS', 'Access-Control-Allow-Headers': 'Authorization, Content-Type', 'Access-Control-Max-Age': '86400', } }));
 
 function handleRequest(request, env, ctx) {
