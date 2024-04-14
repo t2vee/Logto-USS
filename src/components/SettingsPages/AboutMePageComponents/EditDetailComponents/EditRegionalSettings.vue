@@ -10,8 +10,7 @@ import {
 } from '@/components/ui/select'
 import countries from '@/lib/countries.json.js';
 import { Check, ChevronsUpDown } from 'lucide-vue-next'
-
-import { ref } from 'vue'
+import {inject, ref} from 'vue'
 import { cn } from '@/lib/utils'
 import {
   Command,
@@ -26,41 +25,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { useForm, useField } from 'vee-validate';
-import * as z from 'zod';
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
 import {Button} from "@/components/ui/button/index.js";
 import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
 import Label from "@/components/ui/label/Label.vue";
 
-defineProps({
-  userData: {
-    type: Object,
-    required: true,
-  }
-});
-
-const RegionalInformationSchema = z.object({
-  country: z.string().min(1, { message: "Country is required" }),
-  timezone: z.string().min(1, { message: "Timezone is required" }),
-  language: z.string().min(1, { message: "Language is required" })
-});
+const userData = inject('userData')
 
 const open = ref(false)
 const value = ref({})
 const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK;
-
-
-const form = useForm({
-  validationSchema: RegionalInformationSchema,
-})
 </script>
 
 <template>
@@ -84,7 +57,7 @@ const form = useForm({
               </PopoverTrigger>
               <PopoverContent class="p-0">
                 <Command v-model="value">
-                  <CommandInput placeholder="Select a Country" v-bind="countryField" />
+                  <CommandInput placeholder="Select a Country" />
                   <CommandEmpty>No framework found.</CommandEmpty>
                   <CommandList>
                     <CommandGroup>
@@ -114,7 +87,7 @@ const form = useForm({
           </Label>
             <Select>
               <SelectTrigger class="w-[280px]">
-                <SelectValue placeholder="Select a timezone" v-bind="timezoneField" />
+                <SelectValue placeholder="Select a timezone" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
@@ -222,12 +195,12 @@ const form = useForm({
           </Label>
             <Select>
               <SelectTrigger class="w-[280px]">
-                <SelectValue placeholder="Select a Language" v-bind="languageField" />
+                <SelectValue placeholder="Select a Language" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectItem value="en-au" >
-                    English AU (EN-AU)
+                    (EN-AU) English AU
                   </SelectItem>
                 </SelectGroup>
               </SelectContent>

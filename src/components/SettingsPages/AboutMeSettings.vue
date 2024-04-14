@@ -1,6 +1,13 @@
 <script setup>
 import {defineAsyncComponent, inject} from 'vue'
-import {Card, CardContent, CardHeader } from "@/components/ui/card/index.js";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import DataTable from "@/components/SettingsPages/AboutMePageComponents/DataTable.vue";
 const AvatarEditor = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/AvatarComponents/AvatarEditor.vue"));
 const EditPhoneNumberDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditPhoneNumberDialog.vue"));
@@ -9,6 +16,7 @@ const EditBasicInformation = defineAsyncComponent(() => import("@/components/Set
 const EditEmailAddress = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditEmailAddress.vue"));
 const EditRegionalSettings = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditRegionalSettings.vue"));
 const AddPhoneNumberDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/AddPhoneNumberDialog.vue"));
+import { CircleUserRound, UserRound, BookType, Earth } from 'lucide-vue-next';
 
 const userData = inject('userData')
 
@@ -23,76 +31,38 @@ if (userData.value.username) {
 </script>
 
 <template>
-  <Card class="w-[600px] rounded-none" style="border-color: hsla(190, 49%, 78%, 0.2)">
-    <CardHeader>
-      <div class="flex align-middle items-center space-x-3 justify-between">
-        <p class="text-xl font-bold underline">Basic Information</p>
-        <EditDetailDialog title="Basic Information" :edit-page="EditBasicInformation" :user-data="userData" />
+   <div class="w-[600px]">
+      <CardTitle class="my-4">Personal Information</CardTitle>
+      <CardDescription>Manage your personal information, including phone numbers and email addresses where you can be reached.</CardDescription>
+      <div class="flex gap-4 mt-12">
+        <EditDetailDialog
+          title="Full Name"
+          :desc="userData.name ? userData.name : 'Not Set'"
+          :icon="UserRound"
+          :dialog-page="EditBasicInformation"
+        />
+        <EditDetailDialog
+            title="Username"
+            :desc="userData.username ?? userData.name ?? 'Not Set'"
+            :icon="CircleUserRound"
+            :dialog-page="EditBasicInformation"
+        />
       </div>
-    </CardHeader>
-    <CardContent>
-      <div class="flex items-center align-middle justify-between">
-        <DataTable :userData="basicInformationTable" />
-        <AvatarEditor :avatar-url="userData.picture" :user-name="userData.username ? userData.username : userData.name" />
-      </div>
-    </CardContent>
-  </Card>
-  <Card class="w-[600px] rounded-none" style="border-color: hsla(190, 49%, 78%, 0.2)">
-    <CardHeader>
-      <div class="flex align-middle items-center space-x-3 justify-between">
-        <p class="text-xl font-bold underline">Email Address</p>
-        <EditDetailDialog title="Email Address" :edit-page="EditEmailAddress" :user-data="userData" />
-      </div>
-    </CardHeader>
-    <CardContent>
-      <div class="flex align-middle items-center space-x-3">
-        <DataTable
-            verified
-            :detail-verified="userData.email_verified"
-            detail-type="email"
-            :userData="{
-            'Email': userData.email,
-          }" />
-      </div>
-    </CardContent>
-  </Card>
-  <Card class="w-[600px] rounded-none" style="border-color: hsla(190, 49%, 78%, 0.2)">
-    <CardHeader>
-      <div class="flex align-middle items-center space-x-3 justify-between">
-        <p class="text-xl font-bold underline">Phone Number</p>
-        <EditDetailDialog v-if="userData.phone_number" title="Phone Number" :edit-page="EditPhoneNumberDialog" :user-data="userData" />
-      </div>
-    </CardHeader>
-    <CardContent>
-      <div class="flex align-middle items-center space-x-3">
-        <DataTable
-            verified
-            v-if="userData.phone_number"
-            :detail-verified="userData.phone_number_verified"
-            detail-type="phone"
-            :userData="{
-            'Number': userData.phone_number,
-          }" />
-        <EditDetailDialog v-if="!userData.phone_number" title="Phone Number" :edit-page="AddPhoneNumberDialog" :user-data="userData" phone />
-      </div>
-    </CardContent>
-  </Card>
-  <Card class="w-[600px] rounded-none" style="border-color: hsla(190, 49%, 78%, 0.2)">
-    <CardHeader>
-      <div class="flex align-middle items-center space-x-3 justify-between">
-        <p class="text-xl font-bold underline">Regional Settings</p>
-        <EditDetailDialog title="Regional Settings" :edit-page="EditRegionalSettings" :user-data="userData" />
-      </div>
-    </CardHeader>
-    <CardContent>
-      <div class="flex align-middle items-center space-x-3">
-        <DataTable :userData="{
-            'Country': 'Not Set',
-            'Language': 'Not Set',
-          }" />
-      </div>
-    </CardContent>
-  </Card>
+       <div class="flex gap-4 mt-4">
+         <EditDetailDialog
+             title="Country/Region"
+             desc="Not Set"
+             :icon="Earth"
+             :dialog-page="EditRegionalSettings"
+         />
+         <EditDetailDialog
+             title="Language"
+             desc="English-AU"
+             :icon="BookType"
+             :dialog-page="EditRegionalSettings"
+         />
+       </div>
+  </div>
 </template>
 
 <style scoped>

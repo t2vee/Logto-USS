@@ -1,12 +1,12 @@
 <script setup>
-import { ref, onUnmounted } from 'vue';
-import { Button } from '@/components/ui/button'
+import {ref, onUnmounted, inject} from 'vue';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import MFAVerificationDialog
   from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/MfaVerificationDialog.vue";
-import AddPhone from '@/components/SettingsPages/AboutMePageComponents/AddPhone.vue';
 import { eventBus } from '@/lib/eventBus.js';
+import {Card, CardDescription, CardHeader, CardTitle} from "@/components/ui/card/index.js";
 
+const userData = inject('userData')
 
 const handleEvent = (data) => {
   isDialogOpen.value = data;
@@ -19,17 +19,14 @@ defineProps({
     type: String,
     required: true,
   },
-  editPage: {
+  icon: {
+    required: true,
+  },
+  desc: String,
+  dialogPage: {
     type: Object,
     required: true,
   },
-  userData: {
-    type: Object,
-    required: true,
-  },
-  phone: {
-    type: Boolean,
-  }
 })
 
 onUnmounted(cleanup);
@@ -38,14 +35,19 @@ onUnmounted(cleanup);
 <template>
   <Dialog v-model:open="isDialogOpen">
     <DialogTrigger as-child>
-      <AddPhone v-if="phone" />
-      <Button v-else variant="link">Edit</Button>
+      <Card class="h-32 w-full bg-gradient-to-tl from-[#6c888e] to-30% transition-all duration-200 hover:to-60% hover:border-[#abd9e2] hover:cursor-pointer">
+        <CardHeader>
+          <CardTitle class="flex justify-between text-lg">{{ title }}<component :is="icon" v-if="icon" color="#bdeffa" /></CardTitle>
+          <CardDescription>{{ desc }}</CardDescription>
+        </CardHeader>
+      </Card>
     </DialogTrigger>
     <MFAVerificationDialog
         :is-visible="isDialogOpen"
-        :edit-page="editPage"
+        :edit-page="dialogPage"
         :user-data="userData"
         :title="title"
+        :icon="icon"
         @update:isVisible="isDialogOpen = $event"
     />
   </Dialog>

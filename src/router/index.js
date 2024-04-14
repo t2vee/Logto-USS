@@ -31,7 +31,7 @@ const router = createRouter({
     {
       path: '/account/security',
       name: 'security',
-      component: defineAsyncComponent(() => import('@/views/AccountViews/SecurityView.vue')),
+      component: () => import('@/views/AccountViews/SecurityView.vue'),
     },
     {
       path: '/account/privacy',
@@ -53,7 +53,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const { isAuthenticated } = useLogto();
-  if (!isAuthenticated && to.name !== 'login' && to.name !== 'callback') {
+  if (!isAuthenticated.value && to.name !== 'login' && to.name !== 'callback') {
     return { name: 'login' }
   }
 })

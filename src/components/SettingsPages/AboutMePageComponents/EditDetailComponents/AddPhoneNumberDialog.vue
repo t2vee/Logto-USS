@@ -12,11 +12,8 @@ import key from '@/lib/encryptNumber.pem.js';
 import { toast } from 'vue-sonner'
 import MfaCodeInput from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/MfaCodeInput.vue";
 import { eventBus } from '@/lib/eventBus.js';
-import {Input} from "@/components/ui/input/index.js";
-
 
 const userData = inject('userData')
-const userConnectorPresent = inject('userConnectorPresent')
 
 const { getAccessToken } = useLogto();
 const phone = ref(0);

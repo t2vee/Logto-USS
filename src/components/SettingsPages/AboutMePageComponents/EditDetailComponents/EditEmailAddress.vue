@@ -49,7 +49,7 @@ const countdown = () => {
 
 const email = ref('');
 
-const emailRegex = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
+const emailRegex = new RegExp(/^[\w-\.]+(?:\+[\w]+)?@([\w-]+\.)+[\w-]{2,7}$/);
 
 const isEmailValid = computed(() => {
   return emailRegex.test(email.value);

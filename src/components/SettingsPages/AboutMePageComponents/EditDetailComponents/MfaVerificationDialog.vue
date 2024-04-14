@@ -3,7 +3,7 @@ import { watch, ref } from 'vue';
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useLogto } from "@logto/vue";
-import { Loader, Loader2 } from 'lucide-vue-next';
+import { Loader, Loader2, Shield } from 'lucide-vue-next';
 import axios from "axios";
 import {
   DialogClose,
@@ -15,6 +15,8 @@ import {
 import {Button} from "@/components/ui/button/index.js";
 import MfaCodeInput from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/MfaCodeInput.vue";
 import { toast } from 'vue-sonner'
+import { eventBus } from '@/lib/eventBus.js';
+
 
 const props = defineProps({
   isVisible: Boolean,
@@ -28,6 +30,9 @@ const props = defineProps({
   },
   userData: {
     type: Object,
+    required: true,
+  },
+  icon: {
     required: true,
   }
 });
@@ -134,6 +139,7 @@ const handleCodeComplete = async (code) => {
 };
 
 const checkMFA = async () => {
+  isLoading.value = true;
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   accessTokenRef.value = accessToken;
   try {
@@ -150,7 +156,8 @@ const checkMFA = async () => {
     isMfaRequired.value = response.data.status === true;
   } catch (error) {
     toast.error('Error checking MFA:',{description: 'Service Unavailable. Try again later'})
-    isMfaRequired.value = error.response && error.response.status === 404;
+    eventBus.emit('closeEditDetailDialog', false);
+    eventBus.emit('refreshUserData', true);
   } finally {
     isLoading.value = false;
   }
@@ -158,7 +165,6 @@ const checkMFA = async () => {
 
 function updateSelectedMethod(value) {
   selectedMfaMethod.value = value;
-  console.log(value)
 }
 
 watch(() => props.isVisible, (newValue) => {
@@ -172,7 +178,7 @@ watch(() => props.isVisible, (newValue) => {
 <template>
   <DialogContent class="sm:max-w-[425px]">
     <DialogHeader class="mb-3">
-      <DialogTitle>{{ !isLoading && isMfaRequired ? 'Verify Your Identity' : 'Edit ' + title }}</DialogTitle>
+      <DialogTitle class="flex items-center align-middle"><component class="mr-1" :is="!isLoading && isMfaRequired ? Shield : icon" />{{ !isLoading && isMfaRequired ? 'Verify Your Identity' : 'Edit Your ' + title }}</DialogTitle>
       <DialogDescription class="text-xs">
         {{ !isLoading && isMfaRequired ? "In order to verify your identity, we'll send you a code to your preferred method below." : '' }}
       </DialogDescription>

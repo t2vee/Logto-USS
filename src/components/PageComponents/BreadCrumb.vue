@@ -22,7 +22,7 @@ const currentRouteName = computed(() => {
   <nav aria-label="breadcrumb" class="text-sm font-semibold">
     <ol class="flex space-x-2">
       <li>
-        <a class="red" href="https://maxmess.services">
+        <a class="red" href="">
           Home
         </a>
       </li>

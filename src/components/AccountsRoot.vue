@@ -9,9 +9,10 @@ import FooterBar from "@/components/FooterBar.vue";
 import { Loader, Loader2 } from 'lucide-vue-next';
 import SocialIdentityLoginBanner from "@/components/PageComponents/SocialIdentityLoginBanner.vue";
 import { eventBus } from '@/lib/eventBus.js';
+import axios from "axios";
+import {toast} from "vue-sonner";
 
-const { getIdTokenClaims, fetchUserInfo } = useLogto();
-const userId = ref();
+const { getIdTokenClaims, fetchUserInfo, getAccessToken } = useLogto();
 const userInfo = ref(null);
 const isLoading = ref(true);
 const userConnectorPresent = ref(false);
@@ -24,19 +25,26 @@ const handleEvent = (data) => {
 async function loadData() {
   try {
     const claims = await getIdTokenClaims();
-    userId.value = claims.sub;
-    userInfo.value = await fetchUserInfo();
+    const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
+    const logtoRepsonse = await fetchUserInfo();
+    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/${claims.sub}/extended-user-info`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    userInfo.value = Object.assign(response, logtoRepsonse)
     if (userInfo.value.identities.discord || userInfo.value.identities.github || userInfo.value.identities.google) {
       userConnectorPresent.value = true;
     }
+  } catch (error) {
+    toast.error('Error grabbing User Information:',{description: 'Service Unavailable. Try again later'})
   } finally {
     isLoading.value = false;
   }
 }
 
 onMounted(loadData);
-
-const readyUserInfo = computed(() => userInfo.value ? userInfo.value : null);
 
 defineProps({
   page: {
@@ -46,6 +54,7 @@ defineProps({
 });
 
 provide('userData', userInfo)
+provide('moreUserData', )
 provide('userConnectorPresent', userConnectorPresent)
 
 const cleanup = eventBus.on('refreshUserData', handleEvent);
@@ -53,24 +62,24 @@ onUnmounted(cleanup);
 </script>
 
 <template>
-  <div v-if="!isLoading" class="flex flex-col h-screen">
-    <NavBar :user-data="readyUserInfo" />
-    <BreadCrumb class="m-0.5" />
-    <div>
-      <div class="flex gap-1 p-4">
+  <div class="flex flex-col items-center">
+    <div class="flex flex-col h-screen max-w-[1000px] ">
+      <NavBar />
+      <div v-if="!isLoading" class="flex justify-between gap-6">
         <SideBar />
-        <div class="flex-1 flex-grow overflow-auto">
-          <CardContent>
-            <SocialIdentityLoginBanner v-if="userConnectorPresent" :user-connector="readyUserInfo.identities" />
-            <component :is="page" />
-          </CardContent>
+          <div class="flex-1 flex-grow overflow-auto">
+            <CardContent>
+              <component :is="page" />
+            </CardContent>
+          </div>
+      </div>
+      <div v-else-if="isLoading" class="w-full">
+        <div class="flex items-center align-middle justify-center">
+          <Loader class="animate-spin"/>Loading user information...
         </div>
       </div>
     </div>
-    <FooterBar class="mt-auto" />
-  </div>
-  <div v-else-if="isLoading" class="flex items-center align-middle">
-    <Loader class="animate-spin"/>Loading user information...
+    <!--<FooterBar class="mt-auto" />-->
   </div>
 </template>
 

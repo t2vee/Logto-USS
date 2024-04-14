@@ -1,33 +1,5 @@
-@import './base.css';
-
-body {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 0;
-  background-color: hsl(var(--background));
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  color: hsl(var(--foreground));
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "rlig" 1, "calt" 1;
-}
-
-#app {
-  @apply w-full flex items-center justify-center px-12;
-}
-
-html, body {
-  height: 100%;
-}
-#app {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+* {
+  color: #d9d5d0;
 }
 
 a,
@@ -64,18 +36,5 @@ a,
 @media (hover: hover) {
   a:hover {
     color: hsl(187, 26%, 58%);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
   }
 }

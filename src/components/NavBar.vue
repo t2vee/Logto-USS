@@ -1,44 +1,46 @@
 <script setup>
-import Separator from "@/components/ui/separator/Separator.vue";
-
-defineProps({
-  userData: {
-    type: Object,
-    required: true,
-  },
-});
-
 import { useLogto } from "@logto/vue";
-import {
-  Card,
-  CardTitle,
-} from '@/components/ui/card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Label } from '@/components/ui/label'
+import { CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb'
 
 const { signOut } = useLogto();
 const onClickSignOut = () => signOut('http://127.0.0.1:5173/');
 </script>
 
 <template>
-  <Card class="w-full h-[40px] flex items-center align-middle justify-between pl-2">
+  <div class="min-h-12 min-w-[852px]"></div>
+  <div class="w-full h-12 flex align-middle items-center justify-between">
     <CardTitle class="text-xl">Account Dashboard</CardTitle>
-    <div class="flex items-center align-middle">
-      <div class="flex items-center align-middle">
-        <Avatar id="avatar" class="w-7 h-7 mr-1">
-          <AvatarImage :src="userData.picture" alt="{{ userData.username }}-avatar" />
-          <AvatarFallback>{{ userData.username ? userData.username : userData.name }}</AvatarFallback>
-        </Avatar>
-        <Label for="avatar">Welcome, {{ userData.username ? userData.username : userData.name }}</Label>
-      </div>
-      <Separator orientation="vertical" class="ml-3 h-[25px] text-white " />
-      <Button @click="onClickSignOut" variant="link">Log Out</Button>
-      <Button as-child style="border-radius: var(--radius);border-top-left-radius:0;border-bottom-left-radius:0;">
-        <a href="">
-          Home
-        </a>
-      </Button>
-    </div>
-  </Card>
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/">
+            Home
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/account">
+            My Account
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>Personal Information</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+    <Button @click="onClickSignOut" class="h-8 rounded-xl">
+      Log Out
+    </Button>
+  </div>
+  <div class="min-h-12"></div>
 </template>

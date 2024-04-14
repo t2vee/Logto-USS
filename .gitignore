@@ -31,4 +31,4 @@ coverage
 
 encryptNumber.pem.js
 
-.env
+*.env*
