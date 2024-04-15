@@ -21,7 +21,7 @@ export default async (request, env) => {
 			}
 			const updateResponse = await updateUserData(env, accessToken, userData, userId)
 			return response.status === 204 && updateResponse.status === 200
-				? emptySuccessResponse
+				? emptySuccessResponse(env)
 				: failedResponse;
 		} else {
 			return failedResponse;

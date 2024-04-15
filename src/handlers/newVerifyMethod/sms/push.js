@@ -18,6 +18,6 @@ export default async (request, env) => {
 			? emptySuccessResponse(env)
 			: failedResponse();
 	} catch (error) {
-		return failedResponseWithMessage(error);
+		return failedResponseWithMessage('ERR 29380');
 	}
 }

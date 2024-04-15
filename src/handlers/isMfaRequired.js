@@ -1,4 +1,5 @@
 import checkUserIdMiddleware from "../middleware/checkUserIdMiddleware";
+import successJSONResponse from "../responses/successJSONResponse";
 
 export default async (request, env) => {
 	await checkUserIdMiddleware(request)
@@ -6,8 +7,8 @@ export default async (request, env) => {
 	try {
 		const value = await env.MFARequiredTokens.get(request.params.userid);
 		return value
-			? new Response(JSON.stringify({ status: false }), { status: 200, headers: { 'Content-Type': 'application/json' } })
-			: new Response(JSON.stringify({ status: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+			? successJSONResponse(env, { status: false })
+			: successJSONResponse(env, { status: true });
 	} catch (error) {
 		return error(400, error.message);
 	}
