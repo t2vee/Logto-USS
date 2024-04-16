@@ -25,61 +25,38 @@ import usernameExists from "./handlers/userData/usernameExists";
 import extendedUserData from "./handlers/userData/extendedUserData";
 
 import corsPreflight from "./headers/corsPreflight";
+import HandleSpotifyUserInfoEndpoint from "./lib/handleSpotifyUserInfoEndpoint";
 
 
 const router = Router();
 router.options('*', corsHeaders)
 
+router.get('/api/v1/oauth-user-info/endpoint/api-spotify-com/v1/me', HandleSpotifyUserInfoEndpoint)
+
 router
 	.all('*', withMiddleware(async (request, env, ctx) => {return checkTokenMiddleware(request, env);}))
 
 
-// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/mfa-flow/:userid/push-email', pushEmail);
-//router.options('/api/v1/mfa-flow/:userid/push-email', preflightResponse(['POST']))
-// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/mfa-flow/:userid/verify-email-code', verifyEmail);
-//router.options('/api/v1/mfa-flow/:userid/verify-email-code', preflightResponse(['POST']))
 
-// Verified and Tested - Success - 18/03/24
+
 router.post('/api/v1/mfa-flow/:userid/push-sms', pushSMS);
-//router.options('/api/v1/mfa-flow/:userid/push-sms', preflightResponse(['POST']))
-// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/mfa-flow/:userid/verify-sms-code', verifySMS);
-//router.options('/api/v1/mfa-flow/:userid/verify-sms-code', preflightResponse(['POST']))
 
-// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/user-data-entry/new-verify-method/push-sms', pushNewSMS);
-//router.options('/api/v1/user-data-entry/new-verify-method/push-sms', preflightResponse(['POST']))
-// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/user-data-entry/new-verify-method/verify-sms', verifyNewSMS);
-//router.options('/api/v1/user-data-entry/new-verify-method/verify-sms', preflightResponse(['POST']))
-// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/user-data-entry/remove-verify-method/remove-sms', removeSMS);
-//router.options('/api/v1/user-data-entry/remove-verify-method/remove-sms', preflightResponse(['POST']))
 
-// Verified and Tested - Success - 18/03/24
+
 router.post('/api/v1/user-data-entry/new-verify-method/push-email', pushNewEmail);
-//router.options('/api/v1/user-data-entry/new-verify-method/push-email', preflightResponse(['POST']))
-// Verified and Tested - Success - 18/03/24
 router.post('/api/v1/user-data-entry/new-verify-method/verify-email', verifyNewEmail);
-//router.options('/api/v1/user-data-entry/new-verify-method/verify-email', preflightResponse(['POST']))
 
 
-
-// Verified and Tested - Success - 18/03/24
 router.get('/api/v1/:userid/is-mfa-required', isMfaRequired);
-//router.options('/api/v1/:userid/is-mfa-required', preflightResponse(['GET']))
-// Verified and Tested - Success - 18/03/24
 router.get('/api/v1/get-user-info/:userid/mfa-methods', mfaMethods);
-//router.options('/api/v1/get-user-info/:userid/mfa-methods', preflightResponse(['GET']))
-// Verified and Tested - Success - 18/03/24
 router.get('/api/v1/check-username-exists/:username', usernameExists);
-//router.options('/api/v1/check-username-exists/:username', preflightResponse(['GET']))
-
-//router.options('/api/v1/:userid/extended-user-info', preflightResponse)
 router.get('/api/v1/:userid/extended-user-info', extendedUserData);
-
 
 
 /**

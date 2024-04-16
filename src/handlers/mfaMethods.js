@@ -10,7 +10,7 @@ export default async (request, env) => {
 		const accessToken = await fetchAccessToken(env);
 		const resourceResponse = await grabMFAMethods(env, accessToken, request.params.userid);
 		if (resourceResponse === '[]') {
-			return successResponse(env, 'User has no MFA verification methods set up.');
+			return successResponse(env, '["none"]');
 		} else {
 			return successResponse(env, resourceResponse);
 		}
