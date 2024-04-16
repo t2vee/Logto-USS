@@ -9,12 +9,12 @@ const router = createRouter({
   routes: [
 
     {
-      path: '/login',
+      path: '/oauth/login',
       name: 'login',
       component: LoginView
     },
     {
-      path: '/callback',
+      path: '/oauth/callback',
       name: 'callback',
       component: AuthCallbackView,
     },
@@ -36,12 +36,17 @@ const router = createRouter({
     {
       path: '/account/privacy',
       name: 'privacy',
-      component: defineAsyncComponent(() => import('@/views/AccountViews/PrivacyView.vue')),
+      component: () => import('@/views/AccountViews/PrivacyView.vue'),
     },
     {
       path: '/account/notifications',
       name: 'notifications',
       component: defineAsyncComponent(() => import('@/views/AccountViews/NotificationView.vue')),
+    },
+    {
+      path: '/account/connections',
+      name: 'connections',
+      component: () => import('@/views/AccountViews/ConnectionsView.vue'),
     },
     {
       path: '/account/yourdata',

@@ -1,10 +1,10 @@
 <script setup>
 import AccountsRoot from "@/components/AccountsRoot.vue";
-import ProfileSettings from "@/components/SettingsPages/AboutMeSettings.vue";
+import Connections from "@/components/SettingsPages/ConnectionSettings.vue";
 </script>
 
 <template>
-<AccountsRoot :page="ProfileSettings" />
+  <AccountsRoot :page="Connections" />
 </template>
 
 <style scoped>

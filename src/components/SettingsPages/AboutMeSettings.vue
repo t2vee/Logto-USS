@@ -1,21 +1,12 @@
 <script setup>
 import {defineAsyncComponent, inject} from 'vue'
 import {
-  Card,
-  CardContent,
   CardDescription,
-  CardFooter,
-  CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import DataTable from "@/components/SettingsPages/AboutMePageComponents/DataTable.vue";
-const AvatarEditor = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/AvatarComponents/AvatarEditor.vue"));
-const EditPhoneNumberDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditPhoneNumberDialog.vue"));
 const EditDetailDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditDetailDialog.vue"));
 const EditBasicInformation = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditBasicInformation.vue"));
-const EditEmailAddress = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditEmailAddress.vue"));
 const EditRegionalSettings = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditRegionalSettings.vue"));
-const AddPhoneNumberDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/AddPhoneNumberDialog.vue"));
 import { CircleUserRound, UserRound, BookType, Earth } from 'lucide-vue-next';
 
 const userData = inject('userData')

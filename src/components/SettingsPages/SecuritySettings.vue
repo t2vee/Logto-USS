@@ -62,15 +62,16 @@ onMounted(grabMfaOptions)
       />
       <EditDetailDialog
           title="Account Security"
-          :desc="`${mfaOptions.length} MFA Methods Set Up`"
+          :desc="`${mfaOptions.length > 1 ? mfaOptions.length : 'No'} MFA Methods Set Up`"
           :icon="BookType"
           :dialog-page="EditRegionalSettings"
       />
     </div>
     <div class="flex gap-4 mt-4">
       <EditDetailDialog
+          disabled
           title="Recovery Steps"
-          desc="**********"
+          desc="Not Avaliable"
           :icon="KeyRound"
           :dialog-page="EditRegionalSettings"
       />
