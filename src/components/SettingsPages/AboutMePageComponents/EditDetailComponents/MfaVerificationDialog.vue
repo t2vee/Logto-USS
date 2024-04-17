@@ -20,6 +20,7 @@ import { eventBus } from '@/lib/eventBus.js';
 
 const props = defineProps({
   isVisible: Boolean,
+  dataRequest: Boolean,
   title: {
     type: String,
     required: true,
@@ -178,7 +179,7 @@ watch(() => props.isVisible, (newValue) => {
 <template>
   <DialogContent class="sm:max-w-[425px]">
     <DialogHeader class="mb-3">
-      <DialogTitle class="flex items-center align-middle"><component class="mr-1" :is="!isLoading && isMfaRequired ? Shield : icon" />{{ !isLoading && isMfaRequired ? 'Verify Your Identity' : 'Edit Your ' + title }}</DialogTitle>
+      <DialogTitle class="flex items-center align-middle"><component class="mr-1" :is="!isLoading && isMfaRequired ? Shield : icon" />{{ !isLoading && isMfaRequired ? 'Verify Your Identity' : !dataRequest ? 'Edit Your ' + title : title }}</DialogTitle>
       <DialogDescription class="text-xs">
         {{ !isLoading && isMfaRequired ? "In order to verify your identity, we'll send you a code to your preferred method below." : '' }}
       </DialogDescription>

@@ -27,7 +27,8 @@ defineProps({
     required: true,
   },
   desc: String,
-  disabled: Boolean
+  disabled: Boolean,
+  dataRequest: Boolean,
 })
 
 onUnmounted(cleanup);
@@ -50,6 +51,7 @@ onUnmounted(cleanup);
       </Card>
     </DialogTrigger>
     <MFAVerificationDialog
+        :data-request="dataRequest"
         :is-visible="isDialogOpen"
         :edit-page="dialogPage"
         :user-data="userData"

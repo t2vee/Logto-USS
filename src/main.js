@@ -3,6 +3,7 @@ import './assets/base.css'
 import './assets/index.css'
 
 import { createApp } from 'vue'
+import VueMatomo from 'vue-matomo'
 import { createPinia } from 'pinia'
 import { createLogto, UserScope  } from '@logto/vue';
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
@@ -10,7 +11,7 @@ import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
 import App from './App.vue'
 import router from './router'
 const app = createApp(App)
-const config = {
+const logtoConfig = {
     endpoint: import.meta.env.VITE_LOGTO_ENDPOINT,
     appId: import.meta.env.VITE_LOGTO_APPID,
     scopes: [UserScope.Profile, UserScope.Email, UserScope.Phone, UserScope.CustomData, UserScope.Identities, UserScope.Organizations],
@@ -20,6 +21,15 @@ const config = {
 app.use(createPinia())
 app.use(router)
 app.use(autoAnimatePlugin)
-app.use(createLogto, config);
+app.use(createLogto, logtoConfig);
+app.use(VueMatomo, {
+    host: 'https://eye.mxscloud.net',
+    siteId: 2,
+    trackerFileName: 'matomo',
+    router: router,
+    enableLinkTracking: true,
+})
 
 app.mount('#app')
+
+window._paq.push(['trackPageView']);

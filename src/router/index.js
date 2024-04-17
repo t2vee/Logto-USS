@@ -22,32 +22,32 @@ const router = createRouter({
     },
     {
       path: '/account/aboutme',
-      name: 'aboutme',
+      name: 'Personal Information',
       component: () => import('@/views/AboutMeView.vue'),
     },
     {
       path: '/account/security',
-      name: 'security',
+      name: 'Sign-In & Security',
       component: () => import('@/views/SecurityView.vue'),
     },
     {
       path: '/account/privacy',
-      name: 'privacy',
+      name: 'Privacy',
       component: () => import('@/views/PrivacyView.vue'),
     },
     {
       path: '/account/notifications',
-      name: 'notifications',
+      name: 'Notifications',
       component: () => import('@/views/NotificationView.vue'),
     },
     {
       path: '/account/connections',
-      name: 'connections',
+      name: 'Connections',
       component: () => import('@/views/ConnectionsView.vue'),
     },
     {
       path: '/account/yourdata',
-      name: 'yourdata',
+      name: 'Your Data',
       component: () => import('@/views/DataDownloadView.vue'),
     },
   ]

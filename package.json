@@ -31,6 +31,7 @@
     "vee-validate": "^4.12.5",
     "vitepress": "^1.0.0-rc.44",
     "vue": "^3.4.15",
+    "vue-matomo": "^4.2.0",
     "vue-multi-number-input": "^0.1.5",
     "vue-router": "^4.2.5",
     "vue-sonner": "^1.1.2",

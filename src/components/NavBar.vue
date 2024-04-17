@@ -1,5 +1,7 @@
 <script setup>
+import { ref } from 'vue';
 import { useLogto } from "@logto/vue";
+import { useRoute } from 'vue-router';
 import { CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -12,6 +14,9 @@ import {
 } from '@/components/ui/breadcrumb'
 
 const { signOut } = useLogto();
+const route = useRoute();
+const pathName = ref('');
+pathName.value = route.name
 const onClickSignOut = () => signOut('http://127.0.0.1:5173/');
 </script>
 
@@ -34,7 +39,7 @@ const onClickSignOut = () => signOut('http://127.0.0.1:5173/');
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage>Personal Information</BreadcrumbPage>
+          <BreadcrumbPage>{{ pathName }}</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
