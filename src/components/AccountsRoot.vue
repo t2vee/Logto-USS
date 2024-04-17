@@ -2,7 +2,7 @@
 import { useLogto } from "@logto/vue";
 import {ref, onMounted, provide, onUnmounted} from "vue";
 import { CardContent } from '@/components/ui/card';
-import SideBar from "@/components/SIdeBar.vue";
+import SideBar from "@/components/SideBar.vue";
 import NavBar from "@/components/NavBar.vue";
 import { Loader, Loader2 } from 'lucide-vue-next';
 import { eventBus } from '@/lib/eventBus.js';
@@ -51,7 +51,6 @@ defineProps({
 });
 
 provide('userData', userInfo)
-provide('moreUserData', )
 provide('userConnectorPresent', userConnectorPresent)
 
 const cleanup = eventBus.on('refreshUserData', handleEvent);
@@ -77,7 +76,6 @@ onUnmounted(cleanup);
       </div>
       <p class="text-xs text-gray-500 mt-8">MXS Online Services @ 2024 || Web Build 90a6f1e - API Build 144b5bc</p>
     </div>
-    <!--<FooterBar class="mt-auto" />-->
   </div>
 </template>
 

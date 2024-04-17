@@ -1,8 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { defineAsyncComponent } from 'vue';
 import { useLogto } from "@logto/vue";
-import LoginView from '@/views/AuthLoginView.vue'
-import AuthCallbackView from "@/views/AuthCallbackView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,12 +8,12 @@ const router = createRouter({
     {
       path: '/oauth/login',
       name: 'login',
-      component: LoginView
+      component: () => import('@/views/AuthLoginView.vue'),
     },
     {
       path: '/oauth/callback',
       name: 'callback',
-      component: AuthCallbackView,
+      component: () => import('@/views/AuthCallbackView.vue'),
     },
     {
       path: '/',
@@ -26,32 +23,32 @@ const router = createRouter({
     {
       path: '/account/aboutme',
       name: 'aboutme',
-      component: () => import('@/views/AccountViews/AboutMeView.vue'),
+      component: () => import('@/views/AboutMeView.vue'),
     },
     {
       path: '/account/security',
       name: 'security',
-      component: () => import('@/views/AccountViews/SecurityView.vue'),
+      component: () => import('@/views/SecurityView.vue'),
     },
     {
       path: '/account/privacy',
       name: 'privacy',
-      component: () => import('@/views/AccountViews/PrivacyView.vue'),
+      component: () => import('@/views/PrivacyView.vue'),
     },
     {
       path: '/account/notifications',
       name: 'notifications',
-      component: defineAsyncComponent(() => import('@/views/AccountViews/NotificationView.vue')),
+      component: () => import('@/views/NotificationView.vue'),
     },
     {
       path: '/account/connections',
       name: 'connections',
-      component: () => import('@/views/AccountViews/ConnectionsView.vue'),
+      component: () => import('@/views/ConnectionsView.vue'),
     },
     {
       path: '/account/yourdata',
       name: 'yourdata',
-      component: defineAsyncComponent(() => import('@/views/AccountViews/NotificationView.vue')),
+      component: () => import('@/views/DataDownloadView.vue'),
     },
   ]
 })

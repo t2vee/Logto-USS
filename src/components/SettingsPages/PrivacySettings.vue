@@ -21,7 +21,7 @@ const userData = inject('userData')
           :icon="TextSearch"
           :dialog-page="AddPhoneNumberDialog"
       />
-      <p class="w-3/4 text-sm">Control how third party applications can access your account data. Fullly blocking access will cause your details to be omitted when requested.</p>
+      <p class="w-3/4 text-sm">Control how third party applications can access your account data. Fully blocking access will cause your details to be omitted when requested.</p>
     </div>
     <div class="flex gap-16 mt-4 items-center">
       <EditDetailDialog
