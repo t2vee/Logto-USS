@@ -1,1 +1,1 @@
-export default (error) => new Response(JSON.stringify({ message: error.message }), { status: error.status || 500, headers: { 'Content-Type': 'application/json' } })
+export default (error) => Response.json(error, { status: error.status || 401, headers: { 'Content-Type': 'application/json' } })

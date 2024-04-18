@@ -1,9 +1,18 @@
 import successJSONResponse from "../responses/successJSONResponse";
+import failedResponseWithMessage from "../responses/failedResponseWithMessage";
+import extractBearerTokenFromHeaders from "../utils/extractHeaders";
 
 export default async (request, env) => {
+	if (!request.query || !request.query.token) {
+		return failedResponseWithMessage('No Token Provided');
+	}
+	if (request.query.token !== env.TOKEN) {
+		return failedResponseWithMessage('Invalid Token Provided');
+	}
 	const url = `https://api.spotify.com/v1/me`;
 	const headers = request.headers
 	try {
+		const t = extractBearerTokenFromHeaders(request.headers);
 		const response = await fetch(url, { method: 'GET', headers });
 		if (!response.ok) {
 			throw { message: 'Failed to access resource - ERR 6789', status: response.status };
@@ -23,6 +32,6 @@ export default async (request, env) => {
 		return successJSONResponse(env, payload);
 	} catch (error) {
 		console.error('Error accessing resource:', error);
-		throw typeof error === 'string' ? { message: error, status: 500 } : error;
+		return failedResponseWithMessage(error);
 	}
 }
