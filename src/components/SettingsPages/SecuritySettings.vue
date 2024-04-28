@@ -2,12 +2,11 @@
 import {defineAsyncComponent, inject, onMounted, ref} from 'vue'
 import {CardDescription, CardTitle} from "@/components/ui/card/index.js";
 import {BookType, MailCheck, MailX, Phone, PhoneMissed, CircleEllipsis, KeyRound} from "lucide-vue-next";
-import AddPhoneNumberDialog
-  from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/AddPhoneNumberDialog.vue";
 import axios from "axios";
 import {toast} from "vue-sonner";
 import {useLogto} from "@logto/vue";
 
+const AddPhoneNumberDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/AddPhoneNumberDialog.vue"));
 const EditPhoneNumberDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditPhoneNumberDialog.vue"));
 const EditDetailDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditDetailDialog.vue"));
 const EditEmailAddress = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditEmailAddress.vue"));

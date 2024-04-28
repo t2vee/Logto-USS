@@ -5,9 +5,10 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 const EditDetailDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditDetailDialog.vue"));
-const EditBasicInformation = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditBasicInformation.vue"));
+const EditUsername = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditUsername.vue"));
 const EditRegionalSettings = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditRegionalSettings.vue"));
 import { CircleUserRound, UserRound, BookType, Earth } from 'lucide-vue-next';
+import EditFullName from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditFullName.vue";
 
 const userData = inject('userData')
 
@@ -30,13 +31,13 @@ if (userData.value.username) {
           title="Full Name"
           :desc="userData.name ? userData.name : 'Not Set'"
           :icon="UserRound"
-          :dialog-page="EditBasicInformation"
+          :dialog-page="EditFullName"
         />
         <EditDetailDialog
             title="Username"
             :desc="userData.username ?? userData.name ?? 'Not Set'"
             :icon="CircleUserRound"
-            :dialog-page="EditBasicInformation"
+            :dialog-page="EditUsername"
         />
       </div>
        <div class="flex gap-4 mt-4">

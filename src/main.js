@@ -23,7 +23,7 @@ app.use(router)
 app.use(autoAnimatePlugin)
 app.use(createLogto, logtoConfig);
 app.use(VueMatomo, {
-    host: 'https://eye.mxscloud.net',
+    host: import.meta.env.VITE_MATOMO_ENDPOINT,
     siteId: 2,
     trackerFileName: 'matomo',
     router: router,

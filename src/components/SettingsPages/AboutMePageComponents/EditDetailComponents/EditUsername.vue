@@ -94,15 +94,6 @@ const debouncedCheckUsername = debounce(() => checkUsernameAvailability(username
               </div>
             </div>
         </div>
-        <div v-if="!userConnectorPresent" class="grid w-3/4 max-w-sm items-center gap-1.5">
-          <Label for="realname" class="font-bold">
-            Real Name (Optional)
-          </Label>
-            <Input
-                id="realname"
-                :placeholder="userData.name"
-            />
-        </div>
     </div>
     <DialogFooter>
       <div class="flex space-x-10 items-center align-middle">
@@ -112,7 +103,7 @@ const debouncedCheckUsername = debounce(() => checkUsernameAvailability(username
           </a>
         </Button>
         <div class="space-x-2">
-          <Button type="submit" class="h-[30px]" :disabled="userConnectorPresent">
+          <Button type="submit" class="h-[30px]" :disabled="userConnectorPresent || !isAvailable">
             Save
           </Button>
           <DialogClose as-child>

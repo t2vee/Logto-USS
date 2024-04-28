@@ -75,6 +75,7 @@ onUnmounted(cleanup);
         </div>
       </div>
       <p class="text-xs text-gray-500 mt-8">MXS Online Services @ 2024 || Web Build 90a6f1e - API Build 144b5bc</p>
+      <img width="128" src="https://cdn.mxs.app/content/lHvXlqL2OkmpAMi9x15E/mxs.app/Images/Optimised/MXSOS.webp">
     </div>
   </div>
 </template>
