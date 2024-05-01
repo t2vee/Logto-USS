@@ -128,7 +128,7 @@ const handleCodeComplete = async (code) => {
         }
     );
     if (response.status === 204) {
-      codeSent.value = true;
+      codeSent.value = false;
       isMfaRequired.value = false;
       toast.success('Successfully Verified', {description: 'You will stay verified for the next 15 minutes.'})
     }

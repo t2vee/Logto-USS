@@ -32,8 +32,6 @@ function _fetchTrackedState() {
     callbackProp: 'callback',
     callback: data => {
       const { value } = data;
-      console.log(data)
-      console.log(value)
       if (value !== undefined) {
         optedIn.value = value;
       }
@@ -60,13 +58,14 @@ onMounted(cookieFlow)
   <ToastProvider :duration="999999">
     <ToastRoot v-model:open="open">
       <div class="space-y-3">
-        <div class="flex flex-col">
+        <div class="flex flex-col items-center align-middle justify-center">
           <ToastTitle class="flex gap-x-2">
             <Cookie :size="42" /> We use cookies to help improve MXS services
           </ToastTitle>
           <ToastDescription as-child>
             <p>
               You can opt out at any time. Learn more at
+              <br>
               <span>
                 <a class="underline hover:no-underline" target="_blank" href="https://www.cookiesandyou.com">
                   Cookies And You
@@ -78,7 +77,7 @@ onMounted(cookieFlow)
                   Privacy Policy
                 </a>
               </span>
-              <br> <span class="flex items-center align-middle justify-center">You are currently <span v-if="loading" ><Loader class="animate-spin" :size="16" /></span><span v-else>{{ optedIn }}</span></span></p>
+              <br> <span class="flex items-center align-middle justify-center">You are currently&nbsp;<span v-if="loading" ><Loader class="animate-spin" :size="16" /></span><span class="font-bold" v-else>{{ optedIn ? optedIn : 'Opted Out' }}</span></span></p>
           </ToastDescription>
         </div>
         <div class="flex flex-col space-y-2">

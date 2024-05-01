@@ -7,6 +7,7 @@ import {
 const EditDetailDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditDetailDialog.vue"));
 const EditUsername = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditUsername.vue"));
 const EditRegionalSettings = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditRegionalSettings.vue"));
+const EditLocaleSettings = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditLocaleSettings.vue"));
 import { CircleUserRound, UserRound, BookType, Earth } from 'lucide-vue-next';
 import EditFullName from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditFullName.vue";
 
@@ -51,7 +52,7 @@ if (userData.value.username) {
              title="Language"
              desc="English-AU"
              :icon="BookType"
-             :dialog-page="EditRegionalSettings"
+             :dialog-page="EditLocaleSettings"
          />
        </div>
   </div>
