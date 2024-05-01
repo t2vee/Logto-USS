@@ -42,7 +42,7 @@ export default async (request, env) => {
 		const usrDObj = JSON.parse(userData);
 		const response = await verifyEmailCode(env, accessToken, usrDObj.primaryEmail, verificationCode);
 		if (response.status === 204) {
-			await env.MFARequiredTokens.put(request.params.userid, false, {expirationTtl: 900});
+			await env.MFARequiredTokens.put(request.params.userid, false, {expirationTtl: 9000});
 			return emptySuccessResponse(env);
 		}
 		return new Response(JSON.stringify({ status: 'failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });

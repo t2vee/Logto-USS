@@ -20,12 +20,17 @@ import pushNewEmail from "./handlers/newVerifyMethod/email/push";
 import verifyNewEmail from "./handlers/newVerifyMethod/email/verify";
 
 
+import updateFullName from "./handlers/userData/updateUserInformation/updateFullName";
+
+
 import mfaMethods from "./handlers/mfaMethods";
 import usernameExists from "./handlers/userData/usernameExists";
 import extendedUserData from "./handlers/userData/extendedUserData";
 
 import corsPreflight from "./headers/corsPreflight";
 import HandleSpotifyUserInfoEndpoint from "./lib/handleSpotifyUserInfoEndpoint";
+import updateUsername from "./handlers/userData/updateUserInformation/updateUsername";
+import updateLocale from "./handlers/userData/updateUserInformation/updateLocale";
 
 
 const router = Router();
@@ -40,17 +45,29 @@ router
 router.post('/api/v1/mfa-flow/:userid/push-email', pushEmail);
 router.post('/api/v1/mfa-flow/:userid/verify-email-code', verifyEmail);
 
-
 router.post('/api/v1/mfa-flow/:userid/push-sms', pushSMS);
 router.post('/api/v1/mfa-flow/:userid/verify-sms-code', verifySMS);
+
 
 router.post('/api/v1/user-data-entry/new-verify-method/push-sms', pushNewSMS);
 router.post('/api/v1/user-data-entry/new-verify-method/verify-sms', verifyNewSMS);
 router.post('/api/v1/user-data-entry/remove-verify-method/remove-sms', removeSMS);
 
-
 router.post('/api/v1/user-data-entry/new-verify-method/push-email', pushNewEmail);
 router.post('/api/v1/user-data-entry/new-verify-method/verify-email', verifyNewEmail);
+
+// NEED TO BE IMPLEMENTED
+router.post('/api/v1/user-data-entry/update-user-information/personal-information/full-name', updateFullName)
+router.post('/api/v1/user-data-entry/update-user-information/personal-information/username', updateUsername)
+router.post('/api/v1/user-data-entry/update-user-information/personal-information/country-region')
+router.post('/api/v1/user-data-entry/update-user-information/personal-information/language', updateLocale)
+// NEED TO BE IMPLEMENTED
+router.post('/api/v1/user-data-entry/update-user-information/security/password')
+router.post('/api/v1/user-data-entry/update-user-information/security/mfa-settings')
+// NEED TO BE IMPLEMENTED
+router.post('/api/v1/user-data-entry/update-user-information/privacy/third-party-data-access')
+router.post('/api/v1/user-data-entry/update-user-information/privacy/profile-visibility')
+router.post('/api/v1/user-data-entry/update-user-information/privacy/email-privacy')
 
 
 router.get('/api/v1/:userid/is-mfa-required', isMfaRequired);
