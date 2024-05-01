@@ -1,8 +1,8 @@
-import fetchAccessToken from "../utils/fetchAccessToken";
-import checkUsernameAvailability from "../lib/checkUsernameAvailability";
-import emptySuccessResponse from "../responses/emptySuccessResponse";
-import successResponse from "../responses/successResponse";
-import failedResponseWithMessage from "../responses/failedResponseWithMessage";
+import fetchAccessToken from "../../utils/fetchAccessToken";
+import checkUsernameAvailability from "../../lib/checkUsernameAvailability";
+import emptySuccessResponse from "../../responses/emptySuccessResponse";
+import successResponse from "../../responses/successResponse";
+import failedResponseWithMessage from "../../responses/failedResponseWithMessage";
 
 /**
  * Route handler for checking if a username exists.

@@ -41,9 +41,11 @@ export default async (request, env) => {
 		const userData = await grabUserDetails(env, accessToken, request.params.userid);
 		const usrDObj = JSON.parse(userData);
 		const response = await verifyEmailCode(env, accessToken, usrDObj.primaryEmail, verificationCode);
-		return response.status === 204
-			? env.MFARequiredTokens.put(request.params.userid, false, {expirationTtl: 9000}) && emptySuccessResponse(env)
-			: new Response(JSON.stringify({ status: 'failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+		if (response.status === 204) {
+			await env.MFARequiredTokens.put(request.params.userid, false, {expirationTtl: 9000});
+			return emptySuccessResponse(env);
+		}
+		return new Response(JSON.stringify({ status: 'failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
 	} catch (error) {
 		return new Response(JSON.stringify({ message: error.message }), { status: error.status || 500, headers: { 'Content-Type': 'application/json' } });
 	}

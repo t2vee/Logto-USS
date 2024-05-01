@@ -11,7 +11,7 @@ export default async (request, env) => {
 		const accessToken = await fetchAccessToken(env);
 		const response = await sendEmailVerificationCode(env, accessToken, email);
 		return response.status === 204
-			? emptySuccessResponse
+			? emptySuccessResponse(env)
 			: failedResponse;
 	} catch (error) {
 		failedResponseWithMessage(error);
