@@ -16,6 +16,24 @@ import {toast} from "vue-sonner";
 import {eventBus} from "@/lib/eventBus.js";
 import {useLogto} from "@logto/vue";
 
+import {
+  DateFormatter,
+  getLocalTimeZone,
+} from '@internationalized/date'
+
+import { Calendar as CalendarIcon } from 'lucide-vue-next'
+import { Calendar } from '@/components/ui/calendar'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { cn } from '@/lib/utils.js'
+import CalendarWithSelects
+  from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/CalendarWithSelects.vue";
+
+const df = new DateFormatter('en-US', {
+  dateStyle: 'long',
+})
+
+const value = ref()
+
 const userData = inject('userData')
 
 const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK;
@@ -55,21 +73,24 @@ async function updateData() {
   <div>
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5">
-        <Label class="font-bold">
-          Language
-        </Label>
-        <Select v-model="selectedLocale" @update:modelValue="() => console.log(selectedLocale)">
-          <SelectTrigger class="w-[280px]">
-            <SelectValue placeholder="Select a Language" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="en-au">
-                (EN-AU) English AU
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <Popover>
+          <PopoverTrigger as-child>
+            <Button
+                variant="outline"
+                :class="cn(
+          'w-[280px] justify-start text-left font-normal',
+          !value && 'text-muted-foreground',
+        )"
+            >
+              <CalendarIcon class="mr-2 h-4 w-4" />
+              {{ value ? df.format(value.toDate(getLocalTimeZone())) : "Pick a date" }}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent class="w-auto p-0">
+            <CalendarWithSelects />
+            <!--<Calendar v-model="value" initial-focus />-->
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
     <DialogFooter>
