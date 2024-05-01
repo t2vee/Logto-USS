@@ -1,13 +1,5 @@
 <script setup>
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {ref, inject} from 'vue'
+import {inject, ref} from 'vue'
 import {Button} from "@/components/ui/button/index.js";
 import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
 import Label from "@/components/ui/label/Label.vue";
@@ -15,19 +7,39 @@ import axios from "axios";
 import {toast} from "vue-sonner";
 import {eventBus} from "@/lib/eventBus.js";
 import {useLogto} from "@logto/vue";
+
+import {
+  DateFormatter,
+  getLocalTimeZone,
+} from '@internationalized/date'
+
+import { Calendar as CalendarIcon } from 'lucide-vue-next'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { cn } from '@/lib/utils.js'
+import CalendarWithSelects
+  from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/CalendarWithSelects.vue";
+import countries from "@/lib/countries.json.js";
+
+const df = new DateFormatter('en-AU', {
+  dateStyle: 'long',
+})
+
+const value = ref()
+
+const userData = inject('userData')
+
 const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK;
 const { getAccessToken } = useLogto();
-const selectedLocale = ref('')
-const userData = inject('userData')
+const dateSelected = ref(false)
 
 async function updateData() {
   let failed = false;
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/update-user-information/profile/language`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/update-user-information/profile/birthday`,
         {
-          "locale": selectedLocale.value
+          "birthday": df.format(value.value.toDate(getLocalTimeZone()))
         },
         {
           headers: {
@@ -47,27 +59,38 @@ async function updateData() {
     eventBus.emit('refreshUserData', true);
   }
 }
+
+function allowSave() {
+  dateSelected.value = !!value.value;
+}
 </script>
 
 <template>
   <div>
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5">
-        <Label class="font-bold">
-          Language
+        <Label for="username" class="flex font-bold w-full justify-between">
+          Birthday (Optional)
         </Label>
-        <Select v-model="selectedLocale">
-          <SelectTrigger class="w-[280px]">
-            <SelectValue :placeholder="userData.locale ? `(Currently) ${userData.locale.toUpperCase()}` : 'Select a Language'" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="en-au">
-                (EN-AU) English AU
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <Popover>
+          <PopoverTrigger as-child>
+            <Button
+                variant="outline"
+                :class="cn(
+          'w-[280px] justify-start text-left font-normal',
+          !value && 'text-muted-foreground',
+        )"
+            >
+              <CalendarIcon class="mr-2 h-4 w-4" />
+              <p><span v-if="userData.birthdate && !value">(Currently)</span> <span>{{
+                  value ? df.format(value.toDate(getLocalTimeZone())) : (userData.birthdate ? userData.birthdate : 'Pick a date')
+                }}</span></p>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent class="w-auto p-0">
+            <CalendarWithSelects v-model="value" @update:model-value="allowSave" />
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
     <DialogFooter>
@@ -78,7 +101,7 @@ async function updateData() {
           </a>
         </Button>
         <div class="space-x-2">
-          <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!selectedLocale">
+          <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!dateSelected">
             Save
           </Button>
           <DialogClose as-child>

@@ -51,7 +51,7 @@ const cookieFlow = () => {
   console.log(optedIn.value);
 }
 
-onMounted(cookieFlow)
+//onMounted(cookieFlow)
 </script>
 
 <template>

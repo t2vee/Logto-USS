@@ -21,10 +21,9 @@ const handleEvent = (data) => {
 };
 async function loadData() {
   try {
-    const claims = await getIdTokenClaims();
     const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
     const logtoRepsonse = await fetchUserInfo();
-    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/${claims.sub}/extended-user-info`, {
+    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/extended-user-info`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
