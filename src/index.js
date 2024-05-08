@@ -61,6 +61,8 @@ router.post('/api/v1/user-data-entry/update-user-information/personal-informatio
 router.post('/api/v1/user-data-entry/update-user-information/personal-information/username', updateUsername)
 router.post('/api/v1/user-data-entry/update-user-information/personal-information/country-region')
 router.post('/api/v1/user-data-entry/update-user-information/personal-information/language', updateLocale)
+router.post('/api/v1/user-data-entry/update-user-information/personal-information/birthday', updateLocale)
+
 // NEED TO BE IMPLEMENTED
 router.post('/api/v1/user-data-entry/update-user-information/security/password')
 router.post('/api/v1/user-data-entry/update-user-information/security/mfa-settings')

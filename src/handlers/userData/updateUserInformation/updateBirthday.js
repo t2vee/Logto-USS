@@ -7,7 +7,9 @@ export default async (request, env) => {
 	const accessToken = await fetchAccessToken(env);
 	const requestData = await request.json();
 	const userData = {
-		"name": requestData.name,
+		"profile": {
+			"birthdate": requestData.birthday,
+		}
 	}
 	const updateResponse = await updateUserData(env, accessToken, userData, request.userid)
 	return updateResponse.status === 200
