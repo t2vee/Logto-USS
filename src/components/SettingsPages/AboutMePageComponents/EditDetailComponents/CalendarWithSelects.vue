@@ -86,7 +86,7 @@ const formatter = useDateFormatter('en')
           </SelectTrigger>
           <SelectContent class="max-h-[200px]">
             <SelectItem
-                v-for="yearValue in createDecade({ dateObj: date, startIndex: -10, endIndex: 10 })"
+                v-for="yearValue in createDecade({ dateObj: date, startIndex: -90, endIndex: 1 })"
                 :key="yearValue.toString()" :value="yearValue.year.toString()"
             >
               {{ yearValue.year }}

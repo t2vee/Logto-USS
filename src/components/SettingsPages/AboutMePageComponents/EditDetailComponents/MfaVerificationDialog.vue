@@ -60,7 +60,7 @@ const countdown = () => {
 
 async function grabMfaOptions(accessToken) {
   try {
-    return await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/get-user-info/${props.userData.sub}/mfa-methods`, {
+    return await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/get-user-info/mfa-methods`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
@@ -76,7 +76,7 @@ async function sendVerificationCode() {
   isLoading.value = true;
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/${props.userData.sub}/push-${selectedMfaMethod.value}`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/push-${selectedMfaMethod.value}`,
         {},
         {
           headers: {
@@ -118,7 +118,7 @@ const handleCodeComplete = async (code) => {
   isLoading.value = true;
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/${props.userData.sub}/verify-${selectedMfaMethod.value}-code?verification-code=${code}`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/verify-${selectedMfaMethod.value}-code?verification-code=${code}`,
         {},
         {
           headers: {
@@ -144,7 +144,7 @@ const checkMFA = async () => {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   accessTokenRef.value = accessToken;
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/${props.userData.sub}/is-mfa-required`, {
+    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/is-mfa-required`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'

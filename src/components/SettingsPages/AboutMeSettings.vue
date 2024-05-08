@@ -25,7 +25,6 @@ function expandLocale(shortLocale) {
     return shortLocale;
   }
 }
-
 </script>
 
 <template>
@@ -63,7 +62,7 @@ function expandLocale(shortLocale) {
       <div class="flex gap-4 mt-4">
         <EditDetailDialog
             title="Country/Region"
-            desc="Not Set"
+            :desc="userData.data.profile.address.country ?? userData.data.profile.address.locality ?? 'Not Set'"
             :icon="Earth"
             :dialog-page="EditRegionalSettings"
         />

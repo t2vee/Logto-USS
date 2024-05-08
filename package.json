@@ -29,6 +29,7 @@
     "radix-vue": "^1.7.3",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.4.5",
     "vaul-vue": "^0.1.0",
     "vee-validate": "^4.12.5",
     "vitepress": "^1.0.0-rc.44",
