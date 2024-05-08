@@ -31,6 +31,8 @@ import corsPreflight from "./headers/corsPreflight";
 import HandleSpotifyUserInfoEndpoint from "./lib/handleSpotifyUserInfoEndpoint";
 import updateUsername from "./handlers/userData/updateUserInformation/updateUsername";
 import updateLocale from "./handlers/userData/updateUserInformation/updateLocale";
+import updateBirthday from "./handlers/userData/updateUserInformation/updateBirthday";
+import updateRegionalSettings from "./handlers/userData/updateUserInformation/updateRegionalSettings";
 
 
 const router = Router();
@@ -42,11 +44,11 @@ router
 	.all('*', withMiddleware(async (request, env, ctx) => {return checkTokenMiddleware(request, env);}))
 
 
-router.post('/api/v1/mfa-flow/:userid/push-email', pushEmail);
-router.post('/api/v1/mfa-flow/:userid/verify-email-code', verifyEmail);
+router.post('/api/v1/mfa-flow/push-email', pushEmail);
+router.post('/api/v1/mfa-flow/verify-email-code', verifyEmail);
 
-router.post('/api/v1/mfa-flow/:userid/push-sms', pushSMS);
-router.post('/api/v1/mfa-flow/:userid/verify-sms-code', verifySMS);
+router.post('/api/v1/mfa-flow/push-sms', pushSMS);
+router.post('/api/v1/mfa-flow/verify-sms-code', verifySMS);
 
 
 router.post('/api/v1/user-data-entry/new-verify-method/push-sms', pushNewSMS);
@@ -59,9 +61,10 @@ router.post('/api/v1/user-data-entry/new-verify-method/verify-email', verifyNewE
 // NEED TO BE IMPLEMENTED
 router.post('/api/v1/user-data-entry/update-user-information/personal-information/full-name', updateFullName)
 router.post('/api/v1/user-data-entry/update-user-information/personal-information/username', updateUsername)
-router.post('/api/v1/user-data-entry/update-user-information/personal-information/country-region')
-router.post('/api/v1/user-data-entry/update-user-information/personal-information/language', updateLocale)
-router.post('/api/v1/user-data-entry/update-user-information/personal-information/birthday', updateLocale)
+
+router.post('/api/v1/user-data-entry/update-user-information/profile/regional-settings', updateRegionalSettings)
+router.post('/api/v1/user-data-entry/update-user-information/profile/language', updateLocale)
+router.post('/api/v1/user-data-entry/update-user-information/profile/birthday', updateBirthday)
 
 // NEED TO BE IMPLEMENTED
 router.post('/api/v1/user-data-entry/update-user-information/security/password')
@@ -72,10 +75,10 @@ router.post('/api/v1/user-data-entry/update-user-information/privacy/profile-vis
 router.post('/api/v1/user-data-entry/update-user-information/privacy/email-privacy')
 
 
-router.get('/api/v1/:userid/is-mfa-required', isMfaRequired);
-router.get('/api/v1/get-user-info/:userid/mfa-methods', mfaMethods);
+router.get('/api/v1/is-mfa-required', isMfaRequired);
+router.get('/api/v1/get-user-info/mfa-methods', mfaMethods);
 router.get('/api/v1/check-username-exists/:username', usernameExists);
-router.get('/api/v1/:userid/extended-user-info', extendedUserData);
+router.get('/api/v1/extended-user-info', extendedUserData);
 
 
 /**

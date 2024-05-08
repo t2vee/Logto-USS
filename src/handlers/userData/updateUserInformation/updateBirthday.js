@@ -1,5 +1,5 @@
 import fetchAccessToken from "../../../utils/fetchAccessToken";
-import updateUserData from "../../../lib/updateUserData";
+import updateUserProfile from "../../../lib/updateUserProfile";
 import emptySuccessResponse from "../../../responses/emptySuccessResponse";
 import failedResponse from "../../../responses/failedResponse";
 
@@ -11,7 +11,7 @@ export default async (request, env) => {
 			"birthdate": requestData.birthday,
 		}
 	}
-	const updateResponse = await updateUserData(env, accessToken, userData, request.userid)
+	const updateResponse = await updateUserProfile(env, accessToken, userData, request.userid)
 	return updateResponse.status === 200
 		? emptySuccessResponse(env)
 		: failedResponse;
