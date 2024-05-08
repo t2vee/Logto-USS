@@ -1,14 +1,14 @@
 import fetchAccessToken from "../../../utils/fetchAccessToken";
+import updateUserProfile from "../../../lib/updateUserProfile";
 import emptySuccessResponse from "../../../responses/emptySuccessResponse";
 import failedResponse from "../../../responses/failedResponse";
-import updateUserProfile from "../../../lib/updateUserProfile";
 
 export default async (request, env) => {
 	const accessToken = await fetchAccessToken(env);
 	const requestData = await request.json();
 	const userData = {
 		"profile": {
-			"locale": requestData.locale
+			"birthdate": requestData.birthday,
 		}
 	}
 	const updateResponse = await updateUserProfile(env, accessToken, userData, request.userid)

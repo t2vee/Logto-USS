@@ -3,7 +3,6 @@ import grabUserDetails from "../../../lib/grabUserDetails";
 import verifyEmailCode from "../../../lib/verifyEmailCode";
 import checkMfaVerificationCode from "../../../middleware/checkVerificationCodeMiddleware";
 import emptySuccessResponse from "../../../responses/emptySuccessResponse";
-import checkUserIdMiddleware from "../../../middleware/checkUserIdMiddleware";
 /**
  * Handles the POST request to verify an email code as part of the multi-factor authentication flow.
  * This route validates the `userid` and `verificationCode` parameters, ensuring the `userid` is a 12-character
@@ -33,16 +32,15 @@ import checkUserIdMiddleware from "../../../middleware/checkUserIdMiddleware";
  *   if the server encounters an unexpected error.
  */
 export default async (request, env) => {
-	await checkUserIdMiddleware(request)
 	const verificationCode = await checkMfaVerificationCode(request)
 
 	try {
 		const accessToken = await fetchAccessToken(env);
-		const userData = await grabUserDetails(env, accessToken, request.params.userid);
+		const userData = await grabUserDetails(env, accessToken, request.userid);
 		const usrDObj = JSON.parse(userData);
 		const response = await verifyEmailCode(env, accessToken, usrDObj.primaryEmail, verificationCode);
 		if (response.status === 204) {
-			await env.MFARequiredTokens.put(request.params.userid, false, {expirationTtl: 9000});
+			await env.MFARequiredTokens.put(request.userid, false, {expirationTtl: 9000});
 			return emptySuccessResponse(env);
 		}
 		return new Response(JSON.stringify({ status: 'failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });

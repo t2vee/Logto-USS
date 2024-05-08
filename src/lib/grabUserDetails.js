@@ -1,3 +1,4 @@
+import {error} from "itty-router";
 /**
  * Fetches the details of a user by sending a GET request to the user's endpoint.
  * The function constructs a request to the API using the user's ID and an access token for authorization.
@@ -24,13 +25,10 @@ export default async function grabUserDetails(env, accessToken, userid) {
 
 	try {
 		const response = await fetch(url, { method: 'GET', headers });
-		if (!response.ok) {
-			throw { message: 'Failed to access resource - ERR 2344', status: response.status };
-		}
 		const data = await response.json();
 		return JSON.stringify(data, null, 2);
 	} catch (error) {
 		console.error('Error accessing resource:', error);
-		throw typeof error === 'string' ? { message: error, status: 500 } : error;
+		throw new error(404, 'User ID is not valid - Trace ID: 2344');
 	}
 }

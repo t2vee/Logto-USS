@@ -8,9 +8,15 @@ export default async (request, env) => {
 	const requestData = await request.json();
 	const userData = {
 		"profile": {
-			"locale": requestData.locale
+			"address": {
+				"locality": requestData.timezone,
+			}
 		}
 	}
+	if (requestData.country) {
+		userData.profile.address.country = requestData.country;
+	}
+	console.log(userData)
 	const updateResponse = await updateUserProfile(env, accessToken, userData, request.userid)
 	return updateResponse.status === 200
 		? emptySuccessResponse(env)
