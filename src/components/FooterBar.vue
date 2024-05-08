@@ -52,7 +52,7 @@ import Label from "@/components/ui/label/Label.vue";
       </div>
     </div>
     <Separator orientation="vertical" class="h-[100px] text-white" />
-    <img width="200px" src="https://content-delivery.maxmess.services/content/gZdtNe654p1N7WSEwBC2/maxmess.services/Images/MXSOS.webp" alt="msx-logo">
+    <img width="200px" src="https://cdn.mxs.app/content/gZdtNe654p1N7WSEwBC2/maxmess.services/Images/MXSOS.webp" alt="msx-logo">
   </Card>
 </template>
 

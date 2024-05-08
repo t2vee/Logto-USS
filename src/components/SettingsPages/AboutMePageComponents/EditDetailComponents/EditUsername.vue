@@ -2,35 +2,34 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import axios from 'axios';
-import {inject, ref } from 'vue';
+import {inject, ref, defineAsyncComponent } from 'vue';
 import { useLogto } from '@logto/vue';
 import debounce from 'lodash/debounce';
 import {Ban, UserRoundCheck, MoreHorizontal} from 'lucide-vue-next';
-import * as z from 'zod';
 import {Button} from "@/components/ui/button/index.js";
 import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
-import ConnectorAlert from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/ConnectorAlert.vue";
+import {toast} from "vue-sonner";
+import {eventBus} from "@/lib/eventBus.js";
+const ConnectorAlert = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/ConnectorAlert.vue"));
 
 
 const userData = inject('userData')
 const userConnectorPresent = inject('userConnectorPresent')
 
 const { getAccessToken } = useLogto();
+
 const username = ref('');
 const isChecking = ref(false);
 const isAvailable = ref(false);
 const usernameChecked = ref(false);
-const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK;
 
-const BasicInformationSchema = z.object({
-  userid: z.string().length(12).trim().toLowerCase(),
-  username: z.string().min(3).max(18).trim().toLowerCase(),
-  realname: z.string(),
-});
+const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK;
+const usernameRegex = new RegExp(/^[a-zA-Z0-9]{3,24}$/)
+
 
 const checkUsernameAvailability = async (value) => {
   value = value.trim();
-  if (!value) {
+  if (!value || !usernameRegex.test(value)) {
     isChecking.value = false;
     usernameChecked.value = false;
     isAvailable.value = false;
@@ -57,6 +56,34 @@ const checkUsernameAvailability = async (value) => {
 };
 
 const debouncedCheckUsername = debounce(() => checkUsernameAvailability(username.value), 500);
+
+async function updateData() {
+  let failed = false;
+  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
+  try {
+    const response = await axios.post(
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/update-user-information/personal-information/username`,
+        {
+          "username": username.value
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          },
+        });
+    if (response.status === 204) {
+      toast.success('Success!',{description: 'Your changes were saved successfully.'})
+    }
+  } catch (error) {
+    toast.error('Error saving changes:',{description: 'Service Unavailable. Try again later'})
+    failed = true;
+  }
+  if (!failed) {
+    eventBus.emit('closeEditDetailDialog', false);
+    eventBus.emit('refreshUserData', true);
+  }
+}
 </script>
 
 <template>
@@ -94,15 +121,6 @@ const debouncedCheckUsername = debounce(() => checkUsernameAvailability(username
               </div>
             </div>
         </div>
-        <div v-if="!userConnectorPresent" class="grid w-3/4 max-w-sm items-center gap-1.5">
-          <Label for="realname" class="font-bold">
-            Real Name (Optional)
-          </Label>
-            <Input
-                id="realname"
-                :placeholder="userData.name"
-            />
-        </div>
     </div>
     <DialogFooter>
       <div class="flex space-x-10 items-center align-middle">
@@ -112,7 +130,7 @@ const debouncedCheckUsername = debounce(() => checkUsernameAvailability(username
           </a>
         </Button>
         <div class="space-x-2">
-          <Button type="submit" class="h-[30px]" :disabled="userConnectorPresent">
+          <Button type="submit" class="h-[30px]" :disabled="userConnectorPresent || !isAvailable" :onclick="updateData">
             Save
           </Button>
           <DialogClose as-child>

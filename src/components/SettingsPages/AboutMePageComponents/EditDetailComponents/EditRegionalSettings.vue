@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import countries from '@/lib/countries.json.js';
+import timezones from '@/lib/timezones.json.js';
 import { Check, ChevronsUpDown } from 'lucide-vue-next'
 import {inject, ref} from 'vue'
 import { cn } from '@/lib/utils'
@@ -28,12 +29,51 @@ import {
 import {Button} from "@/components/ui/button/index.js";
 import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
 import Label from "@/components/ui/label/Label.vue";
+import {useLogto} from "@logto/vue";
+import axios from "axios";
+import {toast} from "vue-sonner";
+import {eventBus} from "@/lib/eventBus.js";
 
+const { getAccessToken } = useLogto();
 const userData = inject('userData')
 
 const open = ref(false)
-const value = ref({})
+const selectedCountry = ref({})
+const selectedTimezone = ref("")
 const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK;
+
+
+async function updateData() {
+  let failed = false;
+  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
+  try {
+    const payload = {
+      "timezone": selectedTimezone.value
+    }
+    if (selectedCountry.value) {
+      payload.country = selectedCountry.value
+    }
+    const response = await axios.post(
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/update-user-information/profile/regional-settings`,
+        payload,
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          },
+        });
+    if (response.status === 204) {
+      toast.success('Success!',{description: 'Your changes were saved successfully.'})
+    }
+  } catch (error) {
+    toast.error('Error saving changes:',{description: 'Service Unavailable. Try again later'})
+    failed = true;
+  }
+  if (!failed) {
+    eventBus.emit('closeEditDetailDialog', false);
+    eventBus.emit('refreshUserData', true);
+  }
+}
 </script>
 
 <template>
@@ -50,15 +90,16 @@ const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK;
                     role="combobox"
                     class="justify-between"
                 >
-                  {{ value ? countries.find((name) => name.name === value)?.name : 'Select Country...' }}
-
+                  <p><span v-if="userData.data.profile.address.locality && !Object.keys(selectedCountry).length > 0">(Currently)</span> <span>{{
+                      Object.keys(selectedCountry).length > 0 ? `(${countries.find((name) => name.name === selectedCountry)?.code}) ${countries.find((name) => name.name === selectedCountry)?.name}` : (userData.data.profile.address.country ? userData.data.profile.address.country : 'Select a Country')
+                    }}</span></p>
                   <ChevronsUpDown class="ml-1 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent class="p-0">
-                <Command v-model="value">
+                <Command v-model="selectedCountry">
                   <CommandInput placeholder="Select a Country" />
-                  <CommandEmpty>No framework found.</CommandEmpty>
+                  <CommandEmpty>No Country Found</CommandEmpty>
                   <CommandList>
                     <CommandGroup>
                       <CommandItem
@@ -66,11 +107,12 @@ const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK;
                           :key="code"
                           :value="name.name"
                           @select="open = false"
+                          class="hover:text-black"
                       >
                         <Check
                             :class="cn(
                   'mr-2 h-4 w-4',
-                  value === name.name ? 'opacity-100' : 'opacity-0',
+                  selectedCountry === name.name ? 'opacity-100' : 'opacity-0',
                 )"
                         />
                         ({{ name.code }}) {{ name.name }}
@@ -83,126 +125,17 @@ const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK;
         </div>
         <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
           <Label class="font-bold">
-            Timezone <span class="text-xs text-grey-200">(Optional)</span>
+            Timezone
           </Label>
-            <Select>
+            <Select v-model="selectedTimezone">
               <SelectTrigger class="w-[280px]">
-                <SelectValue placeholder="Select a timezone" />
+                <SelectValue :placeholder="userData.data.profile.address.locality ? `(Currently) ${userData.data.profile.address.locality.toUpperCase()}` : 'Select a Timezone'"/>
               </SelectTrigger>
               <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>North America</SelectLabel>
-                  <SelectItem value="est">
-                    (EST) Eastern Standard Time
-                  </SelectItem>
-                  <SelectItem value="cst">
-                    (CST) Central Standard Time
-                  </SelectItem>
-                  <SelectItem value="mst">
-                    (MST) Mountain Standard Time
-                  </SelectItem>
-                  <SelectItem value="pst">
-                    (PST) Pacific Standard Time
-                  </SelectItem>
-                  <SelectItem value="akst">
-                    (AKST) Alaska Standard Time
-                  </SelectItem>
-                  <SelectItem value="hst">
-                    (HST) Hawaii Standard Time
-                  </SelectItem>
-                </SelectGroup>
-                <SelectGroup>
-                  <SelectLabel>Europe & Africa</SelectLabel>
-                  <SelectItem value="gmt">
-                    (GMT) Greenwich Mean Time
-                  </SelectItem>
-                  <SelectItem value="cet">
-                    (CET) Central European Time
-                  </SelectItem>
-                  <SelectItem value="eet">
-                    (EET) Eastern European Time
-                  </SelectItem>
-                  <SelectItem value="west">
-                    (WEST) Western European Summer Time
-                  </SelectItem>
-                  <SelectItem value="cat">
-                    (CAT) Central Africa Time
-                  </SelectItem>
-                  <SelectItem value="eat">
-                    (EAT) East Africa Time (EAT)
-                  </SelectItem>
-                </SelectGroup>
-                <SelectGroup>
-                  <SelectLabel>Asia</SelectLabel>
-                  <SelectItem value="msk">
-                    (MSK) Moscow Time
-                  </SelectItem>
-                  <SelectItem value="ist">
-                    (IST) India Standard Time
-                  </SelectItem>
-                  <SelectItem value="cst_china">
-                    (CST) China Standard Time
-                  </SelectItem>
-                  <SelectItem value="jst">
-                    (JST) Japan Standard Time
-                  </SelectItem>
-                  <SelectItem value="kst">
-                    (KST) Korea Standard Time
-                  </SelectItem>
-                  <SelectItem value="ist_indonesia">
-                    (WITA) Indonesia Central Standard Time
-                  </SelectItem>
-                </SelectGroup>
-                <SelectGroup>
-                  <SelectLabel>Australia & Pacific</SelectLabel>
-                  <SelectItem value="awst">
-                    (AWST) Australian Western Standard Time
-                  </SelectItem>
-                  <SelectItem value="acst">
-                    (ACST) Australian Central Standard Time
-                  </SelectItem>
-                  <SelectItem value="aest">
-                    (AEST) Australian Eastern Standard Time
-                  </SelectItem>
-                  <SelectItem value="nzst">
-                    (NZST) New Zealand Standard Time
-                  </SelectItem>
-                  <SelectItem value="fjt">
-                    (FJT) Fiji Time
-                  </SelectItem>
-                </SelectGroup>
-                <SelectGroup>
-                  <SelectLabel>South America</SelectLabel>
-                  <SelectItem value="art">
-                    (ART) Argentina Time
-                  </SelectItem>
-                  <SelectItem value="bot">
-                    (BOT) Bolivia Time
-                  </SelectItem>
-                  <SelectItem value="brt">
-                    (BRT) Brasilia Time
-                  </SelectItem>
-                  <SelectItem value="clt">
-                    (CLT) Chile Standard Time
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-        </div>
-        <div class="grid w-3/4 max-w-sm items-center gap-1.5">
-          <Label class="font-bold">
-            Language
-          </Label>
-            <Select>
-              <SelectTrigger class="w-[280px]">
-                <SelectValue placeholder="Select a Language" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="en-au" >
-                    (EN-AU) English AU
-                  </SelectItem>
-                </SelectGroup>
+                  <SelectGroup v-for="group in timezones" :key="group">
+                    <SelectLabel>{{ group.name }}</SelectLabel>
+                    <SelectItem v-for="timezone in group.timezones" :key="timezone.code" :value="timezone.code">{{ timezone.label }}</SelectItem>
+                  </SelectGroup>
               </SelectContent>
             </Select>
         </div>
@@ -215,7 +148,7 @@ const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK;
           </a>
         </Button>
         <div class="space-x-2">
-          <Button type="submit" class="h-[30px]">
+          <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!selectedTimezone || !selectedCountry">
             Save
           </Button>
           <DialogClose as-child>

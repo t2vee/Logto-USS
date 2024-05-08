@@ -2,12 +2,11 @@
 import {defineAsyncComponent, inject, onMounted, ref} from 'vue'
 import {CardDescription, CardTitle} from "@/components/ui/card/index.js";
 import {BookType, MailCheck, MailX, Phone, PhoneMissed, CircleEllipsis, KeyRound} from "lucide-vue-next";
-import AddPhoneNumberDialog
-  from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/AddPhoneNumberDialog.vue";
 import axios from "axios";
 import {toast} from "vue-sonner";
 import {useLogto} from "@logto/vue";
 
+const AddPhoneNumberDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/AddPhoneNumberDialog.vue"));
 const EditPhoneNumberDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditPhoneNumberDialog.vue"));
 const EditDetailDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditDetailDialog.vue"));
 const EditEmailAddress = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditEmailAddress.vue"));
@@ -21,7 +20,7 @@ const mfaOptions = ref({})
 async function grabMfaOptions() {
   try {
     const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
-    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/get-user-info/${userData.value.sub}/mfa-methods`, {
+    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/get-user-info/mfa-methods`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
@@ -62,15 +61,16 @@ onMounted(grabMfaOptions)
       />
       <EditDetailDialog
           title="Account Security"
-          :desc="`${mfaOptions.length} MFA Methods Set Up`"
+          :desc="`${mfaOptions.length > 1 ? mfaOptions.length : 'No'} MFA Methods Set Up`"
           :icon="BookType"
           :dialog-page="EditRegionalSettings"
       />
     </div>
     <div class="flex gap-4 mt-4">
       <EditDetailDialog
+          disabled
           title="Recovery Steps"
-          desc="**********"
+          desc="Not Avaliable"
           :icon="KeyRound"
           :dialog-page="EditRegionalSettings"
       />

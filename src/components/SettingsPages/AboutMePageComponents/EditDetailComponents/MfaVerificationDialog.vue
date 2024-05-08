@@ -20,6 +20,7 @@ import { eventBus } from '@/lib/eventBus.js';
 
 const props = defineProps({
   isVisible: Boolean,
+  dataRequest: Boolean,
   title: {
     type: String,
     required: true,
@@ -59,7 +60,7 @@ const countdown = () => {
 
 async function grabMfaOptions(accessToken) {
   try {
-    return await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/get-user-info/${props.userData.sub}/mfa-methods`, {
+    return await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/get-user-info/mfa-methods`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
@@ -75,7 +76,7 @@ async function sendVerificationCode() {
   isLoading.value = true;
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/${props.userData.sub}/push-${selectedMfaMethod.value}`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/push-${selectedMfaMethod.value}`,
         {},
         {
           headers: {
@@ -117,7 +118,7 @@ const handleCodeComplete = async (code) => {
   isLoading.value = true;
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/${props.userData.sub}/verify-${selectedMfaMethod.value}-code?verification-code=${code}`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/verify-${selectedMfaMethod.value}-code?verification-code=${code}`,
         {},
         {
           headers: {
@@ -127,7 +128,7 @@ const handleCodeComplete = async (code) => {
         }
     );
     if (response.status === 204) {
-      codeSent.value = true;
+      codeSent.value = false;
       isMfaRequired.value = false;
       toast.success('Successfully Verified', {description: 'You will stay verified for the next 15 minutes.'})
     }
@@ -143,7 +144,7 @@ const checkMFA = async () => {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   accessTokenRef.value = accessToken;
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/${props.userData.sub}/is-mfa-required`, {
+    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/is-mfa-required`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
@@ -178,7 +179,7 @@ watch(() => props.isVisible, (newValue) => {
 <template>
   <DialogContent class="sm:max-w-[425px]">
     <DialogHeader class="mb-3">
-      <DialogTitle class="flex items-center align-middle"><component class="mr-1" :is="!isLoading && isMfaRequired ? Shield : icon" />{{ !isLoading && isMfaRequired ? 'Verify Your Identity' : 'Edit Your ' + title }}</DialogTitle>
+      <DialogTitle class="flex items-center align-middle"><component class="mr-1" :is="!isLoading && isMfaRequired ? Shield : icon" />{{ !isLoading && isMfaRequired ? 'Verify Your Identity' : !dataRequest ? 'Edit Your ' + title : title }}</DialogTitle>
       <DialogDescription class="text-xs">
         {{ !isLoading && isMfaRequired ? "In order to verify your identity, we'll send you a code to your preferred method below." : '' }}
       </DialogDescription>

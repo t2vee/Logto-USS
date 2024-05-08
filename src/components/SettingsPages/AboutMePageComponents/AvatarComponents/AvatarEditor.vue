@@ -1,6 +1,5 @@
 <script setup>
-import { ref } from 'vue';
-import ImageUploader from "@/components/SettingsPages/AboutMePageComponents/AvatarComponents/ImageUploader.vue";
+import {defineAsyncComponent} from "vue";
 
 defineProps({
   avatarUrl: {
@@ -15,18 +14,10 @@ defineProps({
 
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { SquarePen } from 'lucide-vue-next';
-import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from '@/components/ui/dialog'
 import {
   Tooltip,
@@ -34,21 +25,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import AvatarGallery from "@/components/SettingsPages/AboutMePageComponents/AvatarComponents/AvatarGallery.vue";
-
-const imageUploaderRef = ref(null);
-
-const saveImage = () => {
-  imageUploaderRef.value.uploadFileWrapper();
-};
+const AvatarDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/AvatarComponents/AvatarDialog.vue"));
 </script>
 
 <template>
@@ -73,54 +50,7 @@ const saveImage = () => {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>Edit Avatar</DialogTitle>
-        <DialogDescription class="text-xs">
-          Respect the rights of others. Only upload images that you own or that you have written permission to freely distribute. Like most other online services, your avatar will be visible to other users of the service and associated with your MXS ID, even if your profile is set to "no one can see." Please read our User Agreement for more information.
-
-        </DialogDescription>
-      </DialogHeader>
-      <Tabs default-value="upload" class="w-full">
-        <TabsList class="grid w-full grid-cols-2">
-          <TabsTrigger value="upload">
-            Upload Image
-          </TabsTrigger>
-          <TabsTrigger value="gallery">
-            Avatar Gallery
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="upload">
-          <Card>
-            <CardHeader>
-              <CardTitle>Upload Custom Avatar Image</CardTitle>
-              <CardDescription>
-                Supports SVG, PNG, JPEG, JPG, ICO File Types.
-              </CardDescription>
-            </CardHeader>
-            <CardContent class="space-y-2">
-              <ImageUploader ref="imageUploaderRef" />
-
-            </CardContent>
-            <CardFooter>
-              <p class="text-xs font-bold">Maximum 500kb Upload Size</p>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-        <TabsContent value="gallery">
-          <AvatarGallery />
-        </TabsContent>
-      </Tabs>
-      <DialogFooter>
-        <Button @click="saveImage">Save</Button>
-        <DialogClose as-child>
-          <Button type="button" variant="outline">
-            Close
-          </Button>
-        </DialogClose>
-      </DialogFooter>
-    </DialogContent>
+    <AvatarDialog />
   </Dialog>
 </template>
 

@@ -1,32 +1,29 @@
 <script setup>
-import {defineAsyncComponent, inject} from 'vue'
+import {defineAsyncComponent, inject, onMounted} from 'vue'
 import {
-  Card,
-  CardContent,
   CardDescription,
-  CardFooter,
-  CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import DataTable from "@/components/SettingsPages/AboutMePageComponents/DataTable.vue";
-const AvatarEditor = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/AvatarComponents/AvatarEditor.vue"));
-const EditPhoneNumberDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditPhoneNumberDialog.vue"));
+import { CircleUserRound, UserRound, BookType, Earth, CalendarFold } from 'lucide-vue-next';
+const EditBirthdayDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditBirthdayDialog.vue"));
 const EditDetailDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditDetailDialog.vue"));
-const EditBasicInformation = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditBasicInformation.vue"));
-const EditEmailAddress = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditEmailAddress.vue"));
+const EditUsername = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditUsername.vue"));
 const EditRegionalSettings = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditRegionalSettings.vue"));
-const AddPhoneNumberDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/AddPhoneNumberDialog.vue"));
-import { CircleUserRound, UserRound, BookType, Earth } from 'lucide-vue-next';
+const EditLocaleSettings = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditLocaleSettings.vue"));
+const EditFullName = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditFullName.vue"));
 
 const userData = inject('userData')
 
-const basicInformationTable = {
-  'User ID': userData.value.sub,
-  'Username': userData.value.username || userData.value.name
-};
-
-if (userData.value.username) {
-  basicInformationTable['Real Name'] = userData.value.name;
+function expandLocale(shortLocale) {
+  const localeMap = {
+    "en": "(EN-US) English US",
+    "en-au": "(EN-AU) English AU",
+  };
+  if (localeMap.hasOwnProperty(shortLocale)) {
+    return localeMap[shortLocale];
+  } else {
+    return shortLocale;
+  }
 }
 </script>
 
@@ -36,32 +33,46 @@ if (userData.value.username) {
       <CardDescription>Manage your personal information, including phone numbers and email addresses where you can be reached.</CardDescription>
       <div class="flex gap-4 mt-12">
         <EditDetailDialog
-          title="Full Name"
-          :desc="userData.name ? userData.name : 'Not Set'"
+          title="Public Profile"
+          desc="Open For More Details"
           :icon="UserRound"
-          :dialog-page="EditBasicInformation"
+          :dialog-page="EditFullName"
         />
         <EditDetailDialog
             title="Username"
             :desc="userData.username ?? userData.name ?? 'Not Set'"
             :icon="CircleUserRound"
-            :dialog-page="EditBasicInformation"
+            :dialog-page="EditUsername"
         />
       </div>
-       <div class="flex gap-4 mt-4">
-         <EditDetailDialog
-             title="Country/Region"
-             desc="Not Set"
-             :icon="Earth"
-             :dialog-page="EditRegionalSettings"
-         />
-         <EditDetailDialog
-             title="Language"
-             desc="English-AU"
-             :icon="BookType"
-             :dialog-page="EditRegionalSettings"
-         />
-       </div>
+      <div class="flex gap-4 mt-4">
+        <EditDetailDialog
+            title="Full Name"
+            :desc="userData.name ? userData.name : 'Not Set'"
+            :icon="UserRound"
+            :dialog-page="EditFullName"
+        />
+        <EditDetailDialog
+            title="Birthday"
+            :desc="userData.birthdate ?? userData.birthdate ?? 'Not Set'"
+            :icon="CalendarFold"
+            :dialog-page="EditBirthdayDialog"
+        />
+      </div>
+      <div class="flex gap-4 mt-4">
+        <EditDetailDialog
+            title="Country/Region"
+            :desc="userData.data.profile.address.country ?? userData.data.profile.address.locality ?? 'Not Set'"
+            :icon="Earth"
+            :dialog-page="EditRegionalSettings"
+        />
+        <EditDetailDialog
+            title="Language"
+            :desc="userData.locale ? expandLocale(userData.locale) : 'Not Set'"
+            :icon="BookType"
+            :dialog-page="EditLocaleSettings"
+        />
+      </div>
   </div>
 </template>
 

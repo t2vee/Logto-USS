@@ -89,6 +89,7 @@ async function sendEncryptedData(encryptedData) {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   accessTokenRef.value = accessToken;
   const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
+  console.log(base64EncryptedData)
   try {
     const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/new-verify-method/push-sms`, {
       encryptedPhoneNumber: base64EncryptedData,
@@ -99,14 +100,21 @@ async function sendEncryptedData(encryptedData) {
       },
     });
     smsSent.value = response.status === 204;
+    if (response.status === 204) {
+      toast.info('Sent Text to ' + phone.value, {description: 'Code will last for 10 minutes.'})
+    }
   } catch (error) {
     toast.error('Error Sending Verification Code:',{description: 'Service Unavailable. Try again later'})
-    smsSent.value = error.response && error.response.status === 404;
+    isEditing.value = true;
+    smsSent.value = false;
+    isLoading.value = false;
+    readyToSend.value = true;
+    eventBus.emit('closeEditDetailDialog', false);
+    eventBus.emit('refreshUserData', true);
   } finally {
     isLoading.value = false;
     resendCodeTimer.value = 60;
     countdown()
-    toast.info('Sent Text to ' + phone.value, {description: 'Code will last for 10 minutes.'})
   }
 }
 

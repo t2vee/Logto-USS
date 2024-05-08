@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed, inject} from 'vue';
+import { ref, computed, inject, defineAsyncComponent } from 'vue';
 import { useLogto } from "@logto/vue";
 import {
   AlertDialog,
@@ -21,7 +21,7 @@ import MfaCodeInput from "@/components/SettingsPages/AboutMePageComponents/EditD
 import axios from "axios";
 import {toast} from "vue-sonner";
 import {eventBus} from "@/lib/eventBus.js";
-import ConnectorAlert from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/ConnectorAlert.vue";
+const ConnectorAlert = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/ConnectorAlert.vue"));
 
 
 const userData = inject('userData')
@@ -139,6 +139,7 @@ const handleCodeComplete = async (code) => {
         <Input
             :disabled="userConnectorPresent"
             id="email"
+            type="email"
             v-model="email"
             :class="{
               'border-red-500': !isEmailValid && isEditing,

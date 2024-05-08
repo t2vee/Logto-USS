@@ -1,13 +1,10 @@
 <script setup>
 import { useLogto } from "@logto/vue";
-import {ref, onMounted, computed, provide, onUnmounted} from "vue";
+import {ref, onMounted, provide, onUnmounted} from "vue";
 import { CardContent } from '@/components/ui/card';
-import SideBar from "@/components/SIdeBar.vue";
+import SideBar from "@/components/SideBar.vue";
 import NavBar from "@/components/NavBar.vue";
-import BreadCrumb from "@/components/PageComponents/BreadCrumb.vue";
-import FooterBar from "@/components/FooterBar.vue";
 import { Loader, Loader2 } from 'lucide-vue-next';
-import SocialIdentityLoginBanner from "@/components/PageComponents/SocialIdentityLoginBanner.vue";
 import { eventBus } from '@/lib/eventBus.js';
 import axios from "axios";
 import {toast} from "vue-sonner";
@@ -24,10 +21,9 @@ const handleEvent = (data) => {
 };
 async function loadData() {
   try {
-    const claims = await getIdTokenClaims();
     const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
     const logtoRepsonse = await fetchUserInfo();
-    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/${claims.sub}/extended-user-info`, {
+    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/extended-user-info`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
@@ -54,7 +50,6 @@ defineProps({
 });
 
 provide('userData', userInfo)
-provide('moreUserData', )
 provide('userConnectorPresent', userConnectorPresent)
 
 const cleanup = eventBus.on('refreshUserData', handleEvent);
@@ -63,7 +58,7 @@ onUnmounted(cleanup);
 
 <template>
   <div class="flex flex-col items-center">
-    <div class="flex flex-col h-screen max-w-[1000px] ">
+    <div class="flex flex-col h-screen max-w-[1000px] items-center">
       <NavBar />
       <div v-if="!isLoading" class="flex justify-between gap-6">
         <SideBar />
@@ -78,8 +73,9 @@ onUnmounted(cleanup);
           <Loader class="animate-spin"/>Loading user information...
         </div>
       </div>
+      <p class="text-xs text-gray-500 mt-8">MXS Online Services @ 2024 || Web Build 90a6f1e - API Build 144b5bc</p>
+      <img width="128" src="https://cdn.mxs.app/content/lHvXlqL2OkmpAMi9x15E/mxs.app/Images/Optimised/MXSOS.webp">
     </div>
-    <!--<FooterBar class="mt-auto" />-->
   </div>
 </template>
 
