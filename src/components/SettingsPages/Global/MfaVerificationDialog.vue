@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Label } from '@/components/ui/label/index.js'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group/index.js'
 import { useLogto } from "@logto/vue";
 import { Loader, Loader2, Shield } from 'lucide-vue-next';
 import axios from "axios";
@@ -13,7 +13,7 @@ import {
   DialogTitle
 } from "@/components/ui/dialog/index.js";
 import {Button} from "@/components/ui/button/index.js";
-import MfaCodeInput from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/MfaCodeInput.vue";
+import MfaCodeInput from "@/components/SettingsPages/Global/MfaCodeInput.vue";
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js';
 

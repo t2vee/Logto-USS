@@ -10,7 +10,7 @@ import {Button} from "@/components/ui/button/index.js";
 import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
 import {toast} from "vue-sonner";
 import {eventBus} from "@/lib/eventBus.js";
-const ConnectorAlert = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/ConnectorAlert.vue"));
+const ConnectorAlert = defineAsyncComponent(() => import("@/components/SettingsPages/Global/ConnectorAlert.vue"));
 
 
 const userData = inject('userData')

@@ -8,7 +8,7 @@ import { useLogto } from '@logto/vue';
 import {Ban, ChevronsRight, Check, AlertCircle, Loader} from 'lucide-vue-next';
 import {Button} from "@/components/ui/button/index.js";
 import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
-import ConnectorAlert from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/ConnectorAlert.vue";
+import ConnectorAlert from "@/components/SettingsPages/Global/ConnectorAlert.vue";
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Checkbox } from '@/components/ui/checkbox'
 import {toast} from "vue-sonner";

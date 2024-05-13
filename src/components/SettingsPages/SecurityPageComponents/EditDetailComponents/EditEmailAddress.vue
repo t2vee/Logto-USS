@@ -17,11 +17,11 @@ import { Label } from '@/components/ui/label';
 import {Loader, MailCheck, MailX, CornerDownRight, ArrowBigRightDash} from 'lucide-vue-next';
 import {Button} from "@/components/ui/button/index.js";
 import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
-import MfaCodeInput from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/MfaCodeInput.vue";
+import MfaCodeInput from "@/components/SettingsPages/Global/MfaCodeInput.vue";
 import axios from "axios";
 import {toast} from "vue-sonner";
 import {eventBus} from "@/lib/eventBus.js";
-const ConnectorAlert = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/ConnectorAlert.vue"));
+const ConnectorAlert = defineAsyncComponent(() => import("@/components/SettingsPages/Global/ConnectorAlert.vue"));
 
 
 const userData = inject('userData')

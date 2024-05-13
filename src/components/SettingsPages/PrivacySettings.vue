@@ -5,7 +5,7 @@ import {Send, TextSearch, UserRoundSearch, BarChart3} from "lucide-vue-next";
 import AddPhoneNumberDialog
   from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/AddPhoneNumberDialog.vue";
 
-const EditDetailDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditDetailDialog.vue"));
+const EditDetailDialog = defineAsyncComponent(() => import("@/components/SettingsPages/Global/EditDetailDialog.vue"));
 const userData = inject('userData')
 
 </script>

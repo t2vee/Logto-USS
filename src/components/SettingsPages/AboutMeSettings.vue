@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/card'
 import { CircleUserRound, UserRound, BookType, Earth, CalendarFold, DoorOpen } from 'lucide-vue-next';
 const EditBirthdayDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditBirthdayDialog.vue"));
-const EditDetailDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditDetailDialog.vue"));
+const EditDetailDialog = defineAsyncComponent(() => import("@/components/SettingsPages/Global/EditDetailDialog.vue"));
 const EditUsername = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditUsername.vue"));
 const EditRegionalSettings = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditRegionalSettings.vue"));
 const EditLocaleSettings = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditLocaleSettings.vue"));

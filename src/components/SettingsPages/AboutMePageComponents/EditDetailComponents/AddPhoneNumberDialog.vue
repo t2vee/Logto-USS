@@ -10,7 +10,7 @@ import {Label} from "@/components/ui/label/index.js";
 import {PhoneMissed, Phone, Loader} from "lucide-vue-next";
 import key from '@/lib/encryptNumber.pem.js';
 import { toast } from 'vue-sonner'
-import MfaCodeInput from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/MfaCodeInput.vue";
+import MfaCodeInput from "@/components/SettingsPages/Global/MfaCodeInput.vue";
 import { eventBus } from '@/lib/eventBus.js';
 
 const userData = inject('userData')

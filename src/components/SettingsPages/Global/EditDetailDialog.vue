@@ -1,8 +1,8 @@
 <script setup>
 import {ref, onUnmounted, inject} from 'vue';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog/index.js'
 import MFAVerificationDialog
-  from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/MfaVerificationDialog.vue";
+  from "@/components/SettingsPages/Global/MfaVerificationDialog.vue";
 import { eventBus } from '@/lib/eventBus.js';
 import {Card, CardDescription, CardHeader, CardTitle} from "@/components/ui/card/index.js";
 
