@@ -6,7 +6,7 @@ import axios from "axios";
 import {toast} from "vue-sonner";
 import {useLogto} from "@logto/vue";
 
-const AddPhoneNumberDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/AddPhoneNumberDialog.vue"));
+const AddPhoneNumberDialog = defineAsyncComponent(() => import("@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/AddPhoneNumberDialog.vue"));
 const EditPhoneNumberDialog = defineAsyncComponent(() => import("@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditPhoneNumberDialog.vue"));
 const EditDetailDialog = defineAsyncComponent(() => import("@/components/SettingsPages/Global/EditDetailDialog.vue"));
 const EditEmailAddress = defineAsyncComponent(() => import("@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditEmailAddress.vue"));

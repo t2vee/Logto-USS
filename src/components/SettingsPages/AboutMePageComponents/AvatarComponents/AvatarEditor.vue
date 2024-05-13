@@ -1,7 +1,7 @@
 <script setup>
 import {defineAsyncComponent, ref, onUnmounted} from "vue";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { SquarePen } from 'lucide-vue-next';
+import {Loader2, SquarePen} from 'lucide-vue-next';
 import {
   Dialog,
   DialogTrigger,
@@ -19,6 +19,9 @@ import {
 } from '@/components/ui/popover'
 import {Button} from "@/components/ui/button/index.js";
 import {eventBus} from "@/lib/eventBus.js";
+import axios from "axios";
+import {toast} from "vue-sonner";
+import {useLogto} from "@logto/vue";
 
 defineProps({
   avatarUrl: {
@@ -30,10 +33,39 @@ defineProps({
     required: true,
   }
 });
-
+const { getAccessToken } = useLogto();
 const AvatarDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/AvatarComponents/AvatarDialog.vue"));
 
 const popoverState = ref(false)
+const isLoading = ref(false)
+
+const removeCurrentAvatar = async () => {
+  let failed;
+  isLoading.value = true;
+  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/avatar/remove`,
+        {},
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          },
+        });
+    if (response.status === 204) {
+      toast.success('Avatar Successfully Removed',{description: 'Click create to add a new one to your account.'})
+    }
+  } catch (error) {
+    toast.error('Error Removing Avatar:',{description: 'Service Unavailable. Try again later'})
+    failed = true;
+  } finally {
+    isLoading.value = false;
+    if (!failed) {
+      eventBus.emit('refreshUserData', true);
+      popoverState.value = false
+    }
+  }
+}
 
 const handleEvent = (data) => {
   isDialogOpen.value = data;
@@ -60,14 +92,15 @@ onUnmounted(cleanup);
                 </div>
               </div>
             </PopoverTrigger>
-            <PopoverContent class="flex w-auto">
+            <PopoverContent class="flex w-auto gap-x-3">
               <DialogTrigger as-child>
-                <Button variant="secondary" class="h-[30px]" @click="() => popoverState = false">
+                <Button variant="secondary" class="h-[30px]" @click="() => popoverState = false" :disabled="isLoading">
                   Create
                 </Button>
               </DialogTrigger>
-              <Button variant="outline" class="h-[30px]">
-                Remove
+              <Button variant="outline" class="h-[30px]" @click="removeCurrentAvatar" :disabled="isLoading">
+                <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
+                {{ isLoading ? 'Removing...' : 'Remove'}}
               </Button>
             </PopoverContent>
           </Popover>

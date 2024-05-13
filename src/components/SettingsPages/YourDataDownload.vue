@@ -2,7 +2,7 @@
 import {CardDescription, CardTitle} from "@/components/ui/card/index.js";
 import {HardDriveDownload} from 'lucide-vue-next';
 import AddPhoneNumberDialog
-  from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/AddPhoneNumberDialog.vue";
+  from "@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/AddPhoneNumberDialog.vue";
 import EditDetailDialog
   from "@/components/SettingsPages/Global/EditDetailDialog.vue";
 </script>
