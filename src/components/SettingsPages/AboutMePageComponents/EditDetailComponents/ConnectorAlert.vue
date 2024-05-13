@@ -3,19 +3,23 @@ import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert/index.j
 import {AlertCircle} from "lucide-vue-next";
 
 defineProps({
+  customTitle: {
+    type: String,
+    default: "You are connected using a Social Login."
+  },
   customMessage: {
     type: String,
+    default: "Your details are based on the information provided by your social connector. You cannot edit the details below."
   }
 })
 </script>
 
 <template>
   <Alert variant="destructive">
-    <AlertCircle class="w-4 h-4" />
-    <AlertTitle class="font-bold">You are connected using a Social Login.</AlertTitle>
-    <AlertDescription>
-      <p v-if="!customMessage">Your details are based on the information provided by your social connector. You cannot edit the details below.</p>
-      <p v-else>{{ customMessage }}</p>
+    <AlertCircle class="w-5 h-5" color="#f67a3c" />
+    <AlertTitle class="font-bold text-[#f67a3c]">{{ customTitle }}</AlertTitle>
+    <AlertDescription class="text-[#f67a3c]">
+      {{ customMessage }}
     </AlertDescription>
   </Alert>
 </template>

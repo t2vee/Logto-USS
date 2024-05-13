@@ -64,7 +64,7 @@ async function sendVerificationCode() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   accessTokenRef.value = accessToken;
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/new-verify-method/push-email`, {
+    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/push-email`, {
       email: email.value,
     }, {
       headers: {
@@ -101,7 +101,7 @@ const handleCodeComplete = async (code) => {
   isLoading.value = true;
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/new-verify-method/verify-email?verification-code=${code}&user-id=${userData.value.sub}`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/verify-email?verification-code=${code}`,
         {email: email.value},
         {
           headers: {

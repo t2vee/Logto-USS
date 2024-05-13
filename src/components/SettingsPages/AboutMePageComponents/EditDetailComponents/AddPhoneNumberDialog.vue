@@ -91,7 +91,7 @@ async function sendEncryptedData(encryptedData) {
   const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
   console.log(base64EncryptedData)
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/new-verify-method/push-sms`, {
+    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/push-sms`, {
       encryptedPhoneNumber: base64EncryptedData,
     }, {
       headers: {
@@ -138,7 +138,7 @@ const handleCodeComplete = async (code) => {
   const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/new-verify-method/verify-sms?verification-code=${code}&user-id=${userData.value.sub}`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/verify-sms?verification-code=${code}`,
         {encryptedPhoneNumber: base64EncryptedData,},
         {
           headers: {

@@ -16,6 +16,8 @@ const isLoading = ref(true);
 const fetchFailure = ref(false);
 const userConnectorPresent = ref(false);
 
+const support = `mailto:${import.meta.env.VITE_SUPPORT_EMAIL}`
+
 const handleEvent = (data) => {
   if (data) {
     loadData()
@@ -116,7 +118,10 @@ onUnmounted(cleanup);
           Retry
         </Button>
       </div>
-      <p class="text-xs text-gray-500 mt-8">MXS Online Services @ 2024 || Web Build 90a6f1e - API Build 144b5bc</p>
+      <div class="flex w-full items-center align-middle justify-between">
+        <p class="text-xs text-gray-500 mt-8">MXS Online Services @ 2024 || Web Build 90a6f1e - API Build 144b5bc</p>
+        <a class="text-xs text-gray-500 mt-8" :href="support">Contact Support</a>
+      </div>
     </div>
   </div>
 </template>

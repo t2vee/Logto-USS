@@ -16,7 +16,7 @@ async function removeNumber() {
   isLoading.value = true;
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/remove-verify-method/remove-sms`,
+    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/remove-sms`,
         {},
         {
           headers: {
