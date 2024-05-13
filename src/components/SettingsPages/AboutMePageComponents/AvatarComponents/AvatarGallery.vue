@@ -1,6 +1,6 @@
 <script setup>
 import {ref, onMounted, inject} from 'vue';
-import { ExternalLink } from "lucide-vue-next";
+import {ExternalLink, Loader2} from "lucide-vue-next";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card/index.js";
 import SingleGalleryAvatar from "@/components/SettingsPages/AboutMePageComponents/AvatarComponents/SingleGalleryAvatar.vue";
 import { Button } from '@/components/ui/button/index.js';
@@ -8,6 +8,7 @@ import axios from "axios";
 import {toast} from "vue-sonner";
 import {eventBus} from "@/lib/eventBus.js";
 import {useLogto} from "@logto/vue";
+import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
 
 const avatars = ref([]);
 const { getAccessToken } = useLogto();
@@ -42,10 +43,6 @@ const loadMoreAvatars = () => fetchAvatars(true);
 
 onMounted(() => fetchAvatars());
 
-const uploadFileWrapper = async () => {
-  await uploadFile();
-};
-
 const fetchGalleryAvatar = async () => {
   try {
     const response = await axios({
@@ -53,14 +50,18 @@ const fetchGalleryAvatar = async () => {
       method: 'GET',
       responseType: 'blob'
     });
+    console.log(response)
     const formData = new FormData();
+    console.log(formData);
     formData.append('file', response.data, 'image.png');
+    return formData;
   } catch (error) {
-    console.error('Error during image fetching or uploading:', error);
+    console.log('Error during image fetching or uploading:', error);
   }
 }
 
 const uploadFile = async () => {
+  isLoading.value = true;
   let failed = false;
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   const formData = await fetchGalleryAvatar()
@@ -93,29 +94,42 @@ const uploadFile = async () => {
 </script>
 
 <template>
-  <Card class="h-[420px]">
-    <CardHeader>
-      <CardTitle>Choose a Generated Avatar</CardTitle>
-      <CardDescription>
-        Avatars based on different generation algorithm methods.
-      </CardDescription>
-    </CardHeader>
-    <CardContent class="space-y-2 overflow-y-auto max-h-[278px]">
-      <div class="p-4 flex flex-col items-center align-middle">
-        <div class="grid grid-cols-8 gap-4">
-          <SingleGalleryAvatar
-              v-for="(avatar, index) in avatars"
-              :key="`${avatar.id}-${index}`"
-              :imageUrl="getFullImageUrl(avatar.imageUrl)"
-              @click="selectAvatar(`${avatar.id}-${index}`, getFullImageUrl(avatar.imageUrl))"
-              :selected="selectedAvatarId === `${avatar.id}-${index}`"
-          />
+  <div class="space-y-4">
+    <Card class="h-[420px]">
+      <CardHeader>
+        <CardTitle>Choose a Generated Avatar</CardTitle>
+        <CardDescription>
+          Avatars based on different generation algorithm methods.
+        </CardDescription>
+      </CardHeader>
+      <CardContent class="space-y-2 overflow-y-auto max-h-[278px]">
+        <div class="p-4 flex flex-col items-center align-middle">
+          <div class="grid grid-cols-8 gap-4">
+            <SingleGalleryAvatar
+                v-for="(avatar, index) in avatars"
+                :key="`${avatar.id}-${index}`"
+                :imageUrl="getFullImageUrl(avatar.imageUrl)"
+                @click="selectAvatar(`${avatar.id}-${index}`, getFullImageUrl(avatar.imageUrl))"
+                :selected="selectedAvatarId === `${avatar.id}-${index}`"
+            />
+          </div>
+          <Button variant="link" @click="loadMoreAvatars">Load More</Button>
         </div>
-        <Button variant="link" @click="loadMoreAvatars">Load More</Button>
-      </div>
-    </CardContent>
-    <CardFooter class="">
-      <a :href="avatarEndpoint" class="flex align-middle items-center text-xs"><ExternalLink class="p-1" />Powered by the MXS Avatar Service.</a>
-    </CardFooter>
-  </Card>
+      </CardContent>
+      <CardFooter class="">
+        <a :href="avatarEndpoint" class="flex align-middle items-center text-xs"><ExternalLink class="p-1" />Powered by the MXS Avatar Service.</a>
+      </CardFooter>
+    </Card>
+    <DialogFooter>
+      <Button @click="uploadFile" class="h-[30px]" :disabled="!selectedAvatarId || isLoading">
+        <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
+        {{ isLoading ? 'Processing...' : 'Save' }}
+      </Button>
+      <DialogClose as-child>
+        <Button type="button" variant="outline" class="h-[30px]">
+          Close
+        </Button>
+      </DialogClose>
+    </DialogFooter>
+  </div>
 </template>

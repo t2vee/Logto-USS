@@ -5,8 +5,13 @@ import { useLogto } from '@logto/vue';
 import { ImageUp, Trash2 } from 'lucide-vue-next';
 import { eventBus } from "@/lib/eventBus.js";
 import {toast} from "vue-sonner";
+import { Loader2 } from 'lucide-vue-next';
+import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card/index.js";
+import { Button } from '@/components/ui/button/index.js';
 
-const { isAuthenticated, getAccessToken } = useLogto();
+
+const { getAccessToken } = useLogto();
 const fileInput = ref(null);
 const preview = ref(null);
 let selectedFile = ref(null);
@@ -25,22 +30,13 @@ const prepareFile = () => {
   }
 };
 
-const uploadFileWrapper = async () => {
-  if (!selectedFile.value) return;
-  if (isAuthenticated.value) {
-    isLoading.value = true;
-    await uploadFile(selectedFile.value);
-  } else {
-    console.log('User is not authenticated');
-  }
-};
-
-const uploadFile = async (file) => {
+const uploadFile = async () => {
+  isLoading.value = true;
   let failed = false;
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   const formData = new FormData();
-  formData.append('file', file);
-  formData.set("file", fileInput.value.files[0], `image.${file.name.split('.').pop()}`);
+  formData.append('file', selectedFile.value);
+  formData.set("file", fileInput.value.files[0], `image.${selectedFile.value.name.split('.').pop()}`);
   try {
     const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/update-user-information/avatar-service/upload`, formData, {
       headers: {
@@ -80,31 +76,56 @@ const clearPreview = () => {
 
 defineExpose({
   prepareFile,
-  uploadFileWrapper
 });
 </script>
 
 <template>
-  <div
-      @click="openFileDialog"
-      @dragover.prevent="dragOver"
-      @drop.prevent="handleDrop"
-      @dragleave.prevent="dragLeave"
-      class="flex flex-col justify-center items-center w-full h-64 rounded-lg border-2 border-dashed border-gray-400 cursor-pointer hover:border-gray-600 space-y-4 relative"
-  >
-    <div v-if="preview" class="w-full h-64 flex justify-center items-center overflow-hidden rounded-lg py-4">
-      <img :src="preview" class="max-w-[150px]" alt="Image preview" />
-      <button
-          class="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-700"
-          @click.stop="clearPreview"
-      >
-        <Trash2 />
-      </button>
-    </div>
-    <label v-else class="flex justify-center items-center" :class="isLoading ? 'cursor-not-allowed' : 'cursor-pointer'">
-      <ImageUp class="text-gray-400" />
-      <span class="ml-1 text-base leading-normal text-gray-400">Upload File</span>
-    </label>
-    <input type="file" class="hidden" ref="fileInput" name="file" @change="prepareFile" accept=".svg, .png, .jpeg, .jpg, .ico, .gif, .webp, .bmp" />
+  <div class="space-y-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>Upload Custom Avatar Image</CardTitle>
+        <CardDescription>
+          Supports PNG, JPG File Types.
+        </CardDescription>
+      </CardHeader>
+      <CardContent class="space-y-2">
+        <div
+            @click="openFileDialog"
+            @dragover.prevent="dragOver"
+            @drop.prevent="handleDrop"
+            @dragleave.prevent="dragLeave"
+            class="flex flex-col justify-center items-center w-full h-64 rounded-lg border-2 border-dashed border-gray-400 cursor-pointer hover:border-gray-600 space-y-4 relative"
+        >
+          <div v-if="preview" class="w-full h-64 flex justify-center items-center overflow-hidden rounded-lg py-4">
+            <img :src="preview" class="max-w-[150px]" alt="Image preview" />
+            <button
+                class="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-700"
+                @click.stop="clearPreview"
+            >
+              <Trash2 />
+            </button>
+          </div>
+          <label v-else class="flex justify-center items-center" :class="isLoading ? 'cursor-not-allowed' : 'cursor-pointer'">
+            <ImageUp class="text-gray-400" />
+            <span class="ml-1 text-base leading-normal text-gray-400">Upload File</span>
+          </label>
+          <input type="file" class="hidden" ref="fileInput" name="file" @change="prepareFile" accept=".png, .jpeg, .jpg" />
+        </div>
+      </CardContent>
+      <CardFooter>
+        <p class="text-xs font-bold">Maximum 1000KB (1MB) Upload Size</p>
+      </CardFooter>
+    </Card>
+    <DialogFooter>
+      <Button @click="uploadFile" class="h-[30px]" :disabled="!selectedFile || isLoading">
+        <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
+        {{ isLoading ? 'Processing...' : 'Save' }}
+      </Button>
+      <DialogClose as-child>
+        <Button type="button" variant="outline" class="h-[30px]">
+          Close
+        </Button>
+      </DialogClose>
+    </DialogFooter>
   </div>
 </template>
