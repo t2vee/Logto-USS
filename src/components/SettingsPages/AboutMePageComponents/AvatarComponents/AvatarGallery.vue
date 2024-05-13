@@ -50,9 +50,7 @@ const fetchGalleryAvatar = async () => {
       method: 'GET',
       responseType: 'blob'
     });
-    console.log(response)
     const formData = new FormData();
-    console.log(formData);
     formData.append('file', response.data, 'image.png');
     return formData;
   } catch (error) {
@@ -66,7 +64,7 @@ const uploadFile = async () => {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   const formData = await fetchGalleryAvatar()
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/update-user-information/avatar-service/upload`, formData, {
+    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/avatar/upload`, formData, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'multipart/form-data',

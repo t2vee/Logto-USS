@@ -218,7 +218,7 @@ watch(() => props.isVisible, (newValue) => {
         <MfaCodeInput :resend-code-timer="resendCodeTimer" @codeComplete="handleCodeComplete" @resendCode="handleCodeResend" @changeInput="handleChangeInput" />
       </div>
       <div v-else-if="!isLoading && !isMfaRequired">
-        <component :is="editPage" :user-data="userData" v-model="isLoading" />
+        <component :is="editPage" />
       </div>
       <div v-else-if="isLoading" class="flex items-center align-middle justify-center">
         <Loader class="animate-spin" :size="32" />

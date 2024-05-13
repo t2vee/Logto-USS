@@ -1,35 +1,17 @@
-# mxs-account-home
+# Logto Account Dashboard
 
-This template should help get you started developing with Vue 3 in Vite.
+A personal "My Account" dashboard built specially for use with the Logto Authentication Platform. Built with nothing but Vue3 and shadcn-vue.  
 
-## Recommended IDE Setup
+Designed to run hand in hand with:
+ - [mxs-account-cf-worker](https://github.com/t2vee/logto-account-cf-worker), A Cloudflare worker designed to interact with the Logto Admin API
+ - [mxs-avatar-service](https://github.com/t2vee/mxs-avatar-service), A custom NodeJS server for basic avatar management and image manipulation
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Running your own instance
+Pretty damn easy.  
+1. Edit the environment variables laid out in `.env.sample`, you may omit the optional values.
+2. Deploy to any platform;
+   3. Run via `npm run build` and expose the static files.
+   4. Run via `wrangler deploy` via the Cloudflare Workers platform
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+## Keep in mind
+This project is still in active development and not yet designed for production.  

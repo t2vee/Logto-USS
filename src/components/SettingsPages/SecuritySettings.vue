@@ -1,5 +1,5 @@
 <script setup>
-import {defineAsyncComponent, inject, onMounted, ref} from 'vue'
+import {defineAsyncComponent, inject, onMounted, provide, ref} from 'vue'
 import {CardDescription, CardTitle} from "@/components/ui/card/index.js";
 import {Fingerprint, MailCheck, MailX, Phone, PhoneMissed, CircleEllipsis, KeyRound} from "lucide-vue-next";
 import axios from "axios";
@@ -10,7 +10,7 @@ const AddPhoneNumberDialog = defineAsyncComponent(() => import("@/components/Set
 const EditPhoneNumberDialog = defineAsyncComponent(() => import("@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditPhoneNumberDialog.vue"));
 const EditDetailDialog = defineAsyncComponent(() => import("@/components/SettingsPages/Global/EditDetailDialog.vue"));
 const EditEmailAddress = defineAsyncComponent(() => import("@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditEmailAddress.vue"));
-const EditMfaMethods = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditMfaMethods.vue"));
+const EditMfaMethods = defineAsyncComponent(() => import("@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditMfaMethods.vue"));
 const UpdatePasswordDialog = defineAsyncComponent(() => import("@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/UpdatePasswordDialog.vue"));
 
 const userData = inject('userData')
@@ -31,6 +31,9 @@ async function grabMfaOptions() {
     toast.error('Error grabbing MFA Options:', {description: error})
   }
 }
+
+provide('mfaMethods', mfaOptions)
+
 onMounted(grabMfaOptions)
 </script>
 
@@ -61,7 +64,7 @@ onMounted(grabMfaOptions)
       />
       <EditDetailDialog
           title="Account Security"
-          :desc="`${mfaOptions.length > 1 ? mfaOptions.length : 'No'} MFA Methods Set Up`"
+          :desc="`${mfaOptions.length > 1 ? mfaOptions.length + 1 : (userData.phone_number_verified ? '2' : '1')} MFA Methods Set Up`"
           :icon="Fingerprint"
           :dialog-page="EditMfaMethods"
       />

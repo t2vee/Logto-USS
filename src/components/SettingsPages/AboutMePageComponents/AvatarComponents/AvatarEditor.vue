@@ -1,7 +1,7 @@
 <script setup>
 import {defineAsyncComponent, ref, onUnmounted} from "vue";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {Loader2, SquarePen} from 'lucide-vue-next';
+import {Loader2, Pencil} from 'lucide-vue-next';
 import {
   Dialog,
   DialogTrigger,
@@ -88,7 +88,7 @@ onUnmounted(cleanup);
                   <AvatarFallback>{{ userName }}</AvatarFallback>
                 </Avatar>
                 <div class="absolute bottom-[-10px] right-4 transform translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-1">
-                  <SquarePen class="w-5 h-5 text-gray-600" />
+                  <Pencil class="w-5 h-5" color="black" />
                 </div>
               </div>
             </PopoverTrigger>
