@@ -38,7 +38,7 @@ const uploadFile = async () => {
   formData.append('file', selectedFile.value);
   formData.set("file", fileInput.value.files[0], `image.${selectedFile.value.name.split('.').pop()}`);
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/update-user-information/avatar-service/upload`, formData, {
+    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/avatar/upload`, formData, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'multipart/form-data',
