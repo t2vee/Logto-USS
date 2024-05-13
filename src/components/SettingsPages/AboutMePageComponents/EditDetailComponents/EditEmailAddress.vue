@@ -128,7 +128,7 @@ const handleCodeComplete = async (code) => {
 
 <template>
   <transition name="fade" mode="out-in">
-    <div v-if="!isLoading && !emailSent" class="flex flex-col gap-4 items-center align-middle">
+    <div v-if="!isLoading && !emailSent" class="flex flex-col gap-4 items-center align-middle space-y-10">
       <ConnectorAlert v-if="userConnectorPresent" />
       <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
         <Label for="email" class="flex font-bold w-full justify-between">
@@ -173,10 +173,10 @@ const handleCodeComplete = async (code) => {
                   <AlertDialogDescription class="space-y-4">
                     Changing your email means that you will <strong>no longer</strong> be able to:
                     <ul class="space-y-1">
-                      <li class="flex items-center align-middle"><ArrowBigRightDash /> Login with {{ userData.email }}</li>
-                      <li class="flex items-center align-middle"><ArrowBigRightDash /> Contact us with {{ userData.email }}</li>
-                      <li class="flex items-center align-middle"><ArrowBigRightDash /> Receive any mail with {{ userData.email }}</li>
-                      <li class="flex items-center align-middle"><ArrowBigRightDash /> Verify your identity with {{ userData.email }}</li>
+                      <li class="flex items-center align-middle"><ArrowBigRightDash /> <span class="font-bold">Login with&nbsp;</span> {{ userData.email.length > 30 ? `${userData.email.substring(0, 30)}...` : userData.email }}</li>
+                      <li class="flex items-center align-middle"><ArrowBigRightDash /> <span class="font-bold">Contact us with&nbsp;</span> {{ userData.email.length > 30 ? `${userData.email.substring(0, 30)}...` : userData.email }}</li>
+                      <li class="flex items-center align-middle"><ArrowBigRightDash /> <span class="font-bold">Receive any mail with&nbsp;</span> {{ userData.email.length > 30 ? `${userData.email.substring(0, 30)}...` : userData.email }}</li>
+                      <li class="flex items-center align-middle"><ArrowBigRightDash /> <span class="font-bold">Verify your identity with&nbsp;</span> {{ userData.email.length > 30 ? `${userData.email.substring(0, 30)}...` : userData.email }}</li>
                     </ul>
                   </AlertDialogDescription>
                 </AlertDialogHeader>

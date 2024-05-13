@@ -38,30 +38,31 @@ async function removeNumber() {
 </script>
 
 <template>
-  <div class="mb-8 w-full">
-    <p class="font-bold text-sm">You can only have one number per account. To change your connected number, remove it first then add a number as normal.</p>
-    <br>
-    <div class="flex justify-evenly">
-      <p>Currently Connected Number:</p>
-      <strong>{{ userData.phone_number }}</strong>
-    </div>
-  </div>
-  <DialogFooter>
-    <div class="flex space-x-7 items-center align-middle">
-      <div class="flex space-x-2">
-        <Button @click="removeNumber" variant="destructive" class="h-[30px]" :disabled="isLoading">
-          <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
-          Remove
-        </Button>
-        <DialogClose as-child>
-          <Button type="button" variant="outline" class="h-[30px]">
-            Cancel
-          </Button>
-        </DialogClose>
+  <div class="flex flex-col items-center align-middle justify-center">
+    <div class="mb-8 w-full">
+      <p class="font-bold text-sm">You can only have one number per account. To change your connected number, remove it first then add a number as normal.</p>
+      <br>
+      <div class="flex justify-evenly">
+        <p>Currently Connected Number:</p>
+        <strong>{{ userData.phone_number }}</strong>
       </div>
     </div>
-  </DialogFooter>
-
+    <DialogFooter>
+      <div class="flex space-x-7 items-center align-middle">
+        <div class="flex space-x-2">
+          <Button @click="removeNumber" variant="destructive" class="h-[30px]" :disabled="isLoading">
+            <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
+            Remove
+          </Button>
+          <DialogClose as-child>
+            <Button type="button" variant="outline" class="h-[30px]">
+              Cancel
+            </Button>
+          </DialogClose>
+        </div>
+      </div>
+    </DialogFooter>
+  </div>
 </template>
 
 <style scoped>

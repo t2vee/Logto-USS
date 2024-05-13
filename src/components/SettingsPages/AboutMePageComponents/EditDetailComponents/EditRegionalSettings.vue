@@ -77,7 +77,7 @@ async function updateData() {
 </script>
 
 <template>
-  <div>
+  <div class="space-y-10">
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
         <div class="grid w-3/4 max-w-sm items-center gap-1.5">
           <Label class="font-bold">
@@ -90,8 +90,8 @@ async function updateData() {
                     role="combobox"
                     class="justify-between"
                 >
-                  <p><span v-if="userData.data.profile.address.locality && !Object.keys(selectedCountry).length > 0">(Currently)</span> <span>{{
-                      Object.keys(selectedCountry).length > 0 ? `(${countries.find((name) => name.name === selectedCountry)?.code}) ${countries.find((name) => name.name === selectedCountry)?.name}` : (userData.data.profile.address.country ? userData.data.profile.address.country : 'Select a Country')
+                  <p><span v-if="userData['profile.address.locality'] && !Object.keys(selectedCountry).length > 0">(Currently)</span> <span>{{
+                      Object.keys(selectedCountry).length > 0 ? `(${countries.find((name) => name.name === selectedCountry)?.code}) ${countries.find((name) => name.name === selectedCountry)?.name}` : (userData['profile.address.country'] ? userData['profile.address.country'] : 'Select a Country')
                     }}</span></p>
                   <ChevronsUpDown class="ml-1 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -129,7 +129,7 @@ async function updateData() {
           </Label>
             <Select v-model="selectedTimezone">
               <SelectTrigger class="w-[280px]">
-                <SelectValue :placeholder="userData.data.profile.address.locality ? `(Currently) ${userData.data.profile.address.locality.toUpperCase()}` : 'Select a Timezone'"/>
+                <SelectValue :placeholder="userData['profile.address.locality'] ? `(Currently) ${userData['profile.address.locality'].toUpperCase()}` : 'Select a Timezone'"/>
               </SelectTrigger>
               <SelectContent>
                   <SelectGroup v-for="group in timezones" :key="group">
@@ -148,7 +148,7 @@ async function updateData() {
           </a>
         </Button>
         <div class="space-x-2">
-          <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!selectedTimezone || !selectedCountry">
+          <Button type="submit" class="h-[30px]" @click="updateData" :disabled="!selectedTimezone || !selectedCountry">
             Save
           </Button>
           <DialogClose as-child>

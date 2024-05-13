@@ -25,6 +25,7 @@
     "http-jsonp": "^1.1.1",
     "lodash": "^4.17.21",
     "lucide-vue-next": "^0.344.0",
+    "nsfwjs": "^4.1.0",
     "pinia": "^2.1.7",
     "radix-vue": "^1.7.3",
     "tailwind-merge": "^2.2.1",

@@ -66,7 +66,7 @@ function allowSave() {
 </script>
 
 <template>
-  <div>
+  <div class="space-y-10">
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5">
         <Label for="username" class="flex font-bold w-full justify-between">

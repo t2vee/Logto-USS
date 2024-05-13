@@ -75,7 +75,7 @@ const debouncedCheckName = debounce(() => checkName(fullName.value), 500);
 </script>
 
 <template>
-  <div>
+  <div class="space-y-10">
     <ConnectorAlert v-if="userConnectorPresent" />
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5">

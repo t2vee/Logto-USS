@@ -170,7 +170,7 @@ async function verifyNumber() {
     const encryptedData = await encryptData(publicKey, phone.value);
     await sendEncryptedData(encryptedData);
   } catch (error) {
-    console.error('failed:', error);
+    console.log('failed:', error);
     isLoading.value = false;
   }
 }
@@ -178,7 +178,7 @@ async function verifyNumber() {
 
 <template>
   <transition name="fade" mode="out-in">
-    <div v-if="!isLoading && !smsSent" class="flex flex-col gap-4 py-4 items-center align-middle">
+    <div v-if="!isLoading && !smsSent" class="flex flex-col gap-4 py-4 items-center align-middle space-y-10">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
         <Label for="email" class="flex font-bold w-full justify-between">
           Enter Number

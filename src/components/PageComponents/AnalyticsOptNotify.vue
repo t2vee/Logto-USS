@@ -37,7 +37,7 @@ function _fetchTrackedState() {
       }
     },
     error: e => {
-      console.error('An error occurred when accessing `isTracked` API method.', e);
+      console.log('An error occurred when accessing `isTracked` API method.', e);
     },
     complete: () => {
       loading.value = false;

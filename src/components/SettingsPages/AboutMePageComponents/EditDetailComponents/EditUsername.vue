@@ -47,7 +47,7 @@ const checkUsernameAvailability = async (value) => {
     });
     isAvailable.value = response.status === 204;
   } catch (error) {
-    console.error('Error checking username availability:', error);
+    console.log('Error checking username availability:', error);
     isAvailable.value = error.response && error.response.status === 404;
   } finally {
     isChecking.value = false;
@@ -87,7 +87,7 @@ async function updateData() {
 </script>
 
 <template>
-  <div>
+  <div class="space-y-10">
     <ConnectorAlert v-if="userConnectorPresent" />
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
         <div class="grid w-3/4 max-w-sm items-center gap-1.5">
@@ -130,7 +130,7 @@ async function updateData() {
           </a>
         </Button>
         <div class="space-x-2">
-          <Button type="submit" class="h-[30px]" :disabled="userConnectorPresent || !isAvailable" :onclick="updateData">
+          <Button type="submit" class="h-[30px]" :disabled="userConnectorPresent || !isAvailable" @click="updateData">
             Save
           </Button>
           <DialogClose as-child>

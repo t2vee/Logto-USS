@@ -1,13 +1,17 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
-import { ImageUp, Trash2 } from 'lucide-vue-next';
 import { useLogto } from '@logto/vue';
+import { ImageUp, Trash2 } from 'lucide-vue-next';
+import { eventBus } from "@/lib/eventBus.js";
+import {toast} from "vue-sonner";
 
 const { isAuthenticated, getAccessToken } = useLogto();
 const fileInput = ref(null);
 const preview = ref(null);
 let selectedFile = ref(null);
+
+const isLoading = defineModel(false);
 
 const openFileDialog = () => {
   fileInput.value.click();
@@ -24,28 +28,47 @@ const prepareFile = () => {
 const uploadFileWrapper = async () => {
   if (!selectedFile.value) return;
   if (isAuthenticated.value) {
-    const accessToken = await getAccessToken();
-    await uploadFile(selectedFile.value, accessToken);
+    isLoading.value = true;
+    await uploadFile(selectedFile.value);
   } else {
     console.log('User is not authenticated');
   }
 };
 
-const uploadFile = async (file, accessToken) => {
+const uploadFile = async (file) => {
+  let failed = false;
+  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   const formData = new FormData();
   formData.append('file', file);
+  formData.set("file", fileInput.value.files[0], `image.${file.name.split('.').pop()}`);
   try {
-    const response = await axios.post(import.meta.env.VITE_LOGTO_ENDPOINT + '/api/user-assets', formData, {
+    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/update-user-information/avatar-service/upload`, formData, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log('File uploaded successfully:', response.data);
-    preview.value = null;
-    selectedFile.value = null;
+    if (response.status === 204) {
+      toast.success('Success!',{description: 'Your changes were saved successfully.'})
+      preview.value = null;
+      selectedFile.value = null;
+    }
   } catch (error) {
-    console.error('Error uploading file:', error);
+    failed = true;
+    console.log('Error uploading file:', error);
+    if (error.response.status === 500) {
+      toast.error('Error saving changes:',{description: 'Service Unavailable. Try again later'})
+    } else if (error.response.status === 406) {
+      toast.warning('Please Upload a Different Image:',{description: 'The image you have selected is not suitable as a avatar'})
+      preview.value = null;
+      selectedFile.value = null;
+    }
+  } finally {
+    isLoading.value = false;
+  }
+  if (!failed) {
+    eventBus.emit('closeEditDetailDialog', false);
+    eventBus.emit('refreshUserData', true);
   }
 };
 
@@ -78,13 +101,10 @@ defineExpose({
         <Trash2 />
       </button>
     </div>
-    <label v-else class="flex justify-center items-center">
+    <label v-else class="flex justify-center items-center" :class="isLoading ? 'cursor-not-allowed' : 'cursor-pointer'">
       <ImageUp class="text-gray-400" />
       <span class="ml-1 text-base leading-normal text-gray-400">Upload File</span>
     </label>
-    <input type="file" class="hidden" ref="fileInput" @change="prepareFile" accept=".svg, .png, .jpeg, .jpg, .ico" />
+    <input type="file" class="hidden" ref="fileInput" name="file" @change="prepareFile" accept=".svg, .png, .jpeg, .jpg, .ico, .gif, .webp, .bmp" />
   </div>
 </template>
-
-<style scoped>
-</style>

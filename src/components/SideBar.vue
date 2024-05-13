@@ -44,9 +44,9 @@ const sidebarNavItems = ref([
 
 <template>
   <div class="flex flex-col h-full items-center">
-    <AvatarEditor :avatar-url="userData.picture" :user-name="userData.username ? userData.username : userData.name" />
+    <AvatarEditor :avatar-url="userData.avatar" :user-name="userData.username ? userData.username : userData.name" />
     <strong>{{ userData.name ? userData.name : userData.username }}</strong>
-    <p class="text-sm text-gray-500">{{ userData.email.length > 20 ? userData.email.substring(0, 20) + '...' : userData.email}}</p>
+    <p class="text-sm text-gray-500">{{ userData.primaryEmail.length > 20 ? userData.primaryEmail.substring(0, 20) + '...' : userData.primaryEmail}}</p>
     <p class="text-xs text-gray-700 mb-8">{{ userData.sub }}</p>
     <nav class="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
       <router-link
