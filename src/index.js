@@ -37,6 +37,7 @@ import updatePassword from "./handlers/userData/updateUserInformation/updatePass
 import uploadNewAvatar from "./handlers/userData/updateUserInformation/uploadNewAvatar";
 import attachAccessToken from "./middleware/attachAccessToken";
 import canChangeUsername from "./handlers/canChangeUsername";
+import removeAvatar from "./handlers/userData/updateUserInformation/removeAvatar";
 
 
 const router = Router();
@@ -65,7 +66,7 @@ router.post('/api/v2/me/verify/verify-email', verifyNewEmail);
 
 
 router.post('/api/v2/me/edit/full-name', updateFullName)
-// TODO Implement time limit between username changes
+//  Implemented! 🥳🥳 - time limit between username changes
 router.post('/api/v2/me/edit/username', updateUsername)
 
 router.post('/api/v2/me/edit/regional-settings', updateRegionalSettings)
@@ -82,7 +83,7 @@ router.post('/api/v1/user-data-entry/update-user-information/privacy/profile-vis
 router.post('/api/v1/user-data-entry/update-user-information/privacy/email-privacy')
 
 router.post('/api/v2/me/avatar/upload', uploadNewAvatar)
-router.post('/api/v2/me/avatar/remove')
+router.post('/api/v2/me/avatar/remove', removeAvatar)
 
 
 router.get('/api/v1/me/is-mfa-required', isMfaRequired);

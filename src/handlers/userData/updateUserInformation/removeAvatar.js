@@ -3,10 +3,10 @@ import emptySuccessResponse from "../../../responses/emptySuccessResponse";
 import failedResponse from "../../../responses/failedResponse";
 import failedResponseWithMessage from "../../../responses/failedResponseWithMessage";
 
-export default  async (request, env) => {
+export default async (request, env) => {
 	try {
 		const payload = {
-			"primaryPhone": null
+			"avatar": null
 		}
 		const response = await updateUserData(env, request.accesstoken, payload, request.userid)
 		return response.status === 200
