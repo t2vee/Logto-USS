@@ -1,4 +1,3 @@
-import fetchAccessToken from "../../../utils/fetchAccessToken";
 import updateUserData from "../../../lib/updateUserData";
 import decryptNumber from "../../../utils/decryptNumber";
 import verifySMSCode from "../../../lib/verifySMSCode";
@@ -14,14 +13,13 @@ export default async (request, env) => {
 	const encryptedPhoneNumber = requestData.encryptedPhoneNumber;
 	const userNumber = await decryptNumber(env, encryptedPhoneNumber);
 	try {
-		const accessToken = await fetchAccessToken(env);
 		const num = await prepareNumber(userNumber)
-		const response = await verifySMSCode(env, accessToken, num, verificationCode);
+		const response = await verifySMSCode(env, request.accesstoken, num, verificationCode);
 		if (response.status === 204) {
 			const userData = {
 				"primaryPhone": num
 			}
-			const updateResponse = await updateUserData(env, accessToken, userData, request.userid)
+			const updateResponse = await updateUserData(env, request.accesstoken, userData, request.userid)
 			return response.status === 204 && updateResponse.status === 200
 				? emptySuccessResponse(env)
 				: failedResponse;

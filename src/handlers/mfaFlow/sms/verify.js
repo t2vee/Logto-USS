@@ -1,4 +1,3 @@
-import fetchAccessToken from "../../../utils/fetchAccessToken";
 import grabUserDetails from "../../../lib/grabUserDetails";
 import verifySMSCode from "../../../lib/verifySMSCode";
 import prepareNumber from "../../../utils/prepareNumber";
@@ -26,10 +25,9 @@ import failedResponseWithMessage from "../../../responses/failedResponseWithMess
 export default async (request, env) => {
 	const verificationCode = await checkVerificationCodeMiddleware(request)
 	try {
-		const accessToken = await fetchAccessToken(env);
-		const userData = await grabUserDetails(env, accessToken, request.userid);
+		const userData = await grabUserDetails(env, request.accesstoken, request.userid);
 		const usrDObj = JSON.parse(userData);
-		const response = await verifySMSCode(env, accessToken, await prepareNumber(usrDObj.primaryPhone), verificationCode);
+		const response = await verifySMSCode(env, request.accesstoken, await prepareNumber(usrDObj.primaryPhone), verificationCode);
 		return response.status === 204
 			? env.MFARequiredTokens.put(request.userid, false, {expirationTtl: 9000})  && emptySuccessResponse(env)
 			: failedResponse();

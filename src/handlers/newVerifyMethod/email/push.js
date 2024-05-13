@@ -1,4 +1,3 @@
-import fetchAccessToken from "../../../utils/fetchAccessToken";
 import sendEmailVerificationCode from "../../../lib/sendEmailVerificationCode";
 import emptySuccessResponse from "../../../responses/emptySuccessResponse";
 import failedResponse from "../../../responses/failedResponse";
@@ -8,8 +7,7 @@ export default async (request, env) => {
 	const requestData = await request.json();
 	const email = requestData.email;
 	try {
-		const accessToken = await fetchAccessToken(env);
-		const response = await sendEmailVerificationCode(env, accessToken, email);
+		const response = await sendEmailVerificationCode(env, request.accesstoken, email);
 		return response.status === 204
 			? emptySuccessResponse(env)
 			: failedResponse;

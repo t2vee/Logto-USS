@@ -1,0 +1,19 @@
+name = ""
+main = "src/index.js"
+compatibility_flags = [ "nodejs_compat" ]
+compatibility_date = "2024-03-04"
+
+kv_namespaces = [
+	{ binding = "MFARequiredTokens", id = "" },
+	{ binding = "LogtoAccessToken", id = "" }
+]
+
+[vars]
+LOGTO_DOMAIN = ''
+JWKS_URI = ''
+ISSUER = ''
+CORS = ''
+AVATAR_API = ''
+
+[placement]
+mode = "smart"

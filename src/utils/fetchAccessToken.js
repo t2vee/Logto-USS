@@ -21,7 +21,7 @@ export default async function fetchAccessToken(env) {
 		if (!data.access_token) {
 			throw { message: 'Access token is missing in response', status: 500 };
 		}
-		return data.access_token;
+		return data;
 	} catch (error) {
 		console.error('Error fetching access token:', error);
 		throw typeof error === 'string' ? { message: error, status: 500 } : error;

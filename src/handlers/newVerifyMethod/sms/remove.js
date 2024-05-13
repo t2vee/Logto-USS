@@ -1,4 +1,3 @@
-import fetchAccessToken from "../../../utils/fetchAccessToken";
 import updateUserData from "../../../lib/updateUserData";
 import emptySuccessResponse from "../../../responses/emptySuccessResponse";
 import failedResponse from "../../../responses/failedResponse";
@@ -13,11 +12,10 @@ export default  async (request, env) => {
 		return error(400, 'Invalid UserID Provided');
 	}
 	try {
-		const accessToken = await fetchAccessToken(env);
 		const payload = {
 			"primaryPhone": null
 		}
-		const response = await updateUserData(env, accessToken, payload, userId)
+		const response = await updateUserData(env, request.accesstoken, payload, userId)
 		return response.status === 200
 			? emptySuccessResponse(env)
 			: failedResponse;

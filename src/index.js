@@ -33,6 +33,10 @@ import updateUsername from "./handlers/userData/updateUserInformation/updateUser
 import updateLocale from "./handlers/userData/updateUserInformation/updateLocale";
 import updateBirthday from "./handlers/userData/updateUserInformation/updateBirthday";
 import updateRegionalSettings from "./handlers/userData/updateUserInformation/updateRegionalSettings";
+import updatePassword from "./handlers/userData/updateUserInformation/updatePassword";
+import uploadNewAvatar from "./handlers/userData/updateUserInformation/uploadNewAvatar";
+import attachAccessToken from "./middleware/attachAccessToken";
+import canChangeUsername from "./handlers/canChangeUsername";
 
 
 const router = Router();
@@ -42,8 +46,9 @@ router.get('/api/v1/oauth-user-info/endpoint/api-spotify-com/v1/me', HandleSpoti
 
 router
 	.all('*', withMiddleware(async (request, env, ctx) => {return checkTokenMiddleware(request, env);}))
+	.all('*', withMiddleware(async (request, env, ctx) => {return attachAccessToken(request, env);}))
 
-
+// TODO Implement DataValidator lib for all userdata routes
 router.post('/api/v1/mfa-flow/push-email', pushEmail);
 router.post('/api/v1/mfa-flow/verify-email-code', verifyEmail);
 
@@ -51,34 +56,42 @@ router.post('/api/v1/mfa-flow/push-sms', pushSMS);
 router.post('/api/v1/mfa-flow/verify-sms-code', verifySMS);
 
 
-router.post('/api/v1/user-data-entry/new-verify-method/push-sms', pushNewSMS);
-router.post('/api/v1/user-data-entry/new-verify-method/verify-sms', verifyNewSMS);
-router.post('/api/v1/user-data-entry/remove-verify-method/remove-sms', removeSMS);
+router.post('/api/v2/me/verify/push-sms', pushNewSMS);
+router.post('/api/v2/me/verify/verify-sms', verifyNewSMS);
+router.post('/api/v2/me/edit/remove-sms', removeSMS);
 
-router.post('/api/v1/user-data-entry/new-verify-method/push-email', pushNewEmail);
-router.post('/api/v1/user-data-entry/new-verify-method/verify-email', verifyNewEmail);
+router.post('/api/v2/me/verify/push-email', pushNewEmail);
+router.post('/api/v2/me/verify/verify-email', verifyNewEmail);
 
+
+router.post('/api/v2/me/edit/full-name', updateFullName)
+// TODO Implement time limit between username changes
+router.post('/api/v2/me/edit/username', updateUsername)
+
+router.post('/api/v2/me/edit/regional-settings', updateRegionalSettings)
+router.post('/api/v2/me/edit/language', updateLocale)
+router.post('/api/v2/me/edit/birthday', updateBirthday)
+
+// TODO Implement Method to change password if old password was forgotten
+router.post('/api/v2/me/edit/password', updatePassword)
 // NEED TO BE IMPLEMENTED
-router.post('/api/v1/user-data-entry/update-user-information/personal-information/full-name', updateFullName)
-router.post('/api/v1/user-data-entry/update-user-information/personal-information/username', updateUsername)
-
-router.post('/api/v1/user-data-entry/update-user-information/profile/regional-settings', updateRegionalSettings)
-router.post('/api/v1/user-data-entry/update-user-information/profile/language', updateLocale)
-router.post('/api/v1/user-data-entry/update-user-information/profile/birthday', updateBirthday)
-
-// NEED TO BE IMPLEMENTED
-router.post('/api/v1/user-data-entry/update-user-information/security/password')
 router.post('/api/v1/user-data-entry/update-user-information/security/mfa-settings')
 // NEED TO BE IMPLEMENTED
 router.post('/api/v1/user-data-entry/update-user-information/privacy/third-party-data-access')
 router.post('/api/v1/user-data-entry/update-user-information/privacy/profile-visibility')
 router.post('/api/v1/user-data-entry/update-user-information/privacy/email-privacy')
 
+router.post('/api/v2/me/avatar/upload', uploadNewAvatar)
+router.post('/api/v2/me/avatar/remove')
 
-router.get('/api/v1/is-mfa-required', isMfaRequired);
-router.get('/api/v1/get-user-info/mfa-methods', mfaMethods);
-router.get('/api/v1/check-username-exists/:username', usernameExists);
-router.get('/api/v1/extended-user-info', extendedUserData);
+
+router.get('/api/v1/me/is-mfa-required', isMfaRequired);
+router.get('/api/v1/me/mfa-methods', mfaMethods);
+router.get('/api/v1/me/extended-user-info', extendedUserData);
+router.get('/api/v1/me/can-change-username', canChangeUsername)
+
+router.get('/api/v1/utils/check-username-exists/:username', usernameExists);
+
 
 
 /**

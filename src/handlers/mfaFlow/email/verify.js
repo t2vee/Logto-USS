@@ -1,4 +1,3 @@
-import fetchAccessToken from "../../../utils/fetchAccessToken";
 import grabUserDetails from "../../../lib/grabUserDetails";
 import verifyEmailCode from "../../../lib/verifyEmailCode";
 import checkMfaVerificationCode from "../../../middleware/checkVerificationCodeMiddleware";
@@ -35,10 +34,9 @@ export default async (request, env) => {
 	const verificationCode = await checkMfaVerificationCode(request)
 
 	try {
-		const accessToken = await fetchAccessToken(env);
-		const userData = await grabUserDetails(env, accessToken, request.userid);
+		const userData = await grabUserDetails(env, request.accesstoken, request.userid);
 		const usrDObj = JSON.parse(userData);
-		const response = await verifyEmailCode(env, accessToken, usrDObj.primaryEmail, verificationCode);
+		const response = await verifyEmailCode(env, request.accesstoken, usrDObj.primaryEmail, verificationCode);
 		if (response.status === 204) {
 			await env.MFARequiredTokens.put(request.userid, false, {expirationTtl: 9000});
 			return emptySuccessResponse(env);

@@ -22,9 +22,7 @@ export default async function sendSMSVerificationCode(env, accessToken, userNumb
 		'Authorization': `Bearer ${accessToken}`,
 		'Content-Type': 'application/json',
 	};
-	console.log(userNumber)
 	const body = JSON.stringify({ phone: userNumber });
-	console.log(body)
 	const response = await fetch(url, { method: 'POST', headers, body });
 	try {
 		if (!response.ok) {

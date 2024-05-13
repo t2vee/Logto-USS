@@ -1,4 +1,3 @@
-import fetchAccessToken from "../../../utils/fetchAccessToken";
 import grabUserDetails from "../../../lib/grabUserDetails";
 import sendSMSVerificationCode from "../../../lib/sendSMSVerificationCode";
 import prepareNumber from "../../../utils/prepareNumber";
@@ -28,10 +27,9 @@ import failedResponseWithMessage from "../../../responses/failedResponseWithMess
 
 export default async (request, env) => {
 	try {
-		const accessToken = await fetchAccessToken(env);
-		const userData = await grabUserDetails(env, accessToken, request.userid)
+		const userData = await grabUserDetails(env, request.accesstoken, request.userid)
 		const usrDObj = JSON.parse(userData)
-		const response = await sendSMSVerificationCode(env, accessToken, await prepareNumber(usrDObj.primaryPhone));
+		const response = await sendSMSVerificationCode(env, request.accesstoken, await prepareNumber(usrDObj.primaryPhone));
 		return response.status === 204
 			? emptySuccessResponse(env)
 			: failedResponse;

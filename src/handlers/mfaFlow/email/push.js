@@ -1,4 +1,3 @@
-import fetchAccessToken from "../../../utils/fetchAccessToken";
 import grabUserDetails from "../../../lib/grabUserDetails";
 import sendEmailVerificationCode from "../../../lib/sendEmailVerificationCode";
 import emptySuccessResponse from "../../../responses/emptySuccessResponse";
@@ -21,10 +20,9 @@ import failedResponseWithMessage from "../../../responses/failedResponseWithMess
 
 export default async (request, env) => {
 	try {
-		const accessToken = await fetchAccessToken(env);
-		const userData = await grabUserDetails(env, accessToken, request.userid)
+		const userData = await grabUserDetails(env, request.accesstoken, request.userid)
 		const usrDObj = JSON.parse(userData)
-		const response = await sendEmailVerificationCode(env, accessToken, usrDObj.primaryEmail);
+		const response = await sendEmailVerificationCode(env, request.accesstoken, usrDObj.primaryEmail);
 		return response.status === 204
 			? emptySuccessResponse(env)
 			: failedResponse;

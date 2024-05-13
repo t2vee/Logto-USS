@@ -1,4 +1,3 @@
-import fetchAccessToken from "../../utils/fetchAccessToken";
 import checkUsernameAvailability from "../../lib/checkUsernameAvailability";
 import emptySuccessResponse from "../../responses/emptySuccessResponse";
 import successResponse from "../../responses/successResponse";
@@ -18,11 +17,7 @@ export default async (request, env, context) => {
 		return failedResponseWithMessage('No Username Provided');
 	}
 	try {
-		const accessToken = await fetchAccessToken(env);
-		if (!accessToken) {
-			return new Response('Failed to fetch access token', { status: 500 });
-		}
-		const resourceResponse = await checkUsernameAvailability(env, accessToken, request.params.username);
+		const resourceResponse = await checkUsernameAvailability(env, request.accesstoken, request.params.username);
 		if (resourceResponse === '[]') {
 			return emptySuccessResponse(env);
 		} else {
