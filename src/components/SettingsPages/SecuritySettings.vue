@@ -113,7 +113,7 @@ onMounted(grabMfaOptions)
       />
       <EditDetailDialog
         title="Account Security"
-        :desc="`${(mfaOptions[1] = 'none' && mfaOptions.length > 2 ? mfaOptions.length + 1 : userData.phone_number_verified ? '2' : '1')} MFA Methods Set Up`"
+        :desc="`${(mfaOptions[1] === 'none' && mfaOptions.length > 2 ? mfaOptions.length + 1 : userData.phone_number_verified ? '2' : '1')} MFA Methods Set Up`"
         :icon="Fingerprint"
         :dialog-page="EditMfaMethods"
       />
