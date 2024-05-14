@@ -25,7 +25,7 @@ async function updateData() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/update-user-information/profile/language`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/language`,
         {
           "locale": selectedLocale.value
         },
@@ -50,7 +50,7 @@ async function updateData() {
 </script>
 
 <template>
-  <div>
+  <div class="space-y-10">
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5">
         <Label class="font-bold">

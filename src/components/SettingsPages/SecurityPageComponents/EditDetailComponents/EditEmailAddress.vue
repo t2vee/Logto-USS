@@ -17,11 +17,11 @@ import { Label } from '@/components/ui/label';
 import {Loader, MailCheck, MailX, CornerDownRight, ArrowBigRightDash} from 'lucide-vue-next';
 import {Button} from "@/components/ui/button/index.js";
 import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
-import MfaCodeInput from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/MfaCodeInput.vue";
+import MfaCodeInput from "@/components/SettingsPages/Global/MfaCodeInput.vue";
 import axios from "axios";
 import {toast} from "vue-sonner";
 import {eventBus} from "@/lib/eventBus.js";
-const ConnectorAlert = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/ConnectorAlert.vue"));
+const ConnectorAlert = defineAsyncComponent(() => import("@/components/SettingsPages/Global/ConnectorAlert.vue"));
 
 
 const userData = inject('userData')
@@ -64,7 +64,7 @@ async function sendVerificationCode() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   accessTokenRef.value = accessToken;
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/new-verify-method/push-email`, {
+    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/push-email`, {
       email: email.value,
     }, {
       headers: {
@@ -101,7 +101,7 @@ const handleCodeComplete = async (code) => {
   isLoading.value = true;
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/new-verify-method/verify-email?verification-code=${code}&user-id=${userData.value.sub}`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/verify-email?verification-code=${code}`,
         {email: email.value},
         {
           headers: {
@@ -128,7 +128,7 @@ const handleCodeComplete = async (code) => {
 
 <template>
   <transition name="fade" mode="out-in">
-    <div v-if="!isLoading && !emailSent" class="flex flex-col gap-4 items-center align-middle">
+    <div v-if="!isLoading && !emailSent" class="flex flex-col gap-4 items-center align-middle space-y-10">
       <ConnectorAlert v-if="userConnectorPresent" />
       <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
         <Label for="email" class="flex font-bold w-full justify-between">
@@ -173,10 +173,10 @@ const handleCodeComplete = async (code) => {
                   <AlertDialogDescription class="space-y-4">
                     Changing your email means that you will <strong>no longer</strong> be able to:
                     <ul class="space-y-1">
-                      <li class="flex items-center align-middle"><ArrowBigRightDash /> Login with {{ userData.email }}</li>
-                      <li class="flex items-center align-middle"><ArrowBigRightDash /> Contact us with {{ userData.email }}</li>
-                      <li class="flex items-center align-middle"><ArrowBigRightDash /> Receive any mail with {{ userData.email }}</li>
-                      <li class="flex items-center align-middle"><ArrowBigRightDash /> Verify your identity with {{ userData.email }}</li>
+                      <li class="flex items-center align-middle"><ArrowBigRightDash /> <span class="font-bold">Login with&nbsp;</span> {{ userData.email.length > 30 ? `${userData.email.substring(0, 30)}...` : userData.email }}</li>
+                      <li class="flex items-center align-middle"><ArrowBigRightDash /> <span class="font-bold">Contact us with&nbsp;</span> {{ userData.email.length > 30 ? `${userData.email.substring(0, 30)}...` : userData.email }}</li>
+                      <li class="flex items-center align-middle"><ArrowBigRightDash /> <span class="font-bold">Receive any mail with&nbsp;</span> {{ userData.email.length > 30 ? `${userData.email.substring(0, 30)}...` : userData.email }}</li>
+                      <li class="flex items-center align-middle"><ArrowBigRightDash /> <span class="font-bold">Verify your identity with&nbsp;</span> {{ userData.email.length > 30 ? `${userData.email.substring(0, 30)}...` : userData.email }}</li>
                     </ul>
                   </AlertDialogDescription>
                 </AlertDialogHeader>

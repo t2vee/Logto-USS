@@ -2,7 +2,7 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import axios from 'axios';
-import {inject, ref, defineAsyncComponent } from 'vue';
+import {inject, ref, defineAsyncComponent, onMounted} from 'vue';
 import { useLogto } from '@logto/vue';
 import debounce from 'lodash/debounce';
 import {Ban, UserRoundCheck, MoreHorizontal} from 'lucide-vue-next';
@@ -10,7 +10,7 @@ import {Button} from "@/components/ui/button/index.js";
 import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
 import {toast} from "vue-sonner";
 import {eventBus} from "@/lib/eventBus.js";
-const ConnectorAlert = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/ConnectorAlert.vue"));
+const ConnectorAlert = defineAsyncComponent(() => import("@/components/SettingsPages/Global/ConnectorAlert.vue"));
 
 
 const userData = inject('userData')
@@ -22,6 +22,7 @@ const username = ref('');
 const isChecking = ref(false);
 const isAvailable = ref(false);
 const usernameChecked = ref(false);
+const waitForNextChange = ref('');
 
 const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK;
 const usernameRegex = new RegExp(/^[a-zA-Z0-9]{3,24}$/)
@@ -39,7 +40,7 @@ const checkUsernameAvailability = async (value) => {
   usernameChecked.value = false;
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/check-username-exists/${value}`, {
+    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/utils/check-username-exists/${value}`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
@@ -47,7 +48,7 @@ const checkUsernameAvailability = async (value) => {
     });
     isAvailable.value = response.status === 204;
   } catch (error) {
-    console.error('Error checking username availability:', error);
+    console.log('Error checking username availability:', error);
     isAvailable.value = error.response && error.response.status === 404;
   } finally {
     isChecking.value = false;
@@ -62,7 +63,7 @@ async function updateData() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/update-user-information/personal-information/username`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/username`,
         {
           "username": username.value
         },
@@ -76,7 +77,11 @@ async function updateData() {
       toast.success('Success!',{description: 'Your changes were saved successfully.'})
     }
   } catch (error) {
-    toast.error('Error saving changes:',{description: 'Service Unavailable. Try again later'})
+    if (error.response.status === 400) {
+      toast.warning('Cant Change Username',{description: error.response.text})
+    } else {
+      toast.error('Error saving changes:',{description: 'Service Unavailable. Try again later'})
+    }
     failed = true;
   }
   if (!failed) {
@@ -84,11 +89,31 @@ async function updateData() {
     eventBus.emit('refreshUserData', true);
   }
 }
+
+const checkNextUsernameChange = async () => {
+  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/can-change-username`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    if (response.status === 200) {
+      waitForNextChange.value = response.data
+    }
+  } catch (error) {
+    console.log('Error grabbing username details:', error);
+    isAvailable.value = error.response && error.response.status === 404;
+  }
+};
+
+onMounted(checkNextUsernameChange)
 </script>
 
 <template>
-  <div>
-    <ConnectorAlert v-if="userConnectorPresent" />
+  <div class="space-y-10">
+    <ConnectorAlert v-if="waitForNextChange" :custom-title="`Cant Change Username Until ${waitForNextChange.value}`" :custom-message="`You can only change your username once per month. Your next username change will be available on the ${waitForNextChange.value}`" />
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
         <div class="grid w-3/4 max-w-sm items-center gap-1.5">
           <Label for="userid" class="font-bold">
@@ -105,7 +130,7 @@ async function updateData() {
             <div>
               <Input
                   id="username"
-                  :disabled="userConnectorPresent"
+                  :disabled="!!waitForNextChange"
                   v-model="username"
                   @input="debouncedCheckUsername"
                   :class="{
@@ -121,6 +146,7 @@ async function updateData() {
               </div>
             </div>
         </div>
+      <p class="text-xs" v-if="!waitForNextChange">Keep in mind, You can only <strong>change your username once per month!</strong></p>
     </div>
     <DialogFooter>
       <div class="flex space-x-10 items-center align-middle">
@@ -130,7 +156,7 @@ async function updateData() {
           </a>
         </Button>
         <div class="space-x-2">
-          <Button type="submit" class="h-[30px]" :disabled="userConnectorPresent || !isAvailable" :onclick="updateData">
+          <Button type="submit" class="h-[30px]" :disabled="waitForNextChange || !isAvailable" @click="updateData">
             Save
           </Button>
           <DialogClose as-child>

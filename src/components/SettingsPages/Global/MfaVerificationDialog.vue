@@ -1,7 +1,7 @@
 <script setup>
-import { watch, ref } from 'vue';
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { ref, watch } from 'vue';
+import { Label } from '@/components/ui/label/index.js'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group/index.js'
 import { useLogto } from "@logto/vue";
 import { Loader, Loader2, Shield } from 'lucide-vue-next';
 import axios from "axios";
@@ -12,8 +12,14 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog/index.js";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 import {Button} from "@/components/ui/button/index.js";
-import MfaCodeInput from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/MfaCodeInput.vue";
+import MfaCodeInput from "@/components/SettingsPages/Global/MfaCodeInput.vue";
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js';
 
@@ -60,7 +66,7 @@ const countdown = () => {
 
 async function grabMfaOptions(accessToken) {
   try {
-    return await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/get-user-info/mfa-methods`, {
+    return await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/mfa-methods`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
@@ -74,6 +80,7 @@ async function grabMfaOptions(accessToken) {
 
 async function sendVerificationCode() {
   isLoading.value = true;
+  let failed = false;
   try {
     const response = await axios.post(
         `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/push-${selectedMfaMethod.value}`,
@@ -89,13 +96,14 @@ async function sendVerificationCode() {
   } catch (error) {
     toast.error('Error sending verification code:', {description: error})
     codeSent.value = false;
+    failed = true;
   } finally {
     isLoading.value = false;
     resendCodeTimer.value = 60;
     countdown()
-    if (selectedMfaMethod.value === 'email') {
+    if (selectedMfaMethod.value === 'email' && !failed) {
       toast.info('Sent Email to ' + props.userData.email, {description: 'Code will last for 10 minutes.'})
-    } else if (selectedMfaMethod.value === 'phone') {
+    } else if (selectedMfaMethod.value === 'phone' && !failed) {
       toast.info('Sent Text to ' + props.userData.phone_number, {description: 'Code will last for 10 minutes.'})
     }
   }
@@ -144,7 +152,7 @@ const checkMFA = async () => {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   accessTokenRef.value = accessToken;
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/is-mfa-required`, {
+    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/is-mfa-required`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
@@ -170,20 +178,22 @@ function updateSelectedMethod(value) {
 
 watch(() => props.isVisible, (newValue) => {
   if (newValue) {
-    checkMFA().catch(error => console.error("MFA check failed:", error));
+    checkMFA().catch(error => console.log("MFA check failed:", error));
   }
 });
-
 </script>
 
 <template>
-  <DialogContent class="sm:max-w-[425px]">
-    <DialogHeader class="mb-3">
-      <DialogTitle class="flex items-center align-middle"><component class="mr-1" :is="!isLoading && isMfaRequired ? Shield : icon" />{{ !isLoading && isMfaRequired ? 'Verify Your Identity' : !dataRequest ? 'Edit Your ' + title : title }}</DialogTitle>
-      <DialogDescription class="text-xs">
-        {{ !isLoading && isMfaRequired ? "In order to verify your identity, we'll send you a code to your preferred method below." : '' }}
-      </DialogDescription>
-    </DialogHeader>
+  <DialogContent class="sm:max-w-[525px] sm:min-h-[500px] flex flex-col items-center justify-center align-middle space-y-6">
+    <transition name="slide" mode="out-in">
+      <DialogHeader class="mb-3 flex flex-col items-center justify-center align-middle">
+        <component class="mr-1" height="42" width="42" :is="!isLoading && isMfaRequired ? Shield : icon" />
+        <DialogTitle class="flex items-center align-middle">{{ !isLoading && isMfaRequired ? 'Verify Your Identity' : !dataRequest ? 'Edit Your ' + title : title }}</DialogTitle>
+        <DialogDescription class="text-xs">
+          {{ !isLoading && isMfaRequired ? "In order to verify your identity, we'll send you a code to your preferred method below." : '' }}
+        </DialogDescription>
+      </DialogHeader>
+    </transition>
     <transition name="fade" mode="out-in">
       <div key="mfa-settings" v-if="!isLoading && isMfaRequired && !codeSent" class="space-y-8">
         <RadioGroup default-value="email" class="space-y-3" @update:modelValue="updateSelectedMethod">
@@ -195,12 +205,21 @@ watch(() => props.isVisible, (newValue) => {
             <RadioGroupItem id="r2" value="sms" />
             <Label for="r2">Text <strong>{{ userData.phone_number }}</strong></Label>
           </div>
-          <div v-if="mfaOptions[0].type === 'Totp'" class="flex items-center space-x-2">
-            <RadioGroupItem id="r3" value="authenticator" />
-            <Label for="r3">Authenticator App (Google/Microsoft Authenticator)</Label>
+          <div v-if="mfaOptions[0].type === 'Totp'">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger class="flex items-center space-x-2">
+                  <RadioGroupItem id="r3" value="authenticator" disabled />
+                  <Label for="r3" class="text-gray-600">Authenticator App (Google/Microsoft Authenticator)</Label>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Currently Not Available</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </RadioGroup>
-        <div class="space-x-2 w-full flex justify-end">
+        <div class="space-x-2 w-full flex justify-center">
           <p class="text-xs" v-if="resendCodeTimer>0 && !readyToSend">Please wait {{ resendCodeTimer }} seconds before sending another code</p>
           <Button :disabled="resendCodeTimer>0 && !readyToSend" class="h-[30px]" @click="sendVerificationCode">Next</Button>
           <DialogClose as-child>
@@ -214,16 +233,12 @@ watch(() => props.isVisible, (newValue) => {
         <MfaCodeInput :resend-code-timer="resendCodeTimer" @codeComplete="handleCodeComplete" @resendCode="handleCodeResend" @changeInput="handleChangeInput" />
       </div>
       <div v-else-if="!isLoading && !isMfaRequired">
-        <component :is="editPage" :user-data="userData" />
+        <component :is="editPage" />
       </div>
-      <div v-else-if="isLoading" class="flex items-center align-middle">
+      <div v-else-if="isLoading" class="flex items-center align-middle justify-center">
         <Loader class="animate-spin" :size="32" />
         <p class="text-xl font-bold">Loading...</p>
       </div>
     </transition>
   </DialogContent>
 </template>
-
-<style scoped>
-
-</style>

@@ -4,9 +4,9 @@ import {
   CardDescription,
   CardTitle,
 } from '@/components/ui/card'
-import { CircleUserRound, UserRound, BookType, Earth, CalendarFold } from 'lucide-vue-next';
+import { CircleUserRound, UserRound, BookType, Earth, CalendarFold, DoorOpen } from 'lucide-vue-next';
 const EditBirthdayDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditBirthdayDialog.vue"));
-const EditDetailDialog = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditDetailDialog.vue"));
+const EditDetailDialog = defineAsyncComponent(() => import("@/components/SettingsPages/Global/EditDetailDialog.vue"));
 const EditUsername = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditUsername.vue"));
 const EditRegionalSettings = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditRegionalSettings.vue"));
 const EditLocaleSettings = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditLocaleSettings.vue"));
@@ -35,7 +35,7 @@ function expandLocale(shortLocale) {
         <EditDetailDialog
           title="Public Profile"
           desc="Open For More Details"
-          :icon="UserRound"
+          :icon="DoorOpen"
           :dialog-page="EditFullName"
         />
         <EditDetailDialog
@@ -54,7 +54,7 @@ function expandLocale(shortLocale) {
         />
         <EditDetailDialog
             title="Birthday"
-            :desc="userData.birthdate ?? userData.birthdate ?? 'Not Set'"
+            :desc="userData['profile.birthdate'] ? userData['profile.birthdate'] : 'Not Set'"
             :icon="CalendarFold"
             :dialog-page="EditBirthdayDialog"
         />
@@ -62,13 +62,13 @@ function expandLocale(shortLocale) {
       <div class="flex gap-4 mt-4">
         <EditDetailDialog
             title="Country/Region"
-            :desc="userData.data.profile.address.country ?? userData.data.profile.address.locality ?? 'Not Set'"
+            :desc="userData['profile.address.country'] ?? userData['profile.address.locality'] ?? 'Not Set'"
             :icon="Earth"
             :dialog-page="EditRegionalSettings"
         />
         <EditDetailDialog
             title="Language"
-            :desc="userData.locale ? expandLocale(userData.locale) : 'Not Set'"
+            :desc="userData['profile.locale'] ? expandLocale(userData['profile.locale']) : 'Not Set'"
             :icon="BookType"
             :dialog-page="EditLocaleSettings"
         />

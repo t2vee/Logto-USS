@@ -27,13 +27,13 @@ const onClickSignOut = () => signOut('http://127.0.0.1:5173/');
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">
+          <BreadcrumbLink href="https://mxs.app">
             Home
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="/account">
+          <BreadcrumbLink href="/account/aboutme">
             My Account
           </BreadcrumbLink>
         </BreadcrumbItem>

@@ -7,18 +7,15 @@ import axios from "axios";
 import {toast} from "vue-sonner";
 import {eventBus} from "@/lib/eventBus.js";
 import {useLogto} from "@logto/vue";
-
 import {
   DateFormatter,
   getLocalTimeZone,
 } from '@internationalized/date'
-
 import { Calendar as CalendarIcon } from 'lucide-vue-next'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/utils.js'
 import CalendarWithSelects
   from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/CalendarWithSelects.vue";
-import countries from "@/lib/countries.json.js";
 
 const df = new DateFormatter('en-AU', {
   dateStyle: 'long',
@@ -37,7 +34,7 @@ async function updateData() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/update-user-information/profile/birthday`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/birthday`,
         {
           "birthday": df.format(value.value.toDate(getLocalTimeZone()))
         },
@@ -66,7 +63,7 @@ function allowSave() {
 </script>
 
 <template>
-  <div>
+  <div class="space-y-10">
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5">
         <Label for="username" class="flex font-bold w-full justify-between">

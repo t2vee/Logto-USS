@@ -10,7 +10,7 @@ import {Label} from "@/components/ui/label/index.js";
 import {PhoneMissed, Phone, Loader} from "lucide-vue-next";
 import key from '@/lib/encryptNumber.pem.js';
 import { toast } from 'vue-sonner'
-import MfaCodeInput from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/MfaCodeInput.vue";
+import MfaCodeInput from "@/components/SettingsPages/Global/MfaCodeInput.vue";
 import { eventBus } from '@/lib/eventBus.js';
 
 const userData = inject('userData')
@@ -91,7 +91,7 @@ async function sendEncryptedData(encryptedData) {
   const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
   console.log(base64EncryptedData)
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/new-verify-method/push-sms`, {
+    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/push-sms`, {
       encryptedPhoneNumber: base64EncryptedData,
     }, {
       headers: {
@@ -138,7 +138,7 @@ const handleCodeComplete = async (code) => {
   const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/new-verify-method/verify-sms?verification-code=${code}&user-id=${userData.value.sub}`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/verify-sms?verification-code=${code}`,
         {encryptedPhoneNumber: base64EncryptedData,},
         {
           headers: {
@@ -170,7 +170,7 @@ async function verifyNumber() {
     const encryptedData = await encryptData(publicKey, phone.value);
     await sendEncryptedData(encryptedData);
   } catch (error) {
-    console.error('failed:', error);
+    console.log('failed:', error);
     isLoading.value = false;
   }
 }
@@ -178,7 +178,7 @@ async function verifyNumber() {
 
 <template>
   <transition name="fade" mode="out-in">
-    <div v-if="!isLoading && !smsSent" class="flex flex-col gap-4 py-4 items-center align-middle">
+    <div v-if="!isLoading && !smsSent" class="flex flex-col gap-4 py-4 items-center align-middle space-y-10">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
         <Label for="email" class="flex font-bold w-full justify-between">
           Enter Number
