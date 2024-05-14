@@ -12,6 +12,12 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog/index.js";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 import {Button} from "@/components/ui/button/index.js";
 import MfaCodeInput from "@/components/SettingsPages/Global/MfaCodeInput.vue";
 import { toast } from 'vue-sonner'
@@ -199,9 +205,18 @@ watch(() => props.isVisible, (newValue) => {
             <RadioGroupItem id="r2" value="sms" />
             <Label for="r2">Text <strong>{{ userData.phone_number }}</strong></Label>
           </div>
-          <div v-if="mfaOptions[0].type === 'Totp'" class="flex items-center space-x-2">
-            <RadioGroupItem id="r3" value="authenticator" />
-            <Label for="r3">Authenticator App (Google/Microsoft Authenticator)</Label>
+          <div v-if="mfaOptions[0].type === 'Totp'">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger class="flex items-center space-x-2">
+                  <RadioGroupItem id="r3" value="authenticator" disabled />
+                  <Label for="r3" class="text-gray-600">Authenticator App (Google/Microsoft Authenticator)</Label>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Currently Not Available</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </RadioGroup>
         <div class="space-x-2 w-full flex justify-center">

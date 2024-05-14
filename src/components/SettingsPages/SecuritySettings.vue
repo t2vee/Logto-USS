@@ -26,7 +26,11 @@ async function grabMfaOptions() {
         'Content-Type': 'application/json'
       }
     });
+
     mfaOptions.value = response.data
+    if (mfaOptions.value[0] === 'none') {
+      mfaOptions.value[1] = "none";
+    }
   } catch (error) {
     toast.error('Error grabbing MFA Options:', {description: error})
   }
@@ -64,7 +68,7 @@ onMounted(grabMfaOptions)
       />
       <EditDetailDialog
           title="Account Security"
-          :desc="`${mfaOptions.length > 1 ? mfaOptions.length + 1 : (userData.phone_number_verified ? '2' : '1')} MFA Methods Set Up`"
+          :desc="`${mfaOptions[1] = 'none' && mfaOptions.length > 2 ? mfaOptions.length + 1 : (userData.phone_number_verified ? '2' : '1')} MFA Methods Set Up`"
           :icon="Fingerprint"
           :dialog-page="EditMfaMethods"
       />
