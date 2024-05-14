@@ -1,5 +1,5 @@
 import updateUserData from "../../../lib/updateUserData";
-import decryptNumber from "../../../utils/decryptNumber";
+//import decryptNumber from "../../../utils/decryptNumber"; bruh
 import verifySMSCode from "../../../lib/verifySMSCode";
 import prepareNumber from "../../../utils/prepareNumber";
 import checkVerificationCodeMiddleware from "../../../middleware/checkVerificationCodeMiddleware";
@@ -11,9 +11,9 @@ export default async (request, env) => {
 	const verificationCode = await checkVerificationCodeMiddleware(request)
 	const requestData = await request.json();
 	const encryptedPhoneNumber = requestData.encryptedPhoneNumber;
-	const userNumber = await decryptNumber(env, encryptedPhoneNumber);
+	//const userNumber = await decryptNumber(env, encryptedPhoneNumber);
 	try {
-		const num = await prepareNumber(userNumber)
+		const num = await prepareNumber(encryptedPhoneNumber)
 		const response = await verifySMSCode(env, request.accesstoken, num, verificationCode);
 		if (response.status === 204) {
 			const userData = {
