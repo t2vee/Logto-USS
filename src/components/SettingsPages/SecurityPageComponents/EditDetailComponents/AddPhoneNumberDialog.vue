@@ -8,7 +8,6 @@ import {Button} from "@/components/ui/button/index.js";
 import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
 import {Label} from "@/components/ui/label/index.js";
 import {PhoneMissed, Phone, Loader} from "lucide-vue-next";
-import key from '@/lib/encryptNumber.pem.js';
 import { toast } from 'vue-sonner'
 import MfaCodeInput from "@/components/SettingsPages/Global/MfaCodeInput.vue";
 import { eventBus } from '@/lib/eventBus.js';
@@ -55,8 +54,8 @@ function checkNumber() {
     isEditing.value = true;
   }
 }
-
-async function importPublicKey() {
+// all completely useless
+/*async function importPublicKey() {
   const pemHeader = "-----BEGIN PUBLIC KEY-----";
   const pemFooter = "-----END PUBLIC KEY-----";
   const pemContents = key.substring(pemHeader.length, key.length - pemFooter.length);
@@ -71,9 +70,9 @@ async function importPublicKey() {
       true,
       ["encrypt"]
   );
-}
+}*/
 
-async function encryptData(publicKey, data) {
+/*async function encryptData(publicKey, data) {
   const encoder = new TextEncoder();
   const encodedData = encoder.encode(data);
   return await crypto.subtle.encrypt(
@@ -83,16 +82,16 @@ async function encryptData(publicKey, data) {
       publicKey,
       encodedData
   );
-}
+}*/
 
-async function sendEncryptedData(encryptedData) {
+async function sendEncryptedData() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   accessTokenRef.value = accessToken;
-  const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
-  console.log(base64EncryptedData)
+  //const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
+  //console.log(base64EncryptedData) extremely complicated for literally no reason
   try {
     const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/push-sms`, {
-      encryptedPhoneNumber: base64EncryptedData,
+      encryptedPhoneNumber: phone.value, // girl what
     }, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -133,13 +132,13 @@ async function handleChangeInput() {
 
 const handleCodeComplete = async (code) => {
   isLoading.value = true;
-  const publicKey = await importPublicKey();
-  const encryptedData = await encryptData(publicKey, phone.value);
-  const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
+  //const publicKey = await importPublicKey();
+  //const encryptedData = await encryptData(publicKey, phone.value);
+  //const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
   try {
     const response = await axios.post(
         `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/verify-sms?verification-code=${code}`,
-        {encryptedPhoneNumber: base64EncryptedData,},
+        {encryptedPhoneNumber: phone.value,},
         {
           headers: {
             'Authorization': `Bearer ${accessTokenRef.value}`,
@@ -166,9 +165,10 @@ async function verifyNumber() {
   if (!isNumberValid.value || !phone.value) return;
   isLoading.value = true;
   try {
-    const publicKey = await importPublicKey();
-    const encryptedData = await encryptData(publicKey, phone.value);
-    await sendEncryptedData(encryptedData);
+    // why
+    //const publicKey = await importPublicKey();
+    //const encryptedData = await encryptData(publicKey, phone.value);
+    await sendEncryptedData();
   } catch (error) {
     console.log('failed:', error);
     isLoading.value = false;

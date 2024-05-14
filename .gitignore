@@ -29,7 +29,5 @@ coverage
 
 *.tsbuildinfo
 
-encryptNumber.pem.js
-
 .env
 *.env
