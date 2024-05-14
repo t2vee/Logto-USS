@@ -1,9 +1,7 @@
-import fetchAccessToken from "../../../utils/fetchAccessToken";
 import grabUserDetails from "../../../lib/grabUserDetails";
 import sendEmailVerificationCode from "../../../lib/sendEmailVerificationCode";
-import emptySuccessResponse from "../../../responses/emptySuccessResponse";
-import failedResponse from "../../../responses/failedResponse";
-import failedResponseWithMessage from "../../../responses/failedResponseWithMessage";
+import successEMPTY from "../../../responses/raw/success-EMPTY";
+import failureEMPTY from "../../../responses/raw/failure-EMPTY";
 
 /**
  * Processes a request to send an email verification code to a user's primary email address.
@@ -21,14 +19,14 @@ import failedResponseWithMessage from "../../../responses/failedResponseWithMess
 
 export default async (request, env) => {
 	try {
-		const accessToken = await fetchAccessToken(env);
-		const userData = await grabUserDetails(env, accessToken, request.userid)
+		const userData = await grabUserDetails(env, request.accesstoken, request.userid)
 		const usrDObj = JSON.parse(userData)
-		const response = await sendEmailVerificationCode(env, accessToken, usrDObj.primaryEmail);
+		const response = await sendEmailVerificationCode(env, request.accesstoken, usrDObj.primaryEmail);
 		return response.status === 204
-			? emptySuccessResponse(env)
-			: failedResponse;
+			? successEMPTY(env)
+			: failureEMPTY(env);
 	} catch (e) {
-		return failedResponseWithMessage(e);
+		console.error(e)
+		return failureEMPTY(env, 418)
 	}
 }

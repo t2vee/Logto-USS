@@ -1,13 +1,14 @@
-import successJSONResponse from "../responses/successJSONResponse";
-import failedResponseWithMessage from "../responses/failedResponseWithMessage";
 import extractBearerTokenFromHeaders from "../utils/extractHeaders";
+import failureCONTENT from "../responses/raw/failure-CONTENT";
+import failureEMPTY from "../responses/raw/failure-EMPTY";
+import successCONTENT from "../responses/raw/success-CONTENT";
 
 export default async (request, env) => {
 	if (!request.query || !request.query.token) {
-		return failedResponseWithMessage('No Token Provided');
+		return failureCONTENT(env,'No Token Provided', 401);
 	}
 	if (request.query.token !== env.TOKEN) {
-		return failedResponseWithMessage('Invalid Token Provided');
+		return failureCONTENT(env,'Invalid Token Provided', 401);
 	}
 	const url = `https://api.spotify.com/v1/me`;
 	const headers = request.headers
@@ -29,9 +30,9 @@ export default async (request, env) => {
 			"filter": data.explicit_content.filter_enabled,
 			"image_url": data.images.length > 0 ? data.images[0].url : null
 		}
-		return successJSONResponse(env, payload);
-	} catch (error) {
-		console.error('Error accessing resource:', error);
-		return failedResponseWithMessage(error);
+		return successCONTENT(env, payload);
+	} catch (e) {
+		console.error(e)
+		return failureEMPTY(env, 418)
 	}
 }

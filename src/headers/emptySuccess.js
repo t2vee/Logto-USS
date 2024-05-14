@@ -1,6 +1,6 @@
-export default {
+export default (env) => new Object({
 	"Content-Type": "text/plain",
-	"Access-Control-Allow-Origin": "http://127.0.0.1:5173",
+	"Access-Control-Allow-Origin": env.CORS,
 	"Access-Control-Allow-Methods": "GET, POST, OPTIONS",
 	"Access-Control-Allow-Headers": "Origin, Content-Type, Accept, Authorization",
 	"Access-Control-Max-Age": "86400",
@@ -10,4 +10,4 @@ export default {
 	"Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
 	"X-XSS-Protection": "1; mode=block",
 	"Referrer-Policy": "no-referrer",
-};
+});

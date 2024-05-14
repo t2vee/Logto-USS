@@ -1,8 +1,8 @@
-import fetchAccessToken from "../../utils/fetchAccessToken";
 import checkUsernameAvailability from "../../lib/checkUsernameAvailability";
-import emptySuccessResponse from "../../responses/emptySuccessResponse";
-import successResponse from "../../responses/successResponse";
-import failedResponseWithMessage from "../../responses/failedResponseWithMessage";
+import successCONTENT from "../../responses/raw/success-CONTENT";
+import successEMPTY from "../../responses/raw/success-EMPTY";
+import failureCONTENT from "../../responses/raw/failure-CONTENT";
+import failureEMPTY from "../../responses/raw/failure-EMPTY";
 
 /**
  * Route handler for checking if a username exists.
@@ -15,20 +15,17 @@ import failedResponseWithMessage from "../../responses/failedResponseWithMessage
  */
 export default async (request, env, context) => {
 	if (!request.params || !request.params.username) {
-		return failedResponseWithMessage('No Username Provided');
+		return failureCONTENT(env, 'No Username Provided', 400);
 	}
 	try {
-		const accessToken = await fetchAccessToken(env);
-		if (!accessToken) {
-			return new Response('Failed to fetch access token', { status: 500 });
-		}
-		const resourceResponse = await checkUsernameAvailability(env, accessToken, request.params.username);
+		const resourceResponse = await checkUsernameAvailability(env, request.accesstoken, request.params.username);
 		if (resourceResponse === '[]') {
-			return emptySuccessResponse(env);
+			return successEMPTY(env);
 		} else {
-			return successResponse(env, 'Username Taken');
+			return successCONTENT(env, 'Username Taken');
 		}
-	} catch (error) {
-		return failedResponseWithMessage(error);
+	} catch (e) {
+		console.error(e)
+		return failureEMPTY(env, 418)
 	}
 }

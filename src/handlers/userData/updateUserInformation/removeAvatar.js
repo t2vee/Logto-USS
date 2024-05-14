@@ -1,13 +1,14 @@
-import sendEmailVerificationCode from "../../../lib/sendEmailVerificationCode";
+import updateUserData from "../../../lib/updateUserData";
 import successEMPTY from "../../../responses/raw/success-EMPTY";
 import failureEMPTY from "../../../responses/raw/failure-EMPTY";
 
 export default async (request, env) => {
-	const requestData = await request.json();
-	const email = requestData.email;
 	try {
-		const response = await sendEmailVerificationCode(env, request.accesstoken, email);
-		return response.status === 204
+		const payload = {
+			"avatar": null
+		}
+		const response = await updateUserData(env, request.accesstoken, payload, request.userid)
+		return response.status === 200
 			? successEMPTY(env)
 			: failureEMPTY(env);
 	} catch (e) {

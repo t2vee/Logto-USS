@@ -1,30 +1,28 @@
-import fetchAccessToken from "../../../utils/fetchAccessToken";
 import verifyEmailCode from "../../../lib/verifyEmailCode";
 import updateUserData from "../../../lib/updateUserData";
-import failedResponseWithMessage from "../../../responses/failedResponseWithMessage";
-import failedResponse from "../../../responses/failedResponse";
-import emptySuccessResponse from "../../../responses/emptySuccessResponse";
 import checkVerificationCodeMiddleware from "../../../middleware/checkVerificationCodeMiddleware";
+import successEMPTY from "../../../responses/raw/success-EMPTY";
+import failureEMPTY from "../../../responses/raw/failure-EMPTY";
 
 export default async (request, env) => {
-	const verificationCode = await checkVerificationCodeMiddleware(request)
+	const verificationCode = await checkVerificationCodeMiddleware(request, env)
 	const requestData = await request.json();
 	const email = requestData.email;
 	try {
-		const accessToken = await fetchAccessToken(env);
-		const response = await verifyEmailCode(env, accessToken, email, verificationCode);
+		const response = await verifyEmailCode(env, request.accesstoken, email, verificationCode);
 		if (response.status === 204) {
 			const userData = {
 				"primaryEmail": email
 			}
-			const updateResponse = await updateUserData(env, accessToken, userData, request.userid)
+			const updateResponse = await updateUserData(env, request.accesstoken, userData, request.userid)
 			return response.status === 204 && updateResponse.status === 200
-				? emptySuccessResponse(env)
-				: failedResponse;
+				? successEMPTY(env)
+				: failureEMPTY(env);
 		} else {
-			return failedResponse;
+			return failureEMPTY(env);
 		}
-	} catch (error) {
-		return failedResponseWithMessage(error);
+	} catch (e) {
+		console.error(e)
+		return failureEMPTY(env, 500)
 	}
 }

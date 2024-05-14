@@ -1,12 +1,14 @@
-import successJSONResponse from "../responses/successJSONResponse";
+import successCONTENT from "../responses/raw/success-CONTENT";
+import failureEMPTY from "../responses/raw/failure-EMPTY";
 
 export default async (request, env) => {
 	try {
 		const value = await env.MFARequiredTokens.get(request.userid);
 		return value
-			? successJSONResponse(env, { status: false })
-			: successJSONResponse(env, { status: true });
-	} catch (error) {
-		return error(400, error.message);
+			? successCONTENT(env, { status: false })
+			: successCONTENT(env, { status: true });
+	} catch (e) {
+		console.error(e)
+		return failureEMPTY(env, 418)
 	}
 }
