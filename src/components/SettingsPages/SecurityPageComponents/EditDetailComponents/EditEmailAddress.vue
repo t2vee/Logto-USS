@@ -60,6 +60,8 @@ const isEditing = computed(() => {
 })
 
 async function sendVerificationCode() {
+  isLoading.value = true;
+  let failed;
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   accessTokenRef.value = accessToken
   try {
@@ -80,12 +82,15 @@ async function sendVerificationCode() {
     toast.error('Error Sending Verification Code:', {
       description: 'Service Unavailable. Try again later'
     })
-    emailSent.value = error.response && error.response.status === 404
+    emailSent.value = error.response && error.response.status === 404;
+    failed = true;
   } finally {
-    isLoading.value = false
-    resendCodeTimer.value = 60
+    isLoading.value = false;
+    resendCodeTimer.value = 60;
     countdown()
-    toast.info('Sent Email to ' + email.value, { description: 'Code will last for 10 minutes.' })
+    if (!failed) {
+      toast.info('Sent Email to ' + email.value, { description: 'Code will last for 10 minutes.' });
+    }
   }
 }
 
@@ -105,6 +110,7 @@ async function handleChangeInput() {
 }
 
 const handleCodeComplete = async (code) => {
+  let failed;
   isLoading.value = true
   try {
     const response = await axios.post(
@@ -127,10 +133,13 @@ const handleCodeComplete = async (code) => {
   } catch (error) {
     toast.error('Error sending verification code:', { description: error })
     emailSent.value = false
+    failed = true;
   } finally {
     isLoading.value = false
-    eventBus.emit('closeEditDetailDialog', false)
-    eventBus.emit('refreshUserData', true)
+    if (!failed) {
+      eventBus.emit('closeEditDetailDialog', false)
+      eventBus.emit('refreshUserData', true)
+    }
   }
 }
 </script>
