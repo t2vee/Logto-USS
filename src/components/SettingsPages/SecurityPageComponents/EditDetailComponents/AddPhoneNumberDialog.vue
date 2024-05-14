@@ -8,9 +8,8 @@ import {Button} from "@/components/ui/button/index.js";
 import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
 import {Label} from "@/components/ui/label/index.js";
 import {PhoneMissed, Phone, Loader} from "lucide-vue-next";
-import key from '@/lib/encryptNumber.pem.js';
 import { toast } from 'vue-sonner'
-import MfaCodeInput from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/MfaCodeInput.vue";
+import MfaCodeInput from "@/components/SettingsPages/Global/MfaCodeInput.vue";
 import { eventBus } from '@/lib/eventBus.js';
 
 const userData = inject('userData')
@@ -55,8 +54,8 @@ function checkNumber() {
     isEditing.value = true;
   }
 }
-
-async function importPublicKey() {
+// all completely useless
+/*async function importPublicKey() {
   const pemHeader = "-----BEGIN PUBLIC KEY-----";
   const pemFooter = "-----END PUBLIC KEY-----";
   const pemContents = key.substring(pemHeader.length, key.length - pemFooter.length);
@@ -71,9 +70,9 @@ async function importPublicKey() {
       true,
       ["encrypt"]
   );
-}
+}*/
 
-async function encryptData(publicKey, data) {
+/*async function encryptData(publicKey, data) {
   const encoder = new TextEncoder();
   const encodedData = encoder.encode(data);
   return await crypto.subtle.encrypt(
@@ -83,16 +82,16 @@ async function encryptData(publicKey, data) {
       publicKey,
       encodedData
   );
-}
+}*/
 
-async function sendEncryptedData(encryptedData) {
+async function sendEncryptedData() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   accessTokenRef.value = accessToken;
-  const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
-  console.log(base64EncryptedData)
+  //const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
+  //console.log(base64EncryptedData) extremely complicated for literally no reason
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/new-verify-method/push-sms`, {
-      encryptedPhoneNumber: base64EncryptedData,
+    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/push-sms`, {
+      encryptedPhoneNumber: phone.value, // girl what
     }, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -133,13 +132,13 @@ async function handleChangeInput() {
 
 const handleCodeComplete = async (code) => {
   isLoading.value = true;
-  const publicKey = await importPublicKey();
-  const encryptedData = await encryptData(publicKey, phone.value);
-  const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
+  //const publicKey = await importPublicKey();
+  //const encryptedData = await encryptData(publicKey, phone.value);
+  //const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/new-verify-method/verify-sms?verification-code=${code}&user-id=${userData.value.sub}`,
-        {encryptedPhoneNumber: base64EncryptedData,},
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/verify-sms?verification-code=${code}`,
+        {encryptedPhoneNumber: phone.value,},
         {
           headers: {
             'Authorization': `Bearer ${accessTokenRef.value}`,
@@ -166,11 +165,12 @@ async function verifyNumber() {
   if (!isNumberValid.value || !phone.value) return;
   isLoading.value = true;
   try {
-    const publicKey = await importPublicKey();
-    const encryptedData = await encryptData(publicKey, phone.value);
-    await sendEncryptedData(encryptedData);
+    // why
+    //const publicKey = await importPublicKey();
+    //const encryptedData = await encryptData(publicKey, phone.value);
+    await sendEncryptedData();
   } catch (error) {
-    console.error('failed:', error);
+    console.log('failed:', error);
     isLoading.value = false;
   }
 }
@@ -178,7 +178,7 @@ async function verifyNumber() {
 
 <template>
   <transition name="fade" mode="out-in">
-    <div v-if="!isLoading && !smsSent" class="flex flex-col gap-4 py-4 items-center align-middle">
+    <div v-if="!isLoading && !smsSent" class="flex flex-col gap-4 py-4 items-center align-middle space-y-10">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
         <Label for="email" class="flex font-bold w-full justify-between">
           Enter Number

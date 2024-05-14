@@ -38,7 +38,7 @@ const timezonesData = [
     ]
 ];
 
-const timezones = timezonesData.map(([groupName, timezones]) => ({
+const timezones = timezonesData.map(([groupName, ...timezones]) => ({
     name: groupName,
     timezones: timezones.map(([label, code]) => ({ label, code }))
 }));

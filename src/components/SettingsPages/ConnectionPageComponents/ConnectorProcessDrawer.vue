@@ -21,7 +21,7 @@ import { Switch } from '@/components/ui/switch'
 import { Button } from "@/components/ui/button";
 import { Link, BarChart3, TextSearch, ChevronsRight, LogIn } from "lucide-vue-next";
 import EditDetailDialog
-  from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditDetailDialog.vue";
+  from "@/components/SettingsPages/Global/EditDetailDialog.vue";
 import EditRegionalSettings
   from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditRegionalSettings.vue";
 

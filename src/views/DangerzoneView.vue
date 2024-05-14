@@ -1,6 +1,6 @@
 <script setup>
 import { defineAsyncComponent } from "vue";
-const NotificationSettings = defineAsyncComponent(() => import("@/components/SettingsPages/NotificationSettings.vue"));
+const NotificationSettings = defineAsyncComponent(() => import("@/components/SettingsPages/DangerzoneSettings.vue"));
 import AccountsRoot from "@/components/AccountsRoot.vue";
 </script>
 

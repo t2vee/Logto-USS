@@ -1,12 +1,4 @@
 <script setup>
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import {inject, ref} from 'vue'
 import {Button} from "@/components/ui/button/index.js";
 import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
@@ -15,20 +7,17 @@ import axios from "axios";
 import {toast} from "vue-sonner";
 import {eventBus} from "@/lib/eventBus.js";
 import {useLogto} from "@logto/vue";
-
 import {
   DateFormatter,
   getLocalTimeZone,
 } from '@internationalized/date'
-
 import { Calendar as CalendarIcon } from 'lucide-vue-next'
-import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/utils.js'
 import CalendarWithSelects
   from "@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/CalendarWithSelects.vue";
 
-const df = new DateFormatter('en-US', {
+const df = new DateFormatter('en-AU', {
   dateStyle: 'long',
 })
 
@@ -38,16 +27,16 @@ const userData = inject('userData')
 
 const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK;
 const { getAccessToken } = useLogto();
-const selectedLocale = ref('')
+const dateSelected = ref(false)
 
 async function updateData() {
   let failed = false;
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/update-user-information/personal-information/language?user-id=${userData.value.sub}`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/birthday`,
         {
-          "locale": selectedLocale.value
+          "birthday": df.format(value.value.toDate(getLocalTimeZone()))
         },
         {
           headers: {
@@ -67,12 +56,19 @@ async function updateData() {
     eventBus.emit('refreshUserData', true);
   }
 }
+
+function allowSave() {
+  dateSelected.value = !!value.value;
+}
 </script>
 
 <template>
-  <div>
+  <div class="space-y-10">
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5">
+        <Label for="username" class="flex font-bold w-full justify-between">
+          Birthday (Optional)
+        </Label>
         <Popover>
           <PopoverTrigger as-child>
             <Button
@@ -83,12 +79,13 @@ async function updateData() {
         )"
             >
               <CalendarIcon class="mr-2 h-4 w-4" />
-              {{ value ? df.format(value.toDate(getLocalTimeZone())) : "Pick a date" }}
+              <p><span v-if="userData.birthdate && !value">(Currently)</span> <span>{{
+                  value ? df.format(value.toDate(getLocalTimeZone())) : (userData.birthdate ? userData.birthdate : 'Pick a date')
+                }}</span></p>
             </Button>
           </PopoverTrigger>
           <PopoverContent class="w-auto p-0">
-            <CalendarWithSelects />
-            <!--<Calendar v-model="value" initial-focus />-->
+            <CalendarWithSelects v-model="value" @update:model-value="allowSave" />
           </PopoverContent>
         </Popover>
       </div>
@@ -101,7 +98,7 @@ async function updateData() {
           </a>
         </Button>
         <div class="space-x-2">
-          <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!selectedLocale">
+          <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!dateSelected">
             Save
           </Button>
           <DialogClose as-child>

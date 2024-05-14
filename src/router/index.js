@@ -16,11 +16,6 @@ const router = createRouter({
       component: () => import('@/views/AuthCallbackView.vue'),
     },
     {
-      path: '/',
-      name: 'account',
-      component: () => import('@/components/AccountsRoot.vue'),
-    },
-    {
       path: '/account/aboutme',
       name: 'Personal Information',
       component: () => import('@/views/AboutMeView.vue'),
@@ -36,9 +31,9 @@ const router = createRouter({
       component: () => import('@/views/PrivacyView.vue'),
     },
     {
-      path: '/account/notifications',
-      name: 'Notifications',
-      component: () => import('@/views/NotificationView.vue'),
+      path: '/account/dangerzone',
+      name: 'Account Actions',
+      component: () => import('@/views/DangerzoneView.vue'),
     },
     {
       path: '/account/connections',

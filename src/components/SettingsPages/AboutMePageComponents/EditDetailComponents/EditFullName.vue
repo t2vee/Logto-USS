@@ -6,7 +6,7 @@ import {defineAsyncComponent, inject, ref} from 'vue';
 import { useLogto } from '@logto/vue';
 import {Button} from "@/components/ui/button/index.js";
 import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
-const ConnectorAlert = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/ConnectorAlert.vue"));
+const ConnectorAlert = defineAsyncComponent(() => import("@/components/SettingsPages/Global/ConnectorAlert.vue"));
 import {toast} from "vue-sonner";
 import {eventBus} from "@/lib/eventBus.js";
 import debounce from "lodash/debounce.js";
@@ -28,7 +28,7 @@ async function updateData() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/user-data-entry/update-user-information/personal-information/full-name?user-id=${userData.value.sub}`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/full-name`,
         {
           "name": fullName.value
         },
@@ -44,7 +44,6 @@ async function updateData() {
   } catch (error) {
     toast.error('Error saving changes:',{description: 'Service Unavailable. Try again later'})
     failed = true;
-  } finally {
   }
   if (!failed) {
     eventBus.emit('closeEditDetailDialog', false);
@@ -76,7 +75,7 @@ const debouncedCheckName = debounce(() => checkName(fullName.value), 500);
 </script>
 
 <template>
-  <div>
+  <div class="space-y-10">
     <ConnectorAlert v-if="userConnectorPresent" />
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5">
