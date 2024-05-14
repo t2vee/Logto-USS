@@ -18,7 +18,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        dir: '~/shed/',
+        dir: 'shed',
         entryFileNames: 'outfit.js',
         assetFileNames: 'outfit.[hash:6].css',
         chunkFileNames: "toolbelt.[hash:6].js",
