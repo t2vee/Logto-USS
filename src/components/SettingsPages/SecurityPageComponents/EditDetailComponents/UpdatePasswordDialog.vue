@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { inject, ref } from 'vue'
 import { useLogto } from '@logto/vue'
-import { Ban, ChevronsRight, Check, AlertCircle, Loader } from 'lucide-vue-next'
+import {Ban, ChevronsRight, Check, AlertCircle, Loader, Loader2} from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
 import ConnectorAlert from '@/components/SettingsPages/Global/ConnectorAlert.vue'
@@ -239,9 +239,10 @@ async function updateData() {
             type="submit"
             class="h-[30px]"
             @click="updateData"
-            :disabled="!passwordCheckPass || !passwordMatches || !oldPassword"
+            :disabled="isLoading || !passwordCheckPass || !passwordMatches || !oldPassword"
           >
-            Save
+            <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
+            {{ isLoading ? 'Saving...' : 'Save' }}
           </Button>
           <DialogClose as-child>
             <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
@@ -249,10 +250,6 @@ async function updateData() {
         </div>
       </div>
     </DialogFooter>
-  </div>
-  <div v-else-if="isLoading" class="flex items-center align-middle justify-center">
-    <Loader class="animate-spin" :size="32" />
-    <p class="text-xl font-bold">Changing Password...</p>
   </div>
 </template>
 
