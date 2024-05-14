@@ -12,7 +12,7 @@ import { ExternalLink, KeyRound, Copyright } from "lucide-vue-next";
 
 import { useLogto } from "@logto/vue";
 const { signIn, isAuthenticated } = useLogto();
-const onClickSignIn = () => signIn(`${import.meta.env.VITE_ROOT_DOMAIN}/oauth/callback`);
+const onClickSignIn = () => signIn(`${import.meta.env.BASE_URL}/oauth/callback`);
 </script>
 
 <template>

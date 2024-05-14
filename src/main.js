@@ -14,7 +14,7 @@ const app = createApp(App)
 const logtoConfig = {
     endpoint: import.meta.env.VITE_LOGTO_ENDPOINT,
     appId: import.meta.env.VITE_LOGTO_APPID,
-    scopes: [UserScope.Profile, UserScope.Email, UserScope.Phone, UserScope.CustomData, UserScope.Identities, UserScope.Organizations],
+    scopes: [UserScope.Profile, UserScope.Email, UserScope.Phone, UserScope.Identities, UserScope.Organizations],
     resources: JSON.parse(import.meta.env.VITE_LOGTO_RESOURCES),
 };
 
