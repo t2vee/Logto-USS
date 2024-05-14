@@ -3,7 +3,7 @@ import {defineAsyncComponent, ref, inject} from 'vue';
 
 import Button from "@/components/ui/button/Button.vue";
 import {Card, CardContent} from "@/components/ui/card/index.js";
-import {BellRing, CircleUserRound, LifeBuoy, Cookie, UserCog, Cable} from "lucide-vue-next";
+import {AlertTriangle, CircleUserRound, LifeBuoy, Cookie, UserCog, Cable} from "lucide-vue-next";
 const AvatarEditor = defineAsyncComponent(() => import("@/components/SettingsPages/AboutMePageComponents/AvatarComponents/AvatarEditor.vue"));
 const userData = inject('userData')
 
@@ -25,11 +25,6 @@ const sidebarNavItems = ref([
     href: '/account/privacy',
   },
   {
-    title: 'Notifications',
-    icon: BellRing,
-    href: '/account/notifications',
-  },
-  {
     title: 'Connections',
     icon: Cable,
     href: '/account/connections',
@@ -38,6 +33,11 @@ const sidebarNavItems = ref([
     title: 'Your Data',
     icon: LifeBuoy,
     href: '/account/yourdata',
+  },
+  {
+    title: 'Account Actions',
+    icon: AlertTriangle,
+    href: '/account/dangerzone',
   },
 ])
 </script>
