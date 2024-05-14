@@ -1,7 +1,7 @@
 import CORS from "../../headers/CORS";
 
 export default (env, content) =>
-	new Response.json(
+	Response.json(
 		content,
 		{
 			status: 200,
