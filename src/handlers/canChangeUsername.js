@@ -1,13 +1,14 @@
-import successJSONResponse from "../responses/successJSONResponse";
-import emptySuccessResponse from "../responses/emptySuccessResponse";
+import failureEMPTY from "../responses/raw/failure-EMPTY";
+import successCONTENT from "../responses/raw/success-CONTENT";
 
 export default async (request, env) => {
 	try {
 		const value = await env.UsernameChangeTimelimit.get(request.userid);
 		return value
-			? successJSONResponse(env, { value })
-			: emptySuccessResponse(env);
-	} catch (error) {
-		return error(400, error.message);
+			? successCONTENT(env, {value})
+			: failureEMPTY(env);
+	} catch (e) {
+		console.error(e)
+		return failureEMPTY(env, 418)
 	}
 }

@@ -1,7 +1,6 @@
 import sendEmailVerificationCode from "../../../lib/sendEmailVerificationCode";
-import emptySuccessResponse from "../../../responses/emptySuccessResponse";
-import failedResponse from "../../../responses/failedResponse";
-import failedResponseWithMessage from "../../../responses/failedResponseWithMessage";
+import successEMPTY from "../../../responses/raw/success-EMPTY";
+import failureEMPTY from "../../../responses/raw/failure-EMPTY";
 
 export default async (request, env) => {
 	const requestData = await request.json();
@@ -9,9 +8,10 @@ export default async (request, env) => {
 	try {
 		const response = await sendEmailVerificationCode(env, request.accesstoken, email);
 		return response.status === 204
-			? emptySuccessResponse(env)
-			: failedResponse;
-	} catch (error) {
-		failedResponseWithMessage(error);
+			? successEMPTY(env)
+			: failureEMPTY(env);
+	} catch (e) {
+		console.error(e)
+		return failureEMPTY(env, 500)
 	}
 }

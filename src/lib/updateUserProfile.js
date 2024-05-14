@@ -1,6 +1,3 @@
-import failedResponseWithMessage from "../responses/failedResponseWithMessage";
-
-
 export default async function (env, accessToken, userData, userId) {
 	const url = `${env.LOGTO_DOMAIN}/api/users/${userId}/profile`;
 	const headers = {

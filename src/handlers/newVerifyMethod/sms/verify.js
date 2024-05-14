@@ -3,12 +3,11 @@ import updateUserData from "../../../lib/updateUserData";
 import verifySMSCode from "../../../lib/verifySMSCode";
 import prepareNumber from "../../../utils/prepareNumber";
 import checkVerificationCodeMiddleware from "../../../middleware/checkVerificationCodeMiddleware";
-import emptySuccessResponse from "../../../responses/emptySuccessResponse";
-import failedResponse from "../../../responses/failedResponse";
-import failedResponseWithMessage from "../../../responses/failedResponseWithMessage";
+import failureEMPTY from "../../../responses/raw/failure-EMPTY";
+import successEMPTY from "../../../responses/raw/success-EMPTY";
 
 export default async (request, env) => {
-	const verificationCode = await checkVerificationCodeMiddleware(request)
+	const verificationCode = await checkVerificationCodeMiddleware(request, env)
 	const requestData = await request.json();
 	const encryptedPhoneNumber = requestData.encryptedPhoneNumber;
 	//const userNumber = await decryptNumber(env, encryptedPhoneNumber);
@@ -21,12 +20,13 @@ export default async (request, env) => {
 			}
 			const updateResponse = await updateUserData(env, request.accesstoken, userData, request.userid)
 			return response.status === 204 && updateResponse.status === 200
-				? emptySuccessResponse(env)
-				: failedResponse;
+				? successEMPTY(env)
+				: failureEMPTY(env);
 		} else {
-			return failedResponse;
+			return failureEMPTY(env);
 		}
-	} catch (error) {
-		return failedResponseWithMessage(error);
+	} catch (e) {
+		console.error(e)
+		return failureEMPTY(env, 500)
 	}
 }

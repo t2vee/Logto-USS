@@ -1,9 +1,8 @@
 import grabUserDetails from "../../../lib/grabUserDetails";
 import sendSMSVerificationCode from "../../../lib/sendSMSVerificationCode";
 import prepareNumber from "../../../utils/prepareNumber";
-import emptySuccessResponse from "../../../responses/emptySuccessResponse";
-import failedResponse from "../../../responses/failedResponse";
-import failedResponseWithMessage from "../../../responses/failedResponseWithMessage";
+import successEMPTY from "../../../responses/raw/success-EMPTY";
+import failureEMPTY from "../../../responses/raw/failure-EMPTY";
 
 /**
  * Handles the process of sending an SMS verification code to the user's primary phone number.
@@ -31,9 +30,10 @@ export default async (request, env) => {
 		const usrDObj = JSON.parse(userData)
 		const response = await sendSMSVerificationCode(env, request.accesstoken, await prepareNumber(usrDObj.primaryPhone));
 		return response.status === 204
-			? emptySuccessResponse(env)
-			: failedResponse;
-	} catch (error) {
-		return failedResponseWithMessage(error);
+			? successEMPTY(env)
+			: failureEMPTY(env);
+	} catch (e) {
+		console.error(e)
+		return failureEMPTY(env, 500)
 	}
 }

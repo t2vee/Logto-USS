@@ -1,16 +1,17 @@
 import grabMFAMethods from "../lib/grabMFAMethods";
-import failedResponseWithMessage from "../responses/failedResponseWithMessage";
-import successResponse from "../responses/successResponse";
+import successCONTENT from "../responses/raw/success-CONTENT";
+import failureEMPTY from "../responses/raw/failure-EMPTY";
 
 export default async (request, env) => {
 	try {
 		const resourceResponse = await grabMFAMethods(env, request.accesstoken, request.userid);
 		if (resourceResponse === '[]') {
-			return successResponse(env, '["none"]');
+			return successCONTENT(env, '["none"]');
 		} else {
-			return successResponse(env, resourceResponse);
+			return successCONTENT(env, resourceResponse);
 		}
-	} catch (error) {
-		return failedResponseWithMessage(error);
+	} catch (e) {
+		console.error(e)
+		return failureEMPTY(env, 418)
 	}
 }

@@ -2,9 +2,9 @@ import grabUserDetails from "../../../lib/grabUserDetails";
 import verifySMSCode from "../../../lib/verifySMSCode";
 import prepareNumber from "../../../utils/prepareNumber";
 import checkVerificationCodeMiddleware from "../../../middleware/checkVerificationCodeMiddleware";
-import emptySuccessResponse from "../../../responses/emptySuccessResponse";
-import failedResponse from "../../../responses/failedResponse";
-import failedResponseWithMessage from "../../../responses/failedResponseWithMessage";
+
+import successEMPTY from "../../../responses/raw/success-EMPTY";
+import failureEMPTY from "../../../responses/raw/failure-EMPTY";
 
 /**
  * Verifies an SMS verification code sent to a user's primary phone number. The function follows a sequence of operations:
@@ -23,15 +23,16 @@ import failedResponseWithMessage from "../../../responses/failedResponseWithMess
  * @throws {Error} Captures and handles any errors that occur during the verification process, returning a failure response with the error message.
  */
 export default async (request, env) => {
-	const verificationCode = await checkVerificationCodeMiddleware(request)
+	const verificationCode = await checkVerificationCodeMiddleware(request, env)
 	try {
 		const userData = await grabUserDetails(env, request.accesstoken, request.userid);
 		const usrDObj = JSON.parse(userData);
 		const response = await verifySMSCode(env, request.accesstoken, await prepareNumber(usrDObj.primaryPhone), verificationCode);
 		return response.status === 204
-			? env.MFARequiredTokens.put(request.userid, false, {expirationTtl: 9000})  && emptySuccessResponse(env)
-			: failedResponse();
-	} catch (error) {
-		return failedResponseWithMessage(error);
+			? env.MFARequiredTokens.put(request.userid, false, {expirationTtl: 9000})  && successEMPTY(env)
+			: failureEMPTY(env);
+	} catch (e) {
+		console.error(e)
+		return failureEMPTY(env, 500)
 	}
 }

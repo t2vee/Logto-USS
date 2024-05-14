@@ -103,7 +103,7 @@ router.get('/api/v1/utils/check-username-exists/:username', usernameExists);
  * @returns {Response} A response object with appropriate CORS headers.
  */
 function corsHeaders(request, env) {
-	const headers = corsPreflight;
+	const headers = corsPreflight(env);
 	if (request.method === 'OPTIONS') {
 		return new Response(null, { headers });
 	} // so jank
