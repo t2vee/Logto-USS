@@ -13,14 +13,11 @@ import { createRemoteJWKSet, jwtVerify } from 'jose';
 export default async function verifyAuthToken(request, env) {
 	try {
 		const token = extractBearerTokenFromHeaders(request.headers);
-		console.log(token)
 		const JWKS = createRemoteJWKSet(new URL(env.JWKS_URI));
-		console.log(JWKS)
 		const { payload } = await jwtVerify(token, JWKS, {
 			issuer: env.ISSUER,
 			audience: 'https://default.logto.app/api',
 		});
-		console.log(payload);
 		return payload;
 	} catch (error) {
 		throw typeof error === 'string' ? { message: error, status: 401 } : error;
