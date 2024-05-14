@@ -17,7 +17,7 @@ const { signOut } = useLogto();
 const route = useRoute();
 const pathName = ref('');
 pathName.value = route.name
-const onClickSignOut = () => signOut('http://127.0.0.1:5173/');
+const onClickSignOut = () => signOut(import.meta.env.BASE_URL);
 </script>
 
 <template>
