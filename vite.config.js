@@ -15,6 +15,17 @@ export default defineConfig({
     },
   },
   plugins: [vue()],
+  build: {
+    rollupOptions: {
+      output: {
+        dir: '~/shed/',
+        entryFileNames: 'outfit.js',
+        assetFileNames: 'outfit.[hash:6].css',
+        chunkFileNames: "toolbelt.[hash:6].js",
+        manualChunks: undefined,
+      }
+    }
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
