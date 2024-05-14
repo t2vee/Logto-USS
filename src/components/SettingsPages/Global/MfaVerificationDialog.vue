@@ -1,110 +1,109 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch } from 'vue'
 import { Label } from '@/components/ui/label/index.js'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group/index.js'
-import { useLogto } from "@logto/vue";
-import { Loader, Loader2, Shield } from 'lucide-vue-next';
-import axios from "axios";
+import { useLogto } from '@logto/vue'
+import { Loader, Loader2, Shield } from 'lucide-vue-next'
+import axios from 'axios'
 import {
   DialogClose,
   DialogContent,
-  DialogDescription, DialogFooter,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle
-} from "@/components/ui/dialog/index.js";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from '@/components/ui/tooltip'
-import {Button} from "@/components/ui/button/index.js";
-import MfaCodeInput from "@/components/SettingsPages/Global/MfaCodeInput.vue";
+} from '@/components/ui/dialog/index.js'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Button } from '@/components/ui/button/index.js'
+import MfaCodeInput from '@/components/SettingsPages/Global/MfaCodeInput.vue'
 import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js';
-
+import { eventBus } from '@/lib/eventBus.js'
 
 const props = defineProps({
   isVisible: Boolean,
   dataRequest: Boolean,
   title: {
     type: String,
-    required: true,
+    required: true
   },
   editPage: {
     type: Object,
-    required: true,
+    required: true
   },
   userData: {
     type: Object,
-    required: true,
+    required: true
   },
   icon: {
-    required: true,
+    required: true
   }
-});
+})
 
-const { getAccessToken } = useLogto();
-const isMfaRequired = ref(false);
-const codeSent = ref(false);
-const isLoading = ref(true);
-const mfaOptions = ref({});
-const accessTokenRef = ref('');
-const selectedMfaMethod = ref('email');
+const { getAccessToken } = useLogto()
+const isMfaRequired = ref(false)
+const codeSent = ref(false)
+const isLoading = ref(true)
+const mfaOptions = ref({})
+const accessTokenRef = ref('')
+const selectedMfaMethod = ref('email')
 const resendCodeTimer = ref(60)
 const readyToSend = ref(true)
 
 const countdown = () => {
   const interval = setInterval(() => {
     if (resendCodeTimer.value > 0) {
-      resendCodeTimer.value--;
+      resendCodeTimer.value--
     } else {
-      clearInterval(interval);
+      clearInterval(interval)
     }
-  }, 1000);
-};
+  }, 1000)
+}
 
 async function grabMfaOptions(accessToken) {
   try {
     return await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/mfa-methods`, {
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       }
-    });
+    })
   } catch (error) {
-    toast.error('Error checking username availability:', {description: error})
-    isMfaRequired.value = error.response && error.response.status === 404;
+    toast.error('Error checking username availability:', { description: error })
+    isMfaRequired.value = error.response && error.response.status === 404
   }
 }
 
 async function sendVerificationCode() {
-  isLoading.value = true;
-  let failed = false;
+  isLoading.value = true
+  let failed = false
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/push-${selectedMfaMethod.value}`,
-        {},
-        {
-          headers: {
-            'Authorization': `Bearer ${accessTokenRef.value}`,
-            'Content-Type': 'application/json'
-          }
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/push-${selectedMfaMethod.value}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessTokenRef.value}`,
+          'Content-Type': 'application/json'
         }
-    );
-    codeSent.value = response.status === 204;
+      }
+    )
+    codeSent.value = response.status === 204
   } catch (error) {
-    toast.error('Error sending verification code:', {description: error})
-    codeSent.value = false;
-    failed = true;
+    toast.error('Error sending verification code:', { description: error })
+    codeSent.value = false
+    failed = true
   } finally {
-    isLoading.value = false;
-    resendCodeTimer.value = 60;
+    isLoading.value = false
+    resendCodeTimer.value = 60
     countdown()
     if (selectedMfaMethod.value === 'email' && !failed) {
-      toast.info('Sent Email to ' + props.userData.email, {description: 'Code will last for 10 minutes.'})
+      toast.info('Sent Email to ' + props.userData.email, {
+        description: 'Code will last for 10 minutes.'
+      })
     } else if (selectedMfaMethod.value === 'phone' && !failed) {
-      toast.info('Sent Text to ' + props.userData.phone_number, {description: 'Code will last for 10 minutes.'})
+      toast.info('Sent Text to ' + props.userData.phone_number, {
+        description: 'Code will last for 10 minutes.'
+      })
     }
   }
 }
@@ -114,103 +113,140 @@ async function handleCodeResend() {
 }
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 async function handleChangeInput() {
-  readyToSend.value = false;
-  codeSent.value = false;
-  sleep(resendCodeTimer.value * 1000).then(() => { readyToSend.value = true });
+  readyToSend.value = false
+  codeSent.value = false
+  sleep(resendCodeTimer.value * 1000).then(() => {
+    readyToSend.value = true
+  })
 }
 
 const handleCodeComplete = async (code) => {
-  isLoading.value = true;
+  isLoading.value = true
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/verify-${selectedMfaMethod.value}-code?verification-code=${code}`,
-        {},
-        {
-          headers: {
-            'Authorization': `Bearer ${accessTokenRef.value}`,
-            'Content-Type': 'application/json'
-          }
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/verify-${selectedMfaMethod.value}-code?verification-code=${code}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessTokenRef.value}`,
+          'Content-Type': 'application/json'
         }
-    );
+      }
+    )
     if (response.status === 204) {
-      codeSent.value = false;
-      isMfaRequired.value = false;
-      toast.success('Successfully Verified', {description: 'You will stay verified for the next 15 minutes.'})
+      codeSent.value = false
+      isMfaRequired.value = false
+      toast.success('Successfully Verified', {
+        description: 'You will stay verified for the next 15 minutes.'
+      })
     }
   } catch (error) {
     toast.warning('Provided Code is Incorrect', 'Please try again')
   } finally {
-    isLoading.value = false;
+    isLoading.value = false
   }
-};
+}
 
 const checkMFA = async () => {
-  isLoading.value = true;
-  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
-  accessTokenRef.value = accessToken;
+  isLoading.value = true
+  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
+  accessTokenRef.value = accessToken
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/is-mfa-required`, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/is-mfa-required`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
       }
-    });
+    )
     if (response.data.status === true) {
       const mfaResponse = await grabMfaOptions(accessToken)
       mfaOptions.value = mfaResponse.data
     }
-    isMfaRequired.value = response.data.status === true;
+    isMfaRequired.value = response.data.status === true
   } catch (error) {
-    toast.error('Error checking MFA:',{description: 'Service Unavailable. Try again later'})
-    eventBus.emit('closeEditDetailDialog', false);
-    eventBus.emit('refreshUserData', true);
+    toast.error('Error checking MFA:', { description: 'Service Unavailable. Try again later' })
+    eventBus.emit('closeEditDetailDialog', false)
+    eventBus.emit('refreshUserData', true)
   } finally {
-    isLoading.value = false;
+    isLoading.value = false
   }
 }
 
 function updateSelectedMethod(value) {
-  selectedMfaMethod.value = value;
+  selectedMfaMethod.value = value
 }
 
-watch(() => props.isVisible, (newValue) => {
-  if (newValue) {
-    checkMFA().catch(error => console.log("MFA check failed:", error));
+watch(
+  () => props.isVisible,
+  (newValue) => {
+    if (newValue) {
+      checkMFA().catch((error) => console.log('MFA check failed:', error))
+    }
   }
-});
+)
 </script>
 
 <template>
-  <DialogContent class="sm:max-w-[525px] sm:min-h-[500px] flex flex-col items-center justify-center align-middle space-y-6">
+  <DialogContent
+    class="sm:max-w-[525px] sm:min-h-[500px] flex flex-col items-center justify-center align-middle space-y-6"
+  >
     <transition name="slide" mode="out-in">
       <DialogHeader class="mb-3 flex flex-col items-center justify-center align-middle">
-        <component class="mr-1" height="42" width="42" :is="!isLoading && isMfaRequired ? Shield : icon" />
-        <DialogTitle class="flex items-center align-middle">{{ !isLoading && isMfaRequired ? 'Verify Your Identity' : !dataRequest ? 'Edit Your ' + title : title }}</DialogTitle>
+        <component
+          class="mr-1"
+          height="42"
+          width="42"
+          :is="!isLoading && isMfaRequired ? Shield : icon"
+        />
+        <DialogTitle class="flex items-center align-middle">{{
+          !isLoading && isMfaRequired
+            ? 'Verify Your Identity'
+            : !dataRequest
+              ? 'Edit Your ' + title
+              : title
+        }}</DialogTitle>
         <DialogDescription class="text-xs">
-          {{ !isLoading && isMfaRequired ? "In order to verify your identity, we'll send you a code to your preferred method below." : '' }}
+          {{
+            !isLoading && isMfaRequired
+              ? "In order to verify your identity, we'll send you a code to your preferred method below."
+              : ''
+          }}
         </DialogDescription>
       </DialogHeader>
     </transition>
     <transition name="fade" mode="out-in">
       <div key="mfa-settings" v-if="!isLoading && isMfaRequired && !codeSent" class="space-y-8">
-        <RadioGroup default-value="email" class="space-y-3" @update:modelValue="updateSelectedMethod">
+        <RadioGroup
+          default-value="email"
+          class="space-y-3"
+          @update:modelValue="updateSelectedMethod"
+        >
           <div class="flex items-center space-x-2">
             <RadioGroupItem id="r1" value="email" />
-            <Label for="r1">Email <strong>{{ userData.email }}</strong></Label>
+            <Label for="r1"
+              >Email <strong>{{ userData.email }}</strong></Label
+            >
           </div>
           <div v-if="userData.phone_number" class="flex items-center space-x-2">
             <RadioGroupItem id="r2" value="sms" />
-            <Label for="r2">Text <strong>{{ userData.phone_number }}</strong></Label>
+            <Label for="r2"
+              >Text <strong>{{ userData.phone_number }}</strong></Label
+            >
           </div>
           <div v-if="mfaOptions[0].type === 'Totp'">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger class="flex items-center space-x-2">
                   <RadioGroupItem id="r3" value="authenticator" disabled />
-                  <Label for="r3" class="text-gray-600">Authenticator App (Google/Microsoft Authenticator)</Label>
+                  <Label for="r3" class="text-gray-600"
+                    >Authenticator App (Google/Microsoft Authenticator)</Label
+                  >
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Currently Not Available</p>
@@ -220,17 +256,27 @@ watch(() => props.isVisible, (newValue) => {
           </div>
         </RadioGroup>
         <div class="space-x-2 w-full flex justify-center">
-          <p class="text-xs" v-if="resendCodeTimer>0 && !readyToSend">Please wait {{ resendCodeTimer }} seconds before sending another code</p>
-          <Button :disabled="resendCodeTimer>0 && !readyToSend" class="h-[30px]" @click="sendVerificationCode">Next</Button>
+          <p class="text-xs" v-if="resendCodeTimer > 0 && !readyToSend">
+            Please wait {{ resendCodeTimer }} seconds before sending another code
+          </p>
+          <Button
+            :disabled="resendCodeTimer > 0 && !readyToSend"
+            class="h-[30px]"
+            @click="sendVerificationCode"
+            >Next</Button
+          >
           <DialogClose as-child>
-            <Button class="h-[30px]" type="button" variant="outline">
-              Cancel
-            </Button>
+            <Button class="h-[30px]" type="button" variant="outline"> Cancel </Button>
           </DialogClose>
         </div>
       </div>
       <div v-else-if="!isLoading && isMfaRequired && codeSent">
-        <MfaCodeInput :resend-code-timer="resendCodeTimer" @codeComplete="handleCodeComplete" @resendCode="handleCodeResend" @changeInput="handleChangeInput" />
+        <MfaCodeInput
+          :resend-code-timer="resendCodeTimer"
+          @codeComplete="handleCodeComplete"
+          @resendCode="handleCodeResend"
+          @changeInput="handleChangeInput"
+        />
       </div>
       <div v-else-if="!isLoading && !isMfaRequired">
         <component :is="editPage" />

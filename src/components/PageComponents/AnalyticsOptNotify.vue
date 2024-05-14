@@ -1,54 +1,61 @@
 <script setup>
-import {onMounted, ref} from 'vue'
-import {Cookie, Loader} from 'lucide-vue-next'
-import { ToastAction, ToastDescription, ToastProvider, Toast as ToastRoot, ToastTitle, ToastViewport } from "@/components/CustomShadcnComponents/toast"
-import httpJsonp from 'http-jsonp';
+import { onMounted, ref } from 'vue'
+import { Cookie, Loader } from 'lucide-vue-next'
+import {
+  ToastAction,
+  ToastDescription,
+  ToastProvider,
+  Toast as ToastRoot,
+  ToastTitle,
+  ToastViewport
+} from '@/components/CustomShadcnComponents/toast'
+import httpJsonp from 'http-jsonp'
 
-const open = ref(false);
-const ajaxUrl = `${import.meta.env.VITE_MATOMO_ENDPOINT}/index.php?module=API&method=AjaxOptOut.`;
-const optedIn = ref(null);
-const loading = ref(false);
+const open = ref(false)
+const ajaxUrl = `${import.meta.env.VITE_MATOMO_ENDPOINT}/index.php?module=API&method=AjaxOptOut.`
+const optedIn = ref(null)
+const loading = ref(false)
 
 const doIgnore = () => {
-  loading.value = true;
-  const url = `${ajaxUrl}doIgnore`;
-  const script = document.createElement('script');
-  script.src = `${url}`;
-  document.body.appendChild(script);
-};
+  loading.value = true
+  const url = `${ajaxUrl}doIgnore`
+  const script = document.createElement('script')
+  script.src = `${url}`
+  document.body.appendChild(script)
+}
 
 const doTrack = () => {
-  loading.value = true;
-  const url = `${ajaxUrl}doTrack`;
-  const script = document.createElement('script');
-  script.src = `${url}`;
-  document.body.appendChild(script);
-};
+  loading.value = true
+  const url = `${ajaxUrl}doTrack`
+  const script = document.createElement('script')
+  script.src = `${url}`
+  document.body.appendChild(script)
+}
 
 // From https://github.com/inventage/matomo-opt-out/blob/569557bcec321060ea601149acf60889ec1d466f/src/MatomoOptOut.js#L122
 function _fetchTrackedState() {
   httpJsonp({
     url: `${ajaxUrl}isTracked`,
     callbackProp: 'callback',
-    callback: data => {
-      const { value } = data;
+    callback: (data) => {
+      const { value } = data
       if (value !== undefined) {
-        optedIn.value = value;
+        optedIn.value = value
       }
     },
-    error: e => {
-      console.log('An error occurred when accessing `isTracked` API method.', e);
+    error: (e) => {
+      console.log('An error occurred when accessing `isTracked` API method.', e)
     },
     complete: () => {
-      loading.value = false;
-    },
-  });
+      loading.value = false
+    }
+  })
 }
 
 const cookieFlow = () => {
-  open.value = true;
+  open.value = true
   _fetchTrackedState()
-  console.log(optedIn.value);
+  console.log(optedIn.value)
 }
 
 //onMounted(cookieFlow)
@@ -65,9 +72,13 @@ const cookieFlow = () => {
           <ToastDescription as-child>
             <p>
               You can opt out at any time. Learn more at
-              <br>
+              <br />
               <span>
-                <a class="underline hover:no-underline" target="_blank" href="https://www.cookiesandyou.com">
+                <a
+                  class="underline hover:no-underline"
+                  target="_blank"
+                  href="https://www.cookiesandyou.com"
+                >
                   Cookies And You
                 </a>
               </span>
@@ -77,25 +88,27 @@ const cookieFlow = () => {
                   Privacy Policy
                 </a>
               </span>
-              <br> <span class="flex items-center align-middle justify-center">You are currently&nbsp;<span v-if="loading" ><Loader class="animate-spin" :size="16" /></span><span class="font-bold" v-else>{{ optedIn ? optedIn : 'Opted Out' }}</span></span></p>
+              <br />
+              <span class="flex items-center align-middle justify-center"
+                >You are currently&nbsp;<span v-if="loading"
+                  ><Loader class="animate-spin" :size="16" /></span
+                ><span class="font-bold" v-else>{{ optedIn ? optedIn : 'Opted Out' }}</span></span
+              >
+            </p>
           </ToastDescription>
         </div>
         <div class="flex flex-col space-y-2">
           <ToastAction as-child alt-text="Goto schedule to undo">
             <!--suppress HtmlUnknownAttribute -->
-            <button class="hover:text-black" :onclick="doTrack">
-              Accept
-            </button>
+            <button class="hover:text-black" :onclick="doTrack">Accept</button>
           </ToastAction>
           <ToastAction as-child alt-text="Goto schedule to undo">
             <!--suppress HtmlUnknownAttribute -->
-            <button class="hover:text-black" :onclick="doIgnore">
-              Opt Out
-            </button>
+            <button class="hover:text-black" :onclick="doIgnore">Opt Out</button>
           </ToastAction>
         </div>
       </div>
     </ToastRoot>
-    <ToastViewport/>
+    <ToastViewport />
   </ToastProvider>
 </template>

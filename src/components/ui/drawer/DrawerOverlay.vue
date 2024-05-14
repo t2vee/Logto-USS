@@ -1,20 +1,20 @@
 <script setup>
-import { DrawerOverlay } from "vaul-vue";
-import { computed } from "vue";
-import { cn } from "@/lib/utils";
+import { DrawerOverlay } from 'vaul-vue'
+import { computed } from 'vue'
+import { cn } from '@/lib/utils'
 
 const props = defineProps({
   forceMount: { type: Boolean, required: false },
   asChild: { type: Boolean, required: false },
   as: { type: null, required: false },
-  class: { type: null, required: false },
-});
+  class: { type: null, required: false }
+})
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { class: _, ...delegated } = props
 
-  return delegated;
-});
+  return delegated
+})
 </script>
 
 <template>

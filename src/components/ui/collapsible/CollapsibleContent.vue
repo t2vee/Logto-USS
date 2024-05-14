@@ -1,11 +1,11 @@
 <script setup>
-import { CollapsibleContent } from "radix-vue";
+import { CollapsibleContent } from 'radix-vue'
 
 const props = defineProps({
   forceMount: { type: Boolean, required: false },
   asChild: { type: Boolean, required: false },
-  as: { type: null, required: false },
-});
+  as: { type: null, required: false }
+})
 </script>
 
 <template>

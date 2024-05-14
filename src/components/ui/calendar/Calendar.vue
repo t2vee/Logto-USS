@@ -1,6 +1,6 @@
 <script setup>
-import { computed } from "vue";
-import { CalendarRoot, useForwardPropsEmits } from "radix-vue";
+import { computed } from 'vue'
+import { CalendarRoot, useForwardPropsEmits } from 'radix-vue'
 import {
   CalendarCell,
   CalendarCellTrigger,
@@ -12,9 +12,9 @@ import {
   CalendarHeader,
   CalendarHeading,
   CalendarNextButton,
-  CalendarPrevButton,
-} from ".";
-import { cn } from "@/lib/utils";
+  CalendarPrevButton
+} from '.'
+import { cn } from '@/lib/utils'
 
 const props = defineProps({
   modelValue: { type: null, required: false },
@@ -40,26 +40,22 @@ const props = defineProps({
   dir: { type: String, required: false },
   asChild: { type: Boolean, required: false },
   as: { type: null, required: false },
-  class: { type: null, required: false },
-});
+  class: { type: null, required: false }
+})
 
-const emits = defineEmits(["update:modelValue", "update:placeholder"]);
+const emits = defineEmits(['update:modelValue', 'update:placeholder'])
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { class: _, ...delegated } = props
 
-  return delegated;
-});
+  return delegated
+})
 
-const forwarded = useForwardPropsEmits(delegatedProps, emits);
+const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>
-  <CalendarRoot
-    v-slot="{ grid, weekDays }"
-    :class="cn('p-3', props.class)"
-    v-bind="forwarded"
-  >
+  <CalendarRoot v-slot="{ grid, weekDays }" :class="cn('p-3', props.class)" v-bind="forwarded">
     <CalendarHeader>
       <CalendarPrevButton />
       <CalendarHeading />
@@ -81,11 +77,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
             :key="`weekDate-${index}`"
             class="mt-2 w-full"
           >
-            <CalendarCell
-              v-for="weekDate in weekDates"
-              :key="weekDate.toString()"
-              :date="weekDate"
-            >
+            <CalendarCell v-for="weekDate in weekDates" :key="weekDate.toString()" :date="weekDate">
               <CalendarCellTrigger :day="weekDate" :month="month.value" />
             </CalendarCell>
           </CalendarGridRow>

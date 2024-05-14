@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed, inject, defineAsyncComponent } from 'vue';
-import { useLogto } from "@logto/vue";
+import { ref, computed, inject, defineAsyncComponent } from 'vue'
+import { useLogto } from '@logto/vue'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,77 +10,82 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {Loader, MailCheck, MailX, CornerDownRight, ArrowBigRightDash} from 'lucide-vue-next';
-import {Button} from "@/components/ui/button/index.js";
-import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
-import MfaCodeInput from "@/components/SettingsPages/Global/MfaCodeInput.vue";
-import axios from "axios";
-import {toast} from "vue-sonner";
-import {eventBus} from "@/lib/eventBus.js";
-const ConnectorAlert = defineAsyncComponent(() => import("@/components/SettingsPages/Global/ConnectorAlert.vue"));
-
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Loader, MailCheck, MailX, CornerDownRight, ArrowBigRightDash } from 'lucide-vue-next'
+import { Button } from '@/components/ui/button/index.js'
+import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
+import MfaCodeInput from '@/components/SettingsPages/Global/MfaCodeInput.vue'
+import axios from 'axios'
+import { toast } from 'vue-sonner'
+import { eventBus } from '@/lib/eventBus.js'
+const ConnectorAlert = defineAsyncComponent(
+  () => import('@/components/SettingsPages/Global/ConnectorAlert.vue')
+)
 
 const userData = inject('userData')
 const userConnectorPresent = inject('userConnectorPresent')
 
-const { getAccessToken } = useLogto();
-const accessTokenRef = ref('');
-const emailSent = ref(false);
-const isLoading = ref(false);
-const emailVerified = ref(false);
+const { getAccessToken } = useLogto()
+const accessTokenRef = ref('')
+const emailSent = ref(false)
+const isLoading = ref(false)
+const emailVerified = ref(false)
 const resendCodeTimer = ref(60)
 const readyToSend = ref(true)
-const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK;
-
+const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK
 
 const countdown = () => {
   const interval = setInterval(() => {
     if (resendCodeTimer.value > 0) {
-      resendCodeTimer.value--;
+      resendCodeTimer.value--
     } else {
-      clearInterval(interval);
+      clearInterval(interval)
     }
-  }, 1000);
-};
+  }, 1000)
+}
 
-const email = ref('');
+const email = ref('')
 
-const emailRegex = new RegExp(/^[\w-\.]+(?:\+[\w]+)?@([\w-]+\.)+[\w-]{2,7}$/);
+const emailRegex = new RegExp(/^[\w-\.]+(?:\+[\w]+)?@([\w-]+\.)+[\w-]{2,7}$/)
 
 const isEmailValid = computed(() => {
-  return emailRegex.test(email.value);
-});
+  return emailRegex.test(email.value)
+})
 
 const isEditing = computed(() => {
-  return email.value.length > 0;
-});
-
+  return email.value.length > 0
+})
 
 async function sendVerificationCode() {
-  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
-  accessTokenRef.value = accessToken;
+  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
+  accessTokenRef.value = accessToken
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/push-email`, {
-      email: email.value,
-    }, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/push-email`,
+      {
+        email: email.value
       },
-    });
-    emailSent.value = response.status === 204;
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+    emailSent.value = response.status === 204
   } catch (error) {
-    toast.error('Error Sending Verification Code:',{description: 'Service Unavailable. Try again later'})
-    emailSent.value = error.response && error.response.status === 404;
+    toast.error('Error Sending Verification Code:', {
+      description: 'Service Unavailable. Try again later'
+    })
+    emailSent.value = error.response && error.response.status === 404
   } finally {
-    isLoading.value = false;
-    resendCodeTimer.value = 60;
+    isLoading.value = false
+    resendCodeTimer.value = 60
     countdown()
-    toast.info('Sent Email to ' + email.value, {description: 'Code will last for 10 minutes.'})
+    toast.info('Sent Email to ' + email.value, { description: 'Code will last for 10 minutes.' })
   }
 }
 
@@ -89,81 +94,95 @@ async function handleCodeResend() {
 }
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 async function handleChangeInput() {
-  readyToSend.value = false;
-  emailSent.value = false;
-  sleep(resendCodeTimer.value * 1000).then(() => { readyToSend.value = true });
+  readyToSend.value = false
+  emailSent.value = false
+  sleep(resendCodeTimer.value * 1000).then(() => {
+    readyToSend.value = true
+  })
 }
 
 const handleCodeComplete = async (code) => {
-  isLoading.value = true;
+  isLoading.value = true
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/verify-email?verification-code=${code}`,
-        {email: email.value},
-        {
-          headers: {
-            'Authorization': `Bearer ${accessTokenRef.value}`,
-            'Content-Type': 'application/json'
-          }
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/verify-email?verification-code=${code}`,
+      { email: email.value },
+      {
+        headers: {
+          Authorization: `Bearer ${accessTokenRef.value}`,
+          'Content-Type': 'application/json'
         }
-    );
-    emailSent.value = response.status === 204;
+      }
+    )
+    emailSent.value = response.status === 204
     if (response.status === 204) {
-      toast.success('Successfully Verified', {description: `${email.value} has been successfully added to your account.`})
+      toast.success('Successfully Verified', {
+        description: `${email.value} has been successfully added to your account.`
+      })
     }
-    emailVerified.value = !(response.status === 204);
+    emailVerified.value = !(response.status === 204)
   } catch (error) {
-    toast.error('Error sending verification code:',{description: error})
-    emailSent.value = false;
+    toast.error('Error sending verification code:', { description: error })
+    emailSent.value = false
   } finally {
-    isLoading.value = false;
-    eventBus.emit('closeEditDetailDialog', false);
-    eventBus.emit('refreshUserData', true);
+    isLoading.value = false
+    eventBus.emit('closeEditDetailDialog', false)
+    eventBus.emit('refreshUserData', true)
   }
-};
+}
 </script>
 
 <template>
   <transition name="fade" mode="out-in">
-    <div v-if="!isLoading && !emailSent" class="flex flex-col gap-4 items-center align-middle space-y-10">
+    <div
+      v-if="!isLoading && !emailSent"
+      class="flex flex-col gap-4 items-center align-middle space-y-10"
+    >
       <ConnectorAlert v-if="userConnectorPresent" />
       <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
         <Label for="email" class="flex font-bold w-full justify-between">
           Email
           <span v-if="isEmailValid && isEditing" class="text-xs text-green-500">Valid Email</span>
-          <span v-else-if="!isEmailValid && isEditing" class="text-xs text-red-500">Invalid Email Format</span>
+          <span v-else-if="!isEmailValid && isEditing" class="text-xs text-red-500"
+            >Invalid Email Format</span
+          >
         </Label>
         <Input
-            :disabled="userConnectorPresent"
-            id="email"
-            type="email"
-            v-model="email"
-            :class="{
-              'border-red-500': !isEmailValid && isEditing,
-               'border-green-500': isEmailValid && isEditing
-              }"
-            :placeholder="userConnectorPresent ? userData.email : 'Enter your email'"
+          :disabled="userConnectorPresent"
+          id="email"
+          type="email"
+          v-model="email"
+          :class="{
+            'border-red-500': !isEmailValid && isEditing,
+            'border-green-500': isEmailValid && isEditing
+          }"
+          :placeholder="userConnectorPresent ? userData.email : 'Enter your email'"
         />
         <div class="absolute inset-y-0 right-0 flex items-center pt-5 pr-3">
-          <MailCheck  v-if="isEmailValid && isEditing" class="text-green-500" />
-          <MailX  v-else-if="!isEmailValid && isEditing" class="text-red-500" />
+          <MailCheck v-if="isEmailValid && isEditing" class="text-green-500" />
+          <MailX v-else-if="!isEmailValid && isEditing" class="text-red-500" />
         </div>
       </div>
-      <p class="text-xs" v-if="resendCodeTimer>0 && !readyToSend">Please wait {{ resendCodeTimer }} seconds before sending another code</p>
+      <p class="text-xs" v-if="resendCodeTimer > 0 && !readyToSend">
+        Please wait {{ resendCodeTimer }} seconds before sending another code
+      </p>
       <DialogFooter>
         <div class="flex space-x-8 items-center align-middle">
           <Button variant="link" as-child>
-            <a target="_blank" :href="footer">
-              Privacy and Cookies Policy
-            </a>
+            <a target="_blank" :href="footer"> Privacy and Cookies Policy </a>
           </Button>
           <div class="space-x-2">
             <AlertDialog>
               <AlertDialogTrigger as-child>
-                <Button class="h-[30px]" :disabled="!isEmailValid || userConnectorPresent || resendCodeTimer>0 && !readyToSend">
+                <Button
+                  class="h-[30px]"
+                  :disabled="
+                    !isEmailValid || userConnectorPresent || (resendCodeTimer > 0 && !readyToSend)
+                  "
+                >
                   Verify
                 </Button>
               </AlertDialogTrigger>
@@ -173,10 +192,40 @@ const handleCodeComplete = async (code) => {
                   <AlertDialogDescription class="space-y-4">
                     Changing your email means that you will <strong>no longer</strong> be able to:
                     <ul class="space-y-1">
-                      <li class="flex items-center align-middle"><ArrowBigRightDash /> <span class="font-bold">Login with&nbsp;</span> {{ userData.email.length > 30 ? `${userData.email.substring(0, 30)}...` : userData.email }}</li>
-                      <li class="flex items-center align-middle"><ArrowBigRightDash /> <span class="font-bold">Contact us with&nbsp;</span> {{ userData.email.length > 30 ? `${userData.email.substring(0, 30)}...` : userData.email }}</li>
-                      <li class="flex items-center align-middle"><ArrowBigRightDash /> <span class="font-bold">Receive any mail with&nbsp;</span> {{ userData.email.length > 30 ? `${userData.email.substring(0, 30)}...` : userData.email }}</li>
-                      <li class="flex items-center align-middle"><ArrowBigRightDash /> <span class="font-bold">Verify your identity with&nbsp;</span> {{ userData.email.length > 30 ? `${userData.email.substring(0, 30)}...` : userData.email }}</li>
+                      <li class="flex items-center align-middle">
+                        <ArrowBigRightDash /> <span class="font-bold">Login with&nbsp;</span>
+                        {{
+                          userData.email.length > 30
+                            ? `${userData.email.substring(0, 30)}...`
+                            : userData.email
+                        }}
+                      </li>
+                      <li class="flex items-center align-middle">
+                        <ArrowBigRightDash /> <span class="font-bold">Contact us with&nbsp;</span>
+                        {{
+                          userData.email.length > 30
+                            ? `${userData.email.substring(0, 30)}...`
+                            : userData.email
+                        }}
+                      </li>
+                      <li class="flex items-center align-middle">
+                        <ArrowBigRightDash />
+                        <span class="font-bold">Receive any mail with&nbsp;</span>
+                        {{
+                          userData.email.length > 30
+                            ? `${userData.email.substring(0, 30)}...`
+                            : userData.email
+                        }}
+                      </li>
+                      <li class="flex items-center align-middle">
+                        <ArrowBigRightDash />
+                        <span class="font-bold">Verify your identity with&nbsp;</span>
+                        {{
+                          userData.email.length > 30
+                            ? `${userData.email.substring(0, 30)}...`
+                            : userData.email
+                        }}
+                      </li>
                     </ul>
                   </AlertDialogDescription>
                 </AlertDialogHeader>
@@ -187,9 +236,7 @@ const handleCodeComplete = async (code) => {
               </AlertDialogContent>
             </AlertDialog>
             <DialogClose as-child>
-              <Button type="button" variant="outline" class="h-[30px]">
-                Cancel
-              </Button>
+              <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
             </DialogClose>
           </div>
         </div>
@@ -200,12 +247,14 @@ const handleCodeComplete = async (code) => {
       <p class="text-xl font-bold">Loading...</p>
     </div>
     <div v-else-if="!isLoading && emailSent">
-      <MfaCodeInput :resend-code-timer="resendCodeTimer" @codeComplete="handleCodeComplete" @resendCode="handleCodeResend" @changeInput="handleChangeInput" />
+      <MfaCodeInput
+        :resend-code-timer="resendCodeTimer"
+        @codeComplete="handleCodeComplete"
+        @resendCode="handleCodeResend"
+        @changeInput="handleChangeInput"
+      />
     </div>
   </transition>
 </template>
 
-
-<style scoped>
-
-</style>
+<style scoped></style>

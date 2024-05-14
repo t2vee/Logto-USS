@@ -1,8 +1,8 @@
 <script setup>
-import { DrawerContent, DrawerPortal } from "vaul-vue";
-import { useForwardPropsEmits } from "radix-vue";
-import DrawerOverlay from "./DrawerOverlay.vue";
-import { cn } from "@/lib/utils";
+import { DrawerContent, DrawerPortal } from 'vaul-vue'
+import { useForwardPropsEmits } from 'radix-vue'
+import DrawerOverlay from './DrawerOverlay.vue'
+import { cn } from '@/lib/utils'
 
 const props = defineProps({
   forceMount: { type: Boolean, required: false },
@@ -10,18 +10,18 @@ const props = defineProps({
   disableOutsidePointerEvents: { type: Boolean, required: false },
   asChild: { type: Boolean, required: false },
   as: { type: null, required: false },
-  class: { type: null, required: false },
-});
+  class: { type: null, required: false }
+})
 const emits = defineEmits([
-  "escapeKeyDown",
-  "pointerDownOutside",
-  "focusOutside",
-  "interactOutside",
-  "openAutoFocus",
-  "closeAutoFocus",
-]);
+  'escapeKeyDown',
+  'pointerDownOutside',
+  'focusOutside',
+  'interactOutside',
+  'openAutoFocus',
+  'closeAutoFocus'
+])
 
-const forwarded = useForwardPropsEmits(props, emits);
+const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>

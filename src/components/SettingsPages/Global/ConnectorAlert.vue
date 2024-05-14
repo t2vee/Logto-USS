@@ -1,15 +1,16 @@
 <script setup>
-import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert/index.js";
-import {AlertCircle} from "lucide-vue-next";
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert/index.js'
+import { AlertCircle } from 'lucide-vue-next'
 
 defineProps({
   customTitle: {
     type: String,
-    default: "You are connected using a Social Login."
+    default: 'You are connected using a Social Login.'
   },
   customMessage: {
     type: String,
-    default: "Your details are based on the information provided by your social connector. You cannot edit the details below."
+    default:
+      'Your details are based on the information provided by your social connector. You cannot edit the details below.'
   }
 })
 </script>
@@ -24,6 +25,4 @@ defineProps({
   </Alert>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

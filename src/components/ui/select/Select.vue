@@ -1,5 +1,5 @@
 <script setup>
-import { SelectRoot, useForwardPropsEmits } from "radix-vue";
+import { SelectRoot, useForwardPropsEmits } from 'radix-vue'
 
 const props = defineProps({
   open: { type: Boolean, required: false },
@@ -10,11 +10,11 @@ const props = defineProps({
   name: { type: String, required: false },
   autocomplete: { type: String, required: false },
   disabled: { type: Boolean, required: false },
-  required: { type: Boolean, required: false },
-});
-const emits = defineEmits(["update:modelValue", "update:open"]);
+  required: { type: Boolean, required: false }
+})
+const emits = defineEmits(['update:modelValue', 'update:open'])
 
-const forwarded = useForwardPropsEmits(props, emits);
+const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>

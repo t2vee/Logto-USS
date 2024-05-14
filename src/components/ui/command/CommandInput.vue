@@ -1,12 +1,12 @@
 <script setup>
-import { computed } from "vue";
-import { Search } from "lucide-vue-next";
-import { ComboboxInput, useForwardProps } from "radix-vue";
-import { cn } from "@/lib/utils";
+import { computed } from 'vue'
+import { Search } from 'lucide-vue-next'
+import { ComboboxInput, useForwardProps } from 'radix-vue'
+import { cn } from '@/lib/utils'
 
 defineOptions({
-  inheritAttrs: false,
-});
+  inheritAttrs: false
+})
 
 const props = defineProps({
   type: { type: String, required: false },
@@ -14,16 +14,16 @@ const props = defineProps({
   autoFocus: { type: Boolean, required: false },
   asChild: { type: Boolean, required: false },
   as: { type: null, required: false },
-  class: { type: null, required: false },
-});
+  class: { type: null, required: false }
+})
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { class: _, ...delegated } = props
 
-  return delegated;
-});
+  return delegated
+})
 
-const forwardedProps = useForwardProps(delegatedProps);
+const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>

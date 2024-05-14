@@ -19,16 +19,19 @@ a,
   opacity: 0;
 }
 
-.slide-enter-active, .slide-leave-active {
+.slide-enter-active,
+.slide-leave-active {
   transition-property: transform, opacity;
   transition-duration: 500ms;
   transition-timing-function: ease;
 }
-.slide-enter-from, .slide-leave-to {
+.slide-enter-from,
+.slide-leave-to {
   transform: translateX(100%);
   opacity: 0;
 }
-.slide-enter-to, .slide-leave-from {
+.slide-enter-to,
+.slide-leave-from {
   transform: translateX(0%);
   opacity: 1;
 }

@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from 'vue';
-import { useLogto } from "@logto/vue";
-import { useRoute } from 'vue-router';
+import { ref } from 'vue'
+import { useLogto } from '@logto/vue'
+import { useRoute } from 'vue-router'
 import { CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -10,14 +10,14 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
+  BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
 
-const { signOut } = useLogto();
-const route = useRoute();
-const pathName = ref('');
+const { signOut } = useLogto()
+const route = useRoute()
+const pathName = ref('')
 pathName.value = route.name
-const onClickSignOut = () => signOut(import.meta.env.VITE_ROOT);
+const onClickSignOut = () => signOut(import.meta.env.VITE_ROOT)
 </script>
 
 <template>
@@ -27,15 +27,11 @@ const onClickSignOut = () => signOut(import.meta.env.VITE_ROOT);
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="https://mxs.app">
-            Home
-          </BreadcrumbLink>
+          <BreadcrumbLink href="https://mxs.app"> Home </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="/account/aboutme">
-            My Account
-          </BreadcrumbLink>
+          <BreadcrumbLink href="/account/aboutme"> My Account </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
@@ -43,9 +39,7 @@ const onClickSignOut = () => signOut(import.meta.env.VITE_ROOT);
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
-    <Button @click="onClickSignOut" class="h-8 rounded-xl">
-      Log Out
-    </Button>
+    <Button @click="onClickSignOut" class="h-8 rounded-xl"> Log Out </Button>
   </div>
   <div class="min-h-12"></div>
 </template>

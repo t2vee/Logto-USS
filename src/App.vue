@@ -1,9 +1,8 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import { Toaster as SonnerToaster } from '@/components/ui/sonner'
-import { Toaster } from "@/components/CustomShadcnComponents/toast"
-import AnalyticsOptNotify from "@/components/PageComponents/AnalyticsOptNotify.vue";
-
+import { Toaster } from '@/components/CustomShadcnComponents/toast'
+import AnalyticsOptNotify from '@/components/PageComponents/AnalyticsOptNotify.vue'
 </script>
 
 <template>
@@ -13,6 +12,4 @@ import AnalyticsOptNotify from "@/components/PageComponents/AnalyticsOptNotify.v
   <SonnerToaster position="bottom-center" richColors theme="dark"></SonnerToaster>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

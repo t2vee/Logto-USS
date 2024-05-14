@@ -1,11 +1,11 @@
 <script setup>
-import { computed } from "vue";
-import { TooltipContent, TooltipPortal, useForwardPropsEmits } from "radix-vue";
-import { cn } from "@/lib/utils";
+import { computed } from 'vue'
+import { TooltipContent, TooltipPortal, useForwardPropsEmits } from 'radix-vue'
+import { cn } from '@/lib/utils'
 
 defineOptions({
-  inheritAttrs: false,
-});
+  inheritAttrs: false
+})
 
 const props = defineProps({
   ariaLabel: { type: String, required: false },
@@ -21,18 +21,18 @@ const props = defineProps({
   arrowPadding: { type: Number, required: false },
   sticky: { type: String, required: false },
   hideWhenDetached: { type: Boolean, required: false },
-  class: { type: null, required: false },
-});
+  class: { type: null, required: false }
+})
 
-const emits = defineEmits(["escapeKeyDown", "pointerDownOutside"]);
+const emits = defineEmits(['escapeKeyDown', 'pointerDownOutside'])
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { class: _, ...delegated } = props
 
-  return delegated;
-});
+  return delegated
+})
 
-const forwarded = useForwardPropsEmits(delegatedProps, emits);
+const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>

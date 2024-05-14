@@ -1,20 +1,20 @@
 <script setup>
-import { computed } from "vue";
-import { ComboboxGroup, ComboboxLabel } from "radix-vue";
-import { cn } from "@/lib/utils";
+import { computed } from 'vue'
+import { ComboboxGroup, ComboboxLabel } from 'radix-vue'
+import { cn } from '@/lib/utils'
 
 const props = defineProps({
   asChild: { type: Boolean, required: false },
   as: { type: null, required: false },
   class: { type: null, required: false },
-  heading: { type: String, required: false },
-});
+  heading: { type: String, required: false }
+})
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { class: _, ...delegated } = props
 
-  return delegated;
-});
+  return delegated
+})
 </script>
 
 <template>
@@ -27,10 +27,7 @@ const delegatedProps = computed(() => {
       )
     "
   >
-    <ComboboxLabel
-      v-if="heading"
-      class="px-2 py-1.5 text-xs font-medium text-muted-foreground"
-    >
+    <ComboboxLabel v-if="heading" class="px-2 py-1.5 text-xs font-medium text-muted-foreground">
       {{ heading }}
     </ComboboxLabel>
     <slot />

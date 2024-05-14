@@ -1,168 +1,187 @@
 <script setup>
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import axios from 'axios';
-import {inject, ref, defineAsyncComponent, onMounted} from 'vue';
-import { useLogto } from '@logto/vue';
-import debounce from 'lodash/debounce';
-import {Ban, UserRoundCheck, MoreHorizontal} from 'lucide-vue-next';
-import {Button} from "@/components/ui/button/index.js";
-import {DialogClose, DialogFooter} from "@/components/ui/dialog/index.js";
-import {toast} from "vue-sonner";
-import {eventBus} from "@/lib/eventBus.js";
-const ConnectorAlert = defineAsyncComponent(() => import("@/components/SettingsPages/Global/ConnectorAlert.vue"));
-
+import axios from 'axios'
+import { inject, ref, defineAsyncComponent, onMounted } from 'vue'
+import { useLogto } from '@logto/vue'
+import debounce from 'lodash/debounce'
+import { Ban, UserRoundCheck, MoreHorizontal } from 'lucide-vue-next'
+import { Button } from '@/components/ui/button/index.js'
+import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
+import { toast } from 'vue-sonner'
+import { eventBus } from '@/lib/eventBus.js'
+const ConnectorAlert = defineAsyncComponent(
+  () => import('@/components/SettingsPages/Global/ConnectorAlert.vue')
+)
 
 const userData = inject('userData')
 const userConnectorPresent = inject('userConnectorPresent')
 
-const { getAccessToken } = useLogto();
+const { getAccessToken } = useLogto()
 
-const username = ref('');
-const isChecking = ref(false);
-const isAvailable = ref(false);
-const usernameChecked = ref(false);
-const waitForNextChange = ref('');
+const username = ref('')
+const isChecking = ref(false)
+const isAvailable = ref(false)
+const usernameChecked = ref(false)
+const waitForNextChange = ref('')
 
-const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK;
+const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK
 const usernameRegex = new RegExp(/^[a-zA-Z0-9]{3,24}$/)
 
-
 const checkUsernameAvailability = async (value) => {
-  value = value.trim();
+  value = value.trim()
   if (!value || !usernameRegex.test(value)) {
-    isChecking.value = false;
-    usernameChecked.value = false;
-    isAvailable.value = false;
-    return;
+    isChecking.value = false
+    usernameChecked.value = false
+    isAvailable.value = false
+    return
   }
-  isChecking.value = true;
-  usernameChecked.value = false;
-  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
+  isChecking.value = true
+  usernameChecked.value = false
+  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/utils/check-username-exists/${value}`, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/utils/check-username-exists/${value}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
       }
-    });
-    isAvailable.value = response.status === 204;
+    )
+    isAvailable.value = response.status === 204
   } catch (error) {
-    console.log('Error checking username availability:', error);
-    isAvailable.value = error.response && error.response.status === 404;
+    console.log('Error checking username availability:', error)
+    isAvailable.value = error.response && error.response.status === 404
   } finally {
-    isChecking.value = false;
-    usernameChecked.value = true;
+    isChecking.value = false
+    usernameChecked.value = true
   }
-};
+}
 
-const debouncedCheckUsername = debounce(() => checkUsernameAvailability(username.value), 500);
+const debouncedCheckUsername = debounce(() => checkUsernameAvailability(username.value), 500)
 
 async function updateData() {
-  let failed = false;
-  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
+  let failed = false
+  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/username`,
-        {
-          "username": username.value
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
-          },
-        });
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/username`,
+      {
+        username: username.value
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    )
     if (response.status === 204) {
-      toast.success('Success!',{description: 'Your changes were saved successfully.'})
+      toast.success('Success!', { description: 'Your changes were saved successfully.' })
     }
   } catch (error) {
     if (error.response.status === 400) {
-      toast.warning('Cant Change Username',{description: error.response.text})
+      toast.warning('Cant Change Username', { description: error.response.text })
     } else {
-      toast.error('Error saving changes:',{description: 'Service Unavailable. Try again later'})
+      toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
     }
-    failed = true;
+    failed = true
   }
   if (!failed) {
-    eventBus.emit('closeEditDetailDialog', false);
-    eventBus.emit('refreshUserData', true);
+    eventBus.emit('closeEditDetailDialog', false)
+    eventBus.emit('refreshUserData', true)
   }
 }
 
 const checkNextUsernameChange = async () => {
-  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE);
+  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/can-change-username`, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/can-change-username`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
       }
-    });
+    )
     if (response.status === 200) {
       waitForNextChange.value = response.data
     }
   } catch (error) {
-    console.log('Error grabbing username details:', error);
-    isAvailable.value = error.response && error.response.status === 404;
+    console.log('Error grabbing username details:', error)
+    isAvailable.value = error.response && error.response.status === 404
   }
-};
+}
 
 onMounted(checkNextUsernameChange)
 </script>
 
 <template>
   <div class="space-y-10">
-    <ConnectorAlert v-if="waitForNextChange" :custom-title="`Cant Change Username Until ${waitForNextChange.value}`" :custom-message="`You can only change your username once per month. Your next username change will be available on the ${waitForNextChange.value}`" />
+    <ConnectorAlert
+      v-if="waitForNextChange"
+      :custom-title="`Cant Change Username Until ${waitForNextChange.value}`"
+      :custom-message="`You can only change your username once per month. Your next username change will be available on the ${waitForNextChange.value}`"
+    />
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
-        <div class="grid w-3/4 max-w-sm items-center gap-1.5">
-          <Label for="userid" class="font-bold">
-            User ID <span v-if="!userConnectorPresent" class="text-xs text-grey-200">(Cannot Change)</span>
-          </Label>
-          <Input id="userid" disabled :default-value="userData.sub" :placeholder="userData.sub" />
+      <div class="grid w-3/4 max-w-sm items-center gap-1.5">
+        <Label for="userid" class="font-bold">
+          User ID
+          <span v-if="!userConnectorPresent" class="text-xs text-grey-200">(Cannot Change)</span>
+        </Label>
+        <Input id="userid" disabled :default-value="userData.sub" :placeholder="userData.sub" />
+      </div>
+      <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
+        <Label for="username" class="flex font-bold w-full justify-between">
+          Username
+          <span v-if="isAvailable && usernameChecked" class="text-xs text-green-500"
+            >Username Available!</span
+          >
+          <span v-else-if="!isAvailable && usernameChecked" class="text-red-500"
+            >Username Taken</span
+          >
+        </Label>
+        <div>
+          <Input
+            id="username"
+            :disabled="!!waitForNextChange"
+            v-model="username"
+            @input="debouncedCheckUsername"
+            :class="{
+              'border-red-500': !isAvailable && usernameChecked,
+              'border-green-500': isAvailable && usernameChecked
+            }"
+            :placeholder="userData.username ? userData.username : userData.name"
+          />
+          <div class="absolute inset-y-0 right-0 flex items-center pt-7 pr-1">
+            <MoreHorizontal v-if="isChecking" />
+            <UserRoundCheck v-else-if="isAvailable && usernameChecked" class="text-green-500" />
+            <Ban v-else-if="!isAvailable && usernameChecked" class="text-red-500" />
+          </div>
         </div>
-        <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
-          <Label for="username" class="flex font-bold w-full justify-between">
-            Username
-            <span v-if="isAvailable && usernameChecked" class="text-xs text-green-500">Username Available!</span>
-            <span v-else-if="!isAvailable && usernameChecked" class="text-red-500">Username Taken</span>
-          </Label>
-            <div>
-              <Input
-                  id="username"
-                  :disabled="!!waitForNextChange"
-                  v-model="username"
-                  @input="debouncedCheckUsername"
-                  :class="{
-                     'border-red-500': !isAvailable && usernameChecked,
-                     'border-green-500': isAvailable && usernameChecked
-                    }"
-                  :placeholder="userData.username ? userData.username : userData.name"
-              />
-              <div class="absolute inset-y-0 right-0 flex items-center pt-7 pr-1">
-                <MoreHorizontal v-if="isChecking" />
-                <UserRoundCheck v-else-if="isAvailable && usernameChecked" class="text-green-500" />
-                <Ban v-else-if="!isAvailable && usernameChecked" class="text-red-500" />
-              </div>
-            </div>
-        </div>
-      <p class="text-xs" v-if="!waitForNextChange">Keep in mind, You can only <strong>change your username once per month!</strong></p>
+      </div>
+      <p class="text-xs" v-if="!waitForNextChange">
+        Keep in mind, You can only <strong>change your username once per month!</strong>
+      </p>
     </div>
     <DialogFooter>
       <div class="flex space-x-10 items-center align-middle">
         <Button variant="link" as-child>
-          <a target="_blank" :href="footer">
-            Privacy and Cookies Policy
-          </a>
+          <a target="_blank" :href="footer"> Privacy and Cookies Policy </a>
         </Button>
         <div class="space-x-2">
-          <Button type="submit" class="h-[30px]" :disabled="waitForNextChange || !isAvailable" @click="updateData">
+          <Button
+            type="submit"
+            class="h-[30px]"
+            :disabled="waitForNextChange || !isAvailable"
+            @click="updateData"
+          >
             Save
           </Button>
           <DialogClose as-child>
-            <Button type="button" variant="outline" class="h-[30px]">
-              Cancel
-            </Button>
+            <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
           </DialogClose>
         </div>
       </div>
@@ -170,6 +189,4 @@ onMounted(checkNextUsernameChange)
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

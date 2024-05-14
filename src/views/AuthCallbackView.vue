@@ -1,14 +1,14 @@
 <script setup>
-import { useHandleSignInCallback } from '@logto/vue';
-import { useRouter } from 'vue-router';
-import { UserCheck } from 'lucide-vue-next';
+import { useHandleSignInCallback } from '@logto/vue'
+import { useRouter } from 'vue-router'
+import { UserCheck } from 'lucide-vue-next'
 
-const router = useRouter();
-const sleep = ms => new Promise(r => setTimeout(r, ms));
+const router = useRouter()
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 const { isLoading } = useHandleSignInCallback(() => {
   router.push({ path: '/account/aboutme' })
-});
+})
 </script>
 
 <template>
@@ -19,6 +19,4 @@ const { isLoading } = useHandleSignInCallback(() => {
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

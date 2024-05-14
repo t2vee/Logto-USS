@@ -1,5 +1,5 @@
 <script setup>
-import { TabsRoot, useForwardPropsEmits } from "radix-vue";
+import { TabsRoot, useForwardPropsEmits } from 'radix-vue'
 
 const props = defineProps({
   defaultValue: { type: String, required: false },
@@ -8,11 +8,11 @@ const props = defineProps({
   activationMode: { type: String, required: false },
   modelValue: { type: String, required: false },
   asChild: { type: Boolean, required: false },
-  as: { type: null, required: false },
-});
-const emits = defineEmits(["update:modelValue"]);
+  as: { type: null, required: false }
+})
+const emits = defineEmits(['update:modelValue'])
 
-const forwarded = useForwardPropsEmits(props, emits);
+const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>
