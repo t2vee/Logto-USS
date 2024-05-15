@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npx shadcn-vue@latest add --overwrite accordion alert alert-dialog avatar breadcrumb button calendar card checkbox collapsible command dialog drawer dropdown-menu form hover-card input label pin-input popover progress radio-group select separator sonner switch tabs tooltip && vite build",
+    "build": "npx shadcn-vue@latest add accordion alert alert-dialog avatar breadcrumb button calendar card checkbox collapsible command dialog drawer dropdown-menu form hover-card input label pin-input popover progress radio-group select separator sonner switch tabs tooltip && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
