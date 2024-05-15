@@ -8,8 +8,8 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-src/components/ui/*
-!src/components/ui/dialog*
+#src/components/ui/*
+#!src/components/ui/dialog*
 .DS_Store
 dist
 dist-ssr
