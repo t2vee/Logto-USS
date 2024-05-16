@@ -77,7 +77,7 @@ const sidebarNavItems = ref([
           class="w-full text-left justify-start"
           @click="navigate"
         >
-          <component :is="item.icon" v-if="item.icon" class="pr-1.5" />
+          <component :is="item.icon" v-if="item.icon" class="pr-1.5" :color="$route.path === item.href ? 'rgb(165 243 252)' : ''" />
           {{ item.title }}
         </Button>
       </router-link>
