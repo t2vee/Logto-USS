@@ -3,15 +3,17 @@ import failureCONTENT from "../../../responses/raw/failure-CONTENT";
 import successEMPTY from "../../../responses/raw/success-EMPTY";
 import failureEMPTY from "../../../responses/raw/failure-EMPTY";
 
+import Filter from "bad-words";
+const filter = new Filter();
+
 export default async (request, env) => {
 	try {
 		const value = await env.UsernameChangeTimelimit.get(request.userid)
-		if (value) {
-			return failureCONTENT(env,`Be patient! You still have to wait until ${value} before changing your username.`, 400)
-		}
+		if (value) {return failureCONTENT(env,`Be patient! You still have to wait until ${value} before changing your username.`, 400)}
 		const usernameRegex = new RegExp(/^[a-zA-Z0-9]{3,24}$/)
 		const requestData = await request.json();
 		if (usernameRegex.test(requestData.username)) {
+			if (filter.isProfane(requestData.username)) {return failureCONTENT(env,'Username contains bad words >:(', 406)}
 			const userData = {"username": requestData.username}
 			const updateResponse = await updateUserData(env, request.accesstoken, userData, request.userid)
 			if (updateResponse.status === 200) {

@@ -13,10 +13,13 @@ import failureEMPTY from "../../responses/raw/failure-EMPTY";
  * @param {Object} context - An object containing route parameters, among which is the username to check.
  * @returns {Response} A Fetch API response object with the result of the check or an error message.
  */
-export default async (request, env, context) => {
-	if (!request.params || !request.params.username) {
-		return failureCONTENT(env, 'No Username Provided', 400);
-	}
+
+import Filter from "bad-words";
+const filter = new Filter();
+
+export default async (request, env) => {
+	if (!request.params || !request.params.username) { return failureCONTENT(env, 'No Username Provided', 400); }
+	if (filter.isProfane(request.params.username)) { return failureCONTENT(env, 'Username contains bad words >:(', 406) }
 	try {
 		const resourceResponse = await checkUsernameAvailability(env, request.accesstoken, request.params.username);
 		if (resourceResponse === '[]') {

@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@tensorflow/tfjs-node": "3.18.0",
+    "bad-words": "^3.0.4",
     "itty-router": "^4.0.27",
     "jose": "^5.2.3",
     "jsdocs": "^0.0.1",
