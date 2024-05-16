@@ -11,7 +11,7 @@ const ConnectorAlert = defineAsyncComponent(
 )
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
-import debounce from 'lodash/debounce.js'
+import debounce from 'lodash/debounce'
 import { Ban, MoreHorizontal, UserRoundCheck } from 'lucide-vue-next'
 
 const userData = inject('userData')
@@ -23,6 +23,7 @@ const fullName = ref('')
 const isOk = ref(false)
 const isChecking = ref(false)
 const nameChecked = ref(false)
+const badWords = ref(false)
 
 async function updateData() {
   let failed = false
@@ -44,7 +45,14 @@ async function updateData() {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
     }
   } catch (error) {
-    toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
+    if (error.response.status === 406) {
+      badWords.value = true
+      isOk.value = false
+      fullName.value = '';
+      toast.warning('Did not save changes:', { description: 'Name contains bad words.' })
+    } else {
+      toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
+    }
     failed = true
   }
   if (!failed) {
@@ -54,6 +62,7 @@ async function updateData() {
 }
 
 const checkName = async (value) => {
+  badWords.value = false;
   isChecking.value = true
   nameChecked.value = false
   value = value.trim()
@@ -62,7 +71,7 @@ const checkName = async (value) => {
     isOk.value = false
     return
   }
-  if (value.length > 124) {
+  if (value.length > 64) {
     isChecking.value = false
     nameChecked.value = true
     isOk.value = false
@@ -90,7 +99,8 @@ const debouncedCheckName = debounce(() => checkName(fullName.value), 500)
       <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
         <Label for="username" class="flex font-bold w-full justify-between">
           Real Name (Optional)
-          <span v-if="!isOk && nameChecked" class="text-red-500">Invalid Name</span>
+          <span v-if="badWords" class="text-xs text-red-500">Contains Bad Words</span>
+          <span v-else-if="!isOk && nameChecked" class="text-xs text-red-500">Invalid Name</span>
         </Label>
         <div>
           <Input

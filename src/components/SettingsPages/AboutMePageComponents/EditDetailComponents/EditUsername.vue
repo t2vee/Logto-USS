@@ -24,11 +24,13 @@ const isChecking = ref(false)
 const isAvailable = ref(false)
 const usernameChecked = ref(false)
 const waitForNextChange = ref('')
+const badWords = ref(false)
 
 const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK
 const usernameRegex = new RegExp(/^[a-zA-Z0-9]{3,24}$/)
 
 const checkUsernameAvailability = async (value) => {
+  badWords.value = false;
   value = value.trim()
   if (!value || !usernameRegex.test(value)) {
     isChecking.value = false
@@ -51,7 +53,7 @@ const checkUsernameAvailability = async (value) => {
     )
     isAvailable.value = response.status === 204
   } catch (error) {
-    console.log('Error checking username availability:', error)
+    if (error.response.status === 406) { badWords.value = true }
     isAvailable.value = error.response && error.response.status === 404
   } finally {
     isChecking.value = false
@@ -81,10 +83,14 @@ async function updateData() {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
     }
   } catch (error) {
-    if (error.response.status === 400) {
-      toast.warning('Cant Change Username', { description: error.response.text })
-    } else {
-      toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
+    switch (error.response.status) {
+      case 406:
+      case 400:
+        toast.warning('Cant Change Username', { description: error.response.text })
+        break;
+      case 418:
+        toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' });
+        break;
     }
     failed = true
   }
@@ -110,7 +116,6 @@ const checkNextUsernameChange = async () => {
       waitForNextChange.value = response.data
     }
   } catch (error) {
-    console.log('Error grabbing username details:', error)
     isAvailable.value = error.response && error.response.status === 404
   }
 }
@@ -136,7 +141,8 @@ onMounted(checkNextUsernameChange)
       <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
         <Label for="username" class="flex font-bold w-full justify-between">
           Username
-          <span v-if="isAvailable && usernameChecked" class="text-xs text-green-500"
+          <span v-if="badWords" class="text-xs text-red-500">Contains Bad Words</span>
+          <span v-else-if="isAvailable && usernameChecked" class="text-xs text-green-500"
             >Username Available!</span
           >
           <span v-else-if="!isAvailable && usernameChecked" class="text-red-500"
