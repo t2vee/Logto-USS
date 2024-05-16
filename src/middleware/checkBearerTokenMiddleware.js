@@ -1,5 +1,5 @@
-import {error} from "itty-router";
 import verifyAuthToken from "../utils/verifyAuthToken";
+import failureCONTENT from "../responses/raw/failure-CONTENT";
 
 export default async (request, env) => {
 	try {
@@ -8,6 +8,6 @@ export default async (request, env) => {
 		console.log('[MIDDLEWARE] Authentication Bearer Token Check Succeeded')
 	} catch (e) {
 		console.log(e)
-		return error(400, 'Invalid or Non-existent Authentication Bearer Token');
+		return failureCONTENT(env, 'Invalid or Non-existent Authentication Bearer Token', 400);
 	}
 }

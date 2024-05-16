@@ -38,6 +38,9 @@ import uploadNewAvatar from "./handlers/userData/updateUserInformation/uploadNew
 import attachAccessToken from "./middleware/attachAccessToken";
 import canChangeUsername from "./handlers/canChangeUsername";
 import removeAvatar from "./handlers/userData/updateUserInformation/removeAvatar";
+import failureCONTENT from "./responses/raw/failure-CONTENT";
+import suspendUser from "./handlers/suspendUser";
+import terminateUser from "./handlers/terminateUser";
 
 
 const router = Router();
@@ -57,14 +60,12 @@ router.post('/api/v1/mfa-flow/verify-email-code', verifyEmail);
 router.post('/api/v1/mfa-flow/push-sms', pushSMS);
 router.post('/api/v1/mfa-flow/verify-sms-code', verifySMS);
 
-
 router.post('/api/v2/me/verify/push-sms', pushNewSMS);
 router.post('/api/v2/me/verify/verify-sms', verifyNewSMS);
 router.post('/api/v2/me/edit/remove-sms', removeSMS);
 
 router.post('/api/v2/me/verify/push-email', pushNewEmail);
 router.post('/api/v2/me/verify/verify-email', verifyNewEmail);
-
 
 router.post('/api/v2/me/edit/full-name', updateFullName)
 router.post('/api/v2/me/edit/username', updateUsername)
@@ -93,6 +94,8 @@ router.get('/api/v1/me/can-change-username', canChangeUsername)
 
 router.get('/api/v1/utils/check-username-exists/:username', usernameExists);
 
+router.post('/api/v2/me/dangerzone/suspendme', suspendUser)
+router.post('/api/v2/me/dangerzone/terminate', terminateUser)
 
 
 /**
@@ -121,8 +124,8 @@ function corsHeaders(request, env) {
  *
  * @returns {Response} A Fetch API response object with a 404 status code and a message indicating that the resource was not found.
  */
-// Verified and Tested - Success - 18/03/24 <= was a lie, no wildcard paths work is they are below the auth middleware line
-//router.all('*', (env) => new Response('Not Found', { status: 404, headers: { 'Content-Type': 'text/plain','Access-Control-Allow-Origin': env.CORS, 'Access-Control-Allow-Methods': 'GET, OPTIONS', 'Access-Control-Allow-Headers': 'Authorization, Content-Type', 'Access-Control-Max-Age': '86400', } }));
+// Verified and Tested - Success - 18/03/24 <= was a lie, no wildcard paths work is they are below the auth middleware line <= im just stupid, thats the whole point. that it 404s even if the user is authenticated
+router.all('*', (env) => failureCONTENT(env, 'this is not the route you are looking for', 404));
 
 // why
 function handleRequest(request, env, ctx) {
