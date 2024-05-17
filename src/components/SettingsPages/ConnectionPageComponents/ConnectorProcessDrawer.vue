@@ -141,14 +141,12 @@ function completeStepOne() {
               </CardDescription>
             </CardHeader>
             <CardContent v-if="stepTwoActive">
-              <Card class="flex items-center align-middle justify-center bg-[#162831] gap-x-6 p-2 border-b-primary border-b-4 hover:cursor-pointer hover:bg-[#0E1D25FF] hover:border-t-4 hover:border-t-primary-foreground hover:border-b-0">
+              <Card class="flex items-center align-middle justify-center bg-[#162831] gap-x-6 p-2 border-b-muted border-b-4 hover:cursor-pointer hover:bg-[#0E1D25FF] hover:border-t-4 hover:border-t-primary-foreground hover:border-b-0">
                 <CardTitle class="flex mt-2 gap-x-2">
                   <LogIn :size="28" />
                   Click to Authorise with
                 </CardTitle>
                 <img v-if="serviceImg" class="max-w-44" :src="serviceImg" :alt="service" />
-                <component v-else-if="serviceIcon" :is="serviceIcon" color="white" />
-                {{ service }}
               </Card>
             </CardContent>
           </Card>
