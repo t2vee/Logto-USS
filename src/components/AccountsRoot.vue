@@ -5,12 +5,12 @@ import { CardContent } from '@/components/ui/card'
 import SideBar from '@/components/SideBar.vue'
 import NavBar from '@/components/NavBar.vue'
 import { Button } from '@/components/ui/button'
-import { Loader, Loader2, AlertOctagon } from 'lucide-vue-next'
+import { Loader, AlertOctagon } from 'lucide-vue-next'
 import { eventBus } from '@/lib/eventBus.js'
 import axios from 'axios'
 import { toast } from 'vue-sonner'
 
-const { fetchUserInfo, getAccessToken } = useLogto()
+const { fetchUserInfo, getAccessToken, isAuthenticated } = useLogto()
 const userInfo = ref(null)
 const isLoading = ref(true)
 const fetchFailure = ref(false)
@@ -24,6 +24,7 @@ const handleEvent = (data) => {
   }
 }
 async function loadData() {
+  if (!isAuthenticated) { window.location.replace("/oauth/login") }
   fetchFailure.value = false
   isLoading.value = true
   try {

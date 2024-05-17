@@ -19,9 +19,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         dir: 'dist',
-        entryFileNames: 'worker.js',
-        assetFileNames: 'outfit.[hash:6].css',
-        chunkFileNames: "toolbelt.[hash:6].js",
+        entryFileNames: 'core.js',
+        assetFileNames: '[hash:10].css',
+        chunkFileNames: "[hash:10].js",
         manualChunks: undefined,
       }
     }

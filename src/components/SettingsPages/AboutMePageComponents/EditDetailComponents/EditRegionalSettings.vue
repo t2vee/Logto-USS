@@ -77,7 +77,7 @@ async function updateData() {
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5">
         <Label class="font-bold">
-          Country/Region <span class="text-xs text-grey-200">(Optional)</span>
+          Country/Region
         </Label>
         <Popover v-model:open="open">
           <PopoverTrigger as-child>
@@ -87,7 +87,7 @@ async function updateData() {
                   v-if="
                     userData['profile.address.locality'] && !Object.keys(selectedCountry).length > 0
                   "
-                  >(Currently)</span
+                  >(Currently) </span
                 >
                 <span>{{
                   Object.keys(selectedCountry).length > 0
@@ -148,6 +148,7 @@ async function updateData() {
                 v-for="timezone in group.timezones"
                 :key="timezone.code"
                 :value="timezone.code"
+                class="hover:text-black"
                 >{{ timezone.label }}</SelectItem
               >
             </SelectGroup>

@@ -72,7 +72,7 @@ onMounted(countdown)
         THIS IS A DESTRUCTIVE ACTION! You will not be able to log back into your account once done. In the the future, if you do wish to reactivate your account, send a reactivation request to <strong>support@mxs.email</strong> from your current account email.
       </p>
       <br />
-      <div class="flex justify-evenly">
+      <div class="flex flex-col items-center justify-evenly">
         <p>Currently Connected Email:</p>
         <strong>{{ userData.email }}</strong>
       </div>

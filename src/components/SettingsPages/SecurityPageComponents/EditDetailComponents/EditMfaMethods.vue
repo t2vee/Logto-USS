@@ -101,7 +101,7 @@ const resetDefault = () => {
     <div v-else-if="phoneActive" class="space-y-3 flex flex-col items-center">
       <p class="text-sm w-2/3 text-center">
         When a phone number is added to a MXS Account it is used <strong>only</strong> for MFA. To
-        {{ userData.phone_number ? 'disable' : 'enable' }} MFA via SMS
+        {{ userData.phone_number ? 'disable' : 'enable' }} MFA via SMS,
         {{ userData.phone_number ? 'remove' : 'add' }} your number below:
       </p>
       <div class="w-2/3">
@@ -113,8 +113,8 @@ const resetDefault = () => {
         />
       </div>
     </div>
-    <div v-else-if="appActive" class="space-y-3">
-      <EditAppAuthenticator />
+    <div v-else-if="appActive">
+      <EditAppAuthenticator :mfa-methods="mfaMethods" />
     </div>
     <div v-else-if="backupActive" class="space-y-3">
       <ManageBackupCodes />

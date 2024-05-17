@@ -38,7 +38,7 @@ onUnmounted(cleanup)
 <template>
   <Dialog v-model:open="isDialogOpen">
     <DialogTrigger as-child>
-      <Alert :class="`h-32 w-full bg-gradient-to-tl from-[${destructive ? '#7a1414' : '#c2480c'}] to-30% transition-all duration-200 hover:to-60% hover:border-[${destructive ? '#dc2626' : '#f67a3c'}] hover:cursor-pointer`">
+      <Alert :class="`h-32 w-full bg-gradient-to-tl ${destructive ? 'from-[#7a1414]' : 'from-[#c2480c]'} to-30% transition-all duration-200 hover:to-60% ${destructive ? 'hover:border-[#dc2626]' : 'hover:border-[#f67a3c]'} hover:cursor-pointer`">
         <div class="flex items-center align-middle space-x-3">
           <component :is="icon" v-if="icon" :color="destructive ? 'rgb(220 38 38)' : '#f67a3c'"/>
           <AlertTitle class="flex justify-between text-lg" :class="destructive ? 'text-red-600' : 'text-[#f67a3c]'">{{ title }}</AlertTitle>

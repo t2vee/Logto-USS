@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from "vue";
+import {computed, ref} from "vue";
 import {
   SelectItem,
   SelectItemIndicator,
@@ -25,6 +25,8 @@ const delegatedProps = computed(() => {
 });
 
 const forwardedProps = useForwardProps(delegatedProps);
+
+const hover = ref(false)
 </script>
 
 <template>
@@ -36,14 +38,16 @@ const forwardedProps = useForwardProps(delegatedProps);
         props.class
       )
     "
+    @mouseenter="() => hover = true"
+    @mouseleave="() => hover = false"
   >
     <span class="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <SelectItemIndicator>
-        <Check class="h-4 w-4" />
+        <Check :color="hover ? 'black' : ''" class="h-4 w-4" />
       </SelectItemIndicator>
     </span>
 
-    <SelectItemText>
+    <SelectItemText :class="hover ? 'text-black' : ''">
       <slot />
     </SelectItemText>
   </SelectItem>

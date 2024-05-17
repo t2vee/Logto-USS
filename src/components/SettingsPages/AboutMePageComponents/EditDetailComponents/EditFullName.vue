@@ -6,9 +6,7 @@ import { defineAsyncComponent, inject, ref } from 'vue'
 import { useLogto } from '@logto/vue'
 import { Button } from '@/components/ui/button/index.js'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-const ConnectorAlert = defineAsyncComponent(
-  () => import('@/components/SettingsPages/Global/ConnectorAlert.vue')
-)
+const ConnectorAlert = defineAsyncComponent(() => import('@/components/SettingsPages/Global/ConnectorAlert.vue'))
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
 import debounce from 'lodash/debounce'
@@ -88,17 +86,10 @@ const debouncedCheckName = debounce(() => checkName(fullName.value), 500)
 <template>
   <div class="space-y-10">
     <ConnectorAlert v-if="userConnectorPresent" />
-    <div class="flex flex-col gap-4 py-4 items-center align-middle">
-      <div class="grid w-3/4 max-w-sm items-center gap-1.5">
-        <Label for="userid" class="font-bold">
-          User ID
-          <span v-if="!userConnectorPresent" class="text-xs text-grey-200">(Cannot Change)</span>
-        </Label>
-        <Input id="userid" disabled :default-value="userData.sub" :placeholder="userData.sub" />
-      </div>
+    <div class="flex flex-col gap-4 pb-4 items-center align-middle">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
         <Label for="username" class="flex font-bold w-full justify-between">
-          Real Name (Optional)
+          Full Name
           <span v-if="badWords" class="text-xs text-red-500">Contains Bad Words</span>
           <span v-else-if="!isOk && nameChecked" class="text-xs text-red-500">Invalid Name</span>
         </Label>

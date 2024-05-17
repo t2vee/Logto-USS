@@ -130,14 +130,7 @@ onMounted(checkNextUsernameChange)
       :custom-title="`Cant Change Username Until ${waitForNextChange.value}`"
       :custom-message="`You can only change your username once per month. Your next username change will be available on the ${waitForNextChange.value}`"
     />
-    <div class="flex flex-col gap-4 py-4 items-center align-middle">
-      <div class="grid w-3/4 max-w-sm items-center gap-1.5">
-        <Label for="userid" class="font-bold">
-          User ID
-          <span v-if="!userConnectorPresent" class="text-xs text-grey-200">(Cannot Change)</span>
-        </Label>
-        <Input id="userid" disabled :default-value="userData.sub" :placeholder="userData.sub" />
-      </div>
+    <div class="flex flex-col gap-4 pb-4 items-center align-middle">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
         <Label for="username" class="flex font-bold w-full justify-between">
           Username

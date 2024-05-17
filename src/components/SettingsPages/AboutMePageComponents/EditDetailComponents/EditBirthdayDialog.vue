@@ -64,12 +64,13 @@ function allowSave() {
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5">
         <Label for="username" class="flex font-bold w-full justify-between">
-          Birthday (Optional)
+          Birthday
         </Label>
         <Popover>
           <PopoverTrigger as-child>
             <Button
               variant="outline"
+
               :class="
                 cn(
                   'w-[280px] justify-start text-left font-normal',
