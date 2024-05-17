@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router'
 import { Toaster as SonnerToaster } from '@/components/ui/sonner'
 import { Toaster } from '@/components/CustomShadcnComponents/toast'
-import AnalyticsOptNotify from '@/components/PageComponents/AnalyticsOptNotify.vue'
+import AnalyticsOptNotify from '@/components/SettingsPages/Global/AnalyticsOptNotify.vue'
 </script>
 
 <template>

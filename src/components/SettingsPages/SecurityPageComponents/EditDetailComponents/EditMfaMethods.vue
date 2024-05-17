@@ -13,7 +13,7 @@ import { inject, ref, defineAsyncComponent } from 'vue'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
 import { Button } from '@/components/ui/button/index.js'
 import { CardDescription, CardTitle } from '@/components/ui/card/index.js'
-import { Fingerprint, PhoneMissed, CircleEllipsis, KeyRound } from 'lucide-vue-next'
+import { Fingerprint, PhoneMissed, CircleEllipsis, KeyRound, DoorOpen } from 'lucide-vue-next'
 import axios from 'axios'
 import { toast } from 'vue-sonner'
 import { useLogto } from '@logto/vue'
@@ -303,7 +303,7 @@ const resetDefault = () => {
     <div v-if="emailActive || phoneActive || appActive || backupActive" class="mt-6">
       <DialogFooter>
         <div class="flex justify-center items-center align-middle <!--gap-x-20-->">
-          <Button variant="secondary" class="h-[30px]" @click="resetDefault"> Go Back </Button>
+          <Button variant="secondary" class="h-[30px]" @click="resetDefault"><DoorOpen :stroke-wdth="1.5" color="black" class="pr-1" /> Go Back </Button>
         </div>
       </DialogFooter>
     </div>

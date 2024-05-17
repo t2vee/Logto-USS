@@ -68,8 +68,8 @@ onMounted(countdown)
   </div>
   <div v-else class="flex flex-col items-center align-middle justify-center">
     <div class="mb-8 w-full">
-      <p class="text-md text-center">
-        THIS IS A DESTRUCTIVE ACTION! You will not be able to log back into your account once done. In the the future, if you do wish to reactivate your account, send a reactivation request to <strong>support@mxs.email</strong> from your current account email.
+      <p class="text-md text-center text-destructive">
+        <span class="font-bold text-destructive">THIS IS A DESTRUCTIVE ACTION!</span> You will not be able to log back into your account once done. In the the future, if you do wish to reactivate your account, send a reactivation request to <span class="font-bold text-destructive">support@mxs.email</span> from your current account email.
       </p>
       <br />
       <div class="flex flex-col items-center justify-evenly">

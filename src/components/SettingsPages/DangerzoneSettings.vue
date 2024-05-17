@@ -10,8 +10,8 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import DangerZoneAlertDialog from "@/components/SettingsPages/Global/DangerZoneAlertDialog.vue";
-import TerminateAccount from "@/components/DangerZoneComponents/EditDetailComponents/TerminateAccount.vue";
-import SuspendAccount from "@/components/DangerZoneComponents/EditDetailComponents/SuspendAccount.vue";
+import TerminateAccount from "@/components/DangerZoneComponents/DetailComponents/TerminateAccount.vue";
+import SuspendAccount from "@/components/DangerZoneComponents/DetailComponents/SuspendAccount.vue";
 
 </script>
 

@@ -4,16 +4,12 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Card } from '@/components/ui/card/index.js'
 import { Link2, Link2Off, ChevronDown } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
-const ConnectorProcessDrawer = defineAsyncComponent(
-  () => import('@/components/SettingsPages/ConnectionPageComponents/ConnectorProcessDrawer.vue')
-)
+import ConnectorProcessDrawer from '@/components/SettingsPages/ConnectionPageComponents/ConnectorProcessDrawer.vue';
 import { eventBus } from '@/lib/eventBus.js'
 
 const props = defineProps({
-  image: {
-    type: String,
-    required: true
-  },
+  image: String,
+  icon: Object,
   service: {
     type: String,
     required: true
@@ -41,14 +37,19 @@ onUnmounted(cleanup)
   >
     <Collapsible v-model:open="isOpen" @update:open="closeOther">
       <CollapsibleTrigger class="flex items-center align-middle justify-between w-full">
-        <img class="max-w-24" :src="image" :alt="service" />
-        <ChevronDown :class="{ 'rotate-180': isOpen }" />
-        <div class="flex gap-x-2 items-center align-middle">
-          <p :class="linked ? 'text-green-500' : 'text-gray-500'">
-            {{ linked ? '' : 'Not' }} Linked
-          </p>
-          <Link2Off v-if="!linked" color="#718096" />
-          <Link2 v-else color="#48bb78" />
+        <div class="flex gap-x-4">
+          <component :is="icon" color="white" />
+          <p>{{ service }}</p>
+        </div>
+        <div class="flex gap-x-3">
+          <div class="flex gap-x-2 items-center align-middle">
+            <p :class="linked ? 'text-green-500' : 'text-gray-500'">
+              {{ linked ? '' : 'Not' }} Linked
+            </p>
+            <Link2Off v-if="!linked" color="#718096" />
+            <Link2 v-else color="#48bb78" />
+          </div>
+          <ChevronDown :class="{ 'rotate-180': isOpen }" />
         </div>
       </CollapsibleTrigger>
       <CollapsibleContent class="flex" v-if="!linked">
@@ -60,7 +61,7 @@ onUnmounted(cleanup)
           </p>
         </div>
         <div class="w-1/2 flex flex-col items-center align-middle justify-center gap-y-2">
-          <ConnectorProcessDrawer :service-img="image" :service="service" />
+          <ConnectorProcessDrawer :service-img="image" :service-icon="icon" :service="service" />
         </div>
       </CollapsibleContent>
       <CollapsibleContent v-else class="flex">

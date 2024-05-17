@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import Button from '@/components/ui/button/Button.vue'
+import Button from '../../ui/button/Button.vue'
 
 const route = useRoute()
 
@@ -26,7 +26,7 @@ const currentRouteName = computed(() => {
       </li>
       <li>/</li>
       <li>
-        <a class="red" href="/"> My Account </a>
+        <a class="red" href="/public"> My Account </a>
       </li>
       <li v-if="currentRouteName">/</li>
       <li v-if="currentRouteName" class="capitalize">{{ currentRouteName }}</li>

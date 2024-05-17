@@ -39,15 +39,7 @@ async function loadData() {
         }
       }
     )
-    const jsonRes = Object.assign(response.data, logtoRepsonse)
-    userInfo.value = flattenJson(jsonRes)
-    if (
-      userInfo.value['identities.discord'] ||
-      userInfo.value['identities.github'] ||
-      userInfo.value['identities.google']
-    ) {
-      userConnectorPresent.value = true
-    }
+    userInfo.value = Object.assign(response.data, logtoRepsonse)
   } catch (error) {
     console.log('error loading user information', error)
     toast.error('Error grabbing User Information:', {
@@ -57,35 +49,6 @@ async function loadData() {
   } finally {
     isLoading.value = false
   }
-}
-
-function flattenJson(obj) {
-  const result = {}
-
-  function recurse(src, prop) {
-    if (Object(src) !== src) {
-      result[prop] = src
-    } else if (Array.isArray(src)) {
-      for (let i = 0, l = src.length; i < l; i++) {
-        recurse(src[i], prop + '[' + i + ']')
-      }
-      if (src.length === 0) {
-        result[prop] = []
-      }
-    } else {
-      let isEmpty = true
-      for (const p in src) {
-        isEmpty = false
-        recurse(src[p], prop ? prop + '.' + p : p)
-      }
-      if (isEmpty && prop) {
-        result[prop] = {}
-      }
-    }
-  }
-
-  recurse(obj, '')
-  return result
 }
 
 onMounted(loadData)

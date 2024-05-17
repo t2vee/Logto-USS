@@ -12,6 +12,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
+import {DoorOpen, LogOut} from 'lucide-vue-next';
 
 const { signOut } = useLogto()
 const route = useRoute()
@@ -39,7 +40,7 @@ const onClickSignOut = () => signOut(import.meta.env.VITE_ROOT)
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
-    <Button @click="onClickSignOut" class="h-8 rounded-xl"> Log Out </Button>
+    <Button @click="onClickSignOut" class="h-8 rounded-xl"> Log Out<LogOut :stroke-wdth="2.25" color="black" class="pl-1.5"  /></Button>
   </div>
   <div class="min-h-12"></div>
 </template>

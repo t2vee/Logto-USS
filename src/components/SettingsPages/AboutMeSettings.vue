@@ -1,5 +1,5 @@
 <script setup>
-import { defineAsyncComponent, inject, onMounted } from 'vue'
+import { defineAsyncComponent, inject } from 'vue'
 import { CardDescription, CardTitle } from '@/components/ui/card'
 import {
   CircleUserRound,
@@ -9,35 +9,12 @@ import {
   CalendarFold,
   DoorOpen
 } from 'lucide-vue-next'
-const EditBirthdayDialog = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditBirthdayDialog.vue'
-    )
-)
-const EditDetailDialog = defineAsyncComponent(
-  () => import('@/components/SettingsPages/Global/EditDetailDialog.vue')
-)
-const EditUsername = defineAsyncComponent(
-  () =>
-    import('@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditUsername.vue')
-)
-const EditRegionalSettings = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditRegionalSettings.vue'
-    )
-)
-const EditLocaleSettings = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditLocaleSettings.vue'
-    )
-)
-const EditFullName = defineAsyncComponent(
-  () =>
-    import('@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditFullName.vue')
-)
+const EditBirthdayDialog = defineAsyncComponent(() => import('@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditBirthdayDialog.vue'))
+const EditDetailDialog = defineAsyncComponent(() => import('@/components/SettingsPages/Global/EditDetailDialog.vue'))
+const EditUsername = defineAsyncComponent(() => import('@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditUsername.vue'))
+const EditRegionalSettings = defineAsyncComponent(() => import('@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditRegionalSettings.vue'))
+const EditLocaleSettings = defineAsyncComponent(() => import('@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditLocaleSettings.vue'))
+const EditFullName = defineAsyncComponent(() => import('@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditFullName.vue'))
 
 const userData = inject('userData')
 
@@ -84,7 +61,7 @@ function expandLocale(shortLocale) {
       />
       <EditDetailDialog
         title="Birthday"
-        :desc="userData['profile.birthdate'] ? userData['profile.birthdate'] : 'Not Set'"
+        :desc="userData.profile?.birthdate ? userData.profile.birthdate : 'Not Set'"
         :icon="CalendarFold"
         :dialog-page="EditBirthdayDialog"
       />
@@ -93,14 +70,14 @@ function expandLocale(shortLocale) {
       <EditDetailDialog
         title="Country/Region"
         :desc="
-          userData['profile.address.country'] ?? userData['profile.address.locality'] ?? 'Not Set'
+          userData.profile?.address?.country ?? userData.profile?.address?.country ?? 'Not Set'
         "
         :icon="Earth"
         :dialog-page="EditRegionalSettings"
       />
       <EditDetailDialog
         title="Language"
-        :desc="userData['profile.locale'] ? expandLocale(userData['profile.locale']) : 'Not Set'"
+        :desc="userData.profile.locale ? expandLocale(userData.profile.locale) : 'Not Set'"
         :icon="BookType"
         :dialog-page="EditLocaleSettings"
       />

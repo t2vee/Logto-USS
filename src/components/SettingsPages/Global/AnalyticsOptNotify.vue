@@ -8,7 +8,7 @@ import {
   Toast as ToastRoot,
   ToastTitle,
   ToastViewport
-} from '@/components/CustomShadcnComponents/toast'
+} from '@/components/CustomShadcnComponents/toast/index.js'
 import httpJsonp from 'http-jsonp'
 
 const open = ref(false)
