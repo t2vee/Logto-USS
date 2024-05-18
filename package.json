@@ -13,6 +13,7 @@
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
     "@internationalized/date": "^3.5.2",
+    "@logto/js": "^4.1.1",
     "@logto/vue": "^2.2.2",
     "@vee-validate/zod": "^4.12.8",
     "@vueuse/core": "^10.9.0",
@@ -40,9 +41,9 @@
     "@rushstack/eslint-patch": "^1.3.3",
     "@types/node": "^20.11.24",
     "@vitejs/plugin-vue": "^5.0.3",
+    "@vue/eslint-config-prettier": "",
     "autoprefixer": "^10.4.18",
     "eslint": "^8.49.0",
-    "@vue/eslint-config-prettier": "",
     "eslint-plugin-vue": "^9.17.0",
     "postcss": "^8.4.35",
     "prettier": "^3.0.3",

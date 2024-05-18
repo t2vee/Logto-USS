@@ -14,61 +14,26 @@ import axios from 'axios'
 import { toast } from 'vue-sonner'
 import { useLogto } from '@logto/vue'
 
-const AddPhoneNumberDialog = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/AddPhoneNumberDialog.vue'
-    )
-)
-const EditPhoneNumberDialog = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditPhoneNumberDialog.vue'
-    )
-)
-const EditDetailDialog = defineAsyncComponent(
-  () => import('@/components/SettingsPages/Global/EditDetailDialog.vue')
-)
-const EditEmailAddress = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditEmailAddress.vue'
-    )
-)
-const EditMfaMethods = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditMfaMethods.vue'
-    )
-)
-const UpdatePasswordDialog = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/UpdatePasswordDialog.vue'
-    )
-)
+const AddPhoneNumberDialog = defineAsyncComponent(() => import('@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/AddPhoneNumberDialog.vue'))
+const EditPhoneNumberDialog = defineAsyncComponent(() => import('@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditPhoneNumberDialog.vue'))
+const EditDetailDialog = defineAsyncComponent(() => import('@/components/SettingsPages/Global/EditDetailDialog.vue'))
+const EditEmailAddress = defineAsyncComponent(() => import('@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditEmailAddress.vue'))
+const EditMfaMethods = defineAsyncComponent(() => import('@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditMfaMethods.vue'))
+const UpdatePasswordDialog = defineAsyncComponent(() => import('@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/UpdatePasswordDialog.vue'))
 
 const userData = inject('userData')
 const { getAccessToken } = useLogto()
-const mfaOptions = ref({})
+const mfaOptions = ref([])
 
 async function grabMfaOptions() {
   try {
-    const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
     const response = await axios.get(
       `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/mfa-methods`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        }
-      }
+      {headers: {Authorization: `Bearer ${await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)}`, 'Content-Type': 'application/json'}}
     )
-
-    mfaOptions.value = response.data
-    if (mfaOptions.value[0] === 'none') {
-      mfaOptions.value[1] = 'none'
-    }
+    mfaOptions.value.push(userData.value.email)
+    if (userData.value.phone_number) {mfaOptions.value.push(userData.value.phone_number)}
+    if (response.data[0] !== 'none') {mfaOptions.value.push(response.data[0])}
   } catch (error) {
     toast.error('Error grabbing MFA Options:', { description: error })
   }
@@ -113,7 +78,7 @@ onMounted(grabMfaOptions)
       />
       <EditDetailDialog
         title="Account Security"
-        :desc="`${(mfaOptions[1] === 'none' && mfaOptions.length > 2 ? mfaOptions.length + 1 : userData.phone_number_verified ? '2' : '1')} MFA Methods Set Up`"
+        :desc="`${mfaOptions.length} MFA Methods Set Up`"
         :icon="Fingerprint"
         :dialog-page="EditMfaMethods"
       />

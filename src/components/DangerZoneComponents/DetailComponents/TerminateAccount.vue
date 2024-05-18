@@ -23,7 +23,7 @@ const { getAccessToken, signOut } = useLogto()
 
 const isLoading = ref(false)
 const terminationComplete = ref(false)
-const s = ref(30)
+const s = ref(20)
 
 async function terminateAccount() {
   isLoading.value = true

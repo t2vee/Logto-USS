@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref } from 'vue'
+import { ref } from 'vue'
 import axios from 'axios'
 import { useLogto } from '@logto/vue'
 import { VueTelInput } from 'vue-tel-input'
@@ -11,8 +11,6 @@ import { PhoneMissed, Phone, Loader } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import MfaCodeInput from '@/components/SettingsPages/Global/MfaCodeInput.vue'
 import { eventBus } from '@/lib/eventBus.js'
-
-const userData = inject('userData')
 
 const { getAccessToken } = useLogto()
 const phone = ref(0)
@@ -58,46 +56,15 @@ function checkNumber() {
     isEditing.value = true
   }
 }
-// all completely useless
-/*async function importPublicKey() {
-  const pemHeader = "-----BEGIN PUBLIC KEY-----";
-  const pemFooter = "-----END PUBLIC KEY-----";
-  const pemContents = key.substring(pemHeader.length, key.length - pemFooter.length);
-  const binaryDer = Uint8Array.from(atob(pemContents), c => c.charCodeAt(0));
-  return await crypto.subtle.importKey(
-      "spki",
-      binaryDer.buffer,
-      {
-        name: "RSA-OAEP",
-        hash: "SHA-256",
-      },
-      true,
-      ["encrypt"]
-  );
-}*/
-
-/*async function encryptData(publicKey, data) {
-  const encoder = new TextEncoder();
-  const encodedData = encoder.encode(data);
-  return await crypto.subtle.encrypt(
-      {
-        name: "RSA-OAEP",
-      },
-      publicKey,
-      encodedData
-  );
-}*/
 
 async function sendEncryptedData() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   accessTokenRef.value = accessToken
-  //const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
-  //console.log(base64EncryptedData) extremely complicated for literally no reason
   try {
     const response = await axios.post(
       `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/push-sms`,
       {
-        encryptedPhoneNumber: phone.value // girl what
+        encryptedPhoneNumber: phone.value
       },
       {
         headers: {
@@ -144,9 +111,6 @@ async function handleChangeInput() {
 
 const handleCodeComplete = async (code) => {
   isLoading.value = true
-  //const publicKey = await importPublicKey();
-  //const encryptedData = await encryptData(publicKey, phone.value);
-  //const base64EncryptedData = btoa(String.fromCharCode(...new Uint8Array(encryptedData)));
   try {
     const response = await axios.post(
       `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/verify-sms?verification-code=${code}`,
@@ -179,9 +143,6 @@ async function verifyNumber() {
   if (!isNumberValid.value || !phone.value) return
   isLoading.value = true
   try {
-    // why
-    //const publicKey = await importPublicKey();
-    //const encryptedData = await encryptData(publicKey, phone.value);
     await sendEncryptedData()
   } catch (error) {
     console.log('failed:', error)

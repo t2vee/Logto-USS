@@ -13,7 +13,7 @@ const userData = inject('userData')
 
 const isLoading = ref(false)
 const suspendComplete = ref(false)
-const s = ref(30)
+const s = ref(20)
 
 async function deactivateAccount() {
   isLoading.value = true

@@ -10,54 +10,22 @@ import {
   MailX
 } from 'lucide-vue-next'
 import { inject, ref, defineAsyncComponent } from 'vue'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
+import { DialogFooter } from '@/components/ui/dialog/index.js'
 import { Button } from '@/components/ui/button/index.js'
-import { CardDescription, CardTitle } from '@/components/ui/card/index.js'
-import { Fingerprint, PhoneMissed, CircleEllipsis, KeyRound, DoorOpen } from 'lucide-vue-next'
-import axios from 'axios'
-import { toast } from 'vue-sonner'
-import { useLogto } from '@logto/vue'
+import { PhoneMissed, DoorOpen } from 'lucide-vue-next'
 
-const ConnectorAlert = defineAsyncComponent(
-  () => import('@/components/SettingsPages/Global/ConnectorAlert.vue')
-)
-const EditAppAuthenticator = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditAppAuthenticator.vue'
-    )
-)
-const ManageBackupCodes = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/ManageBackupCodes.vue'
-    )
-)
-const AddPhoneNumberDialog = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/AddPhoneNumberDialog.vue'
-    )
-)
-const EditPhoneNumberDialog = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditPhoneNumberDialog.vue'
-    )
-)
-const EditDetailDialog = defineAsyncComponent(
-  () => import('@/components/SettingsPages/Global/EditDetailDialog.vue')
-)
-const EditEmailAddress = defineAsyncComponent(
-  () =>
-    import(
-      '@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditEmailAddress.vue'
-    )
-)
+const ConnectorAlert = defineAsyncComponent(() => import('@/components/SettingsPages/Global/ConnectorAlert.vue'))
+const EditAppAuthenticator = defineAsyncComponent(() => import('@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditAppAuthenticator.vue'))
+const ManageBackupCodes = defineAsyncComponent(() => import('@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/ManageBackupCodes.vue'))
+const AddPhoneNumberDialog = defineAsyncComponent(() => import('@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/AddPhoneNumberDialog.vue'))
+const EditPhoneNumberDialog = defineAsyncComponent(() => import('@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditPhoneNumberDialog.vue'))
+const EditDetailDialog = defineAsyncComponent(() => import('@/components/SettingsPages/Global/EditDetailDialog.vue'))
+const EditEmailAddress = defineAsyncComponent(() => import('@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditEmailAddress.vue'))
 
 const userData = inject('userData')
 const mfaMethods = inject('mfaMethods')
 
+// i hate this but im also lazy so...
 const emailMouseOver = ref(false)
 const phoneMouseOver = ref(false)
 const appMouseOver = ref(false)
@@ -67,6 +35,8 @@ const emailActive = ref(false)
 const phoneActive = ref(false)
 const appActive = ref(false)
 const backupActive = ref(false)
+
+const removeFooter = ref(false)
 
 const resetDefault = () => {
   emailActive.value = false
@@ -114,7 +84,7 @@ const resetDefault = () => {
       </div>
     </div>
     <div v-else-if="appActive">
-      <EditAppAuthenticator :mfa-methods="mfaMethods" />
+      <EditAppAuthenticator v-model="removeFooter" :mfa-methods="mfaMethods" />
     </div>
     <div v-else-if="backupActive" class="space-y-3">
       <ManageBackupCodes />
@@ -222,7 +192,7 @@ const resetDefault = () => {
               :color="
                 appMouseOver
                   ? 'rgba(161 85% 86%)'
-                  : mfaMethods[0].type === 'Totp'
+                  : mfaMethods[2]
                     ? 'rgb(34 197 94)'
                     : ''
               "
@@ -233,18 +203,18 @@ const resetDefault = () => {
               :class="
                 appMouseOver
                   ? 'text-secondary'
-                  : mfaMethods[0].type === 'Totp'
+                  : mfaMethods[2]
                     ? 'text-green-500'
                     : ''
               "
             >
               <Check
-                v-if="mfaMethods[0].type === 'Totp'"
+                v-if="mfaMethods[2]"
                 :size="16"
                 :color="
                   appMouseOver
                     ? 'rgba(161 85% 86%)'
-                    : mfaMethods[0].type === 'Totp'
+                    : mfaMethods[2]
                       ? 'rgb(34 197 94)'
                       : ''
                 "
@@ -300,10 +270,13 @@ const resetDefault = () => {
     </div>
   </Transition>
   <Transition name="fade" mode="out-in">
-    <div v-if="emailActive || phoneActive || appActive || backupActive" class="mt-6">
+    <div v-if="!removeFooter && (emailActive || phoneActive || appActive || backupActive)" class="mt-6 w-full">
       <DialogFooter>
         <div class="flex justify-center items-center align-middle <!--gap-x-20-->">
-          <Button variant="secondary" class="h-[30px]" @click="resetDefault"><DoorOpen :stroke-wdth="1.5" color="black" class="pr-1" /> Go Back </Button>
+          <Button variant="secondary" class="h-[30px]" @click="resetDefault">
+            <DoorOpen :stroke-wdth="1.5" color="black" class="pr-1" />
+            Go Back
+          </Button>
         </div>
       </DialogFooter>
     </div>
