@@ -26,8 +26,7 @@ export default async function checkUsernameAvailability(env, accessToken, userid
 		if (!response.ok) {
 			throw { message: 'Failed to access resource due to network error - ERR 7893', status: response.status };
 		}
-		const data = await response.json();
-		return JSON.stringify(data, null, 2);
+		return await response.json();
 	} catch (error) {
 		console.error('Error accessing resource:', error);
 		throw typeof error === 'string' ? { message: error, status: 500 } : error;

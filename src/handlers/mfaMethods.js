@@ -1,12 +1,12 @@
-import grabMFAMethods from "../lib/grabMFAMethods";
+import grabMFAMethods from "../lib/mfa/grabMFAMethods";
 import successCONTENT from "../responses/raw/success-CONTENT";
 import failureEMPTY from "../responses/raw/failure-EMPTY";
 
 export default async (request, env) => {
 	try {
 		const resourceResponse = await grabMFAMethods(env, request.accesstoken, request.userid);
-		if (resourceResponse === '[]') {
-			return successCONTENT(env, '["none"]');
+		if (JSON.stringify(resourceResponse) === '[]') {
+			return successCONTENT(env, ["none"]);
 		} else {
 			return successCONTENT(env, resourceResponse);
 		}

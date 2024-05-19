@@ -41,6 +41,8 @@ import removeAvatar from "./handlers/userData/updateUserInformation/removeAvatar
 import failureCONTENT from "./responses/raw/failure-CONTENT";
 import suspendUser from "./handlers/suspendUser";
 import terminateUser from "./handlers/terminateUser";
+import createNewMfaMethod from "./handlers/userData/createNewMfaMethod";
+import removeMfaMethod from "./handlers/userData/removeMfaMethod";
 
 
 const router = Router();
@@ -60,6 +62,9 @@ router.post('/api/v1/mfa-flow/verify-email-code', verifyEmail);
 router.post('/api/v1/mfa-flow/push-sms', pushSMS);
 router.post('/api/v1/mfa-flow/verify-sms-code', verifySMS);
 
+router.post('/api/v2/me/mfa/create', createNewMfaMethod);
+router.post('/api/v2/me/mfa/remove', removeMfaMethod);
+
 router.post('/api/v2/me/verify/push-sms', pushNewSMS);
 router.post('/api/v2/me/verify/verify-sms', verifyNewSMS);
 router.post('/api/v2/me/edit/remove-sms', removeSMS);
@@ -77,8 +82,8 @@ router.post('/api/v2/me/edit/birthday', updateBirthday)
 // Implement Method to change password if old password was forgotten - not sure if i want to implement this, will probably find a alternative
 router.post('/api/v2/me/edit/password', updatePassword)
 // NEED TO BE IMPLEMENTED
-router.post('/api/v1/user-data-entry/update-user-information/security/mfa-settings')
-// NEED TO BE IMPLEMENTED
+// router.post('/api/v1/user-data-entry/update-user-information/security/mfa-settings') outdated route design - will remove son
+// NEED TO BE IMPLEMENTED - will take fucking forever
 router.post('/api/v1/user-data-entry/update-user-information/privacy/third-party-data-access')
 router.post('/api/v1/user-data-entry/update-user-information/privacy/profile-visibility')
 router.post('/api/v1/user-data-entry/update-user-information/privacy/email-privacy')
