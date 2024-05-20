@@ -238,7 +238,7 @@ watch(
               >Text <strong>{{ userData.phone_number }}</strong></Label
             >
           </div>
-          <div v-if="mfaOptions[0].type === 'Totp'">
+          <div v-if="mfaOptions[0]">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger class="flex items-center space-x-2">
@@ -246,6 +246,21 @@ watch(
                   <Label for="r3" class="text-gray-600"
                     >Authenticator App (Google/Microsoft Authenticator)</Label
                   >
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Currently Not Available</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+          <div v-if="mfaOptions[1]">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger class="flex items-center space-x-2">
+                  <RadioGroupItem id="r3" value="authenticator" disabled />
+                  <Label for="r3" class="text-gray-600">
+                    Backup Code
+                  </Label>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Currently Not Available</p>

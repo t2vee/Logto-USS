@@ -25,7 +25,7 @@ const handleComplete = (e) => emit('codeComplete', e.join(''))
   <div class="flex flex-col items-center align-middle gap-3">
     <h3 class="font-bold">Input the 6 digit code sent to you</h3>
     <div>
-      <PinInput id="pin-input" v-model="value" placeholder="" @complete="handleComplete">
+      <PinInput id="pin-input" v-model="value" placeholder="" @complete="handleComplete" otp type="number">
         <PinInputGroup class="">
           <template v-for="(id, index) in 6" :key="id">
             <PinInputInput
