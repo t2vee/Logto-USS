@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import {defineAsyncComponent, onMounted, ref} from 'vue'
 import {
   Drawer,
   DrawerClose,
@@ -22,10 +22,10 @@ import { Progress } from '@/components/ui/progress'
 import { Switch } from '@/components/ui/switch'
 import { Button } from '@/components/ui/button'
 import { Link, BarChart3, TextSearch, ChevronsRight, LogIn } from 'lucide-vue-next'
-import EditDetailDialog from '@/components/SettingsPages/Global/EditDetailDialog.vue'
-import EditRegionalSettings from '@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditRegionalSettings.vue'
+const EditDetailDialog = defineAsyncComponent(() => import('@/components/SettingsPages/Global/EditDetailDialog.vue'));
+const EditRegionalSettings = defineAsyncComponent(() => import('@/components/SettingsPages/AboutMePageComponents/EditDetailComponents/EditRegionalSettings.vue'));
 
-defineProps({
+const props = defineProps({
   service: {
     type: String,
     required: true
@@ -51,6 +51,20 @@ function completeStepOne() {
     progress.value = 66
   }
 }
+
+const beginAuthorizationFlow = () => {
+  const url = `/connectors/link/${props.service.toLowerCase()}?action=create`;
+  const width = 400;
+  const height = 600;
+  const left = (screen.width / 2) - (width / 2);
+  const top = (screen.height / 2) - (height / 2);
+
+  window.open(
+      url,
+      'AuthorizationWindow',
+      `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`
+  );
+};
 </script>
 
 <template>
@@ -141,12 +155,12 @@ function completeStepOne() {
               </CardDescription>
             </CardHeader>
             <CardContent v-if="stepTwoActive">
-              <Card class="flex items-center align-middle justify-center bg-[#162831] gap-x-6 p-2 border-b-muted border-b-4 hover:cursor-pointer hover:bg-[#0E1D25FF] hover:border-t-4 hover:border-t-primary-foreground hover:border-b-0">
+              <Card @click="beginAuthorizationFlow" class="flex items-center align-middle justify-center bg-[#162831] gap-x-6 p-2 border-b-muted border-b-4 hover:cursor-pointer hover:bg-[#0E1D25FF] hover:border-t-4 hover:border-t-primary-foreground hover:border-b-0">
                 <CardTitle class="flex mt-2 gap-x-2">
                   <LogIn :size="28" />
                   Click to Authorise with
                 </CardTitle>
-                <img v-if="serviceImg" class="max-w-44" :src="serviceImg" :alt="service" />
+                <img v-if="serviceImg" class="max-w-32" :src="serviceImg" :alt="service" />
               </Card>
             </CardContent>
           </Card>

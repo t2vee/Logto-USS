@@ -3,6 +3,7 @@ import {inject, onMounted} from 'vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { GoogleIcon, DiscordIcon, SpotifyIcon, GitHubIcon } from 'vue3-simple-icons';
 import ConnectorCard from '@/components/SettingsPages/ConnectionPageComponents/ConnectorCard.vue'
+import {LogIn} from "lucide-vue-next";
 
 const userData = inject('userData')
 </script>
@@ -44,6 +45,12 @@ const userData = inject('userData')
       >Listed below are third parties with which you have authorized MXS to share some of your
       data.</CardDescription
     >
-    <div class="mt-12"></div>
+    <div class="mt-6">
+      <Card class="w-full mb-4 p-4">
+        <CardDescription class="flex gap-x-2">
+          You do not have any Connected Applications
+        </CardDescription>
+      </Card>
+    </div>
   </div>
 </template>

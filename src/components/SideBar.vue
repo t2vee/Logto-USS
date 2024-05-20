@@ -2,8 +2,7 @@
 import { defineAsyncComponent, ref, inject } from 'vue'
 
 import Button from '@/components/ui/button/Button.vue'
-import { Card, CardContent } from '@/components/ui/card/index.js'
-import { AlertTriangle, CircleUserRound, LifeBuoy, Cookie, UserCog, Cable } from 'lucide-vue-next'
+import { AlertTriangle, CircleUserRound, LifeBuoy, Cookie, UserCog, Cable, Code } from 'lucide-vue-next'
 const AvatarEditor = defineAsyncComponent(
   () => import('@/components/SettingsPages/AboutMePageComponents/AvatarComponents/AvatarEditor.vue')
 )
@@ -21,7 +20,7 @@ const sidebarNavItems = ref([
     href: '/account/security'
   },
   {
-    title: 'Privacy',
+    title: 'Privacy Settings',
     icon: Cookie,
     href: '/account/privacy'
   },
@@ -39,6 +38,11 @@ const sidebarNavItems = ref([
     title: 'Account Actions',
     icon: AlertTriangle,
     href: '/account/dangerzone'
+  },
+  {
+    title: 'Developer Options',
+    icon: Code,
+    href: '/account/developer'
   }
 ])
 </script>
@@ -52,9 +56,9 @@ const sidebarNavItems = ref([
     <strong>{{ userData.name ? userData.name : userData.username }}</strong>
     <p class="text-sm text-gray-500">
       {{
-        userData.primaryEmail.length > 20
-          ? userData.primaryEmail.substring(0, 20) + '...'
-          : userData.primaryEmail
+        userData.email.length > 20
+          ? userData.email.substring(0, 20) + '...'
+          : userData.email
       }}
     </p>
     <p class="text-xs text-gray-700 mb-8">{{ userData.sub }}</p>

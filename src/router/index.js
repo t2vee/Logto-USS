@@ -17,7 +17,7 @@ const router = createRouter({
     {
       path: '/connectors/link/:id',
       name: 'Link New Connector',
-      component: () => import('@/views/AuthCallbackView.vue')
+      component: () => import('@/views/ConnectorWindow.vue')
     },
     {
       path: '/account/aboutme',
