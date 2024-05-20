@@ -4,8 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "get-commit-hash": "echo \"VUE_APP_COMMIT_HASH=$(git rev-parse HEAD)\" > .env.local",
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run get-commit-hash && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
