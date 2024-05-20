@@ -167,16 +167,16 @@ const resetDefault = () => {
     </div>
   </Transition>
   <Transition name="fade" mode="out-in">
-    <div v-if="!removeFooter && (emailActive || phoneActive || appActive)" class="mt-6 w-full">
-      <DialogFooter>
-        <div class="flex justify-center items-center align-middle <!--gap-x-20-->">
-          <Button variant="secondary" class="h-[30px]" @click="resetDefault">
-            <DoorOpen :stroke-wdth="1.5" color="black" class="pr-1" />
-            Go Back
-          </Button>
-        </div>
-      </DialogFooter>
-    </div>
-    <div v-else-if="!emailActive || !phoneActive || !appActive"></div>
+    <DialogFooter>
+      <div v-if="!removeFooter && (emailActive || phoneActive || appActive)" class="mt-6 w-full">
+          <div class="flex justify-center items-center align-middle <!--gap-x-20-->">
+            <Button variant="secondary" class="h-[30px]" @click="resetDefault">
+              <DoorOpen :stroke-wdth="1.5" color="black" class="pr-1" />
+              Go Back
+            </Button>
+          </div>
+      </div>
+      <div v-else-if="!emailActive || !phoneActive || !appActive"></div>
+    </DialogFooter>
   </Transition>
 </template>
