@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('@/views/AuthCallbackView.vue')
     },
     {
+      path: '/connectors/link/:id',
+      name: 'Link New Connector',
+      component: () => import('@/views/AuthCallbackView.vue')
+    },
+    {
       path: '/account/aboutme',
       name: 'Personal Information',
       component: () => import('@/views/AboutMeView.vue')
@@ -43,7 +48,12 @@ const router = createRouter({
       path: '/account/yourdata',
       name: 'Your Data',
       component: () => import('@/views/DataDownloadView.vue')
-    }
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('@/router/PageNotFound.vue')
+    },
   ]
 })
 
