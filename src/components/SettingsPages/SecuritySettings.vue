@@ -33,7 +33,6 @@ async function grabMfaOptions() {
       {headers: {Authorization: `Bearer ${await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)}`, 'Content-Type': 'application/json'}}
     )
     if (response.data[0]?.type === 'Totp') {mfaOptions.value.totp = response.data[0]}
-    if (response.data[1]?.type === 'BackupCode') {mfaOptions.value.backup = response.data[1]}
     mfaOptionsNum.value.push(userData.value.email)
     if (userData.value.phone_number) {mfaOptionsNum.value.push(userData.value.phone_number)}
     if (response.data[0] !== 'none') {mfaOptionsNum.value.push(response.data[0])}
@@ -58,9 +57,9 @@ onMounted(grabMfaOptions)
       <EditDetailDialog
         title="Email Address"
         :desc="
-          userData.primaryEmail.length > 30
-            ? userData.primaryEmail.substring(0, 30) + '...'
-            : userData.primaryEmail
+          userData.email.length > 30
+            ? userData.email.substring(0, 30) + '...'
+            : userData.email
         "
         :icon="userData.email_verified ? MailCheck : MailX"
         :dialog-page="EditEmailAddress"

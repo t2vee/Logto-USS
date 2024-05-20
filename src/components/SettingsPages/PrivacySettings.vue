@@ -4,9 +4,7 @@ import { CardDescription, CardTitle } from '@/components/ui/card/index.js'
 import { Send, TextSearch, UserRoundSearch, BarChart3 } from 'lucide-vue-next'
 import AddPhoneNumberDialog from '@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/AddPhoneNumberDialog.vue'
 
-const EditDetailDialog = defineAsyncComponent(
-  () => import('@/components/SettingsPages/Global/EditDetailDialog.vue')
-)
+const EditDetailDialog = defineAsyncComponent(() => import('@/components/SettingsPages/Global/EditDetailDialog.vue'))
 const userData = inject('userData')
 </script>
 
@@ -42,7 +40,7 @@ const userData = inject('userData')
     </div>
     <div class="flex gap-16 mt-4 items-center">
       <EditDetailDialog
-        title="Analytics"
+        title="Analytics Mode"
         desc="Opted Out"
         :icon="BarChart3"
         :dialog-page="AddPhoneNumberDialog"
