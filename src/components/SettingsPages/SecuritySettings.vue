@@ -23,7 +23,8 @@ const UpdatePasswordDialog = defineAsyncComponent(() => import('@/components/Set
 
 const userData = inject('userData')
 const { getAccessToken } = useLogto()
-const mfaOptions = ref([])
+const mfaOptions = ref({})
+const mfaOptionsNum = ref([])
 
 async function grabMfaOptions() {
   try {
@@ -31,11 +32,13 @@ async function grabMfaOptions() {
       `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/mfa-methods`,
       {headers: {Authorization: `Bearer ${await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)}`, 'Content-Type': 'application/json'}}
     )
-    mfaOptions.value.push(userData.value.email)
-    if (userData.value.phone_number) {mfaOptions.value.push(userData.value.phone_number)}
-    if (response.data[0] !== 'none') {mfaOptions.value.push(response.data[0])}
+    if (response.data[0]?.type === 'Totp') {mfaOptions.value.totp = response.data[0]}
+    if (response.data[1]?.type === 'BackupCode') {mfaOptions.value.backup = response.data[1]}
+    mfaOptionsNum.value.push(userData.value.email)
+    if (userData.value.phone_number) {mfaOptionsNum.value.push(userData.value.phone_number)}
+    if (response.data[0] !== 'none') {mfaOptionsNum.value.push(response.data[0])}
   } catch (error) {
-    toast.error('Error grabbing MFA Options:', { description: error })
+    toast.error('Error grabbing MFA Options:', { description: 'Some account actions will be unavailable' })
   }
 }
 
@@ -78,7 +81,7 @@ onMounted(grabMfaOptions)
       />
       <EditDetailDialog
         title="Account Security"
-        :desc="`${mfaOptions.length} MFA Methods Set Up`"
+        :desc="`${mfaOptionsNum.length} MFA Method${mfaOptionsNum.length === 1 ? '' : 's'} Set Up`"
         :icon="Fingerprint"
         :dialog-page="EditMfaMethods"
       />

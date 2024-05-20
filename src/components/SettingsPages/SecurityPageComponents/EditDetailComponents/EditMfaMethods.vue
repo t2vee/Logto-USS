@@ -4,7 +4,6 @@ import {
   Mails,
   Phone,
   TabletSmartphone,
-  ArchiveRestore,
   Check,
   MailCheck,
   MailX
@@ -16,7 +15,6 @@ import { PhoneMissed, DoorOpen } from 'lucide-vue-next'
 
 const ConnectorAlert = defineAsyncComponent(() => import('@/components/SettingsPages/Global/ConnectorAlert.vue'))
 const EditAppAuthenticator = defineAsyncComponent(() => import('@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditAppAuthenticator.vue'))
-const ManageBackupCodes = defineAsyncComponent(() => import('@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/ManageBackupCodes.vue'))
 const AddPhoneNumberDialog = defineAsyncComponent(() => import('@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/AddPhoneNumberDialog.vue'))
 const EditPhoneNumberDialog = defineAsyncComponent(() => import('@/components/SettingsPages/SecurityPageComponents/EditDetailComponents/EditPhoneNumberDialog.vue'))
 const EditDetailDialog = defineAsyncComponent(() => import('@/components/SettingsPages/Global/EditDetailDialog.vue'))
@@ -29,12 +27,10 @@ const mfaMethods = inject('mfaMethods')
 const emailMouseOver = ref(false)
 const phoneMouseOver = ref(false)
 const appMouseOver = ref(false)
-const backupMouseOver = ref(false)
 
 const emailActive = ref(false)
 const phoneActive = ref(false)
 const appActive = ref(false)
-const backupActive = ref(false)
 
 const removeFooter = ref(false)
 
@@ -42,11 +38,9 @@ const resetDefault = () => {
   emailActive.value = false
   phoneActive.value = false
   appActive.value = false
-  backupActive.value = false
   emailMouseOver.value = false
   phoneMouseOver.value = false
   appMouseOver.value = false
-  backupMouseOver.value = false
 }
 </script>
 
@@ -60,9 +54,9 @@ const resetDefault = () => {
       <EditDetailDialog
         title="Email Address"
         :desc="
-          userData.primaryEmail.length > 30
-            ? userData.primaryEmail.substring(0, 30) + '...'
-            : userData.primaryEmail
+          userData.email.length > 30
+            ? userData.email.substring(0, 30) + '...'
+            : userData.email
         "
         :icon="userData.email_verified ? MailCheck : MailX"
         :dialog-page="EditEmailAddress"
@@ -86,15 +80,12 @@ const resetDefault = () => {
     <div v-else-if="appActive">
       <EditAppAuthenticator v-model="removeFooter" :mfa-methods="mfaMethods" />
     </div>
-    <div v-else-if="backupActive" class="space-y-3">
-      <ManageBackupCodes />
-    </div>
     <div v-else class="flex flex-col items-center max-w-[350px] mt-[-30px] gap-y-3">
       <p class="text-sm text-center">
         Add or remove Multi-Factor Authentication methods from your account. Select one below to
         continue
       </p>
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-2 gap-4 w-full">
         <div>
           <Label
             for="email"
@@ -105,31 +96,14 @@ const resetDefault = () => {
           >
             <Mails
               :size="32"
-              :color="
-                emailMouseOver
-                  ? 'rgba(161 85% 86%)'
-                  : userData.email_verified
-                    ? 'rgb(34 197 94)'
-                    : ''
-              "
+              :color="emailMouseOver? 'rgba(161 85% 86%)': userData.email_verified? 'rgb(34 197 94)': ''"
               class="m-2"
             />
-            <div
-              class="flex items-center justify-between"
-              :class="
-                emailMouseOver ? 'text-secondary' : userData.email_verified ? 'text-green-500' : ''
-              "
-            >
+            <div class="flex items-center justify-between" :class="emailMouseOver ? 'text-secondary' : userData.email_verified ? 'text-green-500' : ''">
               <Check
                 v-if="userData.email_verified"
                 :size="16"
-                :color="
-                  emailMouseOver
-                    ? 'rgba(161 85% 86%)'
-                    : userData.email_verified
-                      ? 'rgb(34 197 94)'
-                      : ''
-                "
+                :color="emailMouseOver? 'rgba(161 85% 86%)': userData.email_verified? 'rgb(34 197 94)': ''"
               />
               Email Address
             </div>
@@ -145,124 +119,47 @@ const resetDefault = () => {
           >
             <Phone
               :size="32"
-              :color="
-                phoneMouseOver
-                  ? 'rgba(161 85% 86%)'
-                  : userData.phone_number_verified
-                    ? 'rgb(34 197 94)'
-                    : ''
-              "
+              :color="phoneMouseOver? 'rgba(161 85% 86%)': userData.phone_number_verified? 'rgb(34 197 94)': ''"
               class="m-2"
             />
             <div
               class="flex items-center justify-between"
-              :class="
-                phoneMouseOver
-                  ? 'text-secondary'
-                  : userData.phone_number_verified
-                    ? 'text-green-500'
-                    : ''
-              "
+              :class="phoneMouseOver? 'text-secondary': userData.phone_number_verified? 'text-green-500': ''"
             >
               <Check
                 v-if="userData.phone_number_verified"
                 :size="16"
-                :color="
-                  phoneMouseOver
-                    ? 'rgba(161 85% 86%)'
-                    : userData.phone_number_verified
-                      ? 'rgb(34 197 94)'
-                      : ''
-                "
+                :color="phoneMouseOver? 'rgba(161 85% 86%)': userData.phone_number_verified? 'rgb(34 197 94)': ''"
               />
               Phone Number
             </div>
           </Label>
         </div>
+      </div>
+      <div class="w-full">
         <div>
           <Label
-            for="app"
-            class="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-[#030607] hover:text-secondary peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary hover:cursor-pointer"
-            @mouseenter="() => (appMouseOver = true)"
-            @mouseleave="() => (appMouseOver = false)"
-            @click="() => (appActive = true)"
+              for="app"
+              class="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-[#030607] hover:text-secondary peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary hover:cursor-pointer"
+              @mouseenter="() => (appMouseOver = true)"
+              @mouseleave="() => (appMouseOver = false)"
+              @click="() => (appActive = true)"
           >
             <TabletSmartphone
-              :size="32"
-              :color="
-                appMouseOver
-                  ? 'rgba(161 85% 86%)'
-                  : mfaMethods[2]
-                    ? 'rgb(34 197 94)'
-                    : ''
-              "
-              class="m-2"
+                :size="32"
+                :color="appMouseOver? 'rgba(161 85% 86%)': mfaMethods.totp? 'rgb(34 197 94)': ''"
+                class="m-2"
             />
             <div
-              class="flex items-center justify-between"
-              :class="
-                appMouseOver
-                  ? 'text-secondary'
-                  : mfaMethods[2]
-                    ? 'text-green-500'
-                    : ''
-              "
+                class="flex items-center justify-between"
+                :class="appMouseOver? 'text-secondary': mfaMethods.totp? 'text-green-500': ''"
             >
               <Check
-                v-if="mfaMethods[2]"
-                :size="16"
-                :color="
-                  appMouseOver
-                    ? 'rgba(161 85% 86%)'
-                    : mfaMethods[2]
-                      ? 'rgb(34 197 94)'
-                      : ''
-                "
+                  v-if="mfaMethods.totp"
+                  :size="16"
+                  :color="appMouseOver? 'rgba(161 85% 86%)': mfaMethods.totp? 'rgb(34 197 94)': ''"
               />
               App Authenticator
-            </div>
-          </Label>
-        </div>
-        <div>
-          <Label
-            for="backup"
-            class="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-[#030607] hover:text-secondary peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary hover:cursor-pointer"
-            @mouseenter="() => (backupMouseOver = true)"
-            @mouseleave="() => (backupMouseOver = false)"
-          >
-            <ArchiveRestore
-              :size="32"
-              :color="
-                backupMouseOver
-                  ? 'rgba(161 85% 86%)'
-                  : mfaMethods[1].type === 'BackupCode'
-                    ? 'rgb(34 197 94)'
-                    : ''
-              "
-              class="m-2"
-            />
-            <div
-              class="flex items-center justify-between"
-              :class="
-                backupMouseOver
-                  ? 'text-secondary'
-                  : mfaMethods[1].type === 'BackupCode'
-                    ? 'text-green-500'
-                    : ''
-              "
-            >
-              <Check
-                v-if="mfaMethods[1].type === 'BackupCode'"
-                :size="16"
-                :color="
-                  backupMouseOver
-                    ? 'rgba(161 85% 86%)'
-                    : mfaMethods[1].type === 'BackupCode'
-                      ? 'rgb(34 197 94)'
-                      : ''
-                "
-              />
-              Backup Codes
             </div>
           </Label>
         </div>
@@ -270,7 +167,7 @@ const resetDefault = () => {
     </div>
   </Transition>
   <Transition name="fade" mode="out-in">
-    <div v-if="!removeFooter && (emailActive || phoneActive || appActive || backupActive)" class="mt-6 w-full">
+    <div v-if="!removeFooter && (emailActive || phoneActive || appActive)" class="mt-6 w-full">
       <DialogFooter>
         <div class="flex justify-center items-center align-middle <!--gap-x-20-->">
           <Button variant="secondary" class="h-[30px]" @click="resetDefault">
@@ -280,6 +177,6 @@ const resetDefault = () => {
         </div>
       </DialogFooter>
     </div>
-    <div v-else-if="!emailActive || !phoneActive || !appActive || !backupActive"></div>
+    <div v-else-if="!emailActive || !phoneActive || !appActive"></div>
   </Transition>
 </template>
