@@ -20,8 +20,8 @@ export default defineConfig({
       output: {
         dir: 'dist',
         entryFileNames: 'core.js',
-        assetFileNames: '[hash:10].css',
-        chunkFileNames: "[hash:10].js",
+        assetFileNames: '[hash:7].css',
+        chunkFileNames: "[hash:7].js",
         manualChunks: undefined,
       }
     }

@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "get-commit-hash": "echo \"VUE_APP_COMMIT_HASH=$(git rev-parse HEAD)\" > .env.local",
+    "get-commit-hash": "echo \"VITE_COMMIT_HASH=$(git rev-parse HEAD)\" > .env.local",
     "dev": "vite",
     "build": "npm run get-commit-hash && vite build",
     "preview": "vite preview",

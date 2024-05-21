@@ -17,7 +17,7 @@ const fetchFailure = ref(false)
 const userConnectorPresent = ref(false)
 
 const support = `mailto:${import.meta.env.VITE_SUPPORT_EMAIL}`
-const webBuild = `prod/${import.meta.env.VITE_APP_COMMIT_HASH}`
+const webBuild = `prod/${import.meta.env.VITE_COMMIT_HASH}`
 
 const handleEvent = (data) => {
   if (data) {
