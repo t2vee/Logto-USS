@@ -7,52 +7,52 @@ const router = createRouter({
     {
       path: '/oauth/login',
       name: 'login',
-      component: () => import('@/views/AuthLoginView.vue')
+      component: () => import('@/views/OAuthLogin.vue')
     },
     {
       path: '/oauth/callback',
       name: 'callback',
-      component: () => import('@/views/AuthCallbackView.vue')
+      component: () => import('@/views/OAuthCallback.vue')
     },
     {
-      path: '/connectors/link/:id',
+      path: '/oauth/connectors/:action/:connector',
       name: 'Link New Connector',
-      component: () => import('@/views/ConnectorWindow.vue')
+      component: () => import('@/views/Window/LinkConnector.vue')
     },
     {
       path: '/account/aboutme',
       name: 'Personal Information',
-      component: () => import('@/views/AboutMeView.vue')
+      component: () => import('@/views/PersonalInfo.vue')
     },
     {
       path: '/account/security',
       name: 'Sign-In & Security',
-      component: () => import('@/views/SecurityView.vue')
+      component: () => import('@/views/SignIn&Security.vue')
     },
     {
       path: '/account/privacy',
       name: 'Privacy',
-      component: () => import('@/views/PrivacyView.vue')
+      component: () => import('@/views/Privacy.vue')
     },
     {
       path: '/account/dangerzone',
       name: 'Account Actions',
-      component: () => import('@/views/DangerzoneView.vue')
+      component: () => import('@/views/DangerZone.vue')
     },
     {
       path: '/account/connections',
       name: 'Connections',
-      component: () => import('@/views/ConnectionsView.vue')
+      component: () => import('@/views/Connections.vue')
     },
     {
       path: '/account/yourdata',
       name: 'Your Data',
-      component: () => import('@/views/DataDownloadView.vue')
+      component: () => import('@/views/YourData.vue')
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
-      component: () => import('@/router/PageNotFound.vue')
+      component: () => import('@/router/CatchAll/404.vue')
     },
   ]
 })
