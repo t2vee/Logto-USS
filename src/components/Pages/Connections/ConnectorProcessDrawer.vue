@@ -22,6 +22,7 @@ import { Progress } from '@/components/ui/progress/index.js'
 import { Switch } from '@/components/ui/switch/index.js'
 import { Button } from '@/components/ui/button/index.js'
 import {Link, BarChart3, TextSearch, ChevronsRight, LogIn, LoaderCircle, BadgeCheck} from 'lucide-vue-next'
+import {eventBus} from "@/lib/eventBus.js";
 const EditDetailDialog = defineAsyncComponent(() => import('@/components/Global/EditDetailDialog.vue'));
 const EditRegionalSettings = defineAsyncComponent(() => import('@/components/Pages/PersonalInfo/EditRegionalSettings.vue'));
 
@@ -93,16 +94,21 @@ const beginAuthorizationFlow = () => {
   }, 500);
 };
 
+const handlePrematureClose = () => {
+  if (linkCallbackSuccessful.value) {
+    eventBus.emit('refreshUserData', true)
+  }
+}
+
 onUnmounted( () => {
   if (windowChecker) {
     clearInterval(windowChecker);
   }
-
 })
 </script>
 
 <template>
-  <Drawer class="transition-all duration-500">
+  <Drawer class="transition-all duration-500" @update:open="handlePrematureClose">
     <DrawerTrigger as-child>
       <Button :disabled="disabled">
         <Link color="black" class="mr-1" />
@@ -224,21 +230,32 @@ onUnmounted( () => {
           </Button>
         </div>
         <div class="flex flex-col w-[33%] mr-4">
-          <Card class="h-full" :class="!stepThreeActive ? 'hover:cursor-not-allowed py-28' : ''">
+          <Card class="h-full mb-1" :class="!stepThreeActive ? 'hover:cursor-not-allowed py-28' : ''">
             <CardHeader class="flex items-center">
               <CardTitle :class="!stepThreeActive ? 'text-gray-500' : ''">Step 3:</CardTitle>
               <CardTitle :class="!stepThreeActive ? 'text-gray-500' : ''">
                 Finalise the connection details
               </CardTitle>
               <CardDescription v-if="stepThreeActive">
-                Card Description
+                Check the details of the connected account to verify if they are correct.
               </CardDescription>
             </CardHeader>
             <CardContent v-if="stepThreeActive"> Card Content </CardContent>
             <CardFooter v-if="stepThreeActive"> Card Footer </CardFooter>
           </Card>
+          <Button
+              v-if="!stepTwoActive && stepThreeActive"
+              :disabled="!linkCallbackSuccessful"
+              @click="completeStepTwo"
+              :variant="stepThreeActive ? '' : 'outline'"
+          >
+            <ChevronsRight
+                class="mr-2"
+                color="black"
+            />
+            Complete Setup
+          </Button>
         </div>
-
       </div>
     </DrawerContent>
   </Drawer>

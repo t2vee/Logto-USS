@@ -79,7 +79,7 @@ onUnmounted(cleanup)
         <div class="flex gap-x-3">
           <div class="flex gap-x-2 items-center align-middle">
             <p :class="linked ? 'text-green-500' : 'text-gray-500'">
-              {{ linked ? '' : ( disabled ? 'Not Able to be' : 'Not' ) }} Linked
+              {{ linked ? '' : 'Not' }} Linked
             </p>
             <Link2Off v-if="!linked" color="#718096" />
             <Link2 v-else color="#48bb78" />
