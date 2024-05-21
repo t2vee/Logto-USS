@@ -19,6 +19,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         dir: 'dist',
+        hashCharacters: 'hex',
         entryFileNames: 'core.js',
         assetFileNames: '[hash:7].css',
         chunkFileNames: "[hash:7].js",
