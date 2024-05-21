@@ -55,6 +55,11 @@ const router = createRouter({
       component: () => import('@/views/YourData.vue')
     },
     {
+      path: '/account/developer',
+      name: 'Developer options',
+      component: () => import('@/views/YourData.vue')
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
       component: () => import('@/router/CatchAll/404.vue')
