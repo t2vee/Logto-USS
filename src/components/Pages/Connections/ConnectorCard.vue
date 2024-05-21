@@ -1,13 +1,20 @@
 <script setup>
-import { ref, onUnmounted, defineAsyncComponent } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible/index.js'
 import { Card } from '@/components/ui/card/index.js'
 import { Link2, Link2Off, ChevronDown } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
 import ConnectorProcessDrawer from '@/components/Pages/Connections/ConnectorProcessDrawer.vue';
 import { eventBus } from '@/lib/eventBus.js'
+import axios from "axios";
+import {toast} from "vue-sonner";
+import { useLogto } from '@logto/vue'
+
+const { getAccessToken } = useLogto()
+const isLoading = ref(false)
 
 const props = defineProps({
+  disabled: Boolean,
   image: String,
   icon: Object,
   service: {
@@ -28,6 +35,34 @@ const handleStateChange = (data) => {
 }
 const cleanup = eventBus.on('flipCollapsibleValues', handleStateChange)
 
+async function removeConnector() {
+  isLoading.value = true
+  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
+  try {
+    const response = await axios.post(
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/connectors/remove/${props.service.toLowerCase()}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        }
+    )
+    if (response.status === 204) {
+      toast.success('Connector Removed Successfully', {
+        description: 'Remember to revoke access via your connectors account management.'
+      })
+    }
+  } catch (error) {
+    toast.error('Error Removing Connector:', { description: 'Service Unavailable. Try again later' });
+  } finally {
+    isLoading.value = false;
+    isOpen.value = false;
+    eventBus.emit('refreshUserData', true);
+  }
+}
+
 onUnmounted(cleanup)
 </script>
 
@@ -44,7 +79,7 @@ onUnmounted(cleanup)
         <div class="flex gap-x-3">
           <div class="flex gap-x-2 items-center align-middle">
             <p :class="linked ? 'text-green-500' : 'text-gray-500'">
-              {{ linked ? '' : 'Not' }} Linked
+              {{ linked ? '' : ( disabled ? 'Not Able to be' : 'Not' ) }} Linked
             </p>
             <Link2Off v-if="!linked" color="#718096" />
             <Link2 v-else color="#48bb78" />
@@ -61,7 +96,7 @@ onUnmounted(cleanup)
           </p>
         </div>
         <div class="w-1/2 flex flex-col items-center align-middle justify-center gap-y-2">
-          <ConnectorProcessDrawer :service-img="image" :service-icon="icon" :service="service" />
+          <ConnectorProcessDrawer :service-img="image" :service-icon="icon" :service="service" :disabled="disabled" />
         </div>
       </CollapsibleContent>
       <CollapsibleContent v-else class="flex">
@@ -71,7 +106,9 @@ onUnmounted(cleanup)
           </p>
         </div>
         <div class="w-1/2 flex flex-col items-center align-middle justify-center gap-y-2">
-          <Button variant="destructive"> Remove Connector </Button>
+          <Button variant="destructive" @click="removeConnector">
+            Remove Connector
+          </Button>
         </div>
       </CollapsibleContent>
     </Collapsible>

@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('@/views/OAuthCallback.vue')
     },
     {
+      path: '/:action/connectors/:connector',
+      name: 'Connector Link Callback',
+      component: () => import('@/views/Window/LinkConnector.vue')
+    },
+    {
       path: '/oauth/connectors/:action/:connector',
       name: 'Link New Connector',
       component: () => import('@/views/Window/LinkConnector.vue')

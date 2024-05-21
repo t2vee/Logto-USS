@@ -16,7 +16,7 @@ const redirectToBuiltUri = async () => {
     const response = await axios.post(
         `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/connectors/build-uri/${route.params.connector}`,
         {
-          "redirectUri": `${import.meta.env.VITE_ROOT}/oauth/connectors/callback/${route.params.connector}`
+          "redirectUri": `${import.meta.env.VITE_ROOT}/callback/connectors/${route.params.connector}`
         },
         {headers: {Authorization: `Bearer ${await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)}`, 'Content-Type': 'application/json'}}
     )
@@ -39,13 +39,13 @@ const linkConnectorToAccount = async () => {
           "connectorData": {
             "code": route.query.code,
             "state": route.query.state,
-            "redirectUri": `${import.meta.env.VITE_ROOT}/oauth/connectors/callback/${route.params.connector}`,
+            "redirectUri": `${import.meta.env.VITE_ROOT}/callback/connectors/${route.params.connector}`,
             "key": null,
           }
         },
         {headers: {Authorization: `Bearer ${await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)}`, 'Content-Type': 'application/json'}}
     )
-    if (response.status === 204) {
+    if (response.status === 200) {
       window.close();
     }
   } catch (error) {

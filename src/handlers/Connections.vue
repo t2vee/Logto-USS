@@ -28,6 +28,7 @@ const userData = inject('userData')
         service="Discord"
       />
       <ConnectorCard
+        disabled
         :linked="Boolean(userData.identities.Spotify)"
         image="https://cdn.vstatic.net/content/kLhJNvxNYHqnH0J7zHy2/vee.city/Images/Optimised/Logo_Spotify.png"
         :icon="SpotifyIcon"

@@ -1,5 +1,5 @@
 <script setup>
-import {defineAsyncComponent, onMounted, ref} from 'vue'
+import {defineAsyncComponent, onMounted, onUnmounted, ref} from 'vue'
 import {
   Drawer,
   DrawerClose,
@@ -21,7 +21,7 @@ import {
 import { Progress } from '@/components/ui/progress/index.js'
 import { Switch } from '@/components/ui/switch/index.js'
 import { Button } from '@/components/ui/button/index.js'
-import { Link, BarChart3, TextSearch, ChevronsRight, LogIn } from 'lucide-vue-next'
+import {Link, BarChart3, TextSearch, ChevronsRight, LogIn, LoaderCircle, BadgeCheck} from 'lucide-vue-next'
 const EditDetailDialog = defineAsyncComponent(() => import('@/components/Global/EditDetailDialog.vue'));
 const EditRegionalSettings = defineAsyncComponent(() => import('@/components/Pages/PersonalInfo/EditRegionalSettings.vue'));
 
@@ -32,47 +32,83 @@ const props = defineProps({
   },
   serviceImg: String,
   serviceIcon: Object,
+  disabled: Boolean,
 })
 
-const progress = ref(33)
-const stepOneActive = ref(true)
-const stepTwoActive = ref(false)
-const stepThreeActive = ref(false)
-const policiesAgreed = ref(false)
+const progress = ref(33);
+const stepOneActive = ref(true);
+const stepTwoActive = ref(false);
+const stepThreeActive = ref(false);
+
+const policiesAgreed = ref(false);
+const disableLinkButton = ref(false);
+const linkCallbackSuccessful = ref(false);
+const callbackWaitingText = ref('Waiting For Response...');
+
+let windowChecker = null;
+let authWindow = null;
 
 function completeStepOne() {
   if (stepTwoActive.value && !stepOneActive.value) {
-    stepOneActive.value = true
-    stepTwoActive.value = false
-    progress.value = 33
+    stepOneActive.value = true;
+    stepTwoActive.value = false;
+    progress.value = 33;
   } else {
-    stepOneActive.value = false
-    stepTwoActive.value = true
-    progress.value = 66
+    stepOneActive.value = false;
+    stepTwoActive.value = true;
+    progress.value = 66;
+  }
+}
+
+function completeStepTwo() {
+  if (stepThreeActive.value && !stepTwoActive.value) {
+    stepTwoActive.value = true;
+    stepThreeActive.value = false;
+    progress.value = 66;
+  } else {
+    stepTwoActive.value = false;
+    stepThreeActive.value = true;
+    progress.value = 99;
   }
 }
 
 const beginAuthorizationFlow = () => {
+  disableLinkButton.value = true;
   const url = `/oauth/connectors/new/${props.service.toLowerCase()}`;
   const width = 400;
   const height = 700;
   const left = (screen.width / 2) - (width / 2);
   const top = (screen.height / 2) - (height / 2);
-
-  window.open(
+  authWindow = window.open(
       url,
       'AuthorizationWindow',
       `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`
   );
+  windowChecker = setInterval(() => {
+    if (authWindow && authWindow.closed) {
+      linkCallbackSuccessful.value = true;
+      callbackWaitingText.value = `${props.service} Successfully Linked!`
+      clearInterval(authWindow);
+    }
+  }, 500);
 };
+
+onUnmounted( () => {
+  if (windowChecker) {
+    clearInterval(windowChecker);
+  }
+
+})
 </script>
 
 <template>
   <Drawer class="transition-all duration-500">
-    <DrawerTrigger>
-      <Button>
+    <DrawerTrigger as-child>
+      <Button :disabled="disabled">
         <Link color="black" class="mr-1" />
-        <strong class="text-black">Begin Link Process</strong>
+        <strong class="text-black">
+          {{ disabled ? 'Unavailable' : 'Begin Link Process' }}
+        </strong>
       </Button>
     </DrawerTrigger>
     <DrawerContent>
@@ -129,7 +165,7 @@ const beginAuthorizationFlow = () => {
             </CardFooter>
           </Card>
           <Button
-            :disabled="!policiesAgreed"
+            :disabled="!policiesAgreed || stepThreeActive"
             @click="completeStepOne"
             :variant="stepOneActive ? '' : 'outline'"
           >
@@ -141,8 +177,8 @@ const beginAuthorizationFlow = () => {
             {{ stepOneActive ? 'Continue' : 'Back' }}
           </Button>
         </div>
-        <div class="flex flex-col w-[33%] ml-4">
-          <Card class="h-full mb-1" :class="{ 'hover:cursor-not-allowed py-28': !stepTwoActive }">
+        <div class="flex flex-col w-[33%] ">
+          <Card class="flex flex-col h-full mb-1 items-center" :class="{ 'hover:cursor-not-allowed py-28': !stepTwoActive }">
             <CardHeader class="flex items-center">
               <CardTitle :class="!stepTwoActive ? 'text-gray-500' : ''">Step 2:</CardTitle>
               <CardTitle :class="!stepTwoActive ? 'text-gray-500' : ''">
@@ -155,19 +191,28 @@ const beginAuthorizationFlow = () => {
               </CardDescription>
             </CardHeader>
             <CardContent v-if="stepTwoActive">
-              <Card @click="beginAuthorizationFlow" class="flex items-center align-middle justify-center bg-[#162831] gap-x-6 p-2 border-b-muted border-b-4 hover:cursor-pointer hover:bg-[#0E1D25FF] hover:border-t-4 hover:border-t-primary-foreground hover:border-b-0">
-                <CardTitle class="flex mt-2 gap-x-2">
-                  <LogIn :size="28" />
-                  Click to Authorise with
-                </CardTitle>
+              <Card
+                  v-if="!disableLinkButton"
+                  @click="beginAuthorizationFlow"
+                  class="flex items-center align-middle justify-center bg-[#162831] gap-x-6 p-2 border-b-muted border-b-4 px-12 hover:cursor-pointer hover:bg-[#0E1D25FF] hover:border-t-4 hover:border-t-primary-foreground hover:border-b-0"
+              >
+                <!--<LogIn :size="36" />-->
+                <p class="font-bold text-2xl">Click to Authorise with</p>
                 <img v-if="serviceImg" class="max-w-32" :src="serviceImg" :alt="service" />
               </Card>
             </CardContent>
+            <CardFooter v-if="stepTwoActive && disableLinkButton" class="flex items-center align-middle">
+              <div class="flex items-center align-middle gap-x-2">
+                <LoaderCircle v-if="callbackWaitingText !== `${service} Successfully Linked!`" :size="28" class="animate-spin" />
+                <BadgeCheck :color="'rgb(34 197 94)'" v-else-if="stepTwoActive" />
+                <p class="text-lg" :class="callbackWaitingText !== `${service} Successfully Linked!` ? '' : 'text-green-500'">{{ callbackWaitingText }}</p>
+              </div>
+            </CardFooter>
           </Card>
           <Button
-            v-if="!stepOneActive && stepTwoActive"
-            :disabled="policiesAgreed"
-            @click="completeStepOne"
+            v-if="!stepOneActive && (stepTwoActive || stepThreeActive)"
+            :disabled="!linkCallbackSuccessful"
+            @click="completeStepTwo"
             :variant="stepTwoActive ? '' : 'outline'"
           >
             <ChevronsRight
@@ -178,20 +223,22 @@ const beginAuthorizationFlow = () => {
             {{ stepTwoActive ? 'Continue' : 'Back' }}
           </Button>
         </div>
-        <Card
-          class="w-[33%] mr-4"
-          :class="!stepThreeActive ? 'hover:cursor-not-allowed py-28' : ''"
-        >
-          <CardHeader class="flex items-center">
-            <CardTitle :class="!stepThreeActive ? 'text-gray-500' : ''">Step 3:</CardTitle>
-            <CardTitle :class="!stepThreeActive ? 'text-gray-500' : ''"
-              >Finalise the connection details</CardTitle
-            >
-            <CardDescription v-if="stepThreeActive">Card Description</CardDescription>
-          </CardHeader>
-          <CardContent v-if="stepThreeActive"> Card Content </CardContent>
-          <CardFooter v-if="stepThreeActive"> Card Footer </CardFooter>
-        </Card>
+        <div class="flex flex-col w-[33%] mr-4">
+          <Card class="h-full" :class="!stepThreeActive ? 'hover:cursor-not-allowed py-28' : ''">
+            <CardHeader class="flex items-center">
+              <CardTitle :class="!stepThreeActive ? 'text-gray-500' : ''">Step 3:</CardTitle>
+              <CardTitle :class="!stepThreeActive ? 'text-gray-500' : ''">
+                Finalise the connection details
+              </CardTitle>
+              <CardDescription v-if="stepThreeActive">
+                Card Description
+              </CardDescription>
+            </CardHeader>
+            <CardContent v-if="stepThreeActive"> Card Content </CardContent>
+            <CardFooter v-if="stepThreeActive"> Card Footer </CardFooter>
+          </Card>
+        </div>
+
       </div>
     </DrawerContent>
   </Drawer>
