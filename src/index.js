@@ -45,6 +45,7 @@ import createNewMfaMethod from "./handlers/userData/createNewMfaMethod";
 import removeMfaMethod from "./handlers/userData/removeMfaMethod";
 import buildConnectorAuthUri from "./handlers/buildConnectorAuthUri";
 import linkConnector from "./handlers/userData/linkConnector";
+import removeConnector from "./handlers/userData/removeConnector";
 
 
 const router = Router();
@@ -106,6 +107,7 @@ router.post('/api/v2/me/dangerzone/terminate', terminateUser)
 
 router.post('/api/v2/connectors/build-uri/:connector', buildConnectorAuthUri)
 router.post('/api/v2/connectors/link/:connector', linkConnector)
+router.post('/api/v2/connectors/remove/:connector', removeConnector)
 
 
 /**
