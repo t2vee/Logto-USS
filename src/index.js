@@ -43,6 +43,8 @@ import suspendUser from "./handlers/suspendUser";
 import terminateUser from "./handlers/terminateUser";
 import createNewMfaMethod from "./handlers/userData/createNewMfaMethod";
 import removeMfaMethod from "./handlers/userData/removeMfaMethod";
+import buildConnectorAuthUri from "./handlers/buildConnectorAuthUri";
+import linkConnector from "./handlers/userData/linkConnector";
 
 
 const router = Router();
@@ -101,6 +103,9 @@ router.get('/api/v1/utils/check-username-exists/:username', usernameExists);
 
 router.post('/api/v2/me/dangerzone/suspendme', suspendUser)
 router.post('/api/v2/me/dangerzone/terminate', terminateUser)
+
+router.post('/api/v2/connectors/build-uri/:connector', buildConnectorAuthUri)
+router.post('/api/v2/connectors/link/:connector', linkConnector)
 
 
 /**

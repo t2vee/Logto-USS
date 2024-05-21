@@ -1,4 +1,3 @@
-import {error} from "itty-router";
 /**
  * Fetches the details of a user by sending a GET request to the user's endpoint.
  * The function constructs a request to the API using the user's ID and an access token for authorization.

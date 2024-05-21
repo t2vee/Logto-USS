@@ -5,7 +5,7 @@ export default async (request, env) => {
 	try {
 		const tokenInfo = await verifyAuthToken(request, env);
 		request.userid = tokenInfo.sub;
-		console.log('[MIDDLEWARE] Authentication Bearer Token Check Succeeded')
+		console.log('[MIDDLEWARE] Bearer Token Check Succeeded')
 	} catch (e) {
 		console.log(e)
 		return failureCONTENT(env, 'Invalid or Non-existent Authentication Bearer Token', 400);

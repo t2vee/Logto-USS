@@ -26,7 +26,7 @@ export default async function verifySMSCode(env, accessToken, userNumber, verifi
 	try {
 		const response = await fetch(url, { method: 'POST', headers, body });
 		if (!response.ok) {
-			throw { message: 'Failed to access resource - ERR 5984', status: response.status };
+			throw { message: 'Failed to access resource - ERR 5984', status: response };
 		}
 		return response;
 	} catch (error) {
