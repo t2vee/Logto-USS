@@ -3,7 +3,7 @@ import { ref, watch } from 'vue'
 import { Label } from '@/components/ui/label/index.js'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group/index.js'
 import { useLogto } from '@logto/vue'
-import { Loader, Loader2, Shield } from 'lucide-vue-next'
+import { Loader, Shield } from 'lucide-vue-next'
 import axios from 'axios'
 import {
   DialogClose,
@@ -238,7 +238,7 @@ watch(
               >Text <strong>{{ userData.phone_number }}</strong></Label
             >
           </div>
-          <div v-if="mfaOptions[0]">
+          <div v-if="mfaOptions[0] !== 'none'">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger class="flex items-center space-x-2">

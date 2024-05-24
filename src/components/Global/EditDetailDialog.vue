@@ -39,10 +39,13 @@ onUnmounted(cleanup)
     class="h-32 w-full bg-gradient-to-tl from-gray-800 to-60% hover:cursor-default"
   >
     <CardHeader>
-      <CardTitle class="flex justify-between text-lg text-gray-500"
-        >{{ title }}<component :is="icon" v-if="icon" color="rgb(75 85 99)"
-      /></CardTitle>
-      <CardDescription class="text-gray-500">{{ desc }}</CardDescription>
+      <CardTitle class="flex justify-between text-lg text-gray-500">
+        {{ title }}
+        <component :is="icon" v-if="icon" color="rgb(75 85 99)"/>
+      </CardTitle>
+      <CardDescription class="text-gray-500">
+        {{ desc }}
+      </CardDescription>
     </CardHeader>
   </Card>
   <Dialog v-else v-model:open="isDialogOpen">
