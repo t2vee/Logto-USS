@@ -2,17 +2,21 @@
 // Use of this source code is governed by an MPL license.
 
 
-import grabUserDetails from "../../lib/grabUserDetails";
 import successCONTENT from "../../responses/raw/success-CONTENT";
-import failureEMPTY from "../../responses/raw/failure-EMPTY";
+import { createHttpClient } from "../../HttpClient";
+import failureCONTENT from "../../responses/raw/failure-CONTENT";
 
 export default async (request, env) => {
 	try {
-		const userData = await grabUserDetails(env, request.accesstoken, request.userid)
-		const usrDObj = JSON.parse(userData)
-		return successCONTENT(env, usrDObj);
+		const http = createHttpClient(env, request.accesstoken);
+		const userData = await http.get(
+			`/api/users/${encodeURIComponent(request.userid)}`, {
+				resTo400: 'ERR_USR_ID_INVALID',
+			}
+		);
+		return successCONTENT(env, userData);
 	} catch (e) {
 		console.error(e)
-		return failureEMPTY(env, 418)
+		return failureCONTENT(env, e.message, e.status)
 	}
 }

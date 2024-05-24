@@ -1,5 +1,5 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
-// Use of this source code is governed by an MPL license. 
+// Use of this source code is governed by an MPL license.
 
 
 import { Router } from 'itty-router'
@@ -38,6 +38,7 @@ import removeMfaMethod from "./handlers/userData/removeMfaMethod";
 import buildConnectorAuthUri from "./handlers/buildConnectorAuthUri";
 import linkConnector from "./handlers/userData/linkConnector";
 import removeConnector from "./handlers/userData/removeConnector";
+import checkVerificationCodeMiddleware from "./middleware/checkVerificationCodeMiddleware";
 
 
 const router = Router();
@@ -46,6 +47,7 @@ router.options('*', corsHeaders) // need to fix cors headers so they are specifi
 router.get('/api/v1/oauth-user-info/endpoint/api-spotify-com/v1/me', HandleSpotifyUserInfoEndpoint)
 
 router // the entire middleware system is a hack and a mess. i would like to change it but im lazy so
+	.all('*', withMiddleware(async (request, env, ctx) => {return checkVerificationCodeMiddleware(request, env);}))
 	.all('*', withMiddleware(async (request, env, ctx) => {return checkTokenMiddleware(request, env);}))
 	.all('*', withMiddleware(async (request, env, ctx) => {return attachAccessToken(request, env);}))
 

@@ -1,5 +1,5 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
-// Use of this source code is governed by an MPL license. 
+// Use of this source code is governed by an MPL license.
 
 
 /**
@@ -26,7 +26,7 @@ export default async function verifyEmailCode(env, accessToken, userEmail, verif
 		'Authorization': `Bearer ${accessToken}`,
 		'Content-Type': 'application/json',
 	};
-	const body = JSON.stringify({ email: userEmail, "verificationCode": verificationCode });
+	const body = JSON.stringify();
 	try {
 		const response = await fetch(url, { method: 'POST', headers, body });
 		if (!response.ok) {
