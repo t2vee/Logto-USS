@@ -2,10 +2,11 @@
 import { defineAsyncComponent, ref, inject } from 'vue'
 
 import Button from '../ui/button/Button.vue'
-import { AlertTriangle, CircleUserRound, LifeBuoy, Cookie, UserCog, Cable, Code } from 'lucide-vue-next'
+import { AlertTriangle, CircleUserRound, LifeBuoy, Cookie, UserCog, Cable, Code, Loader } from 'lucide-vue-next'
 const AvatarEditor = defineAsyncComponent(() => import('@/components/Base/Avatar/AvatarEditor.vue'))
 const userData = inject('userData')
 
+const isLoading = ref('')
 const sidebarNavItems = ref([
   {
     title: 'Personal Info',
@@ -43,6 +44,11 @@ const sidebarNavItems = ref([
     href: '/account/developer'
   }
 ])
+
+const handleNav = (navigate, key) => {
+  isLoading.value = key;
+  navigate();
+};
 </script>
 
 <template>
@@ -77,9 +83,9 @@ const sidebarNavItems = ref([
               : 'text-white'
           "
           class="w-full text-left justify-start"
-          @click="navigate"
+          @click="handleNav(navigate, item.title)"
         >
-          <component :is="item.icon" v-if="item.icon" class="pr-1.5" :color="$route.path === item.href ? 'rgb(165 243 252)' : ''" />
+          <component :is="isLoading === item.title ? Loader : item.icon" v-if="item.icon" :class="isLoading === item.title ? 'animate-spin' : 'pr-1.5'" :color="$route.path === item.href ? 'rgb(165 243 252)' : ''" />
           {{ item.title }}
         </Button>
       </router-link>
