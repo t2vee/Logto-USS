@@ -237,24 +237,31 @@ onUnmounted( () => {
                 Finalise the connection details
               </CardTitle>
               <CardDescription v-if="stepThreeActive">
-                Check the details of the connected account to verify if they are correct.
+                What you can do with your new social connector.
               </CardDescription>
             </CardHeader>
-            <CardContent v-if="stepThreeActive"> Card Content </CardContent>
-            <CardFooter v-if="stepThreeActive"> Card Footer </CardFooter>
+            <CardContent v-if="stepThreeActive">
+              You will now be able to login to your MXS Account with {{ service }}.
+              You can now use {{ service }} as a verification provider.
+              You will be able to configure if your connected account is displayed on your profile.
+            </CardContent>
+            <CardFooter v-if="stepThreeActive">
+              You may remove {{ service }} as a connected account through the "Connections" tab.
+            </CardFooter>
           </Card>
-          <Button
-              v-if="!stepTwoActive && stepThreeActive"
-              :disabled="!linkCallbackSuccessful"
-              @click="completeStepTwo"
-              :variant="stepThreeActive ? '' : 'outline'"
-          >
-            <ChevronsRight
-                class="mr-2"
-                color="black"
-            />
-            Complete Setup
-          </Button>
+          <DrawerClose as-child>
+            <Button
+                v-if="!stepTwoActive && stepThreeActive"
+                :disabled="!linkCallbackSuccessful"
+                :variant="stepThreeActive ? '' : 'outline'"
+            >
+              <ChevronsRight
+                  class="mr-2"
+                  color="black"
+              />
+              Complete Setup
+            </Button>
+          </DrawerClose>
         </div>
       </div>
     </DrawerContent>
