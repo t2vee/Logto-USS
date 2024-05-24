@@ -1,8 +1,6 @@
 <script setup>
 import { defineAsyncComponent } from 'vue'
-const DataDownloadSettings = defineAsyncComponent(
-  () => import('@/handlers/YourData.vue')
-)
+const DataDownloadSettings = defineAsyncComponent(() => import('@/handlers/YourData.vue'))
 import AccountsRoot from '@/components/Base/AccountsRoot.vue'
 </script>
 

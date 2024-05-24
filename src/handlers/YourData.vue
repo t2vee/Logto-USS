@@ -16,17 +16,13 @@ import EditDetailDialog from '@/components/Global/EditDetailDialog.vue'
       <br />
       Your download will include:
       <br />
-      <br />
-      <ul>
-        <li>
-          App usage and activity information as spreadsheets or files in .json, .csv, or .pdf
-          format.
-        </li>
-        <li>Documents, photos and videos in their original format.</li>
-        <li>Contacts, calendars, bookmarks and mail in .vcf, .ics, .html, and .eml format.</li>
-      </ul>
-      <br />
-      Your download will not include App, book, movie, TV show, or music purchases.
+      <p>
+        User Information like personal info, privacy settings, connection information, security settings,
+        data history and developer applications. These will be in the .json format.
+      </p>
+      <p>
+        User Uploaded Media like avatars. These will be in the web optimised .webp format.
+      </p>
     </CardDescription>
     <EditDetailDialog
       title="Request Your Data"
@@ -37,5 +33,3 @@ import EditDetailDialog from '@/components/Global/EditDetailDialog.vue'
     />
   </div>
 </template>
-
-<style scoped></style>
