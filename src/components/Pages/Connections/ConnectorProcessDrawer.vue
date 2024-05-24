@@ -21,7 +21,7 @@ import {
 import { Progress } from '@/components/ui/progress/index.js'
 import { Switch } from '@/components/ui/switch/index.js'
 import { Button } from '@/components/ui/button/index.js'
-import {Link, BarChart3, TextSearch, ChevronsRight, LogIn, LoaderCircle, BadgeCheck} from 'lucide-vue-next'
+import {Link, BarChart3, TextSearch, ChevronsRight, Dot, LoaderCircle, BadgeCheck} from 'lucide-vue-next'
 import {eventBus} from "@/lib/eventBus.js";
 const EditDetailDialog = defineAsyncComponent(() => import('@/components/Global/EditDetailDialog.vue'));
 const EditRegionalSettings = defineAsyncComponent(() => import('@/components/Pages/PersonalInfo/EditRegionalSettings.vue'));
@@ -139,17 +139,17 @@ onUnmounted( () => {
             <CardContent class="flex gap-x-5">
               <p>
                 I agree to the
-                <span
-                  ><a target="_blank" class="text-cyan-300" href="/legal/privacypolicy"
-                    >MXS Privacy Policy</a
-                  ></span
-                >
+                <span>
+                  <a target="_blank" class="text-cyan-300" href="/legal/privacypolicy">
+                  MXS Privacy Policy
+                  </a>
+                </span>
                 &
-                <span
-                  ><a target="_blank" class="text-cyan-300" href="/legal/termsofservice"
-                    >MXS Terms of Service Agreement</a
-                  ></span
-                >.
+                <span>
+                  <a target="_blank" class="text-cyan-300" href="/legal/termsofservice">
+                  MXS Terms of Service Agreement
+                </a>
+                </span>.
               </p>
               <Switch v-model:checked="policiesAgreed" :disabled="!stepOneActive" />
             </CardContent>
@@ -241,9 +241,9 @@ onUnmounted( () => {
               </CardDescription>
             </CardHeader>
             <CardContent v-if="stepThreeActive">
-              You will now be able to login to your MXS Account with {{ service }}.
-              You can now use {{ service }} as a verification provider.
-              You will be able to configure if your connected account is displayed on your profile.
+              <p class="flex"><Dot />You will now be able to login to your MXS Account with {{ service }}.</p>
+              <p class="flex"><Dot />You can now use {{ service }} as a verification provider.</p>
+              <p class="flex"><Dot />You will be able to configure if your connected account is displayed on your profile.</p>
             </CardContent>
             <CardFooter v-if="stepThreeActive">
               You may remove {{ service }} as a connected account through the "Connections" tab.
