@@ -9,6 +9,7 @@ import {
   CalendarFold,
   DoorOpen
 } from 'lucide-vue-next'
+const EditPublicProfile = defineAsyncComponent(() => import( "@/components/Pages/PersonalInfo/EditPublicProfile.vue"));
 const EditBirthdayDialog = defineAsyncComponent(() => import('@/components/Pages/PersonalInfo/EditBirthdayDialog.vue'))
 const EditDetailDialog = defineAsyncComponent(() => import('@/components/Global/EditDetailDialog.vue'))
 const EditUsername = defineAsyncComponent(() => import('@/components/Pages/PersonalInfo/EditUsername.vue'))
@@ -43,7 +44,7 @@ function expandLocale(shortLocale) {
         title="Public Profile"
         desc="Open For More Details"
         :icon="DoorOpen"
-        :dialog-page="EditFullName"
+        :dialog-page="EditPublicProfile"
       />
       <EditDetailDialog
         title="Username"
