@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license.
+
+
 import importRsaPrivateKey from './importRSAKey';
 /**
  * Decrypts a given piece of encrypted data using RSA-OAEP.

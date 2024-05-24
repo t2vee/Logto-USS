@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license.
+
+
 /**
  * Sends an SMS verification code to a given user number by making a POST request to a specified API endpoint.
  * This function constructs the request with necessary headers, including the authorization token and content type.

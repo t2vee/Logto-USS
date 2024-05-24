@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license. 
+
+
 import grabUserDetails from "../../../lib/grabUserDetails";
 import sendEmailVerificationCode from "../../../lib/sendEmailVerificationCode";
 import successEMPTY from "../../../responses/raw/success-EMPTY";

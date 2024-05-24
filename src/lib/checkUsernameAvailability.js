@@ -1,3 +1,6 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license.
+
 
 /**
  * Fetches a resource using the provided access token and checks for a specific username.

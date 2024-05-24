@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license.
+
+
 import successEMPTY from "../responses/raw/success-EMPTY";
 import failureEMPTY from "../responses/raw/failure-EMPTY";
 import suspendUser from "../lib/suspendUser";

@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license. 
+
+
 import updateUserData from "../../../lib/updateUserData";
 //import decryptNumber from "../../../utils/decryptNumber"; bruh
 import verifySMSCode from "../../../lib/verifySMSCode";

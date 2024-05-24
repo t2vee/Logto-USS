@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license.
+
+
 import failureEMPTY from "../../responses/raw/failure-EMPTY";
 import createMethod from "../../lib/mfa/createMethod";
 import successCONTENT from "../../responses/raw/success-CONTENT";

@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license.
+
+
 export default (env) => new Object({
 	"Access-Control-Allow-Origin": env.CORS,
 	"Access-Control-Allow-Methods": "GET, POST, OPTIONS",

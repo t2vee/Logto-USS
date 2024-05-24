@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license.
+
+
 /**
  * Sends an email verification code to the given email address by making a POST request
  * to the verification codes endpoint. The request includes the user's email in the body

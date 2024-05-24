@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license.
+
+
 /**
  * Generates a response for OPTIONS preflight requests with customizable headers.
  * @param {Object} options Custom options to override default header values.

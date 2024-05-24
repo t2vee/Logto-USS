@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license.
+
+
 import failureEMPTY from "../../responses/raw/failure-EMPTY";
 import failureCONTENT from "../../responses/raw/failure-CONTENT";
 import grabConnectorIds from "../../lib/grabConnectorIds";

@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license. 
+
+
 /**
  * Verifies an SMS verification code by sending it along with the user's phone number to a specified API endpoint.
  * Constructs a POST request with authorization and content type headers, including the user's phone number and

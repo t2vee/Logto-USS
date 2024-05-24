@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license. 
+
+
 /**
  * Cleans and validates a user-provided phone number by removing spaces and the leading '+' sign.
  * It checks the cleaned number against a pattern to ensure it consists only of digits.

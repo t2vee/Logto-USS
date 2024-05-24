@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license. 
+
+
 /**
  * Updates user data for a specified user by sending a PATCH request to the user's endpoint.
  * This function constructs the request with the necessary headers for authorization and content type,

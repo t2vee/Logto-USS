@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license. 
+
+
 /**
  * Verifies an email verification code by sending it along with the user's email to a specified API endpoint.
  * This function constructs a POST request with authorization and content type headers. The email address and

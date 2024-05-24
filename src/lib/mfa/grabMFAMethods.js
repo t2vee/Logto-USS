@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license. 
+
+
 /**
  * Checks the availability of a username by querying a specific endpoint with the user's ID.
  * This function sends a GET request to the endpoint responsible for MFA verifications,

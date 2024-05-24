@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license. 
+
+
 import failureEMPTY from "../../responses/raw/failure-EMPTY";
 import removeMethod from "../../lib/mfa/removeMethod";
 import successEMPTY from "../../responses/raw/success-EMPTY";

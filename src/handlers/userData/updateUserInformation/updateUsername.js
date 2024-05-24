@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license.
+
+
 import updateUserData from "../../../lib/updateUserData";
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
 import successEMPTY from "../../../responses/raw/success-EMPTY";

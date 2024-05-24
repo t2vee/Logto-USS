@@ -1,32 +1,24 @@
-import { Router } from 'itty-router'
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license. 
 
+
+import { Router } from 'itty-router'
 import checkTokenMiddleware from "./middleware/checkBearerTokenMiddleware";
 import withMiddleware from "./middleware/withMiddleware";
 import isMfaRequired from "./handlers/isMfaRequired";
-
-
 import pushEmail from "./handlers/mfaFlow/email/push";
 import verifyEmail from "./handlers/mfaFlow/email/verify";
-
 import pushSMS from "./handlers/mfaFlow/sms/push";
 import verifySMS from "./handlers/mfaFlow/sms/verify";
-
-
 import pushNewSMS from "./handlers/newVerifyMethod/sms/push";
 import verifyNewSMS from "./handlers/newVerifyMethod/sms/verify";
 import removeSMS from "./handlers/newVerifyMethod/sms/remove";
-
 import pushNewEmail from "./handlers/newVerifyMethod/email/push";
 import verifyNewEmail from "./handlers/newVerifyMethod/email/verify";
-
-
 import updateFullName from "./handlers/userData/updateUserInformation/updateFullName";
-
-
 import mfaMethods from "./handlers/mfaMethods";
 import usernameExists from "./handlers/userData/usernameExists";
 import extendedUserData from "./handlers/userData/extendedUserData";
-
 import corsPreflight from "./headers/corsPreflight";
 import HandleSpotifyUserInfoEndpoint from "./lib/handleSpotifyUserInfoEndpoint";
 import updateUsername from "./handlers/userData/updateUserInformation/updateUsername";
@@ -84,16 +76,14 @@ router.post('/api/v2/me/edit/birthday', updateBirthday)
 
 // Implement Method to change password if old password was forgotten - not sure if i want to implement this, will probably find a alternative
 router.post('/api/v2/me/edit/password', updatePassword)
-// NEED TO BE IMPLEMENTED
-// router.post('/api/v1/user-data-entry/update-user-information/security/mfa-settings') outdated route design - will remove son
-// NEED TO BE IMPLEMENTED - will take fucking forever
+
+// TODO NEED TO BE IMPLEMENTED - will take fucking forever
 router.post('/api/v1/user-data-entry/update-user-information/privacy/third-party-data-access')
 router.post('/api/v1/user-data-entry/update-user-information/privacy/profile-visibility')
 router.post('/api/v1/user-data-entry/update-user-information/privacy/email-privacy')
 
 router.post('/api/v2/me/avatar/upload', uploadNewAvatar)
 router.post('/api/v2/me/avatar/remove', removeAvatar)
-
 
 router.get('/api/v1/me/is-mfa-required', isMfaRequired);
 router.get('/api/v1/me/mfa-methods', mfaMethods);

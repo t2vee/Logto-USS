@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license.
+
+
 import fetchAccessToken from "../utils/fetchAccessToken";
 /**
  * Tries to fetch the access token from KV storage, or fetches a new one if the stored token is expired or not present.

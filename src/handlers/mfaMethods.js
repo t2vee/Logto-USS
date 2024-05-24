@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license. 
+
+
 import grabMFAMethods from "../lib/mfa/grabMFAMethods";
 import successCONTENT from "../responses/raw/success-CONTENT";
 import failureEMPTY from "../responses/raw/failure-EMPTY";

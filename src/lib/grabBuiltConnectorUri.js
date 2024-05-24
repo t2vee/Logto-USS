@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license. 
+
+
 import grabConnectorIds from "./grabConnectorIds";
 
 export default async (env, accessToken, uriParams, connectorType) => {

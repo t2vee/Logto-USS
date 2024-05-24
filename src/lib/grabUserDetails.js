@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license. 
+
+
 /**
  * Fetches the details of a user by sending a GET request to the user's endpoint.
  * The function constructs a request to the API using the user's ID and an access token for authorization.
@@ -17,17 +21,14 @@
  */
 
 export default async function grabUserDetails(env, accessToken, userid) {
-	const url = `${env.LOGTO_DOMAIN}/api/users/${encodeURIComponent(userid)}`;
-	const headers = {
-		'Authorization': `Bearer ${accessToken}`,
-	};
-
 	try {
+		const url = `${env.LOGTO_DOMAIN}/api/users/${encodeURIComponent(userid)}`;
+		const headers = {'Authorization': `Bearer ${accessToken}`};
 		const response = await fetch(url, { method: 'GET', headers });
 		const data = await response.json();
 		return JSON.stringify(data, null, 2);
 	} catch (error) {
-		console.error('Error accessing resource:', error);
-		throw new error(404, 'User ID is not valid - Trace ID: 2344');
+		console.error('User ID is not valid - Trace ID: 2344:', error);
+		throw new Error('ERR_USR_ID_INVALID');
 	}
 }

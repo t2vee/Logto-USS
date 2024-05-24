@@ -1,3 +1,7 @@
+// Copyright (c) 2024 t2vee. All rights reserved.
+// Use of this source code is governed by an MPL license.
+
+
 export default async function (env, accessToken, userData, userId) {
 	const url = `${env.LOGTO_DOMAIN}/api/users/${userId}/identities`;
 	const headers = {
