@@ -11,7 +11,7 @@ export default async (request, env) => {
 		const http = createHttpClient(env, request.accesstoken);
 		const userData = await http.get(
 			`/api/users/${encodeURIComponent(request.userid)}`, {
-				resTo400: 'ERR_USR_ID_INVALID',
+				resTo400: 'ERR_USR_DOES_NOT_EXIST',
 			}
 		);
 		return successCONTENT(env, userData);

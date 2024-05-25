@@ -1,42 +1,8 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
+import verifyCode from "../../../lib/verifyCode";
 
-import grabUserDetails from "../../../lib/grabUserDetails";
-import verifySMSCode from "../../../lib/verifySMSCode";
-import prepareNumber from "../../../utils/prepareNumber";
-import checkVerificationCodeMiddleware from "../../../middleware/checkVerificationCodeMiddleware";
-
-import successEMPTY from "../../../responses/raw/success-EMPTY";
-import failureEMPTY from "../../../responses/raw/failure-EMPTY";
-
-/**
- * Verifies an SMS verification code sent to a user's primary phone number. The function follows a sequence of operations:
- * 1. Validates the presence of a user ID in the request using middleware.
- * 2. Validates the verification code provided in the request using another middleware.
- * 3. Fetches an access token for use in subsequent API calls.
- * 4. Retrieves the user's details, including the primary phone number, using the access token and user ID.
- * 5. Prepares the user's phone number in a standardized format for verification.
- * 6. Attempts to verify the provided SMS code against the user's phone number.
- * If the verification succeeds (response status 204), it updates the user's MFA token status to false, indicating no further MFA is required for a session, and returns an empty success response.
- * If the verification fails or any step throws an error, it returns a failure response, either generic or with a specific error message.
- *
- * @param {Request} request The incoming request object. It should include the user ID in its parameters and the verification code.
- * @param {EnvironmentVariables} env An object containing environment variables and secrets. This includes access to external services for fetching access tokens, user details, and verifying SMS codes.
- * @returns {Promise<Response>} A promise that resolves to an empty success response upon successful verification or a failure response (generic or with an error message) if verification fails or an error occurs.
- * @throws {Error} Captures and handles any errors that occur during the verification process, returning a failure response with the error message.
- */
 export default async (request, env) => {
-	const verificationCode = await checkVerificationCodeMiddleware(request, env)
-	try {
-		const userData = await grabUserDetails(env, request.accesstoken, request.userid);
-		const usrDObj = JSON.parse(userData);
-		const response = await verifySMSCode(env, request.accesstoken, await prepareNumber(usrDObj.primaryPhone), verificationCode);
-		return response.status === 204
-			? env.MFARequiredTokens.put(request.userid, false, {expirationTtl: 9000})  && successEMPTY(env)
-			: failureEMPTY(env);
-	} catch (e) {
-		console.error(e)
-		return failureEMPTY(env, 500)
-	}
+	return verifyCode(env, request, 'phone')
 }

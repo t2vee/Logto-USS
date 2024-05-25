@@ -1,32 +1,26 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
-
-import verifyEmailCode from "../../../lib/verifyEmailCode";
-import updateUserData from "../../../lib/updateUserData";
-import checkVerificationCodeMiddleware from "../../../middleware/checkVerificationCodeMiddleware";
 import successEMPTY from "../../../responses/raw/success-EMPTY";
-import failureEMPTY from "../../../responses/raw/failure-EMPTY";
+import verifyCode from "../../../lib/verifyCode";
+import {createHttpClient} from "../../../HttpClient";
+import failureCONTENT from "../../../responses/raw/failure-CONTENT";
 
 export default async (request, env) => {
-	const verificationCode = await checkVerificationCodeMiddleware(request, env)
-	const requestData = await request.json();
-	const email = requestData.email;
 	try {
-		const response = await verifyEmailCode(env, request.accesstoken, email, verificationCode);
-		if (response.status === 204) {
-			const userData = {
-				"primaryEmail": email
+		const requestData = await request.json();
+		const res= await verifyCode(env, request, 'email', requestData.email, true)
+		if (res) { return res; }
+		const http = createHttpClient(env, request.accesstoken);
+		await http.patch(
+			`/api/users/${request.userid}`,
+			{
+				data: {"primaryEmail": requestData.email},
+				resTo400: 'ERR_INVALID_EMAIL',
 			}
-			const updateResponse = await updateUserData(env, request.accesstoken, userData, request.userid)
-			return response.status === 204 && updateResponse.status === 200
-				? successEMPTY(env)
-				: failureEMPTY(env);
-		} else {
-			return failureEMPTY(env);
-		}
+		);
+		return successEMPTY(env)
 	} catch (e) {
 		console.error(e)
-		return failureEMPTY(env, 500)
-	}
+		return failureCONTENT(env, e.message, e.status)	}
 }

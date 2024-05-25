@@ -26,7 +26,7 @@ class HttpClient {
 				config.body = JSON.stringify(data);
 			}
 		}
-		console.log(`[HTTP] Sending Out ${method} Request to ${url}`)
+		console.log(`[HTTPCLIENT] Sending Out ${method} Request to ${url}`)
 		const response = await fetch(this._env.LOGTO_DOMAIN + url, config);
 		const contentType = response.headers.get('content-type');
 		if (!response.ok) {
@@ -54,15 +54,19 @@ class HttpClient {
 		return this.#_request('GET', url, params, headers, resTo400);
 	}
 
-	async post(url, data = {}, headers = {}, resTo400= undefined) {
+	async post(url, {data = {}, headers = {}, resTo400= undefined}) {
 		return this.#_request('POST', url, data, headers, resTo400);
 	}
 
-	async put(url, data = {}, headers = {}, resTo400= undefined) {
+	async patch(url, {data = {}, headers = {}, resTo400= undefined}) {
+		return this.#_request('PATCH', url, data, headers, resTo400);
+	}
+
+	async put(url, {data = {}, headers = {}, resTo400= undefined}) {
 		return this.#_request('PUT', url, data, headers, resTo400);
 	}
 
-	async delete(url, params = {}, headers = {}, resTo400= undefined) {
+	async delete(url, {params = {}, headers = {}, resTo400= undefined}) {
 		return this.#_request('DELETE', url, params, headers, resTo400);
 	}
 }
