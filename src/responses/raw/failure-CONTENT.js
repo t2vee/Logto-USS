@@ -9,6 +9,7 @@ export default (env, content, code = 400) =>
 		content,
 		{
 			status: code,
+			statusText: content,
 			headers: CORS(env, "application/json")
 		}
 	)
