@@ -9,21 +9,19 @@ import prepareNumber from "../utils/prepareNumber";
 export default async (env, request, type, detail = undefined, pass = false) => {
 	try {
 		const http = createHttpClient(env, request.accesstoken);
-		if (detail) {
+		if (!detail) {
 			const userData = await http.get(
 				`/api/users/${encodeURIComponent(request.userid)}`, {
 				});
-			detail = type === 'email' ? detail : await prepareNumber(userData.primaryPhone);
+			detail = type === 'email' ? userData.primaryEmail : await prepareNumber(userData.primaryPhone);
 		}
 		await http.post(
 			'/api/verification-codes/verify',
 			{
-				data: {
-					type: detail,
-					"verificationCode": request.verificationCode,
-				},
-			}
-		);
+				data: type === 'email' ?
+					{'email': detail, "verificationCode": request.verificationCode}
+					: {'phone': detail, "verificationCode": request.verificationCode},
+			});
 		await env.MFARequiredTokens.put(request.userid, false, {expirationTtl: 900});
 		return pass ? undefined : successEMPTY(env)
 	} catch (e) {

@@ -11,9 +11,7 @@ export default  async (request, env) => {
 		const http = createHttpClient(env, request.accesstoken);
 		await http.patch(
 			`/api/users/${request.userid}`,
-			{
-				data: {"primaryPhone": null},
-			}
+			{data: {"primaryPhone": null}}
 		);
 		return successEMPTY(env)
 	} catch (e) {

@@ -7,23 +7,22 @@ import successEMPTY from "../responses/raw/success-EMPTY";
 import failureCONTENT from "../responses/raw/failure-CONTENT";
 
 // reducing extreme boilerplate
-export default async (env, request, type, detail = undefined) => {
+export default async (request, env, type, detail = undefined) => {
 	try {
 		const http = createHttpClient(env, request.accesstoken);
-		if (detail) {
+		if (!detail) {
 			const userData = await http.get(
 				`/api/users/${encodeURIComponent(request.userid)}`, {
 				});
-			detail = type === 'email' ? detail : await prepareNumber(userData.primaryPhone);
+			detail = type === 'email' ? userData.primaryEmail : await prepareNumber(userData.primaryPhone);
 		}
 		await http.post(
 			'/api/verification-codes',
 			{
-				data: {
-					type: detail,
-				}
-			}
-		);
+				data: type === 'email' ?
+					{'email': detail}
+				: {'phone': detail},
+			});
 		return successEMPTY(env);
 	} catch (e) {
 		console.error(e)
