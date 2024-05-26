@@ -6,7 +6,7 @@ import successEMPTY from "../responses/raw/success-EMPTY";
 import failureCONTENT from "../responses/raw/failure-CONTENT";
 import prepareNumber from "../utils/prepareNumber";
 
-export default async (env, request, type, detail = undefined, pass = false) => {
+export default async (env, request, type, detail = undefined) => {
 	try {
 		const http = createHttpClient(env, request.accesstoken);
 		if (!detail) {
@@ -23,7 +23,7 @@ export default async (env, request, type, detail = undefined, pass = false) => {
 					: {'phone': detail, "verificationCode": request.verificationCode},
 			});
 		await env.MFARequiredTokens.put(request.userid, false, {expirationTtl: 900});
-		return pass ? undefined : successEMPTY(env)
+		return successEMPTY(env)
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)
