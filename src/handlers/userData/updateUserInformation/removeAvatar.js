@@ -11,11 +11,10 @@ export default  async (request, env) => {
 		const http = createHttpClient(env, request.accesstoken);
 		await http.patch(
 			`/api/users/${request.userid}`,
-			{data: {"avatar": null}}
-		);
+			{data: {"avatar": null}
+			});
 		return successEMPTY(env)
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)	}
 }
-

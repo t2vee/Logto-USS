@@ -1,30 +1,26 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
-// Use of this source code is governed by an MPL license. 
+// Use of this source code is governed by an MPL license.
 
 
-import updateUserProfile from "../../../lib/updateUserProfile";
 import successEMPTY from "../../../responses/raw/success-EMPTY";
-import failureEMPTY from "../../../responses/raw/failure-EMPTY";
+import {createHttpClient} from "../../../HttpClient";
+import failureCONTENT from "../../../responses/raw/failure-CONTENT";
 
-export default async (request, env) => {
+export default  async (request, env) => {
 	try {
 		const requestData = await request.json();
-		const userData = {
-			"profile": {
-				"address": {
-					"locality": requestData.timezone,
-				}
-			}
-		}
-		if (requestData.country) {
-			userData.profile.address.country = requestData.country;
-		}
-		const updateResponse = await updateUserProfile(env, request.accesstoken, userData, request.userid)
-		return updateResponse.status === 200
-			? successEMPTY(env)
-			: failureEMPTY(env);
+		const http = createHttpClient(env, request.accesstoken);
+		await http.patch(
+			`/api/users/${request.userid}/profile`,
+			{data: {
+					"profile": {
+						"address": {
+							"locality": requestData.timezone,
+							"country": requestData.country ? requestData.country : null,
+						}}}
+			});
+		return successEMPTY(env)
 	} catch (e) {
 		console.error(e)
-		return failureEMPTY(env, 418)
-	}
+		return failureCONTENT(env, e.message, e.status)	}
 }

@@ -1,29 +1,29 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
-// Use of this source code is governed by an MPL license. 
+// Use of this source code is governed by an MPL license.
 
 
-import verifyOldPassword from "../../../lib/verifyOldPassword";
-import updateUserPassword from "../../../lib/updateUserPassword";
 import successEMPTY from "../../../responses/raw/success-EMPTY";
-import failureEMPTY from "../../../responses/raw/failure-EMPTY";
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
+import {createHttpClient} from "../../../HttpClient";
 
 export default async (request, env) => {
 	try {
 		const requestData = await request.json();
-		const verifyPasswordPayload = { "password": requestData.oldPassword }
+		const http = createHttpClient(env, request.accesstoken);
 		try {
-			await verifyOldPassword(env, request.accesstoken, verifyPasswordPayload, request.userid);
+			await http.post(
+				`/api/users/${request.userid}/password/verify`,
+				{data: { "password": requestData.oldPassword }
+				});
 		} catch (err) {
 			return failureCONTENT(env, 'old password does not match!', 406)
 		}
-		const newPasswordPayload = { "password": requestData.password }
-		const updateResponse = await updateUserPassword(env, request.accesstoken, newPasswordPayload, request.userid)
-		return updateResponse.status === 200
-			? successEMPTY(env)
-			: failureEMPTY(env);
+		await http.patch(
+			`/api/users/${request.userid}/password`,
+			{data: { "password": requestData.password }
+			});
+		return successEMPTY(env)
 	} catch (e) {
 		console.error(e)
-		return failureEMPTY(env, 418)
-	}
+		return failureCONTENT(env, e.message, e.status)	}
 }

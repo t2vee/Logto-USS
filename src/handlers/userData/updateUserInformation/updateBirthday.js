@@ -2,24 +2,23 @@
 // Use of this source code is governed by an MPL license.
 
 
-import updateUserProfile from "../../../lib/updateUserProfile";
 import successEMPTY from "../../../responses/raw/success-EMPTY";
-import failureEMPTY from "../../../responses/raw/failure-EMPTY";
+import {createHttpClient} from "../../../HttpClient";
+import failureCONTENT from "../../../responses/raw/failure-CONTENT";
 
-export default async (request, env) => {
+export default  async (request, env) => {
 	try {
 		const requestData = await request.json();
-		const userData = {
-			"profile": {
-				"birthdate": requestData.birthday,
-			}
-		}
-		const updateResponse = await updateUserProfile(env, request.accesstoken, userData, request.userid)
-		return updateResponse.status === 200
-			? successEMPTY(env)
-			: failureEMPTY(env);
+		const http = createHttpClient(env, request.accesstoken);
+		await http.patch(
+			`/api/users/${request.userid}/profile`,
+			{data: {
+					"profile": {
+						"birthdate": requestData.birthday,
+					}}
+			});
+		return successEMPTY(env)
 	} catch (e) {
 		console.error(e)
-		return failureEMPTY(env, 500)
-	}
+		return failureCONTENT(env, e.message, e.status)	}
 }
