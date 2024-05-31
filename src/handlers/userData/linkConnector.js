@@ -2,28 +2,26 @@
 // Use of this source code is governed by an MPL license.
 
 
-import failureEMPTY from "../../responses/raw/failure-EMPTY";
 import failureCONTENT from "../../responses/raw/failure-CONTENT";
-import grabConnectorIds from "../../lib/grabConnectorIds";
-import linkNewUserConnector from "../../lib/linkNewUserConnector";
 import successCONTENT from "../../responses/raw/success-CONTENT";
+import {createHttpClient} from "../../HttpClient";
 
 export default async (request, env) => {
 	try {
-		if (!request.params || !request.params.connector) { return failureCONTENT(env, 'No Connector Type Provided', 400); }
+		if (!request.params || !request.params.connector) { return failureCONTENT(env, 'ERR_NO_TYPE_PROVIDED', 400); }
 		const requestData = await request.json();
-		const connectorResponse = await grabConnectorIds(env, request.accesstoken);
+		const http = createHttpClient(env, request.accesstoken);
+		const connectorResponse = await http.get(`/api/connectors`, {});
 		const connectorID = connectorResponse.find(item => item.target.toLowerCase() === request.params.connector.toLowerCase());
 		const uriParams = {
 			"connectorId": connectorID.id,
 			"connectorData": requestData.connectorData,
 		}
-		const linkResponse = await linkNewUserConnector(env, request.accesstoken, uriParams, request.userid)
-		return linkResponse.status === 200
-			? successCONTENT(env, await linkResponse.json())
-			: failureEMPTY(env);
+		const r = await http.post(
+			`/api/users/${request.userid}/identities`,
+			{data: uriParams});
+		return successCONTENT(env, r);
 	} catch (e) {
 		console.error(e)
-		return failureEMPTY(env, 418)
-	}
+		return failureCONTENT(env, e.message, e.status)}
 }

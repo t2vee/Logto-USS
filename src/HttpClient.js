@@ -70,7 +70,6 @@ class HttpClient {
 		return this.#_request('DELETE', url, params, headers, resTo400);
 	}
 }
-// using a custom wrapper cut down A LOT of code down
 export function createHttpClient(env, accessToken) {
 	return new HttpClient(env, accessToken);
 }
