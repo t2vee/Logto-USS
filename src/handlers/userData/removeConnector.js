@@ -1,21 +1,20 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
-// Use of this source code is governed by an MPL license. 
+// Use of this source code is governed by an MPL license.
 
 
 import successEMPTY from "../../responses/raw/success-EMPTY";
-import failureEMPTY from "../../responses/raw/failure-EMPTY";
-import removeConnector from "../../lib/removeConnector";
 import failureCONTENT from "../../responses/raw/failure-CONTENT";
+import {createHttpClient} from "../../HttpClient";
 
 export default async (request, env) => {
-	if (!request.params || !request.params.connector) { return failureCONTENT(env, 'No Connector Type Provided', 400); }
+	if (!request.params || !request.params.connector) { return failureCONTENT(env, 'ERR_NO_TYPE_PROVIDED', 400); }
 	try {
-		const updateResponse = await removeConnector(env, request.accesstoken, request.userid, request.params.connector)
-		return updateResponse.status === 200
-			? successEMPTY(env)
-			: failureEMPTY(env);
+		const http = createHttpClient(env, request.accesstoken);
+		await http.delete(
+			`/api/users/${request.userid}/identities/${request.params.connector}`,
+			{});
+		return successEMPTY(env)
 	} catch (e) {
 		console.error(e)
-		return failureEMPTY(env, 418)
-	}
+		return failureCONTENT(env, e.message, e.status)}
 }
