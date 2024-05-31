@@ -1,5 +1,5 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
-// Use of this source code is governed by an MPL license. 
+// Use of this source code is governed by an MPL license.
 
 
 export default async (env, imageData) => {
@@ -16,7 +16,7 @@ export default async (env, imageData) => {
 			return false;
 		}
 		console.error('Error accessing resource:', response);
-		throw { message: 'Failed to access resource - Trace ID: 659347', status: response.status };
+		return false;
 	}
 	const data = await response.json();
 	return data[0].className === 'Neutral';

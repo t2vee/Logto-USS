@@ -20,7 +20,7 @@ export default async function (env, accessToken, imageData, userId) {
 		});
 	if (!response.ok) {
 		console.error('Error accessing resource:', response);
-		throw { message: 'Failed to access resource - ERR 023484', status: response.status };
+		return false;
 	}
 	return await response.json();
 }

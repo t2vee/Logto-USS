@@ -5,52 +5,34 @@
 import checkAvatar from "../../../utils/checkAvatar";
 import uploadAvatar from "../../../utils/uploadAvatar";
 import processAvatar from "../../../utils/processAvatar";
-import updateUserData from "../../../lib/updateUserData";
 import successEMPTY from "../../../responses/raw/success-EMPTY";
-import failureEMPTY from "../../../responses/raw/failure-EMPTY";
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
+import {createHttpClient} from "../../../HttpClient";
 
 const allowUploadMimeTypes = [
 	"image/jpeg",
 	"image/png",
-	"image/gif",
-	"image/vnd.microsoft.icon",
-	"image/x-icon",
-	"image/svg+xml",
-	"image/tiff",
-	"image/webp",
-	"image/bmp"
 ];
-const maxUploadFileSize = 8388608;
-
 function validateFile(file) {
-	return allowUploadMimeTypes.includes(file.type) && file.size <= maxUploadFileSize;
+	return allowUploadMimeTypes.includes(file.type) && file.size <= 8388608;
 }
 
 export default async (request, env) => {
 	const reqImg = await request.formData();
 	const file = reqImg.get('file');
-	if (!validateFile(file)) {
-		return failureCONTENT(env,"Invalid file type or size", 400);
-	}
-	if (!await checkAvatar(env, file)) {
-		return failureCONTENT(env, "Image failed one or more checks", 406);
-	}
-	const processedImage = await processAvatar(env, file);
-	if (!processedImage) {
-		return failureCONTENT(env, "Failed to Process the Image", 418);
-	}
+	const http = createHttpClient(env, request.accesstoken);
+	if (!validateFile(file)) {return failureCONTENT(env,"ERR_INVALID_IMG", 400);}
+	if (!await checkAvatar(env, file)) {return failureCONTENT(env, "ERR_IMG_FAILED_CHECK", 406);}
+	const i = !await processAvatar(env, file)
+	if (!i) {return failureCONTENT(env, "ERR_IMG_PROCESS_FAILED", 500);}
 	try {
-		const uploadResponse = await uploadAvatar(env, request.accesstoken, processedImage, request.userid);
-		const userData = {
-			"avatar": uploadResponse.url,
-		}
-		const updateResponse = await updateUserData(env, request.accesstoken, userData, request.userid)
-		return updateResponse.status === 200
-			? successEMPTY(env)
-			: failureEMPTY(env);
+		const uploadResponse = await uploadAvatar(env, request.accesstoken, i, request.userid);
+		await http.patch(
+			`/api/users/${request.userid}`,
+			{data: {"avatar": uploadResponse.url,}
+			});
+		return successEMPTY(env);
 	} catch (e) {
 		console.error(e)
-		return failureEMPTY(env, 418)
-	}
+		return failureCONTENT(env, e.message, e.status)	}
 }
