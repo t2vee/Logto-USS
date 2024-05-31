@@ -2,16 +2,21 @@
 // Use of this source code is governed by an MPL license.
 
 
-import failureEMPTY from "../../responses/raw/failure-EMPTY";
-import createMethod from "../../lib/mfa/createMethod";
 import successCONTENT from "../../responses/raw/success-CONTENT";
+import {createHttpClient} from "../../HttpClient";
+import failureCONTENT from "../../responses/raw/failure-CONTENT";
 
 export default async (request, env) => {
 	try {
-		const updateResponse = await createMethod(env, request.accesstoken, request.userid)
-		return successCONTENT(env, updateResponse);
+		const uri = `/api/users/${request.userid}/mfa-verifications`
+		const http = createHttpClient(env, request.accesstoken);
+		const totp = await http.post(uri, {data: {"type": "Totp"},});
+		const code = await http.post(uri, {data: {"type": "BackupCode"},});
+		return successCONTENT(env, {
+			"AppAuthenticator": totp,
+			"BackupCodes": code,
+		});
 	} catch (e) {
 		console.error(e)
-		return failureEMPTY(env, 418)
-	}
+		return failureCONTENT(env, e.message, e.status)}
 }
