@@ -1,4 +1,10 @@
+@font-face {
+  font-family: geist;
+  src: url('/res/geist.woff2');
+}
+
 * {
+  font-family: geist, "Segoe UI", monospace;
   color: #d9d5d0;
 }
 

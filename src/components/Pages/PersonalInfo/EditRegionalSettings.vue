@@ -130,7 +130,7 @@ async function updateData() {
         </Popover>
       </div>
       <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
-        <Label class="font-bold"> Timezone </Label>
+        <Label class="font-bold"> Timezone <span class="text-xs text-gray-500 font-light">(Required)</span></Label>
         <Select v-model="selectedTimezone">
           <SelectTrigger class="w-[280px]">
             <SelectValue
