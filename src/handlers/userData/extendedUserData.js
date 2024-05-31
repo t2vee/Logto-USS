@@ -12,11 +12,9 @@ export default async (request, env) => {
 		const userData = await http.get(
 			`/api/users/${encodeURIComponent(request.userid)}`, {
 				resTo400: 'ERR_USR_DOES_NOT_EXIST',
-			}
-		);
+			});
 		return successCONTENT(env, userData);
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(env, e.message, e.status)
-	}
+		return failureCONTENT(env, e.message, e.status)}
 }
