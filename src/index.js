@@ -2,42 +2,43 @@
 // Use of this source code is governed by an MPL license.
 
 
+// these imports are horrifying
 import { Router } from 'itty-router'
 import checkTokenMiddleware from "./middleware/checkBearerTokenMiddleware";
 import withMiddleware from "./middleware/withMiddleware";
-import isMfaRequired from "./handlers/isMfaRequired";
-import pushEmail from "./handlers/mfaFlow/email/push";
-import verifyEmail from "./handlers/mfaFlow/email/verify";
-import pushSMS from "./handlers/mfaFlow/sms/push";
-import verifySMS from "./handlers/mfaFlow/sms/verify";
-import pushNewSMS from "./handlers/newVerifyMethod/sms/push";
-import verifyNewSMS from "./handlers/newVerifyMethod/sms/verify";
-import removeSMS from "./handlers/newVerifyMethod/sms/remove";
-import pushNewEmail from "./handlers/newVerifyMethod/email/push";
-import verifyNewEmail from "./handlers/newVerifyMethod/email/verify";
-import updateFullName from "./handlers/userData/updateUserInformation/updateFullName";
-import mfaMethods from "./handlers/mfaMethods";
-import usernameExists from "./handlers/userData/usernameExists";
-import extendedUserData from "./handlers/userData/extendedUserData";
+import isMfaRequired from "./handlers/user/isMfaRequired";
+import pushEmail from "./handlers/user/mfa/flow/push-email";
+import verifyEmail from "./handlers/user/mfa/flow/verify-email";
+import pushSMS from "./handlers/user/mfa/flow/push-sms";
+import verifySMS from "./handlers/user/mfa/flow/verify-sms";
+import pushNewSMS from "./handlers/user/mfa/new/push-sms";
+import verifyNewSMS from "./handlers/user/mfa/new/verify-sms";
+import removeSMS from "./handlers/user/mfa/new/remove-number";
+import pushNewEmail from "./handlers/user/mfa/new/push-email";
+import verifyNewEmail from "./handlers/user/mfa/new/verify-email";
+import updateFullName from "./handlers/user/update/updateFullName";
+import mfaMethods from "./handlers/user/mfa/methods/mfaMethods";
+import usernameExists from "./handlers/user/usernameExists";
+import extendedUserData from "./handlers/user/extendedUserData";
 import corsPreflight from "./headers/corsPreflight";
 import HandleSpotifyUserInfoEndpoint from "./lib/handleSpotifyUserInfoEndpoint";
-import updateUsername from "./handlers/userData/updateUserInformation/updateUsername";
-import updateLocale from "./handlers/userData/updateUserInformation/updateLocale";
-import updateBirthday from "./handlers/userData/updateUserInformation/updateBirthday";
-import updateRegionalSettings from "./handlers/userData/updateUserInformation/updateRegionalSettings";
-import updatePassword from "./handlers/userData/updateUserInformation/updatePassword";
-import uploadNewAvatar from "./handlers/userData/updateUserInformation/uploadNewAvatar";
+import updateUsername from "./handlers/user/update/updateUsername";
+import updateLocale from "./handlers/user/update/updateLocale";
+import updateBirthday from "./handlers/user/update/updateBirthday";
+import updateRegionalSettings from "./handlers/user/update/updateRegionalSettings";
+import updatePassword from "./handlers/user/update/updatePassword";
+import uploadNewAvatar from "./handlers/user/avatar/uploadNewAvatar";
 import attachAccessToken from "./middleware/attachAccessToken";
-import canChangeUsername from "./handlers/canChangeUsername";
-import removeAvatar from "./handlers/userData/updateUserInformation/removeAvatar";
+import canChangeUsername from "./handlers/user/canChangeUsername";
+import removeAvatar from "./handlers/user/avatar/removeAvatar";
 import failureCONTENT from "./responses/raw/failure-CONTENT";
-import suspendUser from "./handlers/suspendUser";
-import terminateUser from "./handlers/terminateUser";
-import createNewMfaMethod from "./handlers/userData/createNewMfaMethod";
-import removeMfaMethod from "./handlers/userData/removeMfaMethod";
-import buildConnectorAuthUri from "./handlers/buildConnectorAuthUri";
-import linkConnector from "./handlers/userData/linkConnector";
-import removeConnector from "./handlers/userData/removeConnector";
+import suspendUser from "./handlers/user/danger/suspendUser";
+import terminateUser from "./handlers/user/danger/terminateUser";
+import createNewMfaMethod from "./handlers/user/mfa/methods/createNewMfaMethod";
+import removeMfaMethod from "./handlers/user/mfa/methods/removeMfaMethod";
+import buildConnectorAuthUri from "./handlers/user/connectors/buildConnectorAuthUri";
+import linkConnector from "./handlers/user/connectors/linkConnector";
+import removeConnector from "./handlers/user/connectors/removeConnector";
 import checkVerificationCodeMiddleware from "./middleware/checkVerificationCodeMiddleware";
 
 

@@ -2,9 +2,9 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successEMPTY from "../../responses/raw/success-EMPTY";
-import failureCONTENT from "../../responses/raw/failure-CONTENT";
-import {createHttpClient} from "../../HttpClient";
+import successEMPTY from "../../../../responses/raw/success-EMPTY";
+import failureCONTENT from "../../../../responses/raw/failure-CONTENT";
+import {createHttpClient} from "../../../../HttpClient";
 
 export default async (request, env) => {
 	const uri = `/api/users/${request.userid}/mfa-verifications/`;

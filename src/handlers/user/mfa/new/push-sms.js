@@ -2,8 +2,8 @@
 // Use of this source code is governed by an MPL license.
 
 
-import pushCode from "../../../lib/pushCode";
-import prepareNumber from "../../../utils/prepareNumber";
+import pushCode from "../../../../lib/pushCode";
+import prepareNumber from "../../../../utils/prepareNumber";
 
 export default async (request, env) => {
 	const requestData = await request.json();

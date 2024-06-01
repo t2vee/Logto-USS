@@ -2,9 +2,9 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successEMPTY from "../responses/raw/success-EMPTY";
-import {createHttpClient} from "../HttpClient";
-import failureCONTENT from "../responses/raw/failure-CONTENT";
+import successEMPTY from "../../../responses/raw/success-EMPTY";
+import {createHttpClient} from "../../../HttpClient";
+import failureCONTENT from "../../../responses/raw/failure-CONTENT";
 
 export default async (request, env) => {
 	try {

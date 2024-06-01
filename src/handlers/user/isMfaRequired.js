@@ -2,8 +2,8 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successCONTENT from "../responses/raw/success-CONTENT";
-import failureEMPTY from "../responses/raw/failure-EMPTY";
+import successCONTENT from "../../responses/raw/success-CONTENT";
+import failureEMPTY from "../../responses/raw/failure-EMPTY";
 
 export default async (request, env) => {
 	try {

@@ -2,7 +2,7 @@
 // Use of this source code is governed by an MPL license.
 
 
-import pushCode from "../../../lib/pushCode";
+import pushCode from "../../../../lib/pushCode";
 
 export default async (request, env) => {
 	const requestData = await request.json();
