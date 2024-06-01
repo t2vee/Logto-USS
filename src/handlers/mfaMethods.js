@@ -1,21 +1,19 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
-// Use of this source code is governed by an MPL license. 
+// Use of this source code is governed by an MPL license.
 
 
-import grabMFAMethods from "../lib/mfa/grabMFAMethods";
+import {createHttpClient} from "../HttpClient";
 import successCONTENT from "../responses/raw/success-CONTENT";
-import failureEMPTY from "../responses/raw/failure-EMPTY";
+import failureCONTENT from "../responses/raw/failure-CONTENT";
 
 export default async (request, env) => {
 	try {
-		const resourceResponse = await grabMFAMethods(env, request.accesstoken, request.userid);
-		if (JSON.stringify(resourceResponse) === '[]') {
-			return successCONTENT(env, ["none"]);
-		} else {
-			return successCONTENT(env, resourceResponse);
-		}
+		const http = createHttpClient(env, request.accesstoken);
+		const r = await http.get(`/api/users/${encodeURIComponent(request.userid)}/mfa-verifications`, {});
+		return r === '[]' ?
+			successCONTENT(env, ["none"]) :
+			successCONTENT(env, r)
 	} catch (e) {
 		console.error(e)
-		return failureEMPTY(env, 418)
-	}
+		return failureCONTENT(env, e.message, e.status)	}
 }
