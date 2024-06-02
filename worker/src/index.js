@@ -40,6 +40,7 @@ import buildConnectorAuthUri from "./handlers/user/connectors/buildConnectorAuth
 import linkConnector from "./handlers/user/connectors/linkConnector";
 import removeConnector from "./handlers/user/connectors/removeConnector";
 import checkVerificationCodeMiddleware from "./middleware/checkVerificationCodeMiddleware";
+import initialiseRequest from './middleware/initialiseRequest'
 
 
 const router = Router();
@@ -48,9 +49,10 @@ router.options('*', corsHeaders) // need to fix cors headers so they are specifi
 router.get('/api/v1/oauth-user-info/endpoint/api-spotify-com/v1/me', HandleSpotifyUserInfoEndpoint)
 
 router // the entire middleware system is a hack and a mess. i would like to change it but im lazy so
-	.all('*', withMiddleware(async (request, env, ctx) => {return checkVerificationCodeMiddleware(request, env);}))
+	.all('*', withMiddleware(async (request, env, ctx) => {return initialiseRequest(request, env);}))
 	.all('*', withMiddleware(async (request, env, ctx) => {return checkTokenMiddleware(request, env);}))
 	.all('*', withMiddleware(async (request, env, ctx) => {return attachAccessToken(request, env);}))
+	.all('*', withMiddleware(async (request, env, ctx) => {return checkVerificationCodeMiddleware(request, env);}))
 
 // TODO Implement DataValidator lib for all userdata routes
 // TODO Implement DataHistory lib for all userdata routes
@@ -80,7 +82,7 @@ router.post('/api/v2/me/edit/birthday', updateBirthday)
 // Implement Method to change password if old password was forgotten - not sure if i want to implement this, will probably find a alternative
 router.post('/api/v2/me/edit/password', updatePassword)
 
-// TODO NEED TO BE IMPLEMENTED - will take fucking forever
+// TODO NEED TO BE IMPLEMENTED
 router.post('/api/v1/user-data-entry/update-user-information/privacy/third-party-data-access')
 router.post('/api/v1/user-data-entry/update-user-information/privacy/profile-visibility')
 router.post('/api/v1/user-data-entry/update-user-information/privacy/email-privacy')
