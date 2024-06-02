@@ -11,7 +11,6 @@ export default async (request, env) => {
 		request.userid = tokenInfo.sub;
 		console.log('[MIDDLEWARE] Bearer Token Check Succeeded')
 	} catch (e) {
-		console.log(e)
-		return failureCONTENT(env, 'Invalid or Non-existent Authentication Bearer Token', 400);
+		return failureCONTENT(env, e.code, 400);
 	}
 }
