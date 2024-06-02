@@ -6,17 +6,17 @@ import failureCONTENT from "../../../responses/raw/failure-CONTENT";
 import successEMPTY from "../../../responses/raw/success-EMPTY";
 import {createHttpClient} from "../../../HttpClient";
 
-import Filter from "bad-words";
-const filter = new Filter();
+// old validation logic, keeping it here while i test the new system
+//const usernameRegex = new RegExp(/^[a-zA-Z0-9]{3,24}$/)
+//if (usernameRegex.test(requestData.username)) {return failureCONTENT(env,'ERR_INVALID_USERNAME', 406);}
+//if (filter.isProfane(requestData.username)) {return failureCONTENT(env,'ERR_CONTAINS_BAD_WORDS', 406)}
 
 export default async (request, env) => {
 	try {
 		const http = createHttpClient(env, request.accesstoken);
 		if (await env.UsernameChangeTimelimit.get(request.userid)) {return failureCONTENT(env,`ERR_CANNOT_YET_CHANGE`, 400)}
-		const usernameRegex = new RegExp(/^[a-zA-Z0-9]{3,24}$/)
 		const requestData = await request.json();
-		if (usernameRegex.test(requestData.username)) {return failureCONTENT(env,'ERR_INVALID_USERNAME', 406);}
-		if (filter.isProfane(requestData.username)) {return failureCONTENT(env,'ERR_CONTAINS_BAD_WORDS', 406)}
+		request.validate.username(requestData.username);
 		await http.patch(
 			`/api/users/${request.userid}`,
 			{data: {"username": requestData.username}
