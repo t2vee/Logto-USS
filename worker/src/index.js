@@ -21,7 +21,7 @@ import mfaMethods from "./handlers/user/mfa/methods/mfaMethods";
 import usernameExists from "./handlers/user/usernameExists";
 import extendedUserData from "./handlers/user/extendedUserData";
 import corsPreflight from "./headers/corsPreflight";
-import HandleSpotifyUserInfoEndpoint from "./lib/handleSpotifyUserInfoEndpoint";
+import HandleSpotifyUserInfoEndpoint from "./handlers/handleSpotifyUserInfoEndpoint";
 import updateUsername from "./handlers/user/update/updateUsername";
 import updateLocale from "./handlers/user/update/updateLocale";
 import updateBirthday from "./handlers/user/update/updateBirthday";
