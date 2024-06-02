@@ -1,8 +1,7 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
-import Ajv, { ValidationError } from 'ajv'
-import validateUsername from 'schemas/username'
+import { validateUsername, validatePassword } from 'validators'
 import Filter from "bad-words";
 import { ValidationException } from '../../exceptions/ValidationException'
 
@@ -13,12 +12,10 @@ export default class DataValidator {
 	}
 
 	async username(username) {
-		try {
-			await validateUsername(username)
-			this._filter.isProfane(username)
-		} catch (e) {
-			if (!(e instanceof Ajv.ValidationError)) throw new Error(e.errors.message)
-			console.log("Validation errors:", e.errors)
-		}
+		if (validateUsername(username)) {throw new ValidationException()}
+		if (this._filter.isProfane(username)) {{throw new ValidationException('ERR_CONTAINS_BAD_WORDS')}}
+	}
+	async password(password) {
+		if (validatePassword(password)) {throw new ValidationException()}
 	}
 }

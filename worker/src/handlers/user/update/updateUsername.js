@@ -16,7 +16,7 @@ export default async (request, env) => {
 		const http = createHttpClient(env, request.accesstoken);
 		if (await env.UsernameChangeTimelimit.get(request.userid)) {return failureCONTENT(env,`ERR_CANNOT_YET_CHANGE`, 400)}
 		const requestData = await request.json();
-		request.validate.username(requestData.username);
+		await request.validate.username(requestData.username);
 		await http.patch(
 			`/api/users/${request.userid}`,
 			{data: {"username": requestData.username}

@@ -2,7 +2,7 @@
 // Use of this source code is governed by an MPL license.
 
 export class ValidationException extends Error {
-	constructor(message, status) {
+	constructor(message = 'ERR_FAILED_VALIDATION', status = 400) {
 		super(message);
 		this.status = status;
 	}

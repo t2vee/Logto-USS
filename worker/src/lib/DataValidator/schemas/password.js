@@ -4,8 +4,9 @@
 export default {
 	type: "object",
 	properties: {
-		username: {type: "string", pattern: "^[a-zA-Z0-9]{3,24}$"},
+		oldPassword: {type: "string", format: "password"},
+		password: {type: "string", format: "password"},
 	},
-	required: ["username"],
+	required: ["password"],
 	additionalProperties: false
 }
