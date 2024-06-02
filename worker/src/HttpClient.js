@@ -1,7 +1,7 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
-import { LogtoException, _500, _403 } from './exceptions/logtoResponse';
+import { LogtoException, _500, _403 } from './exceptions/LogtoResponse';
 
 // a simple fetch wrapper to reduce repetitive error handling code and make it easier to work with
 class HttpClient {
