@@ -1,0 +1,27 @@
+name: Deploy Stack
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy Account Worker
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wrangler Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: "worker"
+          secrets: |
+            LOGTO_APP_ID
+            LOGTO_APP_SECRET
+            TOKEN
+        env:
+          LOGTO_APP_ID: ${{ secrets.LOGTO_APP_ID }}
+          LOGTO_APP_SECRET: ${{ secrets.LOGTO_APP_SECRET }}
+          TOKEN: ${{ secrets.TOKEN }}
