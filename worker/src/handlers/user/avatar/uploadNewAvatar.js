@@ -23,7 +23,7 @@ export default async (request, env) => {
 	const http = createHttpClient(env, request.accesstoken);
 	if (!validateFile(file)) {return failureCONTENT(env,"ERR_INVALID_IMG", 400);}
 	if (!await checkAvatar(env, file)) {return failureCONTENT(env, "ERR_IMG_FAILED_CHECK", 406);}
-	const i = !await processAvatar(env, file)
+	const i = await processAvatar(env, file)
 	if (!i) {return failureCONTENT(env, "ERR_IMG_PROCESS_FAILED", 500);}
 	try {
 		const uploadResponse = await uploadAvatar(env, request.accesstoken, i, request.userid);
