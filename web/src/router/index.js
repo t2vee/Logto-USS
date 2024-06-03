@@ -1,63 +1,73 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useLogto } from '@logto/vue'
 
+import OAuthLogin from '@/views/OAuthLogin.vue'
+import OAuthCallback from '@/views/OAuthCallback.vue'
+import LinkConnector from '@/views/Window/LinkConnector.vue'
+import PersonalInfo from '@/views/PersonalInfo.vue'
+import SignInAndSecurity from '@/views/SignIn&Security.vue'
+import Privacy from '@/views/Privacy.vue'
+import DangerZone from '@/views/DangerZone.vue'
+import Connections from '@/views/Connections.vue'
+import YourData from '@/views/YourData.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/oauth/login',
       name: 'login',
-      component: () => import('@/views/OAuthLogin.vue')
+      component: OAuthLogin
     },
     {
       path: '/oauth/callback',
       name: 'callback',
-      component: () => import('@/views/OAuthCallback.vue')
+      component: OAuthCallback
     },
     {
       path: '/:action/connectors/:connector',
       name: 'Connector Link Callback',
-      component: () => import('@/views/Window/LinkConnector.vue')
+      component: LinkConnector
     },
     {
       path: '/oauth/connectors/:action/:connector',
       name: 'Link New Connector',
-      component: () => import('@/views/Window/LinkConnector.vue')
+      component: LinkConnector
     },
     {
       path: '/account/aboutme',
       name: 'Personal Information',
-      component: () => import('@/views/PersonalInfo.vue')
+      component: PersonalInfo
     },
     {
       path: '/account/security',
       name: 'Sign-In & Security',
-      component: () => import('@/views/SignIn&Security.vue')
+      component: SignInAndSecurity
     },
     {
       path: '/account/privacy',
       name: 'Privacy',
-      component: () => import('@/views/Privacy.vue')
+      component: Privacy
     },
     {
       path: '/account/dangerzone',
       name: 'Account Actions',
-      component: () => import('@/views/DangerZone.vue')
+      component: DangerZone
     },
     {
       path: '/account/connections',
       name: 'Connections',
-      component: () => import('@/views/Connections.vue')
+      component: Connections
     },
     {
       path: '/account/yourdata',
       name: 'Your Data',
-      component: () => import('@/views/YourData.vue')
+      component: YourData
     },
     {
       path: '/account/developer',
       name: 'Developer options',
-      component: () => import('@/views/YourData.vue')
+      component: YourData
     },
     {
       path: '/:pathMatch(.*)*',
