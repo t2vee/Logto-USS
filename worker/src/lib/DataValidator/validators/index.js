@@ -3,5 +3,17 @@
 
 import validateUsername from 'username';
 import validatePassword from 'password';
+import validateBirthday from 'birthday';
+import validateEmail from 'email';
+import validatePhone from 'phone';
+import validateName from 'name';
 
-export { validateUsername, validatePassword };
+
+export {
+	validateUsername,
+	validatePassword,
+	validateBirthday,
+	validateEmail,
+	validateName,
+	validatePhone,
+};

@@ -1,7 +1,7 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
-import { validateUsername, validatePassword } from 'validators'
+import * as validator from 'validators'
 import Filter from "bad-words";
 import { ValidationException } from '../../exceptions/ValidationException'
 
@@ -11,11 +11,24 @@ export default class DataValidator {
 		this._filter = new Filter();
 	}
 
-	async username(username) {
-		if (validateUsername(username)) {throw new ValidationException()}
-		if (this._filter.isProfane(username)) {{throw new ValidationException('ERR_CONTAINS_BAD_WORDS')}}
+	username(data) {
+		if (validator.validateUsername(data)) {throw new ValidationException()}
+		if (this._filter.isProfane(data)) {{throw new ValidationException('ERR_CONTAINS_BAD_WORDS')}}
 	}
-	async password(password) {
-		if (validatePassword(password)) {throw new ValidationException()}
+	fullName(data) {
+		if (validator.validateName(data)) {throw new ValidationException()}
+		if (this._filter.isProfane(data)) {{throw new ValidationException('ERR_CONTAINS_BAD_WORDS')}}
+	}
+	password(data) {
+		if (validator.validatePassword(data)) {throw new ValidationException()}
+	}
+	email(data) {
+		if (validator.validateEmail(data)) {throw new ValidationException()}
+	}
+	phone(data) {
+		if (validator.validatePhone(data)) {throw new ValidationException()}
+	}
+	birthday(data) {
+		if (validator.validateBirthday(data)) {throw new ValidationException()}
 	}
 }
