@@ -1,0 +1,35 @@
+# a pseudo docker compose file, has not been tested yet
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./vuejs-app
+      dockerfile: web.Dockerfile
+    volumes:
+      - web:/app
+    ports:
+      - "3000:3000"
+    networks:
+      - stack
+    depends_on:
+      - worker
+
+  worker:
+    build:
+      context: ./cloudflare-worker
+      dockerfile: worker.Dockerfile
+    volumes:
+      - worker:/app
+    ports:
+      - "8080:8080"
+    networks:
+      - stack
+
+networks:
+  stack:
+    driver: bridge
+
+volumes:
+  web:
+  worker:
