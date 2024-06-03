@@ -8,8 +8,8 @@ import passwordSchema from '../schemas/password'
 const ajv = new Ajv()
 addFormats(ajv, ['password'])
 
-const validatePassword = ajv.compile(passwordSchema)
+const validate = ajv.compile(passwordSchema)
 
 export default async (password) => {
-	validatePassword(password)
+	validate(password)
 };

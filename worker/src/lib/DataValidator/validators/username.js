@@ -8,8 +8,8 @@ import usernameSchema from '../schemas/username'
 const ajv = new Ajv()
 addFormats(ajv, ['regex'])
 
-const validateUsername = ajv.compile(usernameSchema)
+const validate = ajv.compile(usernameSchema)
 
 export default async (username) => {
-	validateUsername(username)
+	validate(username)
 };
