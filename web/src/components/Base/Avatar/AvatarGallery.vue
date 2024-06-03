@@ -1,11 +1,10 @@
 <script setup>
 import { ref, onMounted, inject } from 'vue'
-import { ExternalLink, Loader2 } from 'lucide-vue-next'
+import { Loader2 } from 'lucide-vue-next'
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle
 } from '@/components/ui/card/index.js'
