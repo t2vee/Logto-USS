@@ -16,7 +16,7 @@ import { PhoneMissed, DoorOpen } from 'lucide-vue-next'
 const ConnectorAlert = defineAsyncComponent(() => import('@/components/Global/ConnectorAlert.vue'))
 const EditAppAuthenticator = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/EditAppAuthenticator.vue'))
 const AddPhoneNumberDialog = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/AddPhoneNumberDialog.vue'))
-const EditPhoneNumberDialog = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/EditPhoneNumberDialog.vue'))
+const EditPhoneNumberDialog = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/RemovePhoneNumberDialog.vue'))
 const EditDetailDialog = defineAsyncComponent(() => import('@/components/Global/EditDetailDialog.vue'))
 const EditEmailAddress = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/EditEmailAddress.vue'))
 
