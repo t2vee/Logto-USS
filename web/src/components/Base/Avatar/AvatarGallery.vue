@@ -129,11 +129,6 @@ const uploadFile = async () => {
           <Button variant="link" @click="loadMoreAvatars">Load More</Button>
         </div>
       </CardContent>
-      <CardFooter class="">
-        <a :href="avatarEndpoint" class="flex align-middle items-center text-xs"
-          ><ExternalLink class="p-1" />Powered by the MXS Avatar Service.</a
-        >
-      </CardFooter>
     </Card>
     <DialogFooter>
       <Button @click="uploadFile" class="h-[30px]" :disabled="!selectedAvatarId || isLoading">

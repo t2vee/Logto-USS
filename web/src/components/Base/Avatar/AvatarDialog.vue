@@ -27,8 +27,8 @@ const isLoading = ref(false)
       <DialogDescription class="text-xs">
         Respect the rights of others. Only upload images that you own or that you have written
         permission to freely distribute. Like most other online services, your avatar will be
-        visible to other users of the service and associated with your MXS ID, even if your profile
-        is set to "no one can see". Inappropriate avatars will result in a Permanent Suspension.
+        visible to other users of the service and associated with your Account, even if your profile
+        is set to "no one can see".
       </DialogDescription>
     </DialogHeader>
     <Tabs default-value="upload" class="w-full">

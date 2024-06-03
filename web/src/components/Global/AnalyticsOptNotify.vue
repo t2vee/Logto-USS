@@ -67,7 +67,7 @@ const cookieFlow = () => {
       <div class="space-y-3">
         <div class="flex flex-col items-center align-middle justify-center">
           <ToastTitle class="flex gap-x-2">
-            <Cookie :size="42" /> We use cookies to help improve MXS services
+            <Cookie :size="42" /> We use cookies to help improve the site
           </ToastTitle>
           <ToastDescription as-child>
             <p>

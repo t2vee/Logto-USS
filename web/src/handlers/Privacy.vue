@@ -49,7 +49,7 @@ const userData = inject('userData')
         :dialog-page="AddPhoneNumberDialog"
       />
       <p class="w-3/4 text-sm">
-        MXS Analytics are used by all MXS products and services. You can help improve them by
+        Web Analytics are used by all of our products and services. You can help improve them by
         sharing privatised analytics from your account.
       </p>
     </div>
@@ -63,7 +63,7 @@ const userData = inject('userData')
       />
       <p class="w-3/4 text-sm">
         Enabling Email Privacy will mask your email address in all products and services. You will
-        also be assigned a private MXS email for receiving email.
+        also be assigned a private email for receiving email.
       </p>
     </div>
   </div>

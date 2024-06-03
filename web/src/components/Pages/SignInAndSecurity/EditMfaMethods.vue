@@ -49,7 +49,7 @@ const resetDefault = () => {
     <div v-if="emailActive" class="space-y-3">
       <ConnectorAlert
         custom-title="You Cannot Disable Email as a MFA Method"
-        custom-message="Every MXS account must have a valid email address connected and as such must always be available as a MFA method. You may edit your email address below:"
+        custom-message="Every account must have a valid email address connected and as such must always be available as a MFA method. You may edit your email address below:"
       />
       <EditDetailDialog
         title="Email Address"
@@ -64,7 +64,7 @@ const resetDefault = () => {
     </div>
     <div v-else-if="phoneActive" class="space-y-3 flex flex-col items-center">
       <p class="text-sm w-2/3 text-center">
-        When a phone number is added to a MXS Account it is used <strong>only</strong> for MFA. To
+        When a phone number is added to your account it is used <strong>only</strong> for MFA. To
         {{ userData.phone_number ? 'disable' : 'enable' }} MFA via SMS,
         {{ userData.phone_number ? 'remove' : 'add' }} your number below:
       </p>

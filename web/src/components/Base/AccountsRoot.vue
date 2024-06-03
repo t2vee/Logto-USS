@@ -95,12 +95,10 @@ onUnmounted(cleanup)
       </div>
       <div class="flex w-full items-center align-middle justify-between">
         <p class="text-xs text-gray-500 mt-8">
-          MXS Online Services @ 2024 || Web Build {{ webBuild }}
+          MXS Account Dashboard @ 2024 - Web Version {{ webBuild }}
         </p>
         <a class="text-xs text-gray-500 mt-8" :href="support">Contact Support</a>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped></style>
