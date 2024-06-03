@@ -41,6 +41,7 @@ function expandLocale(shortLocale) {
     >
     <div class="flex gap-4 mt-12">
       <EditDetailDialog
+        disabled
         title="Public Profile"
         desc="Open For More Details"
         :icon="DoorOpen"

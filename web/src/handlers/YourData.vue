@@ -25,6 +25,7 @@ import EditDetailDialog from '@/components/Global/EditDetailDialog.vue'
       </p>
     </CardDescription>
     <EditDetailDialog
+      disabled
       title="Request Your Data"
       desc="You will receive a email with a link to your data archive. The link will be valid for up to 72 hours."
       :icon="HardDriveDownload"

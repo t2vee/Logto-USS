@@ -17,6 +17,7 @@ const userData = inject('userData')
     >
     <div class="flex gap-16 mt-12 items-center">
       <EditDetailDialog
+        disabled
         title="Third Party Data Access"
         desc="Block All"
         :icon="TextSearch"
@@ -29,6 +30,7 @@ const userData = inject('userData')
     </div>
     <div class="flex gap-16 mt-4 items-center">
       <EditDetailDialog
+        disabled
         title="Profile Visibility"
         desc="Friends Only"
         :icon="UserRoundSearch"
@@ -40,6 +42,7 @@ const userData = inject('userData')
     </div>
     <div class="flex gap-16 mt-4 items-center">
       <EditDetailDialog
+        disabled
         title="Analytics Mode"
         desc="Opted Out"
         :icon="BarChart3"
@@ -52,6 +55,7 @@ const userData = inject('userData')
     </div>
     <div class="flex gap-16 mt-4 items-center">
       <EditDetailDialog
+        disabled
         title="Email Privacy"
         desc="Hide and proxy mail"
         :icon="Send"
@@ -64,5 +68,3 @@ const userData = inject('userData')
     </div>
   </div>
 </template>
-
-<style scoped></style>
