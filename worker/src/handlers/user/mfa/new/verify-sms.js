@@ -9,6 +9,7 @@ import failureCONTENT from "../../../../responses/raw/failure-CONTENT";
 export default async (request, env) => {
 	try {
 		const requestData = await request.json();
+		request.validator.phone(requestData);
 		const phone = requestData.encryptedPhoneNumber;
 		try {
 			await verifyCode(env, request, 'phone', phone)
