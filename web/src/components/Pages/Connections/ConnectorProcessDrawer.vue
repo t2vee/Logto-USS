@@ -23,8 +23,8 @@ import { Switch } from '@/components/ui/switch/index.js'
 import { Button } from '@/components/ui/button/index.js'
 import {Link, BarChart3, TextSearch, ChevronsRight, Dot, LoaderCircle, BadgeCheck} from 'lucide-vue-next'
 import {eventBus} from "@/lib/eventBus.js";
-const EditDetailDialog = defineAsyncComponent(() => import('@/components/Global/EditDetailDialog.vue'));
-const EditRegionalSettings = defineAsyncComponent(() => import('@/components/Pages/PersonalInfo/EditRegionalSettings.vue'));
+import EditDetailDialog from '@/components/Global/EditDetailDialog.vue'
+import EditRegionalSettings from '@/components/Pages/PersonalInfo/EditRegionalSettings.vue'
 
 const props = defineProps({
   service: {

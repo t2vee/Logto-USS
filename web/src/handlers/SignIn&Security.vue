@@ -14,12 +14,12 @@ import axios from 'axios'
 import { toast } from 'vue-sonner'
 import { useLogto } from '@logto/vue'
 
-const AddPhoneNumberDialog = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/AddPhoneNumberDialog.vue'))
-const EditPhoneNumberDialog = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/RemovePhoneNumberDialog.vue'))
-const EditDetailDialog = defineAsyncComponent(() => import('@/components/Global/EditDetailDialog.vue'))
-const EditEmailAddress = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/EditEmailAddress.vue'))
-const EditMfaMethods = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/EditMfaMethods.vue'))
-const UpdatePasswordDialog = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/UpdatePasswordDialog.vue'))
+import AddPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/AddPhoneNumberDialog.vue'
+import EditPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/RemovePhoneNumberDialog.vue'
+import EditDetailDialog from '@/components/Global/EditDetailDialog.vue'
+import EditEmailAddress from '@/components/Pages/SignInAndSecurity/EditEmailAddress.vue'
+import EditMfaMethods from '@/components/Pages/SignInAndSecurity/EditMfaMethods.vue'
+import UpdatePasswordDialog from '@/components/Pages/SignInAndSecurity/UpdatePasswordDialog.vue'
 
 const userData = inject('userData')
 const { getAccessToken } = useLogto()

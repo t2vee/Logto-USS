@@ -6,7 +6,7 @@ import { defineAsyncComponent, inject, ref } from 'vue'
 import { useLogto } from '@logto/vue'
 import { Button } from '@/components/ui/button/index.js'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-const ConnectorAlert = defineAsyncComponent(() => import('@/components/Global/ConnectorAlert.vue'))
+import ConnectorAlert from '@/components/Global/ConnectorAlert.vue'
 import { Ban, MoreHorizontal, UserRoundCheck, SquareArrowOutUpRight } from 'lucide-vue-next'
 
 const userData = inject('userData')

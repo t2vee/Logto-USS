@@ -3,9 +3,9 @@ import { defineAsyncComponent } from "vue";
 import { AlertTriangle, OctagonPause } from "lucide-vue-next";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion/index.js'
 import { CardDescription, CardTitle } from '@/components/ui/card/index.js'
-const DangerZoneAlertDialog = defineAsyncComponent(() => import( "@/components/Global/DangerZoneAlertDialog.vue"));
-const TerminateAccount = defineAsyncComponent(() => import( "@/components/Pages/DangerZone/TerminateAccount.vue"));
-const SuspendAccount = defineAsyncComponent(() => import( "@/components/Pages/DangerZone/SuspendAccount.vue"));
+import DangerZoneAlertDialog from "@/components/Global/DangerZoneAlertDialog.vue"
+import TerminateAccount from "@/components/Pages/DangerZone/TerminateAccount.vue"
+import SuspendAccount from "@/components/Pages/DangerZone/SuspendAccount.vue"
 
 </script>
 

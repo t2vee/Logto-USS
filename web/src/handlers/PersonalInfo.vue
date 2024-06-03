@@ -9,13 +9,13 @@ import {
   CalendarFold,
   DoorOpen
 } from 'lucide-vue-next'
-const EditPublicProfile = defineAsyncComponent(() => import( "@/components/Pages/PersonalInfo/EditPublicProfile.vue"));
-const EditBirthdayDialog = defineAsyncComponent(() => import('@/components/Pages/PersonalInfo/EditBirthdayDialog.vue'))
-const EditDetailDialog = defineAsyncComponent(() => import('@/components/Global/EditDetailDialog.vue'))
-const EditUsername = defineAsyncComponent(() => import('@/components/Pages/PersonalInfo/EditUsername.vue'))
-const EditRegionalSettings = defineAsyncComponent(() => import('@/components/Pages/PersonalInfo/EditRegionalSettings.vue'))
-const EditLocaleSettings = defineAsyncComponent(() => import('@/components/Pages/PersonalInfo/EditLocaleSettings.vue'))
-const EditFullName = defineAsyncComponent(() => import('@/components/Pages/PersonalInfo/EditFullName.vue'))
+import EditPublicProfile from  "@/components/Pages/PersonalInfo/EditPublicProfile.vue"
+import EditBirthdayDialog from '@/components/Pages/PersonalInfo/EditBirthdayDialog.vue'
+import EditDetailDialog from '@/components/Global/EditDetailDialog.vue'
+import EditUsername from '@/components/Pages/PersonalInfo/EditUsername.vue'
+import EditRegionalSettings from '@/components/Pages/PersonalInfo/EditRegionalSettings.vue'
+import EditLocaleSettings from '@/components/Pages/PersonalInfo/EditLocaleSettings.vue'
+import EditFullName from '@/components/Pages/PersonalInfo/EditFullName.vue'
 
 const userData = inject('userData')
 

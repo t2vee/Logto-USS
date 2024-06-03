@@ -4,7 +4,7 @@ import { CardDescription, CardTitle } from '@/components/ui/card/index.js'
 import { Send, TextSearch, UserRoundSearch, BarChart3 } from 'lucide-vue-next'
 import AddPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/AddPhoneNumberDialog.vue'
 
-const EditDetailDialog = defineAsyncComponent(() => import('@/components/Global/EditDetailDialog.vue'))
+import EditDetailDialog from '@/components/Global/EditDetailDialog.vue'
 const userData = inject('userData')
 </script>
 
