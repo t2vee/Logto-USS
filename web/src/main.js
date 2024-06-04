@@ -26,14 +26,18 @@ const logtoConfig = {
 app.use(router)
 app.use(autoAnimatePlugin)
 app.use(createLogto, logtoConfig)
-app.use(VueMatomo, {
-  host: import.meta.env.VITE_MATOMO_ENDPOINT,
-  siteId: 2,
-  trackerFileName: 'matomo',
-  router: router,
-  enableLinkTracking: true
-})
+if (import.meta.env.VITE_MATOMO_ENDPOINT) {
+  app.use(VueMatomo, {
+    host: import.meta.env.VITE_MATOMO_ENDPOINT,
+    siteId: 2,
+    trackerFileName: 'matomo',
+    router: router,
+    enableLinkTracking: true
+  })
+}
 
 app.mount('#app')
 
-window._paq.push(['trackPageView'])
+if (import.meta.env.VITE_MATOMO_ENDPOINT) {
+  window._paq.push(['trackPageView'])
+}
