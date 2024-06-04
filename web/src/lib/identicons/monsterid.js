@@ -32,7 +32,7 @@ function getAvatar(seed, width, height, theme = 'default') {
 
   Object.values(parts).forEach(part => drawPart(part, avatar, canvas));
 
-  return canvas.toBuffer();
+  return canvas.toDataURL();
 }
 
 function generateRandomColor(rng) {

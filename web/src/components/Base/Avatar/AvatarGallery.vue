@@ -9,9 +9,9 @@ import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
 import { useLogto } from '@logto/vue'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-import { toPng } from 'jdenticon'
+import * as jdenticon from 'jdenticon'
 import Hashicon from 'hashicon';
-import { generateMonsterID } from '@/lib/identicons/monsterid.js'
+import { getAvatar as generateMonsterID } from '@/lib/identicons/monsterid.js'
 import Blockies from '@/lib/identicons/blockies.js'
 
 const avatars = ref([])
@@ -22,51 +22,71 @@ const selectedAvatarUrl = ref('')
 const isLoading = ref(false)
 const avatarEndpoint = import.meta.env.VITE_AVATAR_SERVICE_ENDPOINT
 
-const arrayBufferToDataUrl = (buffer, mimeType = 'image/png') => {
-  return `data:${mimeType};base64,${buffer.toString("base64")}`
+// god i hate jdenticon so much. they make it so difficult to do the most basic shit. fuck this library
+const createJdenticon = (hash) => {
+  const canvas = document.createElement('canvas');
+  canvas.width = 128;
+  canvas.height = 128;
+  const avatar = canvas.getContext('2d');
+  jdenticon.drawIcon(avatar, hash, 128);
+  return canvas.toDataURL();
 }
 
-const generateAvatars = async () => {
+function dec2hex (dec) {
+  return dec.toString(16).padStart(2, "0")
+}
+
+function generateId (len) {
+  const arr = new Uint8Array((len || 40) / 2)
+  window.crypto.getRandomValues(arr)
+  return Array.from(arr, dec2hex).join('')
+}
+
+const generateAvatars = async (loadMore = false) => {
   let identiconUrls = [];
+  let ii = 0
   for (let i = 0; i < 32; i++) {
-    switch (i) {
-      case i % 2:
+    if (ii === 3) { ii = 0 } else { ii++ }
+    switch (ii) {
+      case 0:
+        identiconUrls.push({
+          id: i,
+          imageUrl: createJdenticon(generateId(32))
+        });
+        break;
+      case 1:
         identiconUrls.push({
           id: i,
           imageUrl:
-            Hashicon(i, {
+            Hashicon(generateId(32), {
             size: 128
-          }),
+          }).toDataURL(),
         });
         break;
-      case i % 3:
+      case 2:
         identiconUrls.push({
           id: i,
-          imageUrl: generateMonsterID(i, 128, 128)
+          imageUrl: generateMonsterID(generateId(32), 128, 128),
         });
         break;
-      case i % 4:
+      case 3:
         // eslint-disable-next-line no-case-declarations
         const options = {
-          seed: i,
+          seed: generateId(32),
           size: 8,
           scale: 16,
         };
-        // eslint-disable-next-line no-case-declarations
-        const iconCanvas = Blockies.create(options)
-        // eslint-disable-next-line no-case-declarations
-        const pngBuffer = iconCanvas.toBuffer()
         identiconUrls.push({
           id: i,
-          imageUrl: arrayBufferToDataUrl(pngBuffer)
+          imageUrl: Blockies.create(options).toDataURL()
         });
         break;
-      default:
-        identiconUrls.push({
-          id: i,
-          imageUrl: arrayBufferToDataUrl(toPng(i, 128))
-        });
     }
+  }
+  if (loadMore) {
+    avatars.value = [...avatars.value, ...identiconUrls]
+  } else {
+    avatars.value = identiconUrls
   }
 }
 
@@ -88,14 +108,13 @@ const fetchAvatars = async (loadMore = false) => {
   }
 }
 
-const getFullImageUrl = (imageUrl) => `${avatarEndpoint}${imageUrl}`
 const selectAvatar = (id, url) => {
   selectedAvatarId.value = id
   selectedAvatarUrl.value = url
 }
-const loadMoreAvatars = () => fetchAvatars(true)
+const loadMoreAvatars = () => generateAvatars(true)
 
-onMounted(() => fetchAvatars())
+onMounted(() => generateAvatars())
 
 const fetchGalleryAvatar = async () => {
   try {
@@ -157,14 +176,14 @@ const uploadFile = async () => {
           Avatars based on different generation algorithm methods.
         </CardDescription>
       </CardHeader>
-      <CardContent class="space-y-2 overflow-y-auto max-h-[330px]">
+      <CardContent class="space-y-2 overflow-y-auto max-h-[300px]">
         <div class="p-4 flex flex-col items-center align-middle">
           <div class="grid grid-cols-8 gap-4">
             <SingleGalleryAvatar
               v-for="(avatar, index) in avatars"
               :key="`${avatar.id}-${index}`"
-              :imageUrl="getFullImageUrl(avatar.imageUrl)"
-              @click="selectAvatar(`${avatar.id}-${index}`, getFullImageUrl(avatar.imageUrl))"
+              :imageUrl="avatar.imageUrl"
+              @click="selectAvatar(`${avatar.id}-${index}`, avatar.imageUrl)"
               :selected="selectedAvatarId === `${avatar.id}-${index}`"
             />
           </div>
