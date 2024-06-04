@@ -1,13 +1,7 @@
 <script setup>
-import { ref, onMounted, inject } from 'vue'
+import { inject, onMounted, ref } from 'vue'
 import { Loader2 } from 'lucide-vue-next'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card/index.js'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card/index.js'
 import SingleGalleryAvatar from '@/components/Base/Avatar/SingleGalleryAvatar.vue'
 import { Button } from '@/components/ui/button/index.js'
 import axios from 'axios'
@@ -15,6 +9,10 @@ import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
 import { useLogto } from '@logto/vue'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
+import { toPng } from 'jdenticon'
+import Hashicon from 'hashicon';
+import { generateMonsterID } from '@/lib/identicons/monsterid.js'
+import Blockies from '@/lib/identicons/blockies.js'
 
 const avatars = ref([])
 const { getAccessToken } = useLogto()
@@ -23,6 +21,54 @@ const selectedAvatarId = ref(null)
 const selectedAvatarUrl = ref('')
 const isLoading = ref(false)
 const avatarEndpoint = import.meta.env.VITE_AVATAR_SERVICE_ENDPOINT
+
+const arrayBufferToDataUrl = (buffer, mimeType = 'image/png') => {
+  return `data:${mimeType};base64,${buffer.toString("base64")}`
+}
+
+const generateAvatars = async () => {
+  let identiconUrls = [];
+  for (let i = 0; i < 32; i++) {
+    switch (i) {
+      case i % 2:
+        identiconUrls.push({
+          id: i,
+          imageUrl:
+            Hashicon(i, {
+            size: 128
+          }),
+        });
+        break;
+      case i % 3:
+        identiconUrls.push({
+          id: i,
+          imageUrl: generateMonsterID(i, 128, 128)
+        });
+        break;
+      case i % 4:
+        // eslint-disable-next-line no-case-declarations
+        const options = {
+          seed: i,
+          size: 8,
+          scale: 16,
+        };
+        // eslint-disable-next-line no-case-declarations
+        const iconCanvas = Blockies.create(options)
+        // eslint-disable-next-line no-case-declarations
+        const pngBuffer = iconCanvas.toBuffer()
+        identiconUrls.push({
+          id: i,
+          imageUrl: arrayBufferToDataUrl(pngBuffer)
+        });
+        break;
+      default:
+        identiconUrls.push({
+          id: i,
+          imageUrl: arrayBufferToDataUrl(toPng(i, 128))
+        });
+    }
+  }
+}
 
 const fetchAvatars = async (loadMore = false) => {
   try {
@@ -78,10 +124,7 @@ const uploadFile = async () => {
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      }
-    )
+          'Content-Type': 'multipart/form-data'}})
     if (response.status === 204) {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
     }
@@ -114,7 +157,7 @@ const uploadFile = async () => {
           Avatars based on different generation algorithm methods.
         </CardDescription>
       </CardHeader>
-      <CardContent class="space-y-2 overflow-y-auto max-h-[278px]">
+      <CardContent class="space-y-2 overflow-y-auto max-h-[330px]">
         <div class="p-4 flex flex-col items-center align-middle">
           <div class="grid grid-cols-8 gap-4">
             <SingleGalleryAvatar
