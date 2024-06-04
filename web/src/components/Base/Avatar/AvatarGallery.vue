@@ -16,11 +16,9 @@ import Blockies from '@/lib/identicons/blockies.js'
 
 const avatars = ref([])
 const { getAccessToken } = useLogto()
-const userData = inject('userData')
 const selectedAvatarId = ref(null)
 const selectedAvatarUrl = ref('')
 const isLoading = ref(false)
-const avatarEndpoint = import.meta.env.VITE_AVATAR_SERVICE_ENDPOINT
 
 // god i hate jdenticon so much. they make it so difficult to do the most basic shit. fuck this library
 const createJdenticon = (hash) => {
@@ -90,24 +88,6 @@ const generateAvatars = async (loadMore = false) => {
   }
 }
 
-const fetchAvatars = async (loadMore = false) => {
-  try {
-    const currentOffset = avatars.value.length
-    const loadAmount = loadMore ? 16 : 32
-    const response = await fetch(
-      `${avatarEndpoint}/avatar-service/v1/gen/uris/r/${userData.value.sub}?limit=${loadAmount}&offset=${currentOffset}`
-    )
-    const data = await response.json()
-    if (loadMore) {
-      avatars.value = [...avatars.value, ...data.identiconUrls]
-    } else {
-      avatars.value = data.identiconUrls
-    }
-  } catch (error) {
-    console.log('Error fetching avatars:', error)
-  }
-}
-
 const selectAvatar = (id, url) => {
   selectedAvatarId.value = id
   selectedAvatarUrl.value = url
@@ -118,13 +98,9 @@ onMounted(() => generateAvatars())
 
 const fetchGalleryAvatar = async () => {
   try {
-    const response = await axios({
-      url: selectedAvatarUrl.value,
-      method: 'GET',
-      responseType: 'blob'
-    })
+    const blob = await fetch(selectedAvatarUrl.value).then(it => it.blob())
     const formData = new FormData()
-    formData.append('file', response.data, 'image.png')
+    formData.append('file', blob, 'image.png')
     return formData
   } catch (error) {
     console.log('Error during image fetching or uploading:', error)
