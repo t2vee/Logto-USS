@@ -60,6 +60,10 @@ const router = createRouter({
       component: () => import('@/views/YourData.vue')
     },
     {
+      path: '/legal',
+      redirect: import.meta.env.VITE_LEGAL_URL,
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
       component: () => import('@/router/CatchAll/404.vue')

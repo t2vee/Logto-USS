@@ -12,7 +12,6 @@ import { Ban, MoreHorizontal, UserRoundCheck, SquareArrowOutUpRight } from 'luci
 const userData = inject('userData')
 const userConnectorPresent = inject('userConnectorPresent')
 const { getAccessToken } = useLogto()
-const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK
 
 </script>
 
@@ -78,7 +77,7 @@ const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK
     <DialogFooter>
       <div class="flex space-x-10 items-center align-middle">
         <Button variant="link" as-child>
-          <a target="_blank" :href="footer"> Privacy and Cookies Policy </a>
+          <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
         </Button>
         <div class="space-x-2">
           <Button
