@@ -10,7 +10,7 @@ export default async (request, env) => {
 	try {
 		const http = createHttpClient(env, request.accesstoken);
 		const r = await http.get(`/api/users/${encodeURIComponent(request.userid)}/mfa-verifications`, {});
-		return r === '[]' ?
+		return r.length === 0 ?
 			successCONTENT(env, ["none"]) :
 			successCONTENT(env, r)
 	} catch (e) {
