@@ -22,7 +22,6 @@ class DataValidator {
 			throw new ValidationException(e.Ge);
 		}
 		if (checkBadWords) {
-			console.log('im checking for naughty words')
 			if (this._filter.isProfane(data.name ? data.name : data.username)) {{throw new ValidationException('ERR_CONTAINS_BAD_WORDS', 406)}}
 		}
 		console.log('[VALIDATOR] Submitted data successfully validated')
