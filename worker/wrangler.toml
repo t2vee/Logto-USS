@@ -12,7 +12,7 @@ kv_namespaces = [
 ]
 
 [vars]
-AVATAR_API = "https://pfps.mxs.app"
+AVATAR_API = "https://check.mxs.app"
 CORS = "https://myid.mxs.app"
 ISSUER = "https://id.mxs.app/oidc"
 JWKS_URI = "https://id.mxs.app/oidc/jwks"
