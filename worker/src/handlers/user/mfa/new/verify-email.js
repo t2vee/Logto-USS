@@ -8,6 +8,7 @@ import failureCONTENT from "../../../../responses/raw/failure-CONTENT";
 export default async (request, env, ctx) => {
 	try {
 		const requestData = await request.json();
+		request.Validate.email(requestData);
 		try {
 			await verifyCode(env, request, 'email', requestData.email)
 		} catch (e) {

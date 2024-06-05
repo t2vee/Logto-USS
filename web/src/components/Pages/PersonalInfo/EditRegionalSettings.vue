@@ -55,8 +55,7 @@ async function updateData() {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json'
         }
-      }
-    )
+      })
     if (response.status === 204) {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
     }

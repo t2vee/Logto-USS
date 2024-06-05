@@ -5,16 +5,12 @@
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
 import successEMPTY from "../../../responses/raw/success-EMPTY";
 
-import Filter from "bad-words";
-const filter = new Filter();
-
 export default async (request, env, ctx) => {
 	try {
-		if (await env.UsernameChangeTimelimit.get(ctx.userid)) {return failureCONTENT(env,`ERR_CANNOT_YET_CHANGE`, 400)}
-		const usernameRegex = new RegExp(/^[a-zA-Z0-9]{3,24}$/)
+		if (await env.UsernameChangeTimelimit.get(request.userid)) {return failureCONTENT(env,`ERR_CANNOT_YET_CHANGE`, 400)}
 		const requestData = await request.json();
-		if (usernameRegex.test(requestData.username)) {return failureCONTENT(env,'ERR_INVALID_USERNAME', 406);}
-		if (filter.isProfane(requestData.username)) {return failureCONTENT(env,'ERR_CONTAINS_BAD_WORDS', 406)}
+		request.Validate.username(requestData);
+		if (await env.UsernameChangeTimelimit.get(ctx.userid)) {return failureCONTENT(env,`ERR_CANNOT_YET_CHANGE`, 400)}
 		await ctx.Http.patch(
 			`/api/users/${ctx.userid}`,
 			{data: {"username": requestData.username}
