@@ -40,7 +40,7 @@ class DataValidator {
 		if (!isNaN(date.getTime())) {
 			const age = this.#calculateAge(date);
 			console.log(age)
-			if (age <= 13 || age >= 99) {throw new ValidationException('ERR_OUT_OF_RANGE', 422)}
+			if (age <= 13 || age >= 99) {throw new ValidationException('ERR_AGE_OUT_OF_RANGE', 422)}
 		} else {
 			throw new ValidationException('ERR_INVALID_DATE', 422);
 		}
