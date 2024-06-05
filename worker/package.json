@@ -11,14 +11,12 @@
     "wrangler": "^3.0.0"
   },
   "dependencies": {
-    "@tensorflow/tfjs-node": "3.18.0",
-    "ajv": "^8.14.0",
-    "ajv-formats": "^3.0.1",
     "bad-words": "^3.0.4",
+    "is-email": "^1.0.2",
     "itty-router": "^4.0.27",
     "jose": "^5.2.3",
     "jsdocs": "^0.0.1",
-    "nsfwjs": "^4.1.0",
+    "superstruct": "^1.0.4",
     "uuid": "^9.0.1"
   }
 }
