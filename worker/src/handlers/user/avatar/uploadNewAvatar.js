@@ -20,7 +20,10 @@ export default async (request, env, ctx) => {
 	const reqImg = await request.formData();
 	const file = reqImg.get('file');
 	if (!validateFile(file)) {return failureCONTENT(env,"ERR_INVALID_IMG", 400);}
-	if (!await checkAvatar(env, file)) {return failureCONTENT(env, "ERR_IMG_FAILED_CHECK", 406);}
+	if (env.ENABLE_NSFW_CHECK) {
+		console.log('[ENABLE_NSFW_CHECK]');
+		if (!await checkAvatar(env, file)) {return failureCONTENT(env, "ERR_IMG_FAILED_CHECK", 406);}
+	}
 	const i = await processAvatar(env, file)
 	if (!i) {return failureCONTENT(env, "ERR_IMG_PROCESS_FAILED", 500);}
 	try {

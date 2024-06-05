@@ -17,6 +17,7 @@ CORS = "https://myid.mxs.app"
 ISSUER = "https://id.mxs.app/oidc"
 JWKS_URI = "https://id.mxs.app/oidc/jwks"
 LOGTO_DOMAIN = "https://id.mxs.app"
+ENABLE_NSFW_CHECK = 1
 
 [placement]
 mode = "smart"
