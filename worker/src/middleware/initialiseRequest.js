@@ -2,11 +2,11 @@
 // Use of this source code is governed by an MPL license.
 
 
-import DataValidator from '../lib/DataValidator'
+import { createDataValidator } from '../lib/DataValidator'
 
 export default async (req, env) => {
 	try {
-		req.Validate = new DataValidator(env, req)
+		req.Validate = createDataValidator(env)
 	} catch (e) {
 
 	}
