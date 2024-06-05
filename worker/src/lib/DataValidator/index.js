@@ -8,6 +8,7 @@ import * as schema from './schemas';
 
 import { assert } from 'superstruct'
 
+// probably a terrible implementation i know but the sunk cost fallacy is so real and i cant escape it
 class DataValidator {
 	constructor(env) {
 		this._env = env;
@@ -24,6 +25,7 @@ class DataValidator {
 			console.log('im checking for naughty words')
 			if (this._filter.isProfane(data.name ? data.name : data.username)) {{throw new ValidationException('ERR_CONTAINS_BAD_WORDS', 406)}}
 		}
+		console.log('[VALIDATOR] Submitted data successfully validated')
 	}
 
 	#calculateAge(data) {
@@ -59,9 +61,19 @@ class DataValidator {
 	email(data) {
 		return this.#validate(data, schema.EmailSchema, 'ERR_INVALID_EMAIL')
 	}
+
 	phone(data) {
 		return this.#validate(data, schema.PhoneSchema, 'ERR_INVALID_NUMBER')
 	}
+
+	regional(data) {
+		return this.#validate(data, schema.RegionalSchema, 'ERR_INVALID_OPTION')
+	}
+
+	locale(data) {
+		return this.#validate(data, schema.LocaleSchema, 'ERR_INVALID_OPTION')
+	}
+
 	birthday(data) {
 		try {
 			this.#validate(data, schema.BirthdaySchema, 'ERR_INVALID_DATE');

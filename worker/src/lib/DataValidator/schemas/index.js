@@ -4,6 +4,8 @@
 import UsernameSchema from './username';
 import PasswordSchema from './password';
 import BirthdaySchema from './birthday';
+import RegionalSchema from './regional';
+import LocaleSchema from './locale';
 import EmailSchema from './email';
 import PhoneSchema from './phone';
 import NameSchema from './name';
@@ -16,4 +18,6 @@ export {
 	EmailSchema,
 	NameSchema,
 	PhoneSchema,
+	RegionalSchema,
+	LocaleSchema,
 };
