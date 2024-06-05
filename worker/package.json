@@ -11,15 +11,18 @@
     "wrangler": "^3.0.0"
   },
   "dependencies": {
+    "@cf-wasm/photon": "^0.1.20",
     "@emeraldpay/hashicon": "^0.5.2",
     "@tensorflow/tfjs-node": "3.18.0",
     "ajv": "^8.14.0",
     "bad-words": "^3.0.4",
+    "esm-seedrandom": "^3.0.5",
     "itty-router": "^4.0.27",
     "jdenticon": "^3.3.0",
     "jose": "^5.2.3",
     "jsdocs": "^0.0.1",
     "nsfwjs": "^4.1.0",
+    "seedrandom": "^3.0.5",
     "uuid": "^9.0.1"
   }
 }
