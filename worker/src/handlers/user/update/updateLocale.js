@@ -10,6 +10,7 @@ export default  async (request, env) => {
 	try {
 		const requestData = await request.json();
 		const http = createHttpClient(env, request.accesstoken);
+		request.Validate.locale(requestData);
 		await http.patch(
 			`/api/users/${request.userid}/profile`,
 			{data: {
