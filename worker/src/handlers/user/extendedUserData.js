@@ -3,14 +3,12 @@
 
 
 import successCONTENT from "../../responses/raw/success-CONTENT";
-import { createHttpClient } from "../../HttpClient";
 import failureCONTENT from "../../responses/raw/failure-CONTENT";
 
-export default async (request, env) => {
+export default async (request, env, ctx) => {
 	try {
-		const http = createHttpClient(env, request.accesstoken);
-		const userData = await http.get(
-			`/api/users/${encodeURIComponent(request.userid)}`, {
+		const userData = await ctx.Http.get(
+			`/api/users/${encodeURIComponent(ctx.userid)}`, {
 				resTo400: 'ERR_USR_DOES_NOT_EXIST',
 			});
 		return successCONTENT(env, userData);

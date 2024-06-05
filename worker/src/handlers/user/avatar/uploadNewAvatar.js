@@ -7,7 +7,6 @@ import uploadAvatar from "../../../utils/uploadAvatar";
 import processAvatar from "../../../utils/processAvatar";
 import successEMPTY from "../../../responses/raw/success-EMPTY";
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
-import {createHttpClient} from "../../../HttpClient";
 
 const allowUploadMimeTypes = [
 	"image/jpeg",
@@ -17,18 +16,17 @@ function validateFile(file) {
 	return allowUploadMimeTypes.includes(file.type) && file.size <= 8388608;
 }
 
-export default async (request, env) => {
+export default async (request, env, ctx) => {
 	const reqImg = await request.formData();
 	const file = reqImg.get('file');
-	const http = createHttpClient(env, request.accesstoken);
 	if (!validateFile(file)) {return failureCONTENT(env,"ERR_INVALID_IMG", 400);}
 	if (!await checkAvatar(env, file)) {return failureCONTENT(env, "ERR_IMG_FAILED_CHECK", 406);}
 	const i = await processAvatar(env, file)
 	if (!i) {return failureCONTENT(env, "ERR_IMG_PROCESS_FAILED", 500);}
 	try {
-		const uploadResponse = await uploadAvatar(env, request.accesstoken, i, request.userid);
-		await http.patch(
-			`/api/users/${request.userid}`,
+		const uploadResponse = await uploadAvatar(env, ctx.accesstoken, i, ctx.userid);
+		await ctx.Http.patch(
+			`/api/users/${ctx.userid}`,
 			{data: {"avatar": uploadResponse.url,}
 			});
 		return successEMPTY(env);

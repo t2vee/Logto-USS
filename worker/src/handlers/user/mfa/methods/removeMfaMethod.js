@@ -4,15 +4,13 @@
 
 import successEMPTY from "../../../../responses/raw/success-EMPTY";
 import failureCONTENT from "../../../../responses/raw/failure-CONTENT";
-import {createHttpClient} from "../../../../HttpClient";
 
-export default async (request, env) => {
-	const uri = `/api/users/${request.userid}/mfa-verifications/`;
+export default async (request, env, ctx) => {
+	const uri = `/api/users/${ctx.userid}/mfa-verifications/`;
 	try {
 		const requestData = await request.json();
-		const http = createHttpClient(env, request.accesstoken);
-		await http.delete(uri + requestData.appid, {});
-		await http.delete(uri + requestData.backupid, {});
+		await ctx.Http.delete(uri + requestData.appid, {});
+		await ctx.Http.delete(uri + requestData.backupid, {});
 		return successEMPTY(env)
 	} catch (e) {
 		console.error(e)

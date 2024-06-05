@@ -49,10 +49,10 @@ router.options('*', corsHeaders) // need to fix cors headers so they are specifi
 router.get('/api/v1/oauth-user-info/endpoint/api-spotify-com/v1/me', HandleSpotifyUserInfoEndpoint)
 
 router // the entire middleware system is a hack and a mess. i would like to change it but im lazy so
-	.all('*', withMiddleware(async (request, env, ctx) => {return initialiseRequest(request, env);}))
-	.all('*', withMiddleware(async (request, env, ctx) => {return checkTokenMiddleware(request, env);}))
-	.all('*', withMiddleware(async (request, env, ctx) => {return attachAccessToken(request, env);}))
-	.all('*', withMiddleware(async (request, env, ctx) => {return checkVerificationCodeMiddleware(request, env);}))
+	.all('*', withMiddleware(async (request, env, ctx) => {return checkTokenMiddleware(request, env, ctx);}))
+	.all('*', withMiddleware(async (request, env, ctx) => {return attachAccessToken(request, env, ctx);}))
+	.all('*', withMiddleware(async (request, env, ctx) => {return initialiseRequest(request, env, ctx);}))
+	.all('*', withMiddleware(async (request, env, ctx) => {return checkVerificationCodeMiddleware(request, env, ctx);}))
 
 // TODO Implement DataValidator lib for all userdata routes
 // TODO Implement DataHistory lib for all userdata routes

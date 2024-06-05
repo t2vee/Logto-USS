@@ -3,10 +3,12 @@
 
 
 import DataValidator from '../lib/DataValidator'
+import { createHttpClient } from '../HttpClient'
 
-export default async (req, env) => {
+export default async (req, env, ctx) => {
 	try {
-		req.Validate = new DataValidator(env, req)
+		ctx.Validate = new DataValidator(env, req)
+		ctx.Http = createHttpClient(env, ctx.accesstoken)
 	} catch (e) {
 
 	}

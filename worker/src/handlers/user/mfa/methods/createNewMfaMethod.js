@@ -3,15 +3,13 @@
 
 
 import successCONTENT from "../../../../responses/raw/success-CONTENT";
-import {createHttpClient} from "../../../../HttpClient";
 import failureCONTENT from "../../../../responses/raw/failure-CONTENT";
 
-export default async (request, env) => {
+export default async (request, env, ctx) => {
 	try {
-		const uri = `/api/users/${request.userid}/mfa-verifications`
-		const http = createHttpClient(env, request.accesstoken);
-		const totp = await http.post(uri, {data: {"type": "Totp"},});
-		const code = await http.post(uri, {data: {"type": "BackupCode"},});
+		const uri = `/api/users/${ctx.userid}/mfa-verifications`
+		const totp = await ctx.Http.post(uri, {data: {"type": "Totp"},});
+		const code = await ctx.Http.post(uri, {data: {"type": "BackupCode"},});
 		return successCONTENT(env, {
 			"AppAuthenticator": totp,
 			"BackupCodes": code,

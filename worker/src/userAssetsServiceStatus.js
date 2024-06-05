@@ -1,5 +1,5 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
-// Use of this source code is governed by an MPL license. 
+// Use of this source code is governed by an MPL license.
 
 
 /*
@@ -18,10 +18,10 @@
 "maxUploadFileSize":8388608}
 */
 
-export default async (request, env) => {
+export default async (request, env, ctx) => {
 		const url = `${env.LOGTO_DOMAIN}/api/user-assets/service-status`;
 		const headers = {
-			'Authorization': `Bearer ${request.accesstoken}`,
+			'Authorization': `Bearer ${ctx.accesstoken}`,
 			'Content-Type': 'application/json',
 		};
 		const response = await fetch(url, { method: 'GET', headers });

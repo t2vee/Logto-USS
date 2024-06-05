@@ -6,9 +6,9 @@ import failureEMPTY from "../../responses/raw/failure-EMPTY";
 import successCONTENT from "../../responses/raw/success-CONTENT";
 import successEMPTY from "../../responses/raw/success-EMPTY";
 
-export default async (request, env) => {
+export default async (request, env, ctx) => {
 	try {
-		const value = await env.UsernameChangeTimelimit.get(request.userid);
+		const value = await env.UsernameChangeTimelimit.get(ctx.userid);
 		return value
 			? successCONTENT(env, {value})
 			: successEMPTY(env);

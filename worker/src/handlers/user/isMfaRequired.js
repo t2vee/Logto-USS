@@ -5,9 +5,9 @@
 import successCONTENT from "../../responses/raw/success-CONTENT";
 import failureEMPTY from "../../responses/raw/failure-EMPTY";
 
-export default async (request, env) => {
+export default async (request, env, ctx) => {
 	try {
-		const value = await env.MFARequiredTokens.get(request.userid);
+		const value = await env.MFARequiredTokens.get(ctx.userid);
 		return value
 			? successCONTENT(env, { status: false })
 			: successCONTENT(env, { status: true });
