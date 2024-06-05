@@ -9,7 +9,7 @@ export default async (request, env, ctx) => {
 	try {
 		if (await env.UsernameChangeTimelimit.get(request.userid)) {return failureCONTENT(env,`ERR_CANNOT_YET_CHANGE`, 400)}
 		const requestData = await request.json();
-		request.Validate.username(requestData);
+		ctx.Validate.username(requestData);
 		if (await env.UsernameChangeTimelimit.get(ctx.userid)) {return failureCONTENT(env,`ERR_CANNOT_YET_CHANGE`, 400)}
 		await ctx.Http.patch(
 			`/api/users/${ctx.userid}`,

@@ -8,7 +8,7 @@ import failureCONTENT from "../../../responses/raw/failure-CONTENT";
 export default  async (request, env, ctx) => {
 	try {
 		const requestData = await request.json();
-		request.Validate.regional(requestData);
+		ctx.Validate.regional(requestData);
 		await ctx.Http.patch(
 			`/api/users/${ctx.userid}/profile`,
 			{data: {
