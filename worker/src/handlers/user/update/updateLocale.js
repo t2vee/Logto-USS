@@ -4,8 +4,9 @@
 
 import successEMPTY from "../../../responses/raw/success-EMPTY";
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
+import { UpdateUserRouter } from './index'
 
-export default  async (request, env, ctx) => {
+UpdateUserRouter.post("/language", async (request, env, ctx) => {
 	try {
 		const requestData = await request.json();
 		ctx.Validate.locale(requestData);
@@ -20,4 +21,4 @@ export default  async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)	}
-}
+})

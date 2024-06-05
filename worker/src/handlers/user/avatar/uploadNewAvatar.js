@@ -7,6 +7,7 @@ import uploadAvatar from "../../../utils/uploadAvatar";
 import processAvatar from "../../../utils/processAvatar";
 import successEMPTY from "../../../responses/raw/success-EMPTY";
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
+import { AvatarUserRouter } from './index'
 
 const allowUploadMimeTypes = [
 	"image/jpeg",
@@ -16,7 +17,7 @@ function validateFile(file) {
 	return allowUploadMimeTypes.includes(file.type) && file.size <= 8388608;
 }
 
-export default async (request, env, ctx) => {
+AvatarUserRouter.post("/upload", async (request, env, ctx) => {
 	const reqImg = await request.formData();
 	const file = reqImg.get('file');
 	if (!validateFile(file)) {return failureCONTENT(env,"ERR_INVALID_IMG", 400);}
@@ -36,4 +37,4 @@ export default async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)	}
-}
+})
