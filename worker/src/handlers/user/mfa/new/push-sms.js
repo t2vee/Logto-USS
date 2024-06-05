@@ -9,7 +9,7 @@ import failureCONTENT from '../../../../responses/raw/failure-CONTENT'
 export default async (request, env) => {
 	const requestData = await request.json();
 	try {
-		request.validator.phone(requestData);
+		request.Validate.phone(requestData);
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)

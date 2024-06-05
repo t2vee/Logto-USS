@@ -9,7 +9,7 @@ import {createHttpClient} from "../../../HttpClient";
 export default async (request, env) => {
 	try {
 		const requestData = await request.json();
-	  request.validate.password(requestData);
+	  request.Validate.password(requestData);
 		const http = createHttpClient(env, request.accesstoken);
 		try {
 			await http.post(

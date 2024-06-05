@@ -10,7 +10,7 @@ export default async (request, env) => {
 	try {
 		const http = createHttpClient(env, request.accesstoken);
 		const requestData = await request.json();
-		request.validator.fullName(requestData);
+		request.Validate.fullName(requestData);
 		await http.patch(
 			`/api/users/${request.userid}`,
 			{data: {"name": requestData.name}
