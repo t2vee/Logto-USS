@@ -26,7 +26,6 @@ const usernameChecked = ref(false)
 const waitForNextChange = ref('')
 const badWords = ref(false)
 
-const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK
 const usernameRegex = new RegExp(/^[a-zA-Z0-9]{3,24}$/)
 
 const checkUsernameAvailability = async (value) => {
@@ -168,7 +167,7 @@ onMounted(checkNextUsernameChange)
     <DialogFooter>
       <div class="flex space-x-10 items-center align-middle">
         <Button variant="link" as-child>
-          <a target="_blank" :href="footer"> Privacy and Cookies Policy </a>
+          <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
         </Button>
         <div class="space-x-2">
           <Button

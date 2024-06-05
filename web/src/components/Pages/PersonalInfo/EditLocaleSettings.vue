@@ -15,7 +15,6 @@ import axios from 'axios'
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
 import { useLogto } from '@logto/vue'
-const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK
 const { getAccessToken } = useLogto()
 const selectedLocale = ref('')
 const userData = inject('userData')
@@ -76,7 +75,7 @@ async function updateData() {
     <DialogFooter>
       <div class="flex space-x-10 items-center align-middle">
         <Button variant="link" as-child>
-          <a target="_blank" :href="footer"> Privacy and Cookies Policy </a>
+          <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
         </Button>
         <div class="space-x-2">
           <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!selectedLocale">

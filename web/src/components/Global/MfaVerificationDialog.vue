@@ -143,7 +143,9 @@ const handleCodeComplete = async (code) => {
       })
     }
   } catch (error) {
-    toast.warning('Provided Code is Incorrect', 'Please try again')
+    toast.warning('Provided Code is Incorrect', {
+      description: 'Please try again'
+    })
   } finally {
     isLoading.value = false
   }
@@ -166,6 +168,7 @@ const checkMFA = async () => {
     if (response.data.status === true) {
       const mfaResponse = await grabMfaOptions(accessToken)
       mfaOptions.value = mfaResponse.data
+      console.log(mfaOptions)
     }
     isMfaRequired.value = response.data.status === true
   } catch (error) {

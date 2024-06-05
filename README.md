@@ -1,17 +1,25 @@
 # Logto Account Dashboard
 
-A personal "My Account" dashboard built specially for use with the Logto Authentication Platform. Built with nothing but Vue3 and shadcn-vue.  
+A personal "My Account" dashboard built specially for use with the Logto Authentication Platform.
 
-Designed to run hand in hand with:
- - [mxs-account-cf-worker](https://github.com/t2vee/logto-account-cf-worker), A Cloudflare worker designed to interact with the Logto Admin API
- - [mxs-avatar-service](https://github.com/t2vee/mxs-avatar-service), A custom NodeJS server for basic avatar management and image manipulation
+It is made up of 2 core components.  
+- The vue3 web client
+- The M2M api on cloudflare workers
 
-## Running your own instance
-Pretty damn easy.  
-1. Edit the environment variables laid out in `.env.sample`, you may omit the optional values.
-2. Deploy to any platform;
-   3. Run via `npm run build` and expose the static files.
-   4. Run via `wrangler deploy` via the Cloudflare Workers platform
+Why not use page functions instead of 2 separate applications?
+- this is so this application stack can be run on platforms other than cloudflare. 
+  - like for example using the cloudflare workerd runtime to run locally with docker
 
-## Keep in mind
-This project is still in active development and not yet designed for production.  
+## demo
+because of the way verification works i dont have a demo setup yet.  
+however you are welcome to make a account for the build i have at [myid.mxs.app](https://myid.mxs.app), then delete your account from the "Account Actions" then "Terminate Account".
+
+## design
+my design inspiration came from a few different account management dashboards but prodominiently
+- [My Apple Id](https://appleid.apple.com/)
+- [EA Account Management](https://myaccount.ea.com/cp-ui/aboutme/index)
+
+with a few others like wargaming, github, reddit and spotify
+
+## quick screenshot
+![img.png](.github/images/img.png)

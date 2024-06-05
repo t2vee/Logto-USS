@@ -3,12 +3,14 @@
 
 
 import { createDataValidator } from '../lib/DataValidator'
+import { createHttpClient } from '../HttpClient'
 
-export default async (req, env) => {
+export default async (req, env, ctx) => {
 	try {
-		req.Validate = createDataValidator(env)
+		ctx.Validate = createDataValidator(env)
+		ctx.Http = createHttpClient(env, ctx.accesstoken)
 	} catch (e) {
 
 	}
-	console.log('[MIDDLEWARE] API Request Initialised');
+	console.log('[MIDDLEWARE] Request Context Initialised');
 }

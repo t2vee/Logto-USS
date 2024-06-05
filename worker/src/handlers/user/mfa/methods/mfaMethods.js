@@ -2,15 +2,13 @@
 // Use of this source code is governed by an MPL license.
 
 
-import {createHttpClient} from "../../../../HttpClient";
 import successCONTENT from "../../../../responses/raw/success-CONTENT";
 import failureCONTENT from "../../../../responses/raw/failure-CONTENT";
 
-export default async (request, env) => {
+export default async (request, env, ctx) => {
 	try {
-		const http = createHttpClient(env, request.accesstoken);
-		const r = await http.get(`/api/users/${encodeURIComponent(request.userid)}/mfa-verifications`, {});
-		return r === '[]' ?
+		const r = await ctx.Http.get(`/api/users/${encodeURIComponent(ctx.userid)}/mfa-verifications`, {});
+		return r.length === 0 ?
 			successCONTENT(env, ["none"]) :
 			successCONTENT(env, r)
 	} catch (e) {

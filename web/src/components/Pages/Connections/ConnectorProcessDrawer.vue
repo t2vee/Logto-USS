@@ -141,13 +141,13 @@ onUnmounted( () => {
                 I agree to the
                 <span>
                   <a target="_blank" class="text-cyan-300" href="/legal/privacypolicy">
-                  MXS Privacy Policy
+                  Privacy Policy
                   </a>
                 </span>
                 &
                 <span>
                   <a target="_blank" class="text-cyan-300" href="/legal/termsofservice">
-                  MXS Terms of Service Agreement
+                  Terms of Service Agreement
                 </a>
                 </span>.
               </p>
@@ -192,7 +192,7 @@ onUnmounted( () => {
               </CardTitle>
               <CardDescription v-if="stepTwoActive">
                 You will be redirected to {{ service }} to authenticate yourself, then authorise
-                the connection with your MXS Account. No need to leave this page, we will open up a
+                the connection with your account. No need to leave this page, we will open up a
                 new window.
               </CardDescription>
             </CardHeader>
@@ -241,7 +241,7 @@ onUnmounted( () => {
               </CardDescription>
             </CardHeader>
             <CardContent v-if="stepThreeActive">
-              <p class="flex"><Dot />You will now be able to login to your MXS Account with {{ service }}.</p>
+              <p class="flex"><Dot />You will now be able to login to your account with {{ service }}.</p>
               <p class="flex"><Dot />You can now use {{ service }} as a verification provider.</p>
               <p class="flex"><Dot />You will be able to configure if your connected account is displayed on your profile.</p>
             </CardContent>

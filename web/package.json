@@ -1,5 +1,5 @@
 {
-  "name": "mxs-account-home",
+  "name": "logto-account-dashboard",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -12,6 +12,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@emeraldpay/hashicon": "^0.5.2",
     "@formkit/auto-animate": "^0.8.1",
     "@internationalized/date": "^3.5.2",
     "@logto/js": "^4.1.1",
@@ -19,9 +20,13 @@
     "@vee-validate/zod": "^4.12.8",
     "@vueuse/core": "^10.9.0",
     "axios": "^1.6.7",
+    "canvas": "^2.11.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "esm-seedrandom": "^3.0.5",
+    "hashicon": "^0.3.0",
     "http-jsonp": "^1.1.1",
+    "jdenticon": "^3.3.0",
     "lodash": "^4.17.21",
     "lucide-vue-next": "^0.378.0",
     "radix-vue": "^1.7.3",

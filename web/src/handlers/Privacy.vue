@@ -17,6 +17,7 @@ const userData = inject('userData')
     >
     <div class="flex gap-16 mt-12 items-center">
       <EditDetailDialog
+        disabled
         title="Third Party Data Access"
         desc="Block All"
         :icon="TextSearch"
@@ -29,6 +30,7 @@ const userData = inject('userData')
     </div>
     <div class="flex gap-16 mt-4 items-center">
       <EditDetailDialog
+        disabled
         title="Profile Visibility"
         desc="Friends Only"
         :icon="UserRoundSearch"
@@ -40,18 +42,20 @@ const userData = inject('userData')
     </div>
     <div class="flex gap-16 mt-4 items-center">
       <EditDetailDialog
+        disabled
         title="Analytics Mode"
         desc="Opted Out"
         :icon="BarChart3"
         :dialog-page="AddPhoneNumberDialog"
       />
       <p class="w-3/4 text-sm">
-        MXS Analytics are used by all MXS products and services. You can help improve them by
+        Web Analytics are used by all of our products and services. You can help improve them by
         sharing privatised analytics from your account.
       </p>
     </div>
     <div class="flex gap-16 mt-4 items-center">
       <EditDetailDialog
+        disabled
         title="Email Privacy"
         desc="Hide and proxy mail"
         :icon="Send"
@@ -59,10 +63,8 @@ const userData = inject('userData')
       />
       <p class="w-3/4 text-sm">
         Enabling Email Privacy will mask your email address in all products and services. You will
-        also be assigned a private MXS email for receiving email.
+        also be assigned a private email for receiving email.
       </p>
     </div>
   </div>
 </template>
-
-<style scoped></style>

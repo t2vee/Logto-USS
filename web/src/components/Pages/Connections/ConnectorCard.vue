@@ -90,9 +90,9 @@ onUnmounted(cleanup)
       <CollapsibleContent class="flex" v-if="!linked">
         <div class="w-1/2 p-2">
           <p class="text-gray-400 text-sm">
-            Click "Link" to visit {{ service }} and link your {{ service }} and MXS accounts. Please
+            Click "Link" to visit {{ service }} and link your {{ service }} to your current account. Please
             note that as part of linking these accounts, {{ service }} will share some of your data
-            with MXS.
+            with us.
           </p>
         </div>
         <div class="w-1/2 flex flex-col items-center align-middle justify-center gap-y-2">

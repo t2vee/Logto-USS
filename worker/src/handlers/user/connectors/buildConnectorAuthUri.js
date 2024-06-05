@@ -4,20 +4,18 @@
 
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
 import successCONTENT from "../../../responses/raw/success-CONTENT";
-import {createHttpClient} from "../../../HttpClient";
 
-export default async (request, env) => {
+export default async (request, env, ctx) => {
 	try {
 		if (!request.params || !request.params.connector) { return failureCONTENT(env, 'ERR_NO_TYPE_PROVIDED', 400); }
 		const requestData = await request.json();
-		const http = createHttpClient(env, request.accesstoken);
 		const uriParams = {
-			"state": Array.from(crypto.getRandomValues(new Uint32Array(request.userid.length)), dec => ('0' + dec.toString(16)).substr(-2)).join(''),
+			"state": Array.from(crypto.getRandomValues(new Uint32Array(ctx.userid.length)), dec => ('0' + dec.toString(16)).substr(-2)).join(''),
 			"redirectUri": requestData.redirectUri,
 		}
-		const connectorResponse = await http.get(`/api/connectors`, {});
+		const connectorResponse = await ctx.Http.get(`/api/connectors`, {});
 		const connectorID = connectorResponse.find(item => item.target.toLowerCase() === request.params.connector.toLowerCase());
-		const r = await http.post(
+		const r = await ctx.Http.post(
 			`/api/connectors/${connectorID.id}/authorization-uri`,
 			{data: uriParams});
 		return successCONTENT(env, r)

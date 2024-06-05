@@ -15,7 +15,7 @@ import { toast } from 'vue-sonner'
 import { useLogto } from '@logto/vue'
 
 const AddPhoneNumberDialog = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/AddPhoneNumberDialog.vue'))
-const EditPhoneNumberDialog = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/EditPhoneNumberDialog.vue'))
+const EditPhoneNumberDialog = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/RemovePhoneNumberDialog.vue'))
 const EditDetailDialog = defineAsyncComponent(() => import('@/components/Global/EditDetailDialog.vue'))
 const EditEmailAddress = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/EditEmailAddress.vue'))
 const EditMfaMethods = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/EditMfaMethods.vue'))

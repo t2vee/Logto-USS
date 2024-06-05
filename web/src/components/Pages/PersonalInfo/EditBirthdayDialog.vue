@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref, nextTick } from 'vue'
+import { inject, ref } from 'vue'
 import { Button } from '@/components/ui/button/index.js'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
 import Label from '../../ui/label/Label.vue'
@@ -16,7 +16,6 @@ import {
   DateFieldInput,
   DateFieldRoot,
 } from 'radix-vue'
-import {Input} from "@/components/ui/input/index.js";
 
 const df = new DateFormatter('en-AU', {
   dateStyle: 'long'
@@ -25,7 +24,6 @@ const df = new DateFormatter('en-AU', {
 const value = ref()
 const userData = inject('userData')
 
-const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK
 const { getAccessToken } = useLogto()
 const dateSelected = ref(false)
 
@@ -133,7 +131,7 @@ function allowSave() {
     <DialogFooter>
       <div class="flex space-x-10 items-center align-middle">
         <Button variant="link" as-child>
-          <a target="_blank" :href="footer"> Privacy and Cookies Policy </a>
+          <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
         </Button>
         <div class="space-x-2">
           <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!dateSelected">

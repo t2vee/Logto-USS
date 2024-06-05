@@ -3,16 +3,14 @@
 
 
 import successEMPTY from "../../../responses/raw/success-EMPTY";
-import {createHttpClient} from "../../../HttpClient";
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
 
-export default  async (request, env) => {
+export default  async (request, env, ctx) => {
 	try {
 		const requestData = await request.json();
-		const http = createHttpClient(env, request.accesstoken);
 		request.Validate.locale(requestData);
-		await http.patch(
-			`/api/users/${request.userid}/profile`,
+		await ctx.Http.patch(
+			`/api/users/${ctx.userid}/profile`,
 			{data: {
 					"profile": {
 						"locale": requestData.locale

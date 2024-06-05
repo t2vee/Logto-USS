@@ -5,18 +5,16 @@
 import successCONTENT from "../../responses/raw/success-CONTENT";
 import successEMPTY from "../../responses/raw/success-EMPTY";
 import failureCONTENT from "../../responses/raw/failure-CONTENT";
-import {createHttpClient} from "../../HttpClient";
 
 
 import Filter from "bad-words";
 const filter = new Filter();
 
-export default async (request, env) => {
+export default async (request, env, ctx) => {
 	try {
-		const http = createHttpClient(env, request.accesstoken);
 		if (!request.params || !request.params.username) { return failureCONTENT(env, 'ERR_NO_USERNAME_PROVIDED', 400); }
 		if (filter.isProfane(request.params.username)) { return failureCONTENT(env, 'ERR_USERNAME_CONTAINS_BAD_WORDS', 406) }
-		const r = await http.get(`/api/users?search=${encodeURIComponent(request.params.username)}`, {});
+		const r = await ctx.Http.get(`/api/users?search=${encodeURIComponent(request.params.username)}`, {});
 		return r === '[]' ?
 			successEMPTY(env) :
 			successCONTENT(env, '')

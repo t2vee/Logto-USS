@@ -8,7 +8,7 @@ export default async function (env, accessToken, imageData, userId) {
 	const url = `${env.LOGTO_DOMAIN}/api/user-assets`;
 	const uploadFormData = new FormData();
 	uploadFormData.append('file', imageData);
-	uploadFormData.set("file", imageData, `${crypto.randomUUID()}__${userId}__${Date.now()}.${imageData.name.split('.').pop()}`);
+	uploadFormData.set("file", imageData, `${crypto.randomUUID()}__${userId}__${Date.now()}.webp`);
 	const headers = {
 		'Authorization': `Bearer ${accessToken}`,
 	};

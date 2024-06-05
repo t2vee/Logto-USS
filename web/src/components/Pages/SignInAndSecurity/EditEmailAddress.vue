@@ -35,7 +35,6 @@ const isLoading = ref(false)
 const emailVerified = ref(false)
 const resendCodeTimer = ref(60)
 const readyToSend = ref(true)
-const footer = import.meta.env.VITE_EDIT_DIALOG_FOOTER_LINK
 
 const countdown = () => {
   const interval = setInterval(() => {
@@ -181,7 +180,7 @@ const handleCodeComplete = async (code) => {
       <DialogFooter>
         <div class="flex space-x-8 items-center align-middle">
           <Button variant="link" as-child>
-            <a target="_blank" :href="footer"> Privacy and Cookies Policy </a>
+            <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
           </Button>
           <div class="space-x-2">
             <AlertDialog>

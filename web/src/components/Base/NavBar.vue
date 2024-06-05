@@ -28,7 +28,7 @@ const onClickSignOut = () => signOut(import.meta.env.VITE_ROOT)
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="https://mxs.app"> Home </BreadcrumbLink>
+          <BreadcrumbLink href="/"> Home </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>

@@ -4,15 +4,13 @@
 
 import successEMPTY from "../../../responses/raw/success-EMPTY";
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
-import {createHttpClient} from "../../../HttpClient";
 
-export default async (request, env) => {
+export default async (request, env, ctx) => {
 	try {
-		const http = createHttpClient(env, request.accesstoken);
 		const requestData = await request.json();
 		request.Validate.fullName(requestData);
-		await http.patch(
-			`/api/users/${request.userid}`,
+		await ctx.Http.patch(
+			`/api/users/${ctx.userid}`,
 			{data: {"name": requestData.name}
 			});
 		return successEMPTY(env)

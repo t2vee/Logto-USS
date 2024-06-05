@@ -11,9 +11,9 @@ const userData = inject('userData')
 <template>
   <div class="w-[600px]">
     <CardTitle class="my-4">Connected Accounts</CardTitle>
-    <CardDescription
-      >Manage accounts and services you have linked to your MXS account.</CardDescription
-    >
+    <CardDescription>
+      Manage accounts and services you have linked to your account.
+    </CardDescription>
     <div class="my-10">
       <ConnectorCard
         :linked="Boolean(userData.identities.google)"
@@ -43,7 +43,7 @@ const userData = inject('userData')
     </div>
     <CardTitle class="my-4">Authorised Applications</CardTitle>
     <CardDescription
-      >Listed below are third parties with which you have authorized MXS to share some of your
+      >Listed below are third parties with which you have authorized us to share some of your
       data.</CardDescription
     >
     <div class="mt-6">
