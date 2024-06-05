@@ -8,6 +8,7 @@ import failureCONTENT from "../../../responses/raw/failure-CONTENT";
 export default async (request, env, ctx) => {
 	try {
 		const requestData = await request.json();
+	  request.Validate.password(requestData);
 		try {
 			await ctx.Http.post(
 				`/api/users/${ctx.userid}/password/verify`,

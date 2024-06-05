@@ -47,7 +47,16 @@ async function updateData() {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
     }
   } catch (error) {
-    toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
+    switch (error.response.status) {
+      case 400:
+        toast.warning('Error saving changes:', { description: 'The Date you have submitted is invalid. Please check your request' })
+        break;
+      case 422:
+        toast.warning('Error saving changes:', { description: 'You were NOT born then. Please check your request' })
+        break;
+      default:
+        toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
+    }
     failed = true
   }
   if (!failed) {
