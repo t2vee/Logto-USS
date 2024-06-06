@@ -11,10 +11,10 @@
     "wrangler": "^3.0.0"
   },
   "dependencies": {
+    "@cf-wasm/photon": "^0.1.20",
     "bad-words": "^3.0.4",
     "is-email": "^1.0.2",
-    "@cf-wasm/photon": "^0.1.20",
-    "itty-router": "^4.0.27",
+    "itty-router": "^5.0.17",
     "jose": "^5.2.3",
     "jsdocs": "^0.0.1",
     "superstruct": "^1.0.4",

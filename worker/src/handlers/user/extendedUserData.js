@@ -4,9 +4,8 @@
 
 import successCONTENT from "../../responses/raw/success-CONTENT";
 import failureCONTENT from "../../responses/raw/failure-CONTENT";
-import { UserRouter } from './index'
 
-const handler = async (request, env, ctx) => {
+export const handler = async (request, env, ctx) => {
 	try {
 		const userData = await ctx.Http.get(
 			`/api/users/${encodeURIComponent(ctx.userid)}`, {
@@ -18,4 +17,3 @@ const handler = async (request, env, ctx) => {
 		return failureCONTENT(env, e.message, e.status)}
 }
 
-UserRouter.get("/extended-user-info", handler)
