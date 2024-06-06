@@ -17,7 +17,7 @@ function validateFile(file) {
 	return allowUploadMimeTypes.includes(file.type) && file.size <= 8388608;
 }
 
-AvatarUserRouter.post("/upload", async (request, env, ctx) => {
+export const handler = async (request, env, ctx) => {
 	const reqImg = await request.formData();
 	const file = reqImg.get('file');
 	if (!validateFile(file)) {return failureCONTENT(env,"ERR_INVALID_IMG", 400);}
@@ -37,4 +37,4 @@ AvatarUserRouter.post("/upload", async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)	}
-})
+}
