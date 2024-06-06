@@ -6,7 +6,8 @@ import failureCONTENT from "../../../responses/raw/failure-CONTENT";
 import successCONTENT from "../../../responses/raw/success-CONTENT";
 import { ConnectorRouter } from './index'
 
-ConnectorRouter.post("/link/:connector", async (request, env, ctx) => {
+
+export const handler = async (request, env, ctx) => {
 	try {
 		if (!request.params || !request.params.connector) { return failureCONTENT(env, 'ERR_NO_TYPE_PROVIDED', 400); }
 		const requestData = await request.json();
@@ -23,4 +24,4 @@ ConnectorRouter.post("/link/:connector", async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)}
-})
+}

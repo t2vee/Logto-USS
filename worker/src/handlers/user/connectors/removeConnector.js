@@ -4,9 +4,8 @@
 
 import successEMPTY from "../../../responses/raw/success-EMPTY";
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
-import { ConnectorRouter } from './index'
 
-ConnectorRouter.post("/remove/:connector", async (request, env, ctx) => {
+export const handler = async (request, env, ctx) => {
 	if (!request.params || !request.params.connector) { return failureCONTENT(env, 'ERR_NO_TYPE_PROVIDED', 400); }
 	try {
 		await ctx.Http.delete(
@@ -16,4 +15,4 @@ ConnectorRouter.post("/remove/:connector", async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)}
-})
+}
