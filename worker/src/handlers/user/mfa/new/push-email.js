@@ -3,7 +3,7 @@
 
 
 import pushCode from "../../../../lib/pushCode";
-import failureCONTENT from '../../../../responses/raw/content400'
+import failureCONTENT from '../../../../responses/content400'
 
 export default async (request, env, ctx) => {
 	const requestData = await request.json();

@@ -5,8 +5,8 @@
 import checkAvatar from "../../../utils/checkAvatar";
 import uploadAvatar from "../../../utils/uploadAvatar";
 import processAvatar from "../../../utils/processAvatar";
-import successEMPTY from "../../../responses/raw/empty204";
-import failureCONTENT from "../../../responses/raw/content400";
+import successEMPTY from "../../../responses/empty204";
+import failureCONTENT from "../../../responses/content400";
 import { AvatarUserRouter } from './index'
 
 const allowUploadMimeTypes = [

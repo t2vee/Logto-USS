@@ -1,8 +1,8 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
-import successEMPTY from "../responses/raw/empty204";
-import failureCONTENT from "../responses/raw/content400";
+import successEMPTY from "../responses/empty204";
+import failureCONTENT from "../responses/content400";
 import prepareNumber from "../utils/prepareNumber";
 
 export default async (env, request, ctx, type, detail = undefined) => {

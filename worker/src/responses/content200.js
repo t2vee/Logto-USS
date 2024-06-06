@@ -6,8 +6,5 @@ export default (content) =>
 		content,
 		{
 			status: 200,
-			headers: {
-				"Content-Type": "application/json; charset=utf-8"
-			},
 		}
 	)

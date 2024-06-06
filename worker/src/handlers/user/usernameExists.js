@@ -2,9 +2,9 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successCONTENT from "../../responses/raw/content200";
-import successEMPTY from "../../responses/raw/empty204";
-import failureCONTENT from "../../responses/raw/content400";
+import successCONTENT from "../../responses/content200";
+import successEMPTY from "../../responses/empty204";
+import failureCONTENT from "../../responses/content400";
 
 import Filter from "bad-words";
 const filter = new Filter();

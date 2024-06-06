@@ -3,9 +3,9 @@
 
 
 import extractBearerTokenFromHeaders from "../utils/extractHeaders";
-import failureCONTENT from "../responses/raw/content400";
-import failureEMPTY from "../responses/raw/empty400";
-import successCONTENT from "../responses/raw/content200";
+import failureCONTENT from "../responses/content400";
+import failureEMPTY from "../responses/empty400";
+import successCONTENT from "../responses/content200";
 
 export default async (request, env) => {
 	if (!request.query || !request.query.token) {

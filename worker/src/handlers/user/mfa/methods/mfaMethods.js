@@ -2,8 +2,8 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successCONTENT from "../../../../responses/raw/content200";
-import failureCONTENT from "../../../../responses/raw/content400";
+import successCONTENT from "../../../../responses/content200";
+import failureCONTENT from "../../../../responses/content400";
 
 export default async (request, env, ctx) => {
 	try {

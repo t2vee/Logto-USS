@@ -2,9 +2,9 @@
 // Use of this source code is governed by an MPL license.
 
 
-import failureEMPTY from "../../responses/raw/empty400";
-import successCONTENT from "../../responses/raw/content200";
-import successEMPTY from "../../responses/raw/empty204";
+import failureEMPTY from "../../responses/empty400";
+import successCONTENT from "../../responses/content200";
+import successEMPTY from "../../responses/empty204";
 
 export const handler = async (request, env, ctx) => {
 	try {

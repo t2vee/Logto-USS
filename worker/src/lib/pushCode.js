@@ -2,8 +2,8 @@
 // Use of this source code is governed by an MPL license.
 
 import prepareNumber from "../utils/prepareNumber";
-import successEMPTY from "../responses/raw/empty204";
-import failureCONTENT from "../responses/raw/content400";
+import successEMPTY from "../responses/empty204";
+import failureCONTENT from "../responses/content400";
 
 export default async (request, env, ctx, type, detail = undefined) => {
 	try {

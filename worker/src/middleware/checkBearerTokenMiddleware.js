@@ -3,7 +3,7 @@
 
 
 import verifyAuthToken from "../utils/verifyAuthToken";
-import failureCONTENT from "../responses/raw/content400";
+import failureCONTENT from "../responses/content400";
 
 export default async (request, env, ctx) => {
 	try {

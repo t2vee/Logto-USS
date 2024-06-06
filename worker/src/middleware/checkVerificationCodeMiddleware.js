@@ -2,7 +2,7 @@
 // Use of this source code is governed by an MPL license.
 
 
-import failureCONTENT from "../responses/raw/content400";
+import failureCONTENT from "../responses/content400";
 
 export default async (request, env, ctx) => {
 	const url = new URL(request.url);
