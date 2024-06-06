@@ -4,7 +4,6 @@
 import { Router } from 'itty-router'
 import { UserRouter } from './user'
 
-// NOTE: this base must include the *complete* base path
 export const HandlerRouter = Router({ base: '/api/v2' })
 
-HandlerRouter.all('/me/*', UserRouter.fetch)
+HandlerRouter.all('/me/*', UserRouter.handle)

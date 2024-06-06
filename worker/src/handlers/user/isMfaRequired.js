@@ -4,8 +4,9 @@
 
 import successCONTENT from "../../responses/raw/success-CONTENT";
 import failureEMPTY from "../../responses/raw/failure-EMPTY";
+import { UserRouter } from './index'
 
-export default async (request, env, ctx) => {
+UserRouter.get("is-mfa-required", async (request, env, ctx) => {
 	try {
 		const value = await env.MFARequiredTokens.get(ctx.userid);
 		return value
@@ -15,4 +16,4 @@ export default async (request, env, ctx) => {
 		console.error(e)
 		return failureEMPTY(env, 418)
 	}
-}
+})

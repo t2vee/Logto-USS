@@ -8,9 +8,10 @@ import failureCONTENT from "../../responses/raw/failure-CONTENT";
 
 
 import Filter from "bad-words";
+import { HandlerRouter } from '../index'
 const filter = new Filter();
 
-export default async (request, env, ctx) => {
+HandlerRouter.get("/utils/check-username-exists/:username", async (request, env, ctx) => {
 	try {
 		if (!request.params || !request.params.username) { return failureCONTENT(env, 'ERR_NO_USERNAME_PROVIDED', 400); }
 		if (filter.isProfane(request.params.username)) { return failureCONTENT(env, 'ERR_USERNAME_CONTAINS_BAD_WORDS', 406) }
@@ -21,4 +22,4 @@ export default async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)	}
-}
+})

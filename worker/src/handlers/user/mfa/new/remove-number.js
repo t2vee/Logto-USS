@@ -4,8 +4,9 @@
 
 import successEMPTY from "../../../../responses/raw/success-EMPTY";
 import failureCONTENT from "../../../../responses/raw/failure-CONTENT";
+import { UpdateUserRouter } from '../../update'
 
-export default  async (request, env, ctx) => {
+UpdateUserRouter.post("/remove-sms", async (request, env, ctx) => {
 	try {
 		await ctx.Http.patch(
 			`/api/users/${ctx.userid}`,
@@ -15,5 +16,5 @@ export default  async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)	}
-}
+})
 
