@@ -4,9 +4,9 @@
 
 import successCONTENT from "../../../../responses/raw/success-CONTENT";
 import failureCONTENT from "../../../../responses/raw/failure-CONTENT";
-import { MFAMethodsRouter } from './index'
 
-MFAMethodsRouter.post("/create", async (request, env, ctx) => {
+
+export default async (request, env, ctx) => {
 	try {
 		const uri = `/api/users/${ctx.userid}/mfa-verifications`
 		const totp = await ctx.Http.post(uri, {data: {"type": "Totp"},});
@@ -18,4 +18,4 @@ MFAMethodsRouter.post("/create", async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)}
-})
+}

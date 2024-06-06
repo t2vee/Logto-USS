@@ -4,9 +4,8 @@
 
 import pushCode from "../../../../lib/pushCode";
 import failureCONTENT from '../../../../responses/raw/failure-CONTENT'
-import { NewMFARouter } from './index'
 
-NewMFARouter.post("push-email", async (request, env, ctx) => {
+export default async (request, env, ctx) => {
 	const requestData = await request.json();
 	try {
 		ctx.Validate.email(requestData);
@@ -16,4 +15,4 @@ NewMFARouter.post("push-email", async (request, env, ctx) => {
 	}
 	const email = requestData.email;
 	return pushCode(request, env, ctx, 'email', email);
-})
+}

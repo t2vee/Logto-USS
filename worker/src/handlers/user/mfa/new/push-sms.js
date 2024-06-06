@@ -5,9 +5,8 @@
 import pushCode from "../../../../lib/pushCode";
 import prepareNumber from "../../../../utils/prepareNumber";
 import failureCONTENT from '../../../../responses/raw/failure-CONTENT'
-import { NewMFARouter } from './index'
 
-NewMFARouter.post("/push-sms", async (request, env, ctx) => {
+export default async (request, env, ctx) => {
 	const requestData = await request.json();
 	try {
 		ctx.Validate.phone(requestData);
@@ -17,4 +16,4 @@ NewMFARouter.post("/push-sms", async (request, env, ctx) => {
 	}
 	const phone = requestData.encryptedPhoneNumber;
 	return pushCode(request, env, ctx, 'email', await prepareNumber(phone));
-})
+}

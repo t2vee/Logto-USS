@@ -8,6 +8,8 @@ import { handler as UpdateFullName } from "./updateFullName";
 import { handler as UpdatePassword } from "./updatePassword";
 import { handler as UpdateRegionalSettings } from "./updateRegionalSettings";
 import { handler as UpdateUsername } from "./updateUsername";
+import removeSMS from "../mfa/new/remove-number";
+
 
 export const UpdateUserRouter = Router({ base: '/api/v2/me/edit' })
 
@@ -18,3 +20,4 @@ UpdateUserRouter
 	.post("/password", UpdatePassword)
 	.post("/regional-settings", UpdateRegionalSettings)
 	.post("/username", UpdateUsername)
+  .post("/remove-sms",removeSMS)
