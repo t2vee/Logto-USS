@@ -5,9 +5,7 @@
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
 import successEMPTY from "../../../responses/raw/success-EMPTY";
 
-import { UpdateUserRouter } from './index'
-
-UpdateUserRouter.post("/username", async (request, env, ctx) => {
+export const handler = async (request, env, ctx) => {
 	try {
 		if (await env.UsernameChangeTimelimit.get(request.userid)) {return failureCONTENT(env,`ERR_CANNOT_YET_CHANGE`, 400)}
 		const requestData = await request.json();
@@ -24,4 +22,4 @@ UpdateUserRouter.post("/username", async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)	}
-})
+}

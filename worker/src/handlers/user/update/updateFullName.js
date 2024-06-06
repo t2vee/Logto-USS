@@ -4,10 +4,8 @@
 
 import successEMPTY from "../../../responses/raw/success-EMPTY";
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
-import { UpdateUserRouter } from './index'
 
-
-UpdateUserRouter.post("/full-name", async (request, env, ctx) => {
+export const handler = async (request, env, ctx) => {
 	try {
 		const requestData = await request.json();
 		ctx.Validate.fullName(requestData);
@@ -19,4 +17,4 @@ UpdateUserRouter.post("/full-name", async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)	}
-})
+}
