@@ -4,8 +4,9 @@
 
 import successEMPTY from "../../../responses/raw/success-EMPTY";
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
+import { DangerZoneRouter } from './index'
 
-export default async (request, env, ctx) => {
+DangerZoneRouter.post("suspendme", async (request, env, ctx) => {
 	try {
 		await ctx.Http.patch(`/api/users/${ctx.userid}/is-suspended`, {
 			body: {"isSuspended": true},
@@ -14,4 +15,4 @@ export default async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)}
-}
+})

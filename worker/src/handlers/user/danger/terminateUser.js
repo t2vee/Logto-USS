@@ -4,12 +4,13 @@
 
 import successEMPTY from "../../../responses/raw/success-EMPTY";
 import failureCONTENT from "../../../responses/raw/failure-CONTENT";
+import { DangerZoneRouter } from './index'
 
-export default async (request, env, ctx) => {
+DangerZoneRouter.post("/terminate", async (request, env, ctx) => {
 	try {
 		await ctx.Http.delete(`/api/users/${ctx.userid}`, {})
 		return successEMPTY(env)
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)}
-}
+})
