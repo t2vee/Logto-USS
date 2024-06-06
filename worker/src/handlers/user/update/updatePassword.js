@@ -2,10 +2,11 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successEMPTY from "../../../responses/raw/success-EMPTY";
-import failureCONTENT from "../../../responses/raw/failure-CONTENT";
+import successEMPTY from "../../../responses/raw/empty204";
+import failureCONTENT from "../../../responses/raw/content400";
+import { UpdateUserRouter } from './index'
 
-export default async (request, env, ctx) => {
+export const handler = async (request, env, ctx) => {
 	try {
 		const requestData = await request.json();
 		ctx.Validate.password(requestData);
@@ -15,14 +16,14 @@ export default async (request, env, ctx) => {
 				{data: { "password": requestData.oldPassword }
 				});
 		} catch (err) {
-			return failureCONTENT(env, 'old password does not match!', 406)
+			return failureCONTENT('old password does not match!', 406)
 		}
 		await ctx.Http.patch(
 			`/api/users/${ctx.userid}/password`,
 			{data: { "password": requestData.password }
 			});
-		return successEMPTY(env)
+		return successEMPTY
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(env, e.message, e.status)	}
+		return failureCONTENT(e.message, e.status)	}
 }

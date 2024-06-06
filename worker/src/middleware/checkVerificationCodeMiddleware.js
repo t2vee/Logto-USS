@@ -2,7 +2,7 @@
 // Use of this source code is governed by an MPL license.
 
 
-import failureCONTENT from "../responses/raw/failure-CONTENT";
+import failureCONTENT from "../responses/raw/content400";
 
 export default async (request, env, ctx) => {
 	const url = new URL(request.url);
@@ -15,5 +15,4 @@ export default async (request, env, ctx) => {
 		console.log('[MIDDLEWARE] Verification Code Check Succeeded')
 		ctx.verificationCode = verificationCode;
 	}
-	console.log('[MIDDLEWARE] Verification Code Not Found. Passing...')
 }

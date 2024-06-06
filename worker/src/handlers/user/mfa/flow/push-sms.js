@@ -4,6 +4,6 @@
 
 import pushCode from "../../../../lib/pushCode";
 
-export default async (request, env) => {
-	return pushCode(request, env, 'phone');
+export const handler = async (request, env, ctx) => {
+	return pushCode(request, env, ctx, 'phone');
 }

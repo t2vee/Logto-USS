@@ -2,14 +2,14 @@
 // Use of this source code is governed by an MPL license.
 
 
-import CORS from "../../headers/CORS";
-
-export default (env, content, code = 400) =>
+export default (content, code = 400) =>
 	Response.json(
 		content,
 		{
 			status: code,
 			statusText: content,
-			headers: CORS(env, "application/json")
+			headers: {
+				"Content-Type": "application/json; charset=utf-8"
+			},
 		}
 	)

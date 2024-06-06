@@ -32,7 +32,7 @@ async function loadData() {
     const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
     const logtoRepsonse = await fetchUserInfo()
     const response = await axios.get(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/extended-user-info`,
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/extended-user-info`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

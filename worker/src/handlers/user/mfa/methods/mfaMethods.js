@@ -2,16 +2,16 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successCONTENT from "../../../../responses/raw/success-CONTENT";
-import failureCONTENT from "../../../../responses/raw/failure-CONTENT";
+import successCONTENT from "../../../../responses/raw/content200";
+import failureCONTENT from "../../../../responses/raw/content400";
 
 export default async (request, env, ctx) => {
 	try {
 		const r = await ctx.Http.get(`/api/users/${encodeURIComponent(ctx.userid)}/mfa-verifications`, {});
 		return r.length === 0 ?
-			successCONTENT(env, ["none"]) :
-			successCONTENT(env, r)
+			successCONTENT(["none"]) :
+			successCONTENT(r)
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(env, e.message, e.status)	}
+		return failureCONTENT(e.message, e.status)	}
 }

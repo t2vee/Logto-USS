@@ -2,18 +2,19 @@
 // Use of this source code is governed by an MPL license.
 
 
-import failureEMPTY from "../../responses/raw/failure-EMPTY";
-import successCONTENT from "../../responses/raw/success-CONTENT";
-import successEMPTY from "../../responses/raw/success-EMPTY";
+import failureEMPTY from "../../responses/raw/empty400";
+import successCONTENT from "../../responses/raw/content200";
+import successEMPTY from "../../responses/raw/empty204";
 
-export default async (request, env, ctx) => {
+export const handler = async (request, env, ctx) => {
 	try {
 		const value = await env.UsernameChangeTimelimit.get(ctx.userid);
 		return value
-			? successCONTENT(env, {value})
-			: successEMPTY(env);
+			? successCONTENT({value})
+			: successEMPTY;
 	} catch (e) {
 		console.error(e)
-		return failureEMPTY(env, 418)
+		return failureEMPTY(418)
 	}
 }
+

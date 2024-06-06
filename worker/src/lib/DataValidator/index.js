@@ -22,7 +22,6 @@ class DataValidator {
 			throw new ValidationException(e.Ge);
 		}
 		if (checkBadWords) {
-			console.log('im checking for naughty words')
 			if (this._filter.isProfane(data.name ? data.name : data.username)) {{throw new ValidationException('ERR_CONTAINS_BAD_WORDS', 406)}}
 		}
 		console.log('[VALIDATOR] Submitted data successfully validated')
@@ -39,7 +38,6 @@ class DataValidator {
 		const date = new Date(`${dateParts[1]} ${dateParts[0]}, ${dateParts[2]}`);
 		if (!isNaN(date.getTime())) {
 			const age = this.#calculateAge(date);
-			console.log(age)
 			if (age <= 13 || age >= 99) {throw new ValidationException('ERR_AGE_OUT_OF_RANGE', 422)}
 		} else {
 			throw new ValidationException('ERR_INVALID_DATE', 422);

@@ -3,6 +3,6 @@
 
 import verifyCode from "../../../../lib/verifyCode";
 
-export default async (request, env) => {
-	return verifyCode(env, request, 'email')
+export const handler = async (request, env, ctx) => {
+	return verifyCode(env, request, ctx, 'email')
 }

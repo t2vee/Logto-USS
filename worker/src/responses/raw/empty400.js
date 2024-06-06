@@ -2,13 +2,13 @@
 // Use of this source code is governed by an MPL license.
 
 
-import CORS from "../../headers/CORS";
-
-export default (env, code = 400) =>
+export default (code = 400) =>
 	new Response(
 		null,
 		{
 			status: code,
-			headers: CORS(env, "text/plain")
+			headers: {
+				"Content-Type": "text/plain; charset=utf-8"
+			},
 		}
 	)

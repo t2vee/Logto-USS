@@ -3,9 +3,9 @@
 
 
 import extractBearerTokenFromHeaders from "../utils/extractHeaders";
-import failureCONTENT from "../responses/raw/failure-CONTENT";
-import failureEMPTY from "../responses/raw/failure-EMPTY";
-import successCONTENT from "../responses/raw/success-CONTENT";
+import failureCONTENT from "../responses/raw/content400";
+import failureEMPTY from "../responses/raw/empty400";
+import successCONTENT from "../responses/raw/content200";
 
 export default async (request, env) => {
 	if (!request.query || !request.query.token) {
@@ -34,9 +34,9 @@ export default async (request, env) => {
 			"filter": data.explicit_content.filter_enabled,
 			"image_url": data.images.length > 0 ? data.images[0].url : null
 		}
-		return successCONTENT(env, payload);
+		return successCONTENT(payload);
 	} catch (e) {
 		console.error(e)
-		return failureEMPTY(env, 418)
+		return failureEMPTY(500)
 	}
 }

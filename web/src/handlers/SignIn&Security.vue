@@ -29,7 +29,7 @@ const mfaOptionsNum = ref([])
 async function grabMfaOptions() {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/mfa-methods`,
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa/methods`,
       {headers: {Authorization: `Bearer ${await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)}`, 'Content-Type': 'application/json'}}
     )
     if (response.data[0]?.type === 'Totp') {mfaOptions.value.totp = response.data[0]}
