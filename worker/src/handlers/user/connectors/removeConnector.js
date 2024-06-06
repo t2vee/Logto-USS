@@ -2,17 +2,17 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successEMPTY from "../../../responses/raw/success-EMPTY";
-import failureCONTENT from "../../../responses/raw/failure-CONTENT";
+import successEMPTY from "../../../responses/raw/empty204";
+import failureCONTENT from "../../../responses/raw/content400";
 
 export const handler = async (request, env, ctx) => {
-	if (!request.params || !request.params.connector) { return failureCONTENT(env, 'ERR_NO_TYPE_PROVIDED', 400); }
+	if (!request.params || !request.params.connector) { return failureCONTENT('ERR_NO_TYPE_PROVIDED', 400); }
 	try {
 		await ctx.Http.delete(
 			`/api/users/${ctx.userid}/identities/${request.params.connector}`,
 			{});
-		return successEMPTY(env)
+		return successEMPTY
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(env, e.message, e.status)}
+		return failureCONTENT(e.message, e.status)}
 }

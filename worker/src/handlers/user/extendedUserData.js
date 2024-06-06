@@ -2,8 +2,8 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successCONTENT from "../../responses/raw/success-CONTENT";
-import failureCONTENT from "../../responses/raw/failure-CONTENT";
+import successCONTENT from "../../responses/raw/content200";
+import failureCONTENT from "../../responses/raw/content400";
 
 export const handler = async (request, env, ctx) => {
 	try {
@@ -11,9 +11,9 @@ export const handler = async (request, env, ctx) => {
 			`/api/users/${encodeURIComponent(ctx.userid)}`, {
 				resTo400: 'ERR_USR_DOES_NOT_EXIST',
 			});
-		return successCONTENT(env, userData);
+		return successCONTENT(userData);
 	} catch (e) {
 		console.error('Error in grabbing User Data:' + e)
-		return failureCONTENT(env, e.message, e.status)}
+		return failureCONTENT(e.message, e.status)}
 }
 

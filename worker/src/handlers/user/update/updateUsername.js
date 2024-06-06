@@ -2,8 +2,8 @@
 // Use of this source code is governed by an MPL license.
 
 
-import failureCONTENT from "../../../responses/raw/failure-CONTENT";
-import successEMPTY from "../../../responses/raw/success-EMPTY";
+import failureCONTENT from "../../../responses/raw/content400";
+import successEMPTY from "../../../responses/raw/empty204";
 
 export const handler = async (request, env, ctx) => {
 	try {
@@ -18,8 +18,8 @@ export const handler = async (request, env, ctx) => {
 		const monthFromNow = Math.floor(new Date(new Date().setMonth(new Date().getMonth() + 1)).getTime() / 1000);
 		const formattedDate = new Date(monthFromNow * 1000)
 		await env.UsernameChangeTimelimit.put(ctx.userid, [('0' + formattedDate.getDate()).slice(-2), ('0' + (formattedDate.getMonth() + 1)).slice(-2), formattedDate.getFullYear().toString().slice(-2)].join('/'), {expirationTtl: monthFromNow})
-		return successEMPTY(env)
+		return successEMPTY
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(env, e.message, e.status)	}
+		return failureCONTENT(e.message, e.status)	}
 }

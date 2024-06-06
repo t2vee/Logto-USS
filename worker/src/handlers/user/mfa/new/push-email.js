@@ -3,7 +3,7 @@
 
 
 import pushCode from "../../../../lib/pushCode";
-import failureCONTENT from '../../../../responses/raw/failure-CONTENT'
+import failureCONTENT from '../../../../responses/raw/content400'
 
 export default async (request, env, ctx) => {
 	const requestData = await request.json();
@@ -11,7 +11,7 @@ export default async (request, env, ctx) => {
 		ctx.Validate.email(requestData);
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(env, e.message, e.status)
+		return failureCONTENT(e.message, e.status)
 	}
 	const email = requestData.email;
 	return pushCode(request, env, ctx, 'email', email);

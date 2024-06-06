@@ -3,7 +3,7 @@
 
 
 import verifyAuthToken from "../utils/verifyAuthToken";
-import failureCONTENT from "../responses/raw/failure-CONTENT";
+import failureCONTENT from "../responses/raw/content400";
 
 export default async (request, env, ctx) => {
 	try {
@@ -11,6 +11,7 @@ export default async (request, env, ctx) => {
 		ctx.userid = tokenInfo.sub;
 		console.log('[MIDDLEWARE] Bearer Token Check Succeeded')
 	} catch (e) {
-		return failureCONTENT(env, e.code, 400);
+		console.log('[MIDDLEWARE] Bearer Token Check FAILED')
+		return failureCONTENT(e.status === 401 ? 'ERR_UNAUTHORISED' : 'ERR_FAILED_TO_VERIFY_TOKEN', e.status);
 	}
 }
