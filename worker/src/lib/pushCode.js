@@ -5,7 +5,6 @@ import prepareNumber from "../utils/prepareNumber";
 import successEMPTY from "../responses/raw/success-EMPTY";
 import failureCONTENT from "../responses/raw/failure-CONTENT";
 
-// reducing extreme boilerplate
 export default async (request, env, ctx, type, detail = undefined) => {
 	try {
 		if (!detail) {

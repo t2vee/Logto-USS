@@ -4,14 +4,15 @@
 import successEMPTY from "../../../../responses/raw/success-EMPTY";
 import verifyCode from "../../../../lib/verifyCode";
 import failureCONTENT from "../../../../responses/raw/failure-CONTENT";
+import { NewMFARouter } from './index'
 
-export default async (request, env, ctx) => {
+NewMFARouter.post("/verify-sms", async (request, env, ctx) => {
 	try {
 		const requestData = await request.json();
 		ctx.Validate.phone(requestData);
 		const phone = requestData.encryptedPhoneNumber;
 		try {
-			await verifyCode(env, request, 'phone', phone)
+			await verifyCode(env, request, ctx, 'phone', phone)
 		} catch (e) {
 			console.error(e)
 			return failureCONTENT(env, e.message, e.status)}
@@ -26,4 +27,4 @@ export default async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)	}
-}
+})

@@ -2,7 +2,8 @@
 // Use of this source code is governed by an MPL license.
 
 import verifyCode from "../../../../lib/verifyCode";
+import { MFAFlowRouter } from './index'
 
-export default async (request, env) => {
-	return verifyCode(env, request, 'email')
-}
+MFAFlowRouter.post("/verify-email-code", async (request, env, ctx) => {
+	return verifyCode(env, request, ctx, 'email')
+})
