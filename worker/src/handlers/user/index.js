@@ -4,6 +4,9 @@
 import { AutoRouter } from 'itty-router'
 
 import { handler as ExtendedUserInfo } from "./extendedUserData";
+import { handler as CanChangeUsername } from "./canChangeUsername";
+import { handler as IsMFARequired } from "./isMfaRequired";
+
 
 import { UpdateUserRouter } from './update'
 import { AvatarUserRouter } from './avatar'
@@ -15,10 +18,15 @@ import { NewMFARouter } from './mfa/new'
 
 export const UserRouter = AutoRouter({ base: '/api/v2/me' })
 
-UserRouter.get("/extended-user-info", ExtendedUserInfo)
+UserRouter
+	.get("/extended-user-info", ExtendedUserInfo)
+	.get("/can-change-username", CanChangeUsername)
+	.get("/is-mfa-required", IsMFARequired)
+	// Sub Routers
+	.post('/avatar/*', AvatarUserRouter.handle)
+
 
 /*UserRouter.post('/edit/*', UpdateUserRouter.handle)
-UserRouter.post('/avatar/*', AvatarUserRouter.handle)
 UserRouter.post('/dangerzone/*', DangerZoneRouter.handle)
 UserRouter.post('/connectors/*', ConnectorRouter.handle)
 
