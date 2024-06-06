@@ -1,16 +1,19 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
-
-// these imports are horrifying - less horrifying now but still not great
+// ITTY
 import { AutoRouter, cors } from 'itty-router'
+// MIDDLEWARE
 import checkTokenMiddleware from "./middleware/checkBearerTokenMiddleware";
 import attachAccessToken from "./middleware/attachAccessToken";
-import failureCONTENT from "./responses/raw/content400";
-import checkVerificationCodeMiddleware from "./middleware/checkVerificationCodeMiddleware";
 import initialiseRequest from './middleware/initialiseRequest'
+import checkVerificationCodeMiddleware from "./middleware/checkVerificationCodeMiddleware";
+// RESPONSES -  just for 404
+import failureCONTENT from "./responses/raw/content400";
+// HANDLERS
 import { HandlerRouter } from './handlers'
 import HandleSpotifyUserInfoEndpoint from './handlers/handleSpotifyUserInfoEndpoint'
+
 
 const { preflight, corsify } = cors({
 	origin: 'https://myid.mxs.app',
