@@ -4,9 +4,8 @@
 
 import successEMPTY from "../../../../responses/raw/success-EMPTY";
 import failureCONTENT from "../../../../responses/raw/failure-CONTENT";
-import { MFAMethodsRouter } from './index'
 
-MFAMethodsRouter.post("/remove", async (request, env, ctx) => {
+export default async (request, env, ctx) => {
 	const uri = `/api/users/${ctx.userid}/mfa-verifications/`;
 	try {
 		const requestData = await request.json();
@@ -16,4 +15,4 @@ MFAMethodsRouter.post("/remove", async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return failureCONTENT(env, e.message, e.status)}
-})
+}

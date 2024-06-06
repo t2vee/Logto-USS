@@ -60,14 +60,14 @@ const countdown = () => {
 
 async function grabMfaOptions(accessToken) {
   try {
-    return await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/mfa-methods`, {
+    return await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa/methods`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       }
     })
   } catch (error) {
-    toast.error('Error checking username availability:', { description: error })
+    toast.error('Error grabbing MFA Options:', { description: 'Some account actions will be unavailable' })
     isMfaRequired.value = error.response && error.response.status === 404
   }
 }
@@ -77,7 +77,7 @@ async function sendVerificationCode() {
   let failed = false
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/push-${selectedMfaMethod.value}`,
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa-flow/push-${selectedMfaMethod.value}`,
       {},
       {
         headers: {
@@ -126,7 +126,7 @@ const handleCodeComplete = async (code) => {
   isLoading.value = true
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/mfa-flow/verify-${selectedMfaMethod.value}-code?verification-code=${code}`,
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa-flow/verify-${selectedMfaMethod.value}-code?verification-code=${code}`,
       {},
       {
         headers: {
@@ -157,7 +157,7 @@ const checkMFA = async () => {
   accessTokenRef.value = accessToken
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/is-mfa-required`,
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/is-mfa-required`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -172,7 +172,7 @@ const checkMFA = async () => {
     }
     isMfaRequired.value = response.data.status === true
   } catch (error) {
-    toast.error('Error checking MFA:', { description: 'Service Unavailable. Try again later' })
+    toast.error('RAHHHHHHHHHHHHHHHHHHError checking MFA:', { description: 'Service Unavailable. Try again later' })
     eventBus.emit('closeEditDetailDialog', false)
     eventBus.emit('refreshUserData', true)
   } finally {
