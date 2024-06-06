@@ -23,14 +23,11 @@ UserRouter
 	.get("/can-change-username", CanChangeUsername)
 	.get("/is-mfa-required", IsMFARequired)
 	// Sub Routers
+	.all("/mfa/*", MFAMethodsRouter.fetch)
+	// these sub routers only use post as a accepting method
 	.post('/avatar/*', AvatarUserRouter.fetch)
 	.post('/connectors/*', ConnectorRouter.fetch)
 	.post('/dangerzone/*', DangerZoneRouter.fetch)
 	.post('/edit/*', UpdateUserRouter.fetch)
-
-
-/*UserRouter
-UserRouter.post('/mfa-flow/*', MFAFlowRouter.handle)
-UserRouter.post('/mfa/*', MFAMethodsRouter.handle)
-UserRouter.post('/verify/*', NewMFARouter.handle)
-*/
+	.post('/mfa-flow/*', MFAFlowRouter.fetch)
+	.post('/verify/*', NewMFARouter.fetch)

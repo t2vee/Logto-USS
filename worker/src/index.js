@@ -19,7 +19,7 @@ const router = AutoRouter();
 //router.options('*', corsHeaders) // need to fix cors headers so they are specific for each path
 
 // not bothered to do fancy routing stuff for this
-//router.get('/api/v1/oauth-user-info/endpoint/api-spotify-com/v1/me', HandleSpotifyUserInfoEndpoint)
+router.get('/api/v1/oauth-user-info/endpoint/api-spotify-com/v1/me', HandleSpotifyUserInfoEndpoint)
 
 // again the reason its so messy is because of itty router v4. i NEED to switch to v5
 router // the entire middleware system is a hack and a mess. i would like to change it but im lazy so

@@ -38,7 +38,6 @@ class DataValidator {
 		const date = new Date(`${dateParts[1]} ${dateParts[0]}, ${dateParts[2]}`);
 		if (!isNaN(date.getTime())) {
 			const age = this.#calculateAge(date);
-			console.log(age)
 			if (age <= 13 || age >= 99) {throw new ValidationException('ERR_AGE_OUT_OF_RANGE', 422)}
 		} else {
 			throw new ValidationException('ERR_INVALID_DATE', 422);
