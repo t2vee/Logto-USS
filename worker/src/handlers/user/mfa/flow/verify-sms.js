@@ -2,8 +2,7 @@
 // Use of this source code is governed by an MPL license.
 
 import verifyCode from "../../../../lib/verifyCode";
-import { MFAFlowRouter } from './index'
 
-MFAFlowRouter.post("/verify-sms-code", async (request, env, ctx) => {
+export const handler= async (request, env, ctx) => {
 	return verifyCode(env, request, ctx, 'phone')
-})
+}

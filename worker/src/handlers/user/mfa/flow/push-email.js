@@ -3,8 +3,7 @@
 
 
 import pushCode from "../../../../lib/pushCode";
-import { MFAFlowRouter } from './index'
 
-MFAFlowRouter.post("/push-email", async (request, env, ctx) => {
+export const handler = async (request, env, ctx) => {
 	return pushCode(request, env, ctx, 'email');
-})
+}
