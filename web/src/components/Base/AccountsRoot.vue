@@ -1,20 +1,20 @@
 <script setup>
-import { useLogto } from '@logto/vue'
-import { ref, onMounted, provide, onUnmounted } from 'vue'
+import { ref, onMounted, provide, onUnmounted, inject } from 'vue'
 import { CardContent } from '@/components/ui/card/index.js'
 import SideBar from '@/components/Base/SideBar.vue'
 import NavBar from '@/components/Base/NavBar.vue'
 import { Button } from '@/components/ui/button/index.js'
 import { Loader, AlertOctagon } from 'lucide-vue-next'
 import { eventBus } from '@/lib/eventBus.js'
-import axios from 'axios'
 import { toast } from 'vue-sonner'
+import {UIStateHandler} from "@/lib/UIStateHandler.js";
 
-const { fetchUserInfo, getAccessToken, isAuthenticated } = useLogto()
 const userInfo = ref(null)
 const isLoading = ref(true)
 const fetchFailure = ref(false)
 const userConnectorPresent = ref(false)
+
+const API = inject('api')
 
 const support = `mailto:${import.meta.env.VITE_SUPPORT_EMAIL}`
 const webBuild = `prod/${import.meta.env.VITE_COMMIT_HASH.length > 7 ? import.meta.env.VITE_COMMIT_HASH.substring(0, 7) : import.meta.env.VITE_COMMIT_HASH}`
@@ -24,32 +24,23 @@ const handleEvent = (data) => {
     loadData()
   }
 }
+
 async function loadData() {
-  if (!isAuthenticated) { window.location.replace("/oauth/login") }
-  fetchFailure.value = false
-  isLoading.value = true
-  try {
-    const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
-    const logtoRepsonse = await fetchUserInfo()
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/extended-user-info`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
+  userInfo.value = API.UserData(
+      new UIStateHandler({
+        always: {
+          isLoading: isLoading.value,
+        },
+        failure: {
+          events: {
+            toast: () => toast.error('Error grabbing User Information:', {description: 'Service Unavailable. Try again later'}),
+          },
+          refs: {
+            fetchFailure: fetchFailure.value,
+          }
         }
-      }
-    )
-    userInfo.value = Object.assign(response.data, logtoRepsonse)
-  } catch (error) {
-    console.log('error loading user information', error)
-    toast.error('Error grabbing User Information:', {
-      description: 'Service Unavailable. Try again later'
-    })
-    fetchFailure.value = true
-  } finally {
-    isLoading.value = false
-  }
+      })
+  )
 }
 
 onMounted(loadData)

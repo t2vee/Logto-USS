@@ -24,7 +24,10 @@ class HttpClient {
 
 		if (data) {
 			if (method === 'GET') {
-				url += '?' + new URLSearchParams(data);
+				const params = new URLSearchParams(data)
+				if (params) {
+					url += '?' + params;
+				}
 			} else {
 				config.body = JSON.stringify(data);
 			}

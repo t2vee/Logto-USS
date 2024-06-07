@@ -172,7 +172,7 @@ const checkMFA = async () => {
     }
     isMfaRequired.value = response.data.status === true
   } catch (error) {
-    toast.error('RAHHHHHHHHHHHHHHHHHHError checking MFA:', { description: 'Service Unavailable. Try again later' })
+    toast.error('Error checking MFA:', { description: 'Service Unavailable. Try again later' })
     eventBus.emit('closeEditDetailDialog', false)
     eventBus.emit('refreshUserData', true)
   } finally {

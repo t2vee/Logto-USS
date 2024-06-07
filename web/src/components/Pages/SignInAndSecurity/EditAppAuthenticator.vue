@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input/index.js'
 import {ref} from "vue";
 import axios from "axios";
 import {toast} from "vue-sonner";
-import {Loader2, ClipboardCopy, ClipboardCheck, FileCheck, FileDown} from 'lucide-vue-next';
+import {Loader2, ClipboardCopy, ClipboardCheck, FileDown} from 'lucide-vue-next';
 import { useClipboard } from '@vueuse/core'
 import { useLogto } from '@logto/vue';
 import {eventBus} from "@/lib/eventBus.js";
