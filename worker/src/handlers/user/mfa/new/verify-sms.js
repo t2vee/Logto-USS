@@ -1,9 +1,8 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
-import { status } from 'itty-router';
+import { status, error } from 'itty-router';
 import verifyCode from "../../../../lib/verifyCode";
-import { error } from 'itty-router'
 
 export default async (request, env, ctx) => {
 	try {

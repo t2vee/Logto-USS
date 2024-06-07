@@ -2,8 +2,7 @@
 // Use of this source code is governed by an MPL license.
 
 
-import { status } from 'itty-router';
-import { error } from 'itty-router'
+import { error, status } from 'itty-router'
 
 export default async (request, env, ctx) => {
 	const uri = `/api/users/${ctx.userid}/mfa-verifications/`;
