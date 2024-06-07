@@ -2,14 +2,12 @@
 // Use of this source code is governed by an MPL license.
 
 // ITTY
-import { AutoRouter, cors } from 'itty-router'
+import {AutoRouter, cors, error} from 'itty-router'
 // MIDDLEWARE
 import checkTokenMiddleware from "./middleware/checkBearerTokenMiddleware";
 import attachAccessToken from "./middleware/attachAccessToken";
 import initialiseRequest from './middleware/initialiseRequest'
 import checkVerificationCodeMiddleware from "./middleware/checkVerificationCodeMiddleware";
-// RESPONSES -  just for 404
-import failureCONTENT from "./responses/content400";
 // HANDLERS
 import { HandlerRouter } from './handlers'
 import HandleSpotifyUserInfoEndpoint from './handlers/handleSpotifyUserInfoEndpoint'
@@ -35,6 +33,6 @@ router
 
 router
 	.all("/api/v2/*", HandlerRouter.fetch)
-	.all('*', () => failureCONTENT('this is not the route you are looking for', 404))
+	.all('*', () => error(404, 'this is not the route you are looking for'))
 
 export default { ...router }

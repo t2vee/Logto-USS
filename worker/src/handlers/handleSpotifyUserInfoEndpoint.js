@@ -3,16 +3,11 @@
 
 
 import extractBearerTokenFromHeaders from "../utils/extractHeaders";
-import failureCONTENT from "../responses/content400";
-import failureEMPTY from "../responses/empty400";
-import successCONTENT from "../responses/content200";
+import {error, json} from "itty-router";
 
 export default async (request, env) => {
-	if (!request.query || !request.query.token) {
-		return failureCONTENT(env,'No Token Provided', 401);
-	}
-	if (request.query.token !== env.TOKEN) {
-		return failureCONTENT(env,'Invalid Token Provided', 401);
+	if (request.query.token !== env.TOKEN || !request.query || !request.query.token) {
+		return error(401, 'ERR_UNAUTHORISED');
 	}
 	const url = `https://api.spotify.com/v1/me`;
 	const headers = request.headers
@@ -34,9 +29,9 @@ export default async (request, env) => {
 			"filter": data.explicit_content.filter_enabled,
 			"image_url": data.images.length > 0 ? data.images[0].url : null
 		}
-		return successCONTENT(payload);
+		return json(payload);
 	} catch (e) {
 		console.error(e)
-		return failureEMPTY(500)
+		return error(500)
 	}
 }

@@ -2,9 +2,8 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successEMPTY from "../../../responses/empty204";
-import failureCONTENT from "../../../responses/content400";
-import { UpdateUserRouter } from './index'
+import { status } from 'itty-router';
+import { error } from 'itty-router'
 
 export const handler = async (request, env, ctx) => {
 	try {
@@ -16,14 +15,15 @@ export const handler = async (request, env, ctx) => {
 				{data: { "password": requestData.oldPassword }
 				});
 		} catch (err) {
-			return failureCONTENT('old password does not match!', 406)
+			return error(406,'old password does not match!')
 		}
 		await ctx.Http.patch(
 			`/api/users/${ctx.userid}/password`,
 			{data: { "password": requestData.password }
 			});
-		return successEMPTY
+		return status(204)
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(e.message, e.status)	}
+		return error(e)
+	}
 }

@@ -1,9 +1,8 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
-import successEMPTY from "../../../../responses/empty204";
+import {error, status} from 'itty-router';
 import verifyCode from "../../../../lib/verifyCode";
-import failureCONTENT from "../../../../responses/content400";
 
 export default async (request, env, ctx) => {
 	try {
@@ -13,7 +12,8 @@ export default async (request, env, ctx) => {
 			await verifyCode(env, request, ctx, 'email', requestData.email)
 		} catch (e) {
 			console.error(e)
-			return failureCONTENT(e.message, e.status)}
+			return error(e)
+		}
 		await ctx.Http.patch(
 			`/api/users/${ctx.userid}`,
 			{
@@ -21,8 +21,9 @@ export default async (request, env, ctx) => {
 				resTo400: 'ERR_INVALID_EMAIL',
 			}
 		);
-		return successEMPTY
+		return status(204)
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(e.message, e.status)	}
+		return error(e)
+	}
 }

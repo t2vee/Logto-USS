@@ -2,16 +2,17 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successEMPTY from "../../../responses/empty204";
-import failureCONTENT from "../../../responses/content400";
+import { status } from 'itty-router';
+import { error } from 'itty-router'
 
 export const handler = async (request, env, ctx) => {
 	try {
 		await ctx.Http.patch(`/api/users/${ctx.userid}/is-suspended`, {
 			body: {"isSuspended": true},
 		})
-		return successEMPTY
+		return status(204)
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(e.message, e.status)}
+		return error(e)
+}
 }

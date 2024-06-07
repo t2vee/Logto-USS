@@ -2,8 +2,7 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successEMPTY from "../../../responses/empty204";
-import failureCONTENT from "../../../responses/content400";
+import { status, error } from 'itty-router';
 
 export const handler = async (request, env, ctx) => {
 	try {
@@ -11,8 +10,9 @@ export const handler = async (request, env, ctx) => {
 			`/api/users/${ctx.userid}`,
 			{data: {"avatar": null}
 			});
-		return successEMPTY
+		return status(204)
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(e.message, e.status)	}
+		return error(e)
+	}
 }

@@ -1,8 +1,7 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
-import successEMPTY from "../responses/empty204";
-import failureCONTENT from "../responses/content400";
+import { status, error } from 'itty-router';
 import prepareNumber from "../utils/prepareNumber";
 
 export default async (env, request, ctx, type, detail = undefined) => {
@@ -21,9 +20,9 @@ export default async (env, request, ctx, type, detail = undefined) => {
 					: {'phone': detail, "verificationCode": ctx.verificationCode},
 			});
 		await env.MFARequiredTokens.put(ctx.userid, false, {expirationTtl: 900});
-		return successEMPTY
+		return status(204)
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(e.message, e.status)
+		return error(e)
 	}
 }

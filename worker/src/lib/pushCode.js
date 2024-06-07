@@ -2,8 +2,7 @@
 // Use of this source code is governed by an MPL license.
 
 import prepareNumber from "../utils/prepareNumber";
-import successEMPTY from "../responses/empty204";
-import failureCONTENT from "../responses/content400";
+import { status, error } from 'itty-router';
 
 export default async (request, env, ctx, type, detail = undefined) => {
 	try {
@@ -20,9 +19,9 @@ export default async (request, env, ctx, type, detail = undefined) => {
 					{'email': detail}
 				: {'phone': detail},
 			});
-		return successEMPTY;
+		return status(204);
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(e.message, e.status)
+		return error(e)
 	}
 }

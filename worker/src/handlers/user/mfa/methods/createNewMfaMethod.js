@@ -2,8 +2,7 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successCONTENT from "../../../../responses/content200";
-import failureCONTENT from "../../../../responses/content400";
+import { error, json } from 'itty-router'
 
 
 export default async (request, env, ctx) => {
@@ -11,11 +10,12 @@ export default async (request, env, ctx) => {
 		const uri = `/api/users/${ctx.userid}/mfa-verifications`
 		const totp = await ctx.Http.post(uri, {data: {"type": "Totp"},});
 		const code = await ctx.Http.post(uri, {data: {"type": "BackupCode"},});
-		return successCONTENT({
+		return json({
 			"AppAuthenticator": totp,
 			"BackupCodes": code,
 		});
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(e.message, e.status)}
+		return error(e)
+}
 }

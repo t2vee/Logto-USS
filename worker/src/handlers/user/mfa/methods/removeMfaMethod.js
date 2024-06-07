@@ -2,8 +2,8 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successEMPTY from "../../../../responses/empty204";
-import failureCONTENT from "../../../../responses/content400";
+import { status } from 'itty-router';
+import { error } from 'itty-router'
 
 export default async (request, env, ctx) => {
 	const uri = `/api/users/${ctx.userid}/mfa-verifications/`;
@@ -11,8 +11,9 @@ export default async (request, env, ctx) => {
 		const requestData = await request.json();
 		await ctx.Http.delete(uri + requestData.appid, {});
 		await ctx.Http.delete(uri + requestData.backupid, {});
-		return successEMPTY
+		return status(204)
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(e.message, e.status)}
+		return error(e)
+}
 }

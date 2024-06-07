@@ -2,7 +2,7 @@
 // Use of this source code is governed by an MPL license.
 
 
-import failureCONTENT from "../responses/content400";
+import { error } from 'itty-router'
 
 export default async (request, env, ctx) => {
 	const url = new URL(request.url);
@@ -10,7 +10,7 @@ export default async (request, env, ctx) => {
 	const verificationCodePattern = /^\d{6}$/;
 	if (verificationCode) {
 		if (!verificationCodePattern.test(verificationCode)) {
-			return failureCONTENT(env,'ERR_CODE_INVALID', 400);
+			return error(400, 'ERR_CODE_INVALID');
 		}
 		console.log('[MIDDLEWARE] Verification Code Check Succeeded')
 		ctx.verificationCode = verificationCode;

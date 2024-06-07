@@ -3,7 +3,7 @@
 
 
 import verifyAuthToken from "../utils/verifyAuthToken";
-import failureCONTENT from "../responses/content400";
+import { error } from 'itty-router'
 
 export default async (request, env, ctx) => {
 	try {
@@ -12,6 +12,6 @@ export default async (request, env, ctx) => {
 		console.log('[MIDDLEWARE] Bearer Token Check Succeeded')
 	} catch (e) {
 		console.log('[MIDDLEWARE] Bearer Token Check FAILED')
-		return failureCONTENT(e.status === 401 ? 'ERR_UNAUTHORISED' : 'ERR_FAILED_TO_VERIFY_TOKEN', e.status);
+		return error(e.statusCode, 'ERR_FAILED_TO_VERIFY_TOKEN');
 	}
 }

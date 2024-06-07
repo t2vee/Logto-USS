@@ -2,17 +2,16 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successCONTENT from "../../responses/content200";
-import failureEMPTY from "../../responses/empty400";
+import { error, json } from 'itty-router'
 
 export const handler = async (request, env, ctx) => {
 	try {
 		const value = await env.MFARequiredTokens.get(ctx.userid);
 		return value
-			? successCONTENT({ status: false })
-			: successCONTENT({ status: true });
+			? json({ status: false })
+			: json({ status: true });
 	} catch (e) {
 		console.error(e)
-		return failureEMPTY(418)
+		return error(418)
 	}
 }

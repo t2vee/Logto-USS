@@ -1,7 +1,10 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
-import { LogtoException, _500, _403 } from './exceptions/LogtoResponse';
+import {StatusError} from "itty-router";
+
+const _500 = 'ERR_SERVICE_FAILURE';
+const _403 = 'ERR_INTERNAL_MISCONFIG';
 
 // a simple fetch wrapper to reduce repetitive error handling code and make it easier to work with
 class HttpClient {
@@ -34,12 +37,12 @@ class HttpClient {
 			switch (response.status) {
 				case 404:
 				case 400:
-					throw new LogtoException(resTo400, 400);
+					throw new StatusError(400, resTo400)
 				case 403:
 				case 401:
-					throw new LogtoException(_403, 500);
+					throw new StatusError(500, _403)
 				case 500:
-					throw new LogtoException(_500, 500);
+					throw new StatusError(500, _500)
 			}
 		}
 		if (contentType && contentType.includes('application/json')) {

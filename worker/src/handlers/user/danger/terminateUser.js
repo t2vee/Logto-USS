@@ -2,16 +2,17 @@
 // Use of this source code is governed by an MPL license.
 
 
-import successEMPTY from "../../../responses/empty204";
-import failureCONTENT from "../../../responses/content400";
+import { status } from 'itty-router';
+import { error } from 'itty-router'
 import { DangerZoneRouter } from './index'
 
 
 export const handler = async (request, env, ctx) => {
 	try {
 		await ctx.Http.delete(`/api/users/${ctx.userid}`, {})
-		return successEMPTY
+		return status(204)
 	} catch (e) {
 		console.error(e)
-		return failureCONTENT(e.message, e.status)}
+		return error(e)
+}
 }
