@@ -1,9 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useLogto } from '@logto/vue'
 import { VueTelInput } from 'vue-tel-input'
-import '@/assets/phone.css'
 import { Button } from '@/components/ui/button/index.js'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
 import { Label } from '@/components/ui/label/index.js'
@@ -148,6 +147,13 @@ async function verifyNumber() {
     isLoading.value = false
   }
 }
+
+onMounted(() => {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://cdn.vstatic.net/content/lHvXlqL2OkmpAMi9x15E/mxs.app/Stylesheet/VueTelInput.css';
+  document.head.appendChild(link);
+});
 </script>
 
 <template>
