@@ -300,7 +300,6 @@ watch(
       </div>
       <div v-else-if="isLoading" class="flex items-center align-middle justify-center">
         <Loader class="animate-spin" :size="32" />
-        <p class="text-xl font-bold">Loading...</p>
       </div>
     </transition>
   </DialogContent>
