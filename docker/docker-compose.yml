@@ -4,7 +4,7 @@ version: '3.8'
 services:
   web:
     build:
-      context: ./vuejs-app
+      context: ./web
       dockerfile: web.Dockerfile
     volumes:
       - web:/app
@@ -17,7 +17,7 @@ services:
 
   worker:
     build:
-      context: ./cloudflare-worker
+      context: ./worker
       dockerfile: worker.Dockerfile
     volumes:
       - worker:/app
