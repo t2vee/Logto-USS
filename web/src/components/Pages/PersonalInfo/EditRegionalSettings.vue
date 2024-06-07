@@ -8,8 +8,8 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select/index.js'
-import countries from '@/lib/countries.json.js'
-import timezones from '@/lib/timezones.json.js'
+import countries from '@/lib/data/countries.json.js'
+import timezones from '@/lib/data/timezones.json.js'
 import { Check, ChevronsUpDown } from 'lucide-vue-next'
 import { inject, ref } from 'vue'
 import { cn } from '@/lib/utils.js'

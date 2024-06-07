@@ -1,9 +1,8 @@
 <script setup>
-import {inject, onMounted} from 'vue'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card/index.js'
+import {inject} from 'vue'
+import { Card, CardDescription, CardTitle } from '@/components/ui/card/index.js'
 import { GoogleIcon, DiscordIcon, SpotifyIcon, GitHubIcon } from 'vue3-simple-icons';
 import ConnectorCard from '@/components/Pages/Connections/ConnectorCard.vue'
-import {LogIn} from "lucide-vue-next";
 
 const userData = inject('userData')
 </script>
