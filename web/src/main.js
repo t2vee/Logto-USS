@@ -29,7 +29,7 @@ app.use(createLogto, logtoConfig)
 if (import.meta.env.VITE_MATOMO_ENDPOINT) {
   app.use(VueMatomo, {
     host: import.meta.env.VITE_MATOMO_ENDPOINT,
-    siteId: 2,
+    siteId: import.meta.env.VITE_MATOMO_SITE_ID,
     trackerFileName: 'matomo',
     router: router,
     enableLinkTracking: true
