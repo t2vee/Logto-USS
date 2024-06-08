@@ -10,9 +10,10 @@ import {
   CircleEllipsis,
   KeyRound
 } from 'lucide-vue-next'
-import axios from 'axios'
 import { toast } from 'vue-sonner'
-import { useLogto } from '@logto/vue'
+import { useAPI } from "@/lib/api/useAPI.js";
+
+const { API, UIStateHandler, getAccessToken, coreResource } = useAPI()
 
 const AddPhoneNumberDialog = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/AddPhoneNumberDialog.vue'))
 const EditPhoneNumberDialog = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/RemovePhoneNumberDialog.vue'))
@@ -22,23 +23,23 @@ const EditMfaMethods = defineAsyncComponent(() => import('@/components/Pages/Sig
 const UpdatePasswordDialog = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/UpdatePasswordDialog.vue'))
 
 const userData = inject('userData')
-const { getAccessToken } = useLogto()
 const mfaOptions = ref({})
 const mfaOptionsNum = ref([])
 
 async function grabMfaOptions() {
-  try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa/methods`,
-      {headers: {Authorization: `Bearer ${await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)}`, 'Content-Type': 'application/json'}}
-    )
-    if (response.data[0]?.type === 'Totp') {mfaOptions.value.totp = response.data[0]}
-    mfaOptionsNum.value.push(userData.value.email)
-    if (userData.value.phone_number) {mfaOptionsNum.value.push(userData.value.phone_number)}
-    if (response.data[0] !== 'none') {mfaOptionsNum.value.push(response.data[0])}
-  } catch (error) {
-    toast.error('Error grabbing MFA Options:', { description: 'Some account actions will be unavailable' })
-  }
+  const res = await API.MfaOptions(await getAccessToken(coreResource, undefined),
+      new UIStateHandler({
+        error: {
+          events: {
+            toast: () => toast.error('Error grabbing MFA Options:', { description: 'Some account actions will be unavailable' }),
+          },
+        }
+      })
+  )
+  if (res[0]?.type === 'Totp') {mfaOptions.value.totp = res[0]}
+  mfaOptionsNum.value.push(userData.value.email)
+  if (userData.value.phone_number) {mfaOptionsNum.value.push(userData.value.phone_number)}
+  if (res[0] !== 'none') {mfaOptionsNum.value.push(res[0])}
 }
 
 provide('mfaMethods', mfaOptions)

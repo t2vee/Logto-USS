@@ -1,20 +1,17 @@
 <script setup>
 import { Input } from '@/components/ui/input/index.js'
 import { Label } from '@/components/ui/label/index.js'
-import axios from 'axios'
-import { defineAsyncComponent, inject, ref } from 'vue'
-import { useLogto } from '@logto/vue'
+import { inject, ref } from 'vue'
 import { Button } from '@/components/ui/button/index.js'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-const ConnectorAlert = defineAsyncComponent(() => import('@/components/Global/ConnectorAlert.vue'))
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
 import debounce from 'lodash/debounce'
 import { Ban, MoreHorizontal, UserRoundCheck } from 'lucide-vue-next'
+import {useAPI} from "@/lib/api/useAPI.js";
 
+const { API, UIStateHandler, getAccessToken, coreResource } = useAPI()
 const userData = inject('userData')
-const userConnectorPresent = inject('userConnectorPresent')
-const { getAccessToken } = useLogto()
 
 const fullName = ref('')
 const isOk = ref(false)
@@ -23,39 +20,46 @@ const nameChecked = ref(false)
 const badWords = ref(false)
 
 async function updateData() {
-  let failed = false
-  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/full-name`,
+  await API.UpdateBaseUserData(
+      await getAccessToken(coreResource, undefined),
+      new UIStateHandler({
+        success: {
+          on204: {
+            events: {
+              toast: () => toast.success('Success!', { description: 'Your changes were saved successfully.' }),
+              closeDialog: () => eventBus.emit('closeEditDetailDialog', false),
+              refreshUserData: () => eventBus.emit('refreshUserData', true)
+            }
+          }
+        },
+        error: {
+          on406: {
+            events: {
+              toast: () => toast.warning('Did not save changes:', { description: 'Name contains bad words.' }),
+            },
+            refs: {
+              badWords: badWords,
+              isOk: isOk,
+              setValue: {
+                fullName: {
+                  target: fullName,
+                  value: ''
+                }
+              }
+            }
+          },
+          onDefault: {
+            events: {
+              toast: () => toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
+            }
+          },
+        }
+      }),
+      '/api/v2/me/edit/full-name',
       {
         name: fullName.value
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        }
       }
-    )
-    if (response.status === 204) {
-      toast.success('Success!', { description: 'Your changes were saved successfully.' })
-    }
-  } catch (error) {
-    if (error.response.status === 406) {
-      badWords.value = true
-      isOk.value = false
-      fullName.value = '';
-      toast.warning('Did not save changes:', { description: 'Name contains bad words.' })
-    } else {
-      toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
-    }
-    failed = true
-  }
-  if (!failed) {
-    eventBus.emit('closeEditDetailDialog', false)
-    eventBus.emit('refreshUserData', true)
-  }
+  )
 }
 
 const checkName = async (value) => {
@@ -84,7 +88,6 @@ const debouncedCheckName = debounce(() => checkName(fullName.value), 500)
 
 <template>
   <div class="space-y-10">
-    <ConnectorAlert v-if="userConnectorPresent" />
     <div class="flex flex-col gap-4 pb-4 items-center align-middle">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
         <Label for="username" class="flex font-bold w-full justify-between">
@@ -95,7 +98,6 @@ const debouncedCheckName = debounce(() => checkName(fullName.value), 500)
         <div>
           <Input
             id="username"
-            :disabled="userConnectorPresent"
             v-model="fullName"
             @input="debouncedCheckName"
             :class="{
@@ -120,7 +122,7 @@ const debouncedCheckName = debounce(() => checkName(fullName.value), 500)
           <Button
             type="submit"
             class="h-[30px]"
-            :disabled="userConnectorPresent || !isOk"
+            :disabled="!isOk"
             :onclick="updateData"
           >
             Save

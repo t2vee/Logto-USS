@@ -1,12 +1,11 @@
 <script setup>
-import { defineAsyncComponent, ref, inject } from 'vue'
+import {defineAsyncComponent, ref, inject, onMounted} from 'vue'
 
 import Button from '../ui/button/Button.vue'
 import { AlertTriangle, CircleUserRound, LifeBuoy, Cookie, UserCog, Cable, Code, Loader } from 'lucide-vue-next'
 const AvatarEditor = defineAsyncComponent(() => import('@/components/Base/Avatar/AvatarEditor.vue'))
-const userData = inject('userData')
 
-const isLoading = ref('')
+const isLoading = ref(false)
 const sidebarNavItems = ref([
   {
     title: 'Personal Info',
@@ -49,10 +48,12 @@ const handleNav = (navigate, key) => {
   isLoading.value = key;
   navigate();
 };
+
+const userData = inject('userData')
 </script>
 
 <template>
-  <div class="flex flex-col h-full items-center">
+  <div v-if="userData.email" class="flex flex-col h-full items-center">
     <AvatarEditor
       :avatar-url="userData.avatar"
       :user-name="userData.username ? userData.username : userData.name"

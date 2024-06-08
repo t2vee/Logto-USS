@@ -79,7 +79,7 @@ function expandLocale(shortLocale) {
       />
       <EditDetailDialog
         title="Language"
-        :desc="userData.profile.locale ? expandLocale(userData.profile.locale) : 'Not Set'"
+        :desc="userData.profile?.locale ? expandLocale(userData.profile?.locale) : 'Not Set'"
         :icon="BookType"
         :dialog-page="EditLocaleSettings"
       />

@@ -1,22 +1,16 @@
 <script setup>
-import { ref, watch } from 'vue'
-import { Label } from '@/components/ui/label/index.js'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group/index.js'
-import { useLogto } from '@logto/vue'
-import { Loader, Shield } from 'lucide-vue-next'
-import axios from 'axios'
-import {
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog/index.js'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip/index.js'
-import { Button } from '@/components/ui/button/index.js'
+import {ref, watch} from 'vue'
+import {Label} from '@/components/ui/label/index.js'
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group/index.js'
+const { API, UIStateHandler, getAccessToken, coreResource } = useAPI()
+import {Loader, Shield} from 'lucide-vue-next'
+import {DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle} from '@/components/ui/dialog/index.js'
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from '@/components/ui/tooltip/index.js'
+import {Button} from '@/components/ui/button/index.js'
 import MfaCodeInput from '@/components/Global/MfaCodeInput.vue'
-import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js'
+import {toast} from 'vue-sonner'
+import {eventBus} from '@/lib/eventBus.js'
+import {useAPI} from "@/lib/api/useAPI.js";
 
 const props = defineProps({
   isVisible: Boolean,
@@ -38,15 +32,15 @@ const props = defineProps({
   }
 })
 
-const { getAccessToken } = useLogto()
 const isMfaRequired = ref(false)
 const codeSent = ref(false)
 const isLoading = ref(true)
 const mfaOptions = ref({})
-const accessTokenRef = ref('')
 const selectedMfaMethod = ref('email')
 const resendCodeTimer = ref(60)
 const readyToSend = ref(true)
+
+let accessToken = '';
 
 const countdown = () => {
   const interval = setInterval(() => {
@@ -58,53 +52,72 @@ const countdown = () => {
   }, 1000)
 }
 
-async function grabMfaOptions(accessToken) {
-  try {
-    return await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa/methods`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+async function grabMfaOptions() {
+  return await API.MfaOptions(accessToken,
+    new UIStateHandler({
+      error: {
+        events: {
+          toast: () => toast.error('Error grabbing MFA Options:', { description: 'Some account actions will be unavailable' }),
+        },
+        setValue: {
+          isMfaRequired: {
+            target: isMfaRequired,
+            value: true,
+          }
+        }
       }
     })
-  } catch (error) {
-    toast.error('Error grabbing MFA Options:', { description: 'Some account actions will be unavailable' })
-    isMfaRequired.value = error.response && error.response.status === 404
-  }
+  )
 }
 
 async function sendVerificationCode() {
   isLoading.value = true
-  let failed = false
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa-flow/push-${selectedMfaMethod.value}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${accessTokenRef.value}`,
-          'Content-Type': 'application/json'
+  await API.SendVerificationCode(accessToken,
+      new UIStateHandler({
+        success: {
+          on204: {
+            refs: {
+              codeSent: codeSent,
+            },
+            events: {
+              toast: () => {
+                if (selectedMfaMethod.value === 'email') {
+                  toast.info('Sent Email to ' + props.userData.email, {
+                    description: 'Code will last for 10 minutes.'
+                  })
+                } else if (selectedMfaMethod.value === 'phone') {
+                  toast.info('Sent Text to ' + props.userData.phone_number, {
+                    description: 'Code will last for 10 minutes.'
+                  })
+                }
+              }
+            }
+          },
+        },
+        always: {
+          refs: {
+            isLoading: isLoading,
+          },
+          setValue: {
+            resendCodeTimer: {
+              target: resendCodeTimer,
+              value: 60
+            },
+          },
+          events: {
+            countdown: countdown
+          }
+        },
+        error: {
+          onDefault: {
+            events: {
+              toast: () => toast.error('Error sending verification code:', { description: 'Please try again later' }),
+            },
+          }
         }
-      }
-    )
-    codeSent.value = response.status === 204
-  } catch (error) {
-    toast.error('Error sending verification code:', { description: error })
-    codeSent.value = false
-    failed = true
-  } finally {
-    isLoading.value = false
-    resendCodeTimer.value = 60
-    countdown()
-    if (selectedMfaMethod.value === 'email' && !failed) {
-      toast.info('Sent Email to ' + props.userData.email, {
-        description: 'Code will last for 10 minutes.'
-      })
-    } else if (selectedMfaMethod.value === 'phone' && !failed) {
-      toast.info('Sent Text to ' + props.userData.phone_number, {
-        description: 'Code will last for 10 minutes.'
-      })
-    }
-  }
+      }),
+      selectedMfaMethod.value
+  )
 }
 
 async function handleCodeResend() {
@@ -124,60 +137,90 @@ async function handleChangeInput() {
 
 const handleCodeComplete = async (code) => {
   isLoading.value = true
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa-flow/verify-${selectedMfaMethod.value}-code?verification-code=${code}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${accessTokenRef.value}`,
-          'Content-Type': 'application/json'
+  await API.VerifyCode(accessToken,
+      new UIStateHandler({
+        success: {
+          on204: {
+            setValue: {
+              codeSent: {
+                target: codeSent,
+                value: false
+              },
+              isMfaRequired: {
+                target: isMfaRequired,
+                value: false
+              }
+            },
+            events: {
+              toast: () => toast.success('Successfully Verified', {
+                description: 'You will stay verified for the next 15 minutes.'
+              })
+            }
+          },
+        },
+        always: {
+          refs: {
+            isLoading: isLoading,
+          }
+        },
+        error: {
+          onDefault: {
+            events: {
+              toast: () => toast.warning('Provided Code is Incorrect', {
+                description: 'Please try again'
+              }),
+            },
+          }
         }
-      }
-    )
-    if (response.status === 204) {
-      codeSent.value = false
-      isMfaRequired.value = false
-      toast.success('Successfully Verified', {
-        description: 'You will stay verified for the next 15 minutes.'
-      })
-    }
-  } catch (error) {
-    toast.warning('Provided Code is Incorrect', {
-      description: 'Please try again'
-    })
-  } finally {
-    isLoading.value = false
-  }
+      }),
+      selectedMfaMethod.value,
+      code
+  )
 }
 
 const checkMFA = async () => {
   isLoading.value = true
-  const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
-  accessTokenRef.value = accessToken
-  try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/is-mfa-required`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
+  accessToken = await getAccessToken(coreResource, undefined)
+  await API.IsMfaRequired(accessToken,
+    new UIStateHandler({
+      success: {
+        on204: {
+          setValue: {
+            mfaOptions: {
+              target: mfaOptions,
+              value: await grabMfaOptions()
+            },
+            isMfaRequired: {
+              target: isMfaRequired,
+              value: true
+            }
+          }
+        },
+        onDefault: {
+          setValue: {
+            isMfaRequired: {
+              target: isMfaRequired,
+              value: false
+            }
+          }
+        }
+      },
+      always: {
+        refs: {
+          isLoading: isLoading,
+        }
+      },
+      error: {
+        onDefault: {
+          events: {
+            closeDialog: () => eventBus.emit('closeEditDetailDialog', false),
+            refreshUserData: () => eventBus.emit('refreshUserData', true),
+            toast: () => toast.error('Error checking MFA:', { description: 'Service Unavailable. Try again later' }),
+          },
         }
       }
-    )
-    if (response.data.status === true) {
-      const mfaResponse = await grabMfaOptions(accessToken)
-      mfaOptions.value = mfaResponse.data
-      console.log(mfaOptions)
-    }
-    isMfaRequired.value = response.data.status === true
-  } catch (error) {
-    toast.error('Error checking MFA:', { description: 'Service Unavailable. Try again later' })
-    eventBus.emit('closeEditDetailDialog', false)
-    eventBus.emit('refreshUserData', true)
-  } finally {
-    isLoading.value = false
-  }
+    }),
+  )
 }
 
 function updateSelectedMethod(value) {
@@ -185,39 +228,39 @@ function updateSelectedMethod(value) {
 }
 
 watch(
-  () => props.isVisible,
-  (newValue) => {
-    if (newValue) {
-      checkMFA().catch((error) => console.log('MFA check failed:', error))
+    () => props.isVisible,
+    (newValue) => {
+      if (newValue) {
+        checkMFA().catch((error) => console.log('MFA check failed:', error))
+      }
     }
-  }
 )
 </script>
 
 <template>
   <DialogContent
-    class="sm:max-w-[525px] sm:min-h-[500px] flex flex-col items-center justify-center align-middle space-y-6"
+      class="sm:max-w-[525px] sm:min-h-[500px] flex flex-col items-center justify-center align-middle space-y-6"
   >
     <transition name="slide" mode="out-in">
       <DialogHeader class="mb-3 flex flex-col items-center justify-center align-middle">
         <component
-          class="mr-1"
-          height="42"
-          width="42"
-          :is="!isLoading && isMfaRequired ? Shield : icon"
+            class="mr-1"
+            height="42"
+            width="42"
+            :is="!isLoading && isMfaRequired ? Shield : icon"
         />
         <DialogTitle class="flex items-center align-middle">{{
-          !isLoading && isMfaRequired
-            ? 'Verify Your Identity'
-            : !dataRequest
-              ? 'Edit Your ' + title
-              : title
-        }}</DialogTitle>
+            !isLoading && isMfaRequired
+                ? 'Verify Your Identity'
+                : !dataRequest
+                    ? 'Edit Your ' + title
+                    : title
+          }}</DialogTitle>
         <DialogDescription class="text-xs">
           {{
             !isLoading && isMfaRequired
-              ? "In order to verify your identity, we'll send you a code to your preferred method below."
-              : ''
+                ? "In order to verify your identity, we'll send you a code to your preferred method below."
+                : ''
           }}
         </DialogDescription>
       </DialogHeader>
@@ -225,20 +268,20 @@ watch(
     <transition name="fade" mode="out-in">
       <div key="mfa-settings" v-if="!isLoading && isMfaRequired && !codeSent" class="space-y-8">
         <RadioGroup
-          default-value="email"
-          class="space-y-3"
-          @update:modelValue="updateSelectedMethod"
+            default-value="email"
+            class="space-y-3"
+            @update:modelValue="updateSelectedMethod"
         >
           <div class="flex items-center space-x-2">
             <RadioGroupItem id="r1" value="email" />
             <Label for="r1"
-              >Email <strong>{{ userData.email }}</strong></Label
+            >Email <strong>{{ userData.email }}</strong></Label
             >
           </div>
           <div v-if="userData.phone_number" class="flex items-center space-x-2">
             <RadioGroupItem id="r2" value="sms" />
             <Label for="r2"
-              >Text <strong>{{ userData.phone_number }}</strong></Label
+            >Text <strong>{{ userData.phone_number }}</strong></Label
             >
           </div>
           <div v-if="mfaOptions[0] !== 'none'">
@@ -247,7 +290,7 @@ watch(
                 <TooltipTrigger class="flex items-center space-x-2">
                   <RadioGroupItem id="r3" value="authenticator" disabled />
                   <Label for="r3" class="text-gray-600"
-                    >Authenticator App (Google/Microsoft Authenticator)</Label
+                  >Authenticator App (Google/Microsoft Authenticator)</Label
                   >
                 </TooltipTrigger>
                 <TooltipContent>
@@ -277,10 +320,10 @@ watch(
             Please wait {{ resendCodeTimer }} seconds before sending another code
           </p>
           <Button
-            :disabled="resendCodeTimer > 0 && !readyToSend"
-            class="h-[30px]"
-            @click="sendVerificationCode"
-            >Next</Button
+              :disabled="resendCodeTimer > 0 && !readyToSend"
+              class="h-[30px]"
+              @click="sendVerificationCode"
+          >Next</Button
           >
           <DialogClose as-child>
             <Button class="h-[30px]" type="button" variant="outline"> Cancel </Button>
@@ -289,10 +332,10 @@ watch(
       </div>
       <div v-else-if="!isLoading && isMfaRequired && codeSent">
         <MfaCodeInput
-          :resend-code-timer="resendCodeTimer"
-          @codeComplete="handleCodeComplete"
-          @resendCode="handleCodeResend"
-          @changeInput="handleChangeInput"
+            :resend-code-timer="resendCodeTimer"
+            @codeComplete="handleCodeComplete"
+            @resendCode="handleCodeResend"
+            @changeInput="handleChangeInput"
         />
       </div>
       <div v-else-if="!isLoading && !isMfaRequired">

@@ -27,7 +27,7 @@ defineProps({
   },
   desc: String,
   disabled: Boolean,
-  dataRequest: Boolean
+  dataRequest: Boolean,
 })
 
 onUnmounted(cleanup)
