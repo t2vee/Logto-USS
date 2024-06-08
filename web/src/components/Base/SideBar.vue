@@ -68,7 +68,7 @@ const handleNav = (navigate, page, key) => {
       }}
     </p>
     <p class="text-xs text-gray-700 mb-8">{{ userData.sub }}</p>
-    <nav class="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1">
+    <nav class="flex flex-col space-x-0 space-y-1">
       <router-link
         v-for="item in sidebarNavItems"
         :key="item.title"
