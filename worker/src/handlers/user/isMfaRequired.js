@@ -2,14 +2,14 @@
 // Use of this source code is governed by an MPL license.
 
 
-import { error, json } from 'itty-router'
+import { error, json, status } from 'itty-router'
 
 export const handler = async (request, env, ctx) => {
 	try {
 		const value = await env.MFARequiredTokens.get(ctx.userid);
 		return value
 			? json({ status: false })
-			: json({ status: true });
+			: status(204);
 	} catch (e) {
 		console.error(e)
 		return error(418)
