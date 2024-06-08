@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, provide, onUnmounted, inject } from 'vue'
+import { ref, onMounted, provide, onUnmounted } from 'vue'
 import { CardContent } from '@/components/ui/card/index.js'
 import SideBar from '@/components/Base/SideBar.vue'
 import NavBar from '@/components/Base/NavBar.vue'
@@ -7,43 +7,16 @@ import { Button } from '@/components/ui/button/index.js'
 import { Loader, AlertOctagon } from 'lucide-vue-next'
 import { eventBus } from '@/lib/eventBus.js'
 import { toast } from 'vue-sonner'
-import {UIStateHandler} from "@/lib/UIStateHandler.js";
+import { useAPI } from "@/lib/api/useAPI.js";
 
-const userInfo = ref(null)
+const { API, UIStateHandler, getAccessToken, coreResource, fetchUserInfo } = useAPI()
+
+const userInfo = ref({})
 const isLoading = ref(true)
 const fetchFailure = ref(false)
-const userConnectorPresent = ref(false)
-
-const API = inject('api')
 
 const support = `mailto:${import.meta.env.VITE_SUPPORT_EMAIL}`
 const webBuild = `prod/${import.meta.env.VITE_COMMIT_HASH.length > 7 ? import.meta.env.VITE_COMMIT_HASH.substring(0, 7) : import.meta.env.VITE_COMMIT_HASH}`
-
-const handleEvent = (data) => {
-  if (data) {
-    loadData()
-  }
-}
-
-async function loadData() {
-  userInfo.value = API.UserData(
-      new UIStateHandler({
-        always: {
-          isLoading: isLoading.value,
-        },
-        failure: {
-          events: {
-            toast: () => toast.error('Error grabbing User Information:', {description: 'Service Unavailable. Try again later'}),
-          },
-          refs: {
-            fetchFailure: fetchFailure.value,
-          }
-        }
-      })
-  )
-}
-
-onMounted(loadData)
 
 defineProps({
   page: {
@@ -52,9 +25,40 @@ defineProps({
   }
 })
 
-provide('userData', userInfo)
-provide('userConnectorPresent', userConnectorPresent)
+const handleEvent = (data) => {
+  if (data) {
+    loadData()
+  }
+}
 
+async function loadData() {
+  isLoading.value = true;
+  fetchFailure.value = false;
+  userInfo.value = await API.UserData(await getAccessToken(coreResource, undefined),
+      new UIStateHandler({
+        always: {
+          refs: {
+            isLoading: isLoading,
+          }
+        },
+        error: {
+          onDefault: {
+            events: {
+              toast: () => toast.error('Error grabbing User Information:', {description: 'Service Unavailable. Try again later'}),
+            },
+            refs: {
+              fetchFailure: fetchFailure,
+            }
+          }
+        }
+      }),
+      await fetchUserInfo()
+  )
+}
+
+provide('userData', userInfo)
+
+onMounted(loadData)
 const cleanup = eventBus.on('refreshUserData', handleEvent)
 onUnmounted(cleanup)
 </script>
@@ -63,7 +67,7 @@ onUnmounted(cleanup)
   <div class="flex flex-col items-center">
     <div class="flex flex-col h-screen max-w-[1000px] items-center">
       <NavBar />
-      <div v-if="!fetchFailure && !isLoading" class="flex justify-between gap-6">
+      <div v-if="!fetchFailure && !isLoading && userInfo.email" class="flex justify-between gap-6">
         <SideBar />
         <div class="flex-1 flex-grow overflow-auto">
           <CardContent>
