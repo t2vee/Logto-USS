@@ -12,6 +12,6 @@ export default async (request, env, ctx) => {
 		console.log('[MIDDLEWARE] Bearer Token Check Succeeded')
 	} catch (e) {
 		console.log('[MIDDLEWARE] Bearer Token Check FAILED')
-		return error(e.statusCode, 'ERR_FAILED_TO_VERIFY_TOKEN');
+		return error(401, 'ERR_FAILED_TO_VERIFY_TOKEN');
 	}
 }
