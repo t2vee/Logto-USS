@@ -36,8 +36,7 @@ if (import.meta.env.VITE_MATOMO_ENDPOINT) {
   })
 }
 app.use(CreateAPI, {
-  logto: import.meta.env.VITE_LOGTO_ENDPOINTz,
-  coreResource: import.meta.env.VITE_LOGTO_CORE_RESOURCE
+  apiDomain: import.meta.env.VITE_API_WORKER_ENDPOINT,
 });
 
 app.mount('#app')
