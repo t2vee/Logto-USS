@@ -4,12 +4,14 @@ const state = reactive(new Map())
 
 export const eventBus = {
   emit(event, data) {
+    console.log("[EVENTBUS] Running emit")
     if (!state.has(event)) {
       state.set(event, [])
     }
     state.get(event).forEach((callback) => callback(data))
   },
   on(event, callback) {
+    console.log("[EVENTBUS] Received emit")
     if (!state.has(event)) {
       state.set(event, [])
     }
