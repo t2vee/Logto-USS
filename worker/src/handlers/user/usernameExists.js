@@ -12,7 +12,8 @@ export const handler = async (request, env, ctx) => {
 		if (!request.params || !request.params.username) { return error(400, 'ERR_NO_USERNAME_PROVIDED'); }
 		if (filter.isProfane(request.params.username)) { return error(406, 'ERR_USERNAME_CONTAINS_BAD_WORDS') }
 		const r = await ctx.Http.get(`/api/users?search=${encodeURIComponent(request.params.username)}`, {});
-		return r === '[]' ? status(204) : json('')
+		console.log(r)
+		return r.length === 0 ? status(204) : json('')
 	} catch (e) {
 		console.error(e)
 		return error(e)

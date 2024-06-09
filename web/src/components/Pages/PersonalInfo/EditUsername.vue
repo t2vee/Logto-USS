@@ -27,7 +27,6 @@ const usernameRegex = new RegExp(/^[a-zA-Z0-9]{3,24}$/)
 
 const checkUsernameAvailability = async (value) => {
   badWords.value = false;
-  value = value.trim()
   if (!value || !usernameRegex.test(value)) {
     isChecking.value = false
     usernameChecked.value = false
@@ -58,6 +57,13 @@ const checkUsernameAvailability = async (value) => {
 }
 
 const debouncedCheckUsername = debounce(() => checkUsernameAvailability(username.value), 500)
+
+const handleInput = (event) => {
+  let input = event.target.value;
+  input = input.toLowerCase().replace(/\s/g, '');
+  username.value = input;
+  debouncedCheckUsername();
+};
 
 async function updateData() {
   let failed = false
@@ -143,7 +149,7 @@ onMounted(checkNextUsernameChange)
             id="username"
             :disabled="!!waitForNextChange"
             v-model="username"
-            @input="debouncedCheckUsername"
+            @input="handleInput"
             :class="{
               'border-red-500': !isAvailable && usernameChecked,
               'border-green-500': isAvailable && usernameChecked

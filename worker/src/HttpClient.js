@@ -12,7 +12,7 @@ class HttpClient {
 		this._env = env;
 		this._accessToken = accessToken;
 	}
-	async #_request(method, url, data = null, headers = {}, resTo400 = 'ERR_MALFORMED_REQUEST') {
+	async #_request(method, url, data = undefined, headers = {}, resTo400 = 'ERR_MALFORMED_REQUEST') {
 		const config = {
 			method: method,
 			headers: {
@@ -21,7 +21,6 @@ class HttpClient {
 				...headers,
 			},
 		};
-
 		if (data) {
 			if (method === 'GET') {
 				url += '?' + new URLSearchParams(data);
@@ -53,7 +52,7 @@ class HttpClient {
 		}
 	}
 
-	async get(url, {params = {}, headers = {}, resTo400= undefined}) {
+	async get(url, {params = undefined, headers = {}, resTo400= undefined}) {
 		return this.#_request('GET', url, params, headers, resTo400);
 	}
 
