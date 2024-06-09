@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import axios from 'axios'
+import axios from 'redaxios'
 import { useLogto } from '@logto/vue'
 import { ImageUp, Trash2 } from 'lucide-vue-next'
 import { eventBus } from '@/lib/eventBus.js'

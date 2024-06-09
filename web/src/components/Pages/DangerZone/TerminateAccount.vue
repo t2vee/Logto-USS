@@ -4,7 +4,7 @@ import { useLogto } from '@logto/vue'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
 import { Loader2 } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
-import axios from 'axios'
+import axios from 'redaxios'
 import { toast } from 'vue-sonner'
 import {CardDescription, CardTitle} from "@/components/ui/card/index.js";
 import {

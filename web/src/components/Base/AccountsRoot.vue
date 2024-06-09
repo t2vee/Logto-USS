@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button/index.js'
 import Skeleton from '@/components/ui/skeleton/Skeleton.vue'
 import { Loader, AlertOctagon } from 'lucide-vue-next'
 import { eventBus } from '@/lib/eventBus.js'
-import axios from 'axios'
+import axios from 'redaxios'
 import { toast } from 'vue-sonner'
 import {RouterView} from "vue-router";
 

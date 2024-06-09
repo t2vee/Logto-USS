@@ -26,7 +26,7 @@ import { Button } from '@/components/ui/button/index.js'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
 import Label from '../../ui/label/Label.vue'
 import { useLogto } from '@logto/vue'
-import axios from 'axios'
+import axios from 'redaxios'
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
 

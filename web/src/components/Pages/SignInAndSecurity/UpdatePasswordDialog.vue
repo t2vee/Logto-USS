@@ -1,5 +1,5 @@
 <script setup>
-import axios from 'axios'
+import axios from 'redaxios'
 import debounce from 'lodash/debounce'
 import { Input } from '@/components/ui/input/index.js'
 import { Label } from '@/components/ui/label/index.js'

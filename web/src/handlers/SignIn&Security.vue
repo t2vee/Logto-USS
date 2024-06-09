@@ -2,7 +2,7 @@
 import {inject, onMounted, provide, ref} from 'vue'
 import {CardDescription, CardTitle} from '@/components/ui/card/index.js'
 import {CircleEllipsis, Fingerprint, KeyRound, MailCheck, MailX, Phone, PhoneMissed} from 'lucide-vue-next'
-import axios from 'axios'
+import axios from 'redaxios'
 import {toast} from 'vue-sonner'
 import {useLogto} from '@logto/vue'
 

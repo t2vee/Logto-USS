@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label/index.js'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group/index.js'
 import { useLogto } from '@logto/vue'
 import { Loader, Shield } from 'lucide-vue-next'
-import axios from 'axios'
+import axios from 'redaxios'
 import {
   DialogClose,
   DialogContent,

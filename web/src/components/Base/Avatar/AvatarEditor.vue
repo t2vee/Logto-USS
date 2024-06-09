@@ -7,7 +7,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/index.js'
 import { Button } from '@/components/ui/button/index.js'
 import { eventBus } from '@/lib/eventBus.js'
-import axios from 'axios'
+import axios from 'redaxios'
 import { toast } from 'vue-sonner'
 import { useLogto } from '@logto/vue'
 

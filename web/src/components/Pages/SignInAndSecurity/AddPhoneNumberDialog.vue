@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import axios from 'redaxios'
 import { useLogto } from '@logto/vue'
 import { VueTelInput } from 'vue-tel-input'
 import { Button } from '@/components/ui/button/index.js'

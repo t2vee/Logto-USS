@@ -18,7 +18,7 @@ import { Loader, MailCheck, MailX, ArrowBigRightDash } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
 import MfaCodeInput from '@/components/Global/MfaCodeInput.vue'
-import axios from 'axios'
+import axios from 'redaxios'
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
 

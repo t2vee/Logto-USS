@@ -1,7 +1,7 @@
 <script setup>
 import { Input } from '@/components/ui/input/index.js'
 import { Label } from '@/components/ui/label/index.js'
-import axios from 'axios'
+import axios from 'redaxios'
 import { inject, ref } from 'vue'
 import { useLogto } from '@logto/vue'
 import { Button } from '@/components/ui/button/index.js'
