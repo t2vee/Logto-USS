@@ -56,7 +56,6 @@ const handleRefresh = (data) => {
 }
 
 const handleLoading = (data) => {
-  console.log(data)
   isSubPageLoading.value = data
 }
 
