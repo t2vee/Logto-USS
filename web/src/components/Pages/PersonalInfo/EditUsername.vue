@@ -39,7 +39,7 @@ const checkUsernameAvailability = async (value) => {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/utils/check-username-exists/${value}`,
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/utils/check-username-exists/${value}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -100,7 +100,7 @@ const checkNextUsernameChange = async () => {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v1/me/can-change-username`,
+      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/can-change-username`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

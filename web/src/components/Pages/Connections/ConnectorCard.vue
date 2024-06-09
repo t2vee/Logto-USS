@@ -39,7 +39,7 @@ async function removeConnector() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/connectors/remove/${props.service.toLowerCase()}`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/connectors/remove/${props.service.toLowerCase()}`,
         {},
         {
           headers: {

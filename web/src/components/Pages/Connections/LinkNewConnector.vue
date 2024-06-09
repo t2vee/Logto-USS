@@ -14,7 +14,7 @@ const redirectToBuiltUri = async () => {
   loaderText.value = 'Grabbing Connector Info...';
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/connectors/build-uri/${route.params.connector}`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/connectors/build-uri/${route.params.connector}`,
         {
           "redirectUri": `${import.meta.env.VITE_ROOT}/callback/connectors/${route.params.connector}`
         },
@@ -34,7 +34,7 @@ const linkConnectorToAccount = async () => {
   loaderText.value = 'Linking Connector...';
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/connectors/link/${route.params.connector}`,
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/connectors/link/${route.params.connector}`,
         {
           "connectorData": {
             "code": route.query.code,
