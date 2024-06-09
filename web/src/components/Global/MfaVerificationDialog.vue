@@ -168,7 +168,6 @@ const checkMFA = async () => {
     if (response.data.status === true) {
       const mfaResponse = await grabMfaOptions(accessToken)
       mfaOptions.value = mfaResponse.data
-      console.log(mfaOptions)
     }
     isMfaRequired.value = response.data.status === true
   } catch (error) {

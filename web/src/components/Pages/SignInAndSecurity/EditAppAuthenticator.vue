@@ -56,6 +56,7 @@ async function setupAppAuthenticator() {
 }
 
 async function deleteAppAuthenticator() {
+  console.log(props.mfaMethods)
   isLoading.value = true;
   try {
     const response = await axios.post(
