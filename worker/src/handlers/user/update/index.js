@@ -8,6 +8,7 @@ import { handler as UpdateFullName } from "./updateFullName";
 import { handler as UpdatePassword } from "./updatePassword";
 import { handler as UpdateRegionalSettings } from "./updateRegionalSettings";
 import { handler as UpdateUsername } from "./updateUsername";
+import { handler as UpdateDeveloperStatus } from "./updateDeveloperStatus";
 import removeSMS from "../mfa/new/remove-number";
 
 
@@ -20,4 +21,5 @@ UpdateUserRouter
 	.post("/password", UpdatePassword)
 	.post("/regional-settings", UpdateRegionalSettings)
 	.post("/username", UpdateUsername)
-  .post("/remove-sms",removeSMS)
+  .post("/remove-sms", removeSMS)
+	.post("/developer-status", UpdateDeveloperStatus)
