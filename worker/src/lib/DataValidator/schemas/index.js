@@ -1,6 +1,7 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
+import DeveloperSchema from './developer';
 import UsernameSchema from './username';
 import PasswordSchema from './password';
 import BirthdaySchema from './birthday';
@@ -20,4 +21,5 @@ export {
 	PhoneSchema,
 	RegionalSchema,
 	LocaleSchema,
+	DeveloperSchema,
 };

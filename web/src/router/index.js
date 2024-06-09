@@ -63,7 +63,7 @@ const router = createRouter({
         {
           path: 'developer',
           name: 'Developer options',
-          component: () => import('@/handlers/YourData.vue')
+          component: () => import('@/handlers/DeveloperOptions.vue')
         },
       ]
     },

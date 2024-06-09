@@ -72,6 +72,10 @@ class DataValidator {
 		return this.#validate(data, schema.LocaleSchema, 'ERR_INVALID_OPTION')
 	}
 
+	developer(data) {
+		return this.#validate(data, schema.DeveloperSchema, 'ERR_INVALID_DATA')
+	}
+
 	birthday(data) {
 		try {
 			this.#validate(data, schema.BirthdaySchema, 'ERR_INVALID_DATE');
