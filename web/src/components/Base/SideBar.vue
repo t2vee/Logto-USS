@@ -54,7 +54,7 @@ const handleNav = (navigate, page, key) => {
 </script>
 
 <template>
-  <div class="flex flex-col h-full items-center">
+  <div class="flex flex-col h-full items-center w-[175px]">
     <AvatarEditor
       :avatar-url="userData.avatar"
       :user-name="userData.username ? userData.username : userData.name"
@@ -81,10 +81,10 @@ const handleNav = (navigate, page, key) => {
           variant="link"
           :class="
             $route.path === item.href
-              ? 'text-cyan-200 bg-muted font-bold hover:bg-muted'
-              : 'text-white'
+              ? 'text-cyan-200 bg-muted font-bold'
+              : 'text-white hover:bg-muted'
           "
-          class="w-full text-left justify-start"
+          class="w-[185px] text-left justify-start"
           @click="handleNav(navigate, item.href, $route.path)"
         >
           <component :is="item.icon" v-if="item.icon" class="pr-1.5" :color="$route.path === item.href ? 'rgb(165 243 252)' : ''" />
