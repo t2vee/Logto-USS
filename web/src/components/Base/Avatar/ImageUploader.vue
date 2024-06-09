@@ -54,7 +54,6 @@ const uploadFile = async () => {
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'multipart/form-data'
         }
       }
     )
@@ -66,14 +65,14 @@ const uploadFile = async () => {
   } catch (error) {
     failed = true
     console.log('Error uploading file:', error)
-    if (error.response.status === 500) {
-      toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
-    } else if (error.response.status === 406) {
+    if (error.status === 406) {
       toast.warning('Please Upload a Different Image:', {
         description: 'The image you have selected is not suitable as a avatar'
       })
       preview.value = null
       selectedFile.value = null
+    } else {
+      toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
     }
   } finally {
     isLoading.value = false

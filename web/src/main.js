@@ -18,7 +18,8 @@ const logtoConfig = {
     UserScope.Email,
     UserScope.Phone,
     UserScope.Identities,
-    UserScope.Organizations
+    UserScope.Organizations,
+    UserScope.CustomData
   ],
   resources: JSON.parse(import.meta.env.VITE_LOGTO_RESOURCES)
 }
