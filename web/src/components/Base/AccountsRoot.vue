@@ -5,24 +5,22 @@ import { CardContent } from '@/components/ui/card/index.js'
 import SideBar from '@/components/Base/SideBar.vue'
 import NavBar from '@/components/Base/NavBar.vue'
 import { Button } from '@/components/ui/button/index.js'
+import Skeleton from '@/components/ui/skeleton/Skeleton.vue'
 import { Loader, AlertOctagon } from 'lucide-vue-next'
 import { eventBus } from '@/lib/eventBus.js'
 import axios from 'axios'
 import { toast } from 'vue-sonner'
+import {RouterView} from "vue-router";
 
 const { fetchUserInfo, getAccessToken, isAuthenticated } = useLogto()
 const userInfo = ref(null)
 const isLoading = ref(true)
+const isSubPageLoading = ref(false)
 const fetchFailure = ref(false)
 
 const support = `mailto:${import.meta.env.VITE_SUPPORT_EMAIL}`
 const webBuild = `prod/${import.meta.env.VITE_COMMIT_HASH.length > 7 ? import.meta.env.VITE_COMMIT_HASH.substring(0, 7) : import.meta.env.VITE_COMMIT_HASH}`
 
-const handleEvent = (data) => {
-  if (data) {
-    loadData()
-  }
-}
 async function loadData() {
   if (!isAuthenticated) { window.location.replace("/oauth/login") }
   fetchFailure.value = false
@@ -51,18 +49,23 @@ async function loadData() {
   }
 }
 
-onMounted(loadData)
-
-defineProps({
-  page: {
-    type: Object,
-    required: true
+const handleRefresh = (data) => {
+  if (data) {
+    loadData()
   }
-})
+}
+
+const handleLoading = (data) => {
+  console.log(data)
+  isSubPageLoading.value = data
+}
+
+onMounted(loadData)
 
 provide('userData', userInfo)
 
-const cleanup = eventBus.on('refreshUserData', handleEvent)
+const cleanup = eventBus.on('refreshUserData', handleRefresh)
+eventBus.on('AccountLoading', handleLoading)
 onUnmounted(cleanup)
 </script>
 
@@ -73,14 +76,24 @@ onUnmounted(cleanup)
       <div v-if="!fetchFailure && !isLoading" class="flex justify-between gap-6">
         <SideBar />
         <div class="flex-1 flex-grow overflow-auto">
-          <CardContent>
-            <component :is="page" />
+          <CardContent v-if="!isSubPageLoading">
+            <RouterView />
           </CardContent>
-        </div>
-      </div>
-      <div v-else-if="isLoading" class="w-full">
-        <div class="flex items-center align-middle justify-center">
-          <Loader class="animate-spin" />Loading user information...
+          <div v-if="isSubPageLoading" class="flex flex-col items-center align-middle justify-center space-y-4 w-[600px]">
+            <div class="space-y-2">
+              <Skeleton class="h-8 w-[300px]" />
+              <Skeleton class="h-4 w-[525px]" />
+              <Skeleton class="h-4 w-[200px]" />
+            </div>
+            <div class="flex space-x-4">
+              <Skeleton class="h-[150px] w-[250px] rounded-xl" />
+              <Skeleton class="h-[150px] w-[250px] rounded-xl" />
+            </div>
+            <div class="flex space-x-4">
+              <Skeleton class="h-[150px] w-[250px] rounded-xl" />
+              <Skeleton class="h-[150px] w-[250px] rounded-xl" />
+            </div>
+          </div>
         </div>
       </div>
       <div

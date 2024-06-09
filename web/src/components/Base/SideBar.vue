@@ -87,7 +87,7 @@ const handleNav = (navigate, page, key) => {
           class="w-full text-left justify-start"
           @click="handleNav(navigate, item.href, $route.path)"
         >
-          <component :is="isLoading === item.href ? Loader : item.icon" v-if="item.icon" :class="isLoading === item.href ? 'animate-spin' : 'pr-1.5'" :color="$route.path === item.href ? 'rgb(165 243 252)' : ''" />
+          <component :is="item.icon" v-if="item.icon" class="pr-1.5" :color="$route.path === item.href ? 'rgb(165 243 252)' : ''" />
           {{ item.title }}
         </Button>
       </router-link>

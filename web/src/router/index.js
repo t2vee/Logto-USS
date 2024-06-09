@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useLogto } from '@logto/vue'
+import AccountsRoot from "@/components/Base/AccountsRoot.vue";
+import {eventBus} from "@/lib/eventBus.js";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,39 +27,45 @@ const router = createRouter({
       component: () => import('@/views/Window/LinkConnector.vue')
     },
     {
-      path: '/account/aboutme',
-      name: 'Personal Information',
-      component: () => import('@/views/PersonalInfo.vue')
-    },
-    {
-      path: '/account/security',
-      name: 'Sign-In & Security',
-      component: () => import('@/views/SignIn&Security.vue')
-    },
-    {
-      path: '/account/privacy',
-      name: 'Privacy',
-      component: () => import('@/views/Privacy.vue')
-    },
-    {
-      path: '/account/dangerzone',
-      name: 'Account Actions',
-      component: () => import('@/views/DangerZone.vue')
-    },
-    {
-      path: '/account/connections',
-      name: 'Connections',
-      component: () => import('@/views/Connections.vue')
-    },
-    {
-      path: '/account/yourdata',
-      name: 'Your Data',
-      component: () => import('@/views/YourData.vue')
-    },
-    {
-      path: '/account/developer',
-      name: 'Developer options',
-      component: () => import('@/views/YourData.vue')
+      path: '/account/',
+      component: AccountsRoot,
+      children: [
+        {
+          path: 'aboutme',
+          name: 'Personal Information',
+          component: () => import('@/handlers/PersonalInfo.vue')
+        },
+        {
+          path: 'security',
+          name: 'Sign-In & Security',
+          component: () => import('@/handlers/SignIn&Security.vue')
+        },
+        {
+          path: 'privacy',
+          name: 'Privacy',
+          component: () => import('@/handlers/Privacy.vue')
+        },
+        {
+          path: 'dangerzone',
+          name: 'Account Actions',
+          component: () => import('@/handlers/DangerZone.vue')
+        },
+        {
+          path: 'connections',
+          name: 'Connections',
+          component: () => import('@/handlers/Connections.vue')
+        },
+        {
+          path: 'yourdata',
+          name: 'Your Data',
+          component: () => import('@/handlers/YourData.vue')
+        },
+        {
+          path: 'developer',
+          name: 'Developer options',
+          component: () => import('@/handlers/YourData.vue')
+        },
+      ]
     },
     {
       path: '/legal',
@@ -71,11 +79,19 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to) => {
   const { isAuthenticated } = useLogto()
   if (!isAuthenticated.value && to.name !== 'login' && to.name !== 'callback') {
     return { name: 'login' }
   }
+  if (to.name !== 'login' && to.name !== 'callback') {
+    eventBus.emit('AccountLoading', true)
+  }
 })
+router.afterEach(async(to) => {
+  if (to.name !== 'login' && to.name !== 'callback') {
+    eventBus.emit('AccountLoading', false)
+  }
+});
 
 export default router
