@@ -55,7 +55,7 @@ async function updateData() {
           },
         }
       }),
-      '/api/v2/me/edit/full-name',
+      'full-name',
       {
         name: fullName.value
       }

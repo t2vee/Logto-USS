@@ -45,7 +45,7 @@ export class API extends HttpClient {
     }
     async UpdateBaseUserData(UseLogto, StateHandler, endpoint, body){
         try {
-            const r = await this.post(endpoint, UseLogto, {
+            const r = await this.post('/api/v2/me/edit/' + endpoint, UseLogto, {
                 data: body
             })
             StateHandler.onSuccess(r.status)
