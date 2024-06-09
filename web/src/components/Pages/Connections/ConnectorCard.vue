@@ -2,9 +2,8 @@
 import { ref, onUnmounted } from 'vue'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible/index.js'
 import { Card } from '@/components/ui/card/index.js'
-import { Link2, Link2Off, ChevronDown } from 'lucide-vue-next'
+import {Link2, Link2Off, ChevronDown, Loader2} from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
-import ConnectorProcessDrawer from '@/components/Pages/Connections/ConnectorProcessDrawer.vue';
 import { eventBus } from '@/lib/eventBus.js'
 import axios from "axios";
 import {toast} from "vue-sonner";
@@ -63,6 +62,31 @@ async function removeConnector() {
   }
 }
 
+const disableLinkButton = ref(false);
+
+let windowChecker = null;
+let authWindow = null;
+
+const beginAuthorizationFlow = () => {
+  disableLinkButton.value = true;
+  const url = `/oauth/connectors/new/${props.service.toLowerCase()}`;
+  const width = 400;
+  const height = 700;
+  const left = (screen.width / 2) - (width / 2);
+  const top = (screen.height / 2) - (height / 2);
+  authWindow = window.open(
+      url,
+      'AuthorizationWindow',
+      `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`
+  );
+  windowChecker = setInterval(() => {
+    if (authWindow && authWindow.closed) {
+      eventBus.emit('refreshUserData', true);
+      clearInterval(windowChecker);
+    }
+  }, 500);
+};
+
 onUnmounted(cleanup)
 </script>
 
@@ -96,7 +120,19 @@ onUnmounted(cleanup)
           </p>
         </div>
         <div class="w-1/2 flex flex-col items-center align-middle justify-center gap-y-2">
-          <ConnectorProcessDrawer :service-img="image" :service-icon="icon" :service="service" :disabled="disabled" />
+          <Button
+              :disabled="disabled"
+              @click="beginAuthorizationFlow"
+          >
+            <Link color="black" class="mr-1" />
+            <strong class="text-black" v-if="!disableLinkButton">
+              {{ disabled ? 'Unavailable' : 'Link Account' }}
+            </strong>
+            <p v-else class="flex items-center align-middle text-black">
+              <Loader2 class="animate-spin mr-1" color="black" />
+              Waiting...
+            </p>
+          </Button>
         </div>
       </CollapsibleContent>
       <CollapsibleContent v-else class="flex">
