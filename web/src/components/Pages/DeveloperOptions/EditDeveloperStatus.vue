@@ -32,11 +32,11 @@ async function updateStatus() {
     )
     if (response.status === 204) {
       toast.success('Developer Account Enabled Successfully', {
-        description: 'You can access your developer dashboard.'
+        description: 'You can now access your developer dashboard.'
       })
     } else {
       toast.success('Developer Account Disabled Successfully', {
-        description: 'You will not longer be able to access your developer dashboard.'
+        description: 'You will no longer be able to access your developer dashboard.'
       })
     }
     eventBus.emit('closeEditDetailDialog', false)
