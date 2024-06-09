@@ -3,5 +3,5 @@
 import { object, string, pattern } from 'superstruct'
 
 export default object({
-	username: pattern(string(), /^[a-zA-Z0-9]{3,24}$/),
+	username: pattern(string(), /^[a-z0-9]{3,24}$/),
 })
