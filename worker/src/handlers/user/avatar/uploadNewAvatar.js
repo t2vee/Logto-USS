@@ -16,16 +16,15 @@ function validateFile(file) {
 }
 
 export const handler = async (request, env, ctx) => {
-	const reqImg = await request.formData();
-	const file = reqImg.get('file');
-	if (!validateFile(file)) {return error(400,"ERR_INVALID_IMG");}
-	if (env.ENABLE_NSFW_CHECK) {
-		console.log('[ENABLE_NSFW_CHECK]');
-		if (!await checkAvatar(env, file)) {return error(406, "ERR_IMG_FAILED_CHECK");}
-	}
-	const i = await processAvatar(env, file)
-	if (!i) {return error(500, "ERR_IMG_PROCESS_FAILED");}
 	try {
+		const reqImg = await request.formData();
+		const file = reqImg.get('file');
+		if (!validateFile(file)) {return error(400,"ERR_INVALID_IMG");}
+		if (env.ENABLE_NSFW_CHECK) {
+			if (!await checkAvatar(env, file)) {return error(406, "ERR_IMG_FAILED_CHECK");}
+		}
+		const i = await processAvatar(env, file)
+		if (!i) {return error(500, "ERR_IMG_PROCESS_FAILED");}
 		const uploadResponse = await uploadAvatar(env, ctx.accesstoken, i, ctx.userid);
 		await ctx.Http.patch(
 			`/api/users/${ctx.userid}`,

@@ -3,6 +3,7 @@
 
 
 export default async (env, imageData) => {
+	console.log('[NSFWCHECK] Checking uploaded image...')
 	const url = `${env.AVATAR_API}/avatar-service/v1/avatar/check-nsfw`;
 	const uploadFormData = new FormData();
 	uploadFormData.append('file', imageData);
@@ -11,13 +12,10 @@ export default async (env, imageData) => {
 		body: uploadFormData
 	});
 	if (!response.ok) {
-		if (response.status === 406) {
-			console.warn('Unsupported File Type');
-			return false;
-		}
+
 		console.error('Error accessing resource:', response);
 		return false;
 	}
 	const data = await response.json();
-	return data[0].className === 'Neutral';
+	return data[0].className === 'Neutral' || data[0].className === 'Drawing';
 }
