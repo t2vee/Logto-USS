@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onUnmounted } from 'vue'
+import { ref, onUnmounted, defineAsyncComponent } from 'vue'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar/index.js'
 import { Loader2, Pencil, Trash2, ImagePlus } from 'lucide-vue-next'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog/index.js'
@@ -22,7 +22,7 @@ defineProps({
   }
 })
 const { getAccessToken } = useLogto()
-import AvatarDialog from '@/components/Base/Avatar/AvatarDialog.vue'
+const AvatarDialog = defineAsyncComponent(() => import('@/components/Base/Avatar/AvatarDialog.vue'));
 
 const isLoading = ref(false)
 
