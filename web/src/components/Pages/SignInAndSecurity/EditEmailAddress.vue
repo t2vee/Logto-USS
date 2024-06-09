@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, inject, defineAsyncComponent } from 'vue'
+import { ref, computed, inject } from 'vue'
 import { useLogto } from '@logto/vue'
 import {
   AlertDialog,
@@ -14,19 +14,15 @@ import {
 } from '@/components/ui/alert-dialog/index.js'
 import { Input } from '@/components/ui/input/index.js'
 import { Label } from '@/components/ui/label/index.js'
-import { Loader, MailCheck, MailX, CornerDownRight, ArrowBigRightDash } from 'lucide-vue-next'
+import { Loader, MailCheck, MailX, ArrowBigRightDash } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
 import MfaCodeInput from '@/components/Global/MfaCodeInput.vue'
 import axios from 'axios'
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
-const ConnectorAlert = defineAsyncComponent(
-  () => import('@/components/Global/ConnectorAlert.vue')
-)
 
 const userData = inject('userData')
-const userConnectorPresent = inject('userConnectorPresent')
 
 const { getAccessToken } = useLogto()
 const accessTokenRef = ref('')
@@ -149,7 +145,6 @@ const handleCodeComplete = async (code) => {
       v-if="!isLoading && !emailSent"
       class="flex flex-col gap-4 items-center align-middle space-y-10"
     >
-      <ConnectorAlert v-if="userConnectorPresent" />
       <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
         <Label for="email" class="flex font-bold w-full justify-between">
           Email
@@ -159,7 +154,6 @@ const handleCodeComplete = async (code) => {
           >
         </Label>
         <Input
-          :disabled="userConnectorPresent"
           id="email"
           type="email"
           v-model="email"
@@ -167,7 +161,7 @@ const handleCodeComplete = async (code) => {
             'border-red-500': !isEmailValid && isEditing,
             'border-green-500': isEmailValid && isEditing
           }"
-          :placeholder="userConnectorPresent ? userData.email : 'Enter your email'"
+          placeholder="Enter your email"
         />
         <div class="absolute inset-y-0 right-0 flex items-center pt-5 pr-3">
           <MailCheck v-if="isEmailValid && isEditing" class="text-green-500" />
@@ -188,7 +182,7 @@ const handleCodeComplete = async (code) => {
                 <Button
                   class="h-[30px]"
                   :disabled="
-                    !isEmailValid || userConnectorPresent || (resendCodeTimer > 0 && !readyToSend)
+                    !isEmailValid || (resendCodeTimer > 0 && !readyToSend)
                   "
                 >
                   Verify

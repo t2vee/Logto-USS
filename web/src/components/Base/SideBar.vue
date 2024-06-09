@@ -1,9 +1,9 @@
 <script setup>
-import { defineAsyncComponent, ref, inject } from 'vue'
+import { ref, inject } from 'vue'
 
 import Button from '../ui/button/Button.vue'
 import { AlertTriangle, CircleUserRound, LifeBuoy, Cookie, UserCog, Cable, Code, Loader } from 'lucide-vue-next'
-const AvatarEditor = defineAsyncComponent(() => import('@/components/Base/Avatar/AvatarEditor.vue'))
+import AvatarEditor from '@/components/Base/Avatar/AvatarEditor.vue'
 const userData = inject('userData')
 
 const isLoading = ref('')

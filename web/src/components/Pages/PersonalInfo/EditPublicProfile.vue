@@ -2,15 +2,13 @@
 import { Input } from '@/components/ui/input/index.js'
 import { Label } from '@/components/ui/label/index.js'
 import axios from 'axios'
-import { defineAsyncComponent, inject, ref } from 'vue'
+import { inject, ref } from 'vue'
 import { useLogto } from '@logto/vue'
 import { Button } from '@/components/ui/button/index.js'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-const ConnectorAlert = defineAsyncComponent(() => import('@/components/Global/ConnectorAlert.vue'))
 import { Ban, MoreHorizontal, UserRoundCheck, SquareArrowOutUpRight } from 'lucide-vue-next'
 
 const userData = inject('userData')
-const userConnectorPresent = inject('userConnectorPresent')
 const { getAccessToken } = useLogto()
 
 </script>

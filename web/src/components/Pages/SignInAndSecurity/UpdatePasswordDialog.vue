@@ -3,7 +3,7 @@ import axios from 'axios'
 import debounce from 'lodash/debounce'
 import { Input } from '@/components/ui/input/index.js'
 import { Label } from '@/components/ui/label/index.js'
-import { inject, ref } from 'vue'
+import { ref } from 'vue'
 import { useLogto } from '@logto/vue'
 import {Ban, ChevronsRight, Check, AlertCircle, Loader, Loader2} from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
@@ -13,9 +13,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Checkbox } from '@/components/ui/checkbox/index.js'
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
-
-const userData = inject('userData')
-const userConnectorPresent = inject('userConnectorPresent')
 
 const { getAccessToken } = useLogto()
 
@@ -112,7 +109,6 @@ async function updateData() {
 <template>
   <div v-if="!isLoading" class="space-y-6">
     <ConnectorAlert
-      v-if="userConnectorPresent"
       custom-message="A password is not required for accounts that are authenticated externally. To change your password, head over to your account provider."
     />
     <div class="flex flex-col gap-4 py-4 items-center align-middle">
@@ -126,7 +122,6 @@ async function updateData() {
           <Input
             type="password"
             id="username"
-            :disabled="userConnectorPresent"
             v-model="password"
             @input="debouncedCheckPassword"
             :class="{ 'border-red-500': passwordInvalid && !passwordCheckPass }"
@@ -143,7 +138,7 @@ async function updateData() {
           <Input
             type="password"
             id="username"
-            :disabled="userConnectorPresent || !passwordCheckPass"
+            :disabled="!passwordCheckPass"
             v-model="confirmPassword"
             @input="debouncedCheckPasswordMatch"
             :class="{ 'border-red-500': !passwordMatches && passwordCheckPass && confirmPassword }"

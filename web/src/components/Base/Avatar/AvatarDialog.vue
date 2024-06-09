@@ -1,5 +1,5 @@
 <script setup>
-import { defineAsyncComponent, ref } from 'vue'
+import { ref } from 'vue'
 import {
   DialogContent,
   DialogDescription,
@@ -8,14 +8,9 @@ import {
 } from '@/components/ui/dialog/index.js'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs/index.js'
 
-const AvatarGallery = defineAsyncComponent(
-  () =>
-    import('@/components/Base/Avatar/AvatarGallery.vue')
-)
-const ImageUploader = defineAsyncComponent(
-  () =>
-    import('@/components/Base/Avatar/ImageUploader.vue')
-)
+import AvatarGallery from '@/components/Base/Avatar/AvatarGallery.vue'
+import ImageUploader from '@/components/Base/Avatar/ImageUploader.vue'
+
 
 const isLoading = ref(false)
 </script>
