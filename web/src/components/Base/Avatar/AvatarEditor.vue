@@ -24,7 +24,6 @@ defineProps({
 const { getAccessToken } = useLogto()
 import AvatarDialog from '@/components/Base/Avatar/AvatarDialog.vue'
 
-const popoverState = ref(false)
 const isLoading = ref(false)
 
 const removeCurrentAvatar = async () => {
@@ -33,14 +32,14 @@ const removeCurrentAvatar = async () => {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/avatar/remove`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/avatar/remove`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
         }
-      }
     )
     if (response.status === 204) {
       toast.success('Avatar Successfully Removed', {
@@ -48,13 +47,12 @@ const removeCurrentAvatar = async () => {
       })
     }
   } catch (error) {
-    toast.error('Error Removing Avatar:', { description: 'Service Unavailable. Try again later' })
+    toast.error('Error Removing Avatar:', {description: 'Service Unavailable. Try again later'})
     failed = true
   } finally {
     isLoading.value = false
     if (!failed) {
       eventBus.emit('refreshUserData', true)
-      popoverState.value = false
     }
   }
 }
@@ -71,43 +69,43 @@ onUnmounted(cleanup)
 <template>
   <TooltipProvider>
     <Tooltip>
-      <Dialog v-model:open="isDialogOpen">
+      <Dialog>
         <TooltipTrigger>
-          <Popover :open="popoverState">
+          <Popover>
             <PopoverTrigger>
-              <div class="relative" @click="() => (popoverState = !popoverState)">
+              <div class="relative">
                 <Avatar class="w-[130px] h-[130px]">
-                  <AvatarImage :src="avatarUrl" alt="avatar" />
+                  <AvatarImage :src="avatarUrl" alt="avatar"/>
                   <AvatarFallback>{{ userName }}</AvatarFallback>
                 </Avatar>
                 <div
-                  class="absolute bottom-[-10px] right-4 transform translate-x-1/2 -translate-y-1/2 bg-muted rounded-full p-1 border-primary-foreground border-1"
+                    class="absolute bottom-[-10px] right-4 transform translate-x-1/2 -translate-y-1/2 bg-muted rounded-full p-1 border-primary-foreground border-1"
                 >
-                  <Pencil class="w-5 h-5" :color="'rgb(191 85% 86%)'" />
+                  <Pencil class="w-5 h-5" :color="'rgb(191 85% 86%)'"/>
                 </div>
               </div>
             </PopoverTrigger>
             <PopoverContent class="flex w-auto gap-x-3">
               <DialogTrigger as-child>
                 <Button
-                  variant="secondary"
-                  class="h-[30px]"
-                  @click="() => (popoverState = false)"
-                  :disabled="isLoading"
+                    variant="secondary"
+                    class="h-[30px]"
+                    :disabled="isLoading"
                 >
-                  <ImagePlus class="pr-1" color="black" />
+                  <ImagePlus class="pr-1" color="black"/>
                   Create
                 </Button>
               </DialogTrigger>
               <Button
-                variant="outline"
-                class="h-[30px]"
-                @click="removeCurrentAvatar"
-                @mouseenter="() => removeHover = true"
-                @mouseleave="() => removeHover = false"
-                :disabled="isLoading"
+                  variant="outline"
+                  class="h-[30px]"
+                  @click="removeCurrentAvatar"
+                  @mouseenter="() => removeHover = true"
+                  @mouseleave="() => removeHover = false"
+                  :disabled="isLoading"
               >
-                <component :is="isLoading ? Loader2 : Trash2" :color="removeHover ? 'black' : 'white'" class="w-4 h-4 mr-2" :class="isLoading ? 'animate-spin' : ''"  />
+                <component :is="isLoading ? Loader2 : Trash2" :color="removeHover ? 'black' : 'white'"
+                           class="w-4 h-4 mr-2" :class="isLoading ? 'animate-spin' : ''"/>
                 {{ isLoading ? 'Removing...' : 'Remove' }}
               </Button>
             </PopoverContent>
@@ -116,10 +114,8 @@ onUnmounted(cleanup)
         <TooltipContent>
           <p>Change Profile Picture</p>
         </TooltipContent>
-        <AvatarDialog />
+        <AvatarDialog/>
       </Dialog>
     </Tooltip>
   </TooltipProvider>
 </template>
-
-<style scoped></style>
