@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card/index.js'
 import {Link2, Link2Off, ChevronDown, Loader2} from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
 import { eventBus } from '@/lib/eventBus.js'
-import axios from "axios";
+import axios from 'redaxios';
 import {toast} from "vue-sonner";
 import { useLogto } from '@logto/vue'
 

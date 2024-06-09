@@ -2,7 +2,7 @@
 import {Button} from "@/components/ui/button/index.js";
 import { Input } from '@/components/ui/input/index.js'
 import {ref} from "vue";
-import axios from "axios";
+import axios from 'redaxios';
 import {toast} from "vue-sonner";
 import {Loader2, ClipboardCopy, ClipboardCheck, FileCheck, FileDown} from 'lucide-vue-next';
 import { useClipboard } from '@vueuse/core'
