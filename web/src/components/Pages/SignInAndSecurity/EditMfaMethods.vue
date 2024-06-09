@@ -8,17 +8,17 @@ import {
   MailCheck,
   MailX
 } from 'lucide-vue-next'
-import { inject, ref, defineAsyncComponent } from 'vue'
+import { inject, ref } from 'vue'
 import { DialogFooter } from '@/components/ui/dialog/index.js'
 import { Button } from '@/components/ui/button/index.js'
 import { PhoneMissed, DoorOpen } from 'lucide-vue-next'
 
-const ConnectorAlert = defineAsyncComponent(() => import('@/components/Global/ConnectorAlert.vue'))
-const EditAppAuthenticator = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/EditAppAuthenticator.vue'))
-const AddPhoneNumberDialog = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/AddPhoneNumberDialog.vue'))
-const EditPhoneNumberDialog = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/RemovePhoneNumberDialog.vue'))
-const EditDetailDialog = defineAsyncComponent(() => import('@/components/Global/EditDetailDialog.vue'))
-const EditEmailAddress = defineAsyncComponent(() => import('@/components/Pages/SignInAndSecurity/EditEmailAddress.vue'))
+import ConnectorAlert from '@/components/Global/ConnectorAlert.vue'
+import EditAppAuthenticator from '@/components/Pages/SignInAndSecurity/EditAppAuthenticator.vue'
+import AddPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/AddPhoneNumberDialog.vue'
+import EditPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/RemovePhoneNumberDialog.vue'
+import EditDetailDialog from '@/components/Global/EditDetailDialog.vue'
+import EditEmailAddress from '@/components/Pages/SignInAndSecurity/EditEmailAddress.vue'
 
 const userData = inject('userData')
 const mfaMethods = inject('mfaMethods')

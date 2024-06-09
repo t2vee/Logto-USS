@@ -2,18 +2,16 @@
 import { Input } from '@/components/ui/input/index.js'
 import { Label } from '@/components/ui/label/index.js'
 import axios from 'axios'
-import { defineAsyncComponent, inject, ref } from 'vue'
+import { inject, ref } from 'vue'
 import { useLogto } from '@logto/vue'
 import { Button } from '@/components/ui/button/index.js'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-const ConnectorAlert = defineAsyncComponent(() => import('@/components/Global/ConnectorAlert.vue'))
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
 import debounce from 'lodash/debounce'
 import { Ban, MoreHorizontal, UserRoundCheck } from 'lucide-vue-next'
 
 const userData = inject('userData')
-const userConnectorPresent = inject('userConnectorPresent')
 const { getAccessToken } = useLogto()
 
 const fullName = ref('')
@@ -84,7 +82,6 @@ const debouncedCheckName = debounce(() => checkName(fullName.value), 500)
 
 <template>
   <div class="space-y-10">
-    <ConnectorAlert v-if="userConnectorPresent" />
     <div class="flex flex-col gap-4 pb-4 items-center align-middle">
       <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
         <Label for="username" class="flex font-bold w-full justify-between">
@@ -95,7 +92,6 @@ const debouncedCheckName = debounce(() => checkName(fullName.value), 500)
         <div>
           <Input
             id="username"
-            :disabled="userConnectorPresent"
             v-model="fullName"
             @input="debouncedCheckName"
             :class="{
@@ -120,7 +116,7 @@ const debouncedCheckName = debounce(() => checkName(fullName.value), 500)
           <Button
             type="submit"
             class="h-[30px]"
-            :disabled="userConnectorPresent || !isOk"
+            :disabled="!isOk"
             :onclick="updateData"
           >
             Save

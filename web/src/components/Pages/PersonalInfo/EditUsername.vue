@@ -2,7 +2,7 @@
 import { Input } from '@/components/ui/input/index.js'
 import { Label } from '@/components/ui/label/index.js'
 import axios from 'axios'
-import { inject, ref, defineAsyncComponent, onMounted } from 'vue'
+import { inject, ref, onMounted } from 'vue'
 import { useLogto } from '@logto/vue'
 import debounce from 'lodash/debounce'
 import { Ban, UserRoundCheck, MoreHorizontal } from 'lucide-vue-next'
@@ -10,12 +10,9 @@ import { Button } from '@/components/ui/button/index.js'
 import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
-const ConnectorAlert = defineAsyncComponent(
-  () => import('@/components/Global/ConnectorAlert.vue')
-)
+import ConnectorAlert from '@/components/Global/ConnectorAlert.vue'
 
 const userData = inject('userData')
-const userConnectorPresent = inject('userConnectorPresent')
 
 const { getAccessToken } = useLogto()
 

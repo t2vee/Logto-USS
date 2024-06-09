@@ -14,7 +14,6 @@ const { fetchUserInfo, getAccessToken, isAuthenticated } = useLogto()
 const userInfo = ref(null)
 const isLoading = ref(true)
 const fetchFailure = ref(false)
-const userConnectorPresent = ref(false)
 
 const support = `mailto:${import.meta.env.VITE_SUPPORT_EMAIL}`
 const webBuild = `prod/${import.meta.env.VITE_COMMIT_HASH.length > 7 ? import.meta.env.VITE_COMMIT_HASH.substring(0, 7) : import.meta.env.VITE_COMMIT_HASH}`
@@ -62,7 +61,6 @@ defineProps({
 })
 
 provide('userData', userInfo)
-provide('userConnectorPresent', userConnectorPresent)
 
 const cleanup = eventBus.on('refreshUserData', handleEvent)
 onUnmounted(cleanup)
