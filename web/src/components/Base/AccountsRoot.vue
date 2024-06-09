@@ -75,24 +75,24 @@ onUnmounted(cleanup)
       <div v-if="!fetchFailure && !isLoading" class="flex justify-between gap-6">
         <SideBar />
         <div class="flex-1 flex-grow overflow-auto">
-          <CardContent v-if="!isSubPageLoading">
-            <RouterView />
+          <CardContent>
+            <RouterView v-if="!isSubPageLoading" />
+            <div v-if="isSubPageLoading" class="flex flex-col items-center align-middle justify-center space-y-4 w-[600px]">
+              <div class="space-y-2">
+                <Skeleton class="h-8 w-[300px]" />
+                <Skeleton class="h-4 w-[525px]" />
+                <Skeleton class="h-4 w-[200px]" />
+              </div>
+              <div class="flex space-x-4">
+                <Skeleton class="h-[150px] w-[250px] rounded-xl" />
+                <Skeleton class="h-[150px] w-[250px] rounded-xl" />
+              </div>
+              <div class="flex space-x-4">
+                <Skeleton class="h-[150px] w-[250px] rounded-xl" />
+                <Skeleton class="h-[150px] w-[250px] rounded-xl" />
+              </div>
+            </div>
           </CardContent>
-          <div v-if="isSubPageLoading" class="flex flex-col items-center align-middle justify-center space-y-4 w-[600px]">
-            <div class="space-y-2">
-              <Skeleton class="h-8 w-[300px]" />
-              <Skeleton class="h-4 w-[525px]" />
-              <Skeleton class="h-4 w-[200px]" />
-            </div>
-            <div class="flex space-x-4">
-              <Skeleton class="h-[150px] w-[250px] rounded-xl" />
-              <Skeleton class="h-[150px] w-[250px] rounded-xl" />
-            </div>
-            <div class="flex space-x-4">
-              <Skeleton class="h-[150px] w-[250px] rounded-xl" />
-              <Skeleton class="h-[150px] w-[250px] rounded-xl" />
-            </div>
-          </div>
         </div>
       </div>
       <div
