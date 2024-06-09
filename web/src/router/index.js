@@ -69,7 +69,9 @@ const router = createRouter({
     },
     {
       path: '/legal',
-      redirect: import.meta.env.VITE_LEGAL_URL,
+      beforeEnter() {
+        window.location.replace(import.meta.env.VITE_LEGAL_URL)
+      }
     },
     {
       path: '/:pathMatch(.*)*',
