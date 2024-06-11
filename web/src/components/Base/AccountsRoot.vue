@@ -103,6 +103,13 @@ onUnmounted(cleanup)
         <p class="text-red-700 text-xl">Failed to grab User information</p>
         <Button @click="loadData" variant="outline" class="h-8 w-20"> Retry </Button>
       </div>
+      <div
+          v-else-if="isLoading"
+          class="flex items-center justify-center"
+      >
+        <Loader class="animate-spin" />
+        Loading User Information...
+      </div>
       <div class="flex w-full items-center align-middle justify-between">
         <p class="text-xs text-gray-500 mt-8">
           MXS Account Dashboard @ 2024 - Web Version {{ webBuild }}

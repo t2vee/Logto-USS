@@ -52,6 +52,12 @@
 @layer base {
   * {
     @apply border-border;
+    @apply text-base;
+  }
+  a {
+    &:hover {
+      @apply text-hover-base;
+    }
   }
   body {
     @apply bg-background text-foreground;
