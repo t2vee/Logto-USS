@@ -17,6 +17,7 @@ const userInfo = ref(null)
 const isLoading = ref(true)
 const isSubPageLoading = ref(false)
 const fetchFailure = ref(false)
+const mfaOptions = ref({})
 
 const support = `mailto:${import.meta.env.VITE_SUPPORT_EMAIL}`
 const webBuild = `prod/${import.meta.env.VITE_COMMIT_HASH.length > 7 ? import.meta.env.VITE_COMMIT_HASH.substring(0, 7) : import.meta.env.VITE_COMMIT_HASH}`
@@ -47,6 +48,17 @@ async function loadData() {
   } finally {
     isLoading.value = false
   }
+  try {
+    const response = await axios.get(
+        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa/methods`,
+        {headers: {Authorization: `Bearer ${await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)}`, 'Content-Type': 'application/json'}}
+    )
+    let optionsNum = [];
+    if (response.data[0]?.type === 'Totp') {mfaOptions.value.totp = response.data[0]}
+    if (response.data[1]?.type === 'BackupCode') {mfaOptions.value.backup = response.data[1]}
+  } catch (error) {
+    toast.error('Error grabbing MFA Options:', { description: 'Some account actions will be unavailable' })
+  }
 }
 
 const handleRefresh = (data) => {
@@ -62,6 +74,7 @@ const handleLoading = (data) => {
 onMounted(loadData)
 
 provide('userData', userInfo)
+provide('mfaMethods', mfaOptions)
 
 const cleanup = eventBus.on('refreshUserData', handleRefresh)
 eventBus.on('AccountLoading', handleLoading)

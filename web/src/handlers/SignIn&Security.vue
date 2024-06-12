@@ -2,9 +2,6 @@
 import {inject, onMounted, provide, ref} from 'vue'
 import {CardDescription, CardTitle} from '@/components/ui/card/index.js'
 import {CircleEllipsis, Fingerprint, KeyRound, MailCheck, MailX, Phone, PhoneMissed} from 'lucide-vue-next'
-import axios from 'redaxios'
-import {toast} from 'vue-sonner'
-import {useLogto} from '@logto/vue'
 
 import AddPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/AddPhoneNumberDialog.vue'
 import EditPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/RemovePhoneNumberDialog.vue'
@@ -14,29 +11,18 @@ import EditMfaMethods from '@/components/Pages/SignInAndSecurity/EditMfaMethods.
 import UpdatePasswordDialog from '@/components/Pages/SignInAndSecurity/UpdatePasswordDialog.vue'
 
 const userData = inject('userData')
-const { getAccessToken } = useLogto()
-const mfaOptions = ref({})
+const mfaOptions = inject('mfaMethods')
 const mfaOptionsNum = ref([])
 
-async function grabMfaOptions() {
-  try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa/methods`,
-      {headers: {Authorization: `Bearer ${await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)}`, 'Content-Type': 'application/json'}}
-    )
-    if (response.data[0]?.type === 'Totp') {mfaOptions.value.totp = response.data[0]}
-    if (response.data[1]?.type === 'BackupCode') {mfaOptions.value.backup = response.data[1]}
-    mfaOptionsNum.value.push(userData.value.email)
-    if (userData.value.phone_number) {mfaOptionsNum.value.push(userData.value.phone_number)}
-    if (response.data[0] !== 'none') {mfaOptionsNum.value.push(response.data[0])}
-  } catch (error) {
-    toast.error('Error grabbing MFA Options:', { description: 'Some account actions will be unavailable' })
-  }
+async function parseMfaOptions() {
+  mfaOptionsNum.value.push(userData.value.email)
+  if (userData.value.phone_number) {mfaOptionsNum.value.push(userData.value.phone_number)}
+  if (mfaOptions.value[0] !== 'none') {mfaOptionsNum.value.push(mfaOptions.value[0])}
 }
 
 provide('mfaMethods', mfaOptions)
 
-onMounted(grabMfaOptions)
+onMounted(parseMfaOptions)
 </script>
 
 <template>
