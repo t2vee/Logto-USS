@@ -4,7 +4,7 @@ import { TooltipRoot, useForwardPropsEmits } from "radix-vue";
 const props = defineProps({
   defaultOpen: { type: Boolean, required: false },
   open: { type: Boolean, required: false },
-  delayDuration: { type: Number, required: false },
+  delayDuration: { type: Number, required: false, default: 200 },
   disableHoverableContent: { type: Boolean, required: false },
   disableClosingTrigger: { type: Boolean, required: false },
   disabled: { type: Boolean, required: false },

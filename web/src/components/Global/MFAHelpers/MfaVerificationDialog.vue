@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dialog/index.js'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip/index.js'
 import { Button } from '@/components/ui/button/index.js'
-import MfaCodeInput from '@/components/Global/MfaCodeInput.vue'
+import MfaCodeInput from '@/components/Global/MFAHelpers/MfaCodeInput.vue'
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
 
@@ -199,88 +199,95 @@ watch(
         </DialogDescription>
       </DialogHeader>
     </transition>
-    <transition name="fade" mode="out-in">
-      <div key="mfa-settings" v-if="!isLoading && isMfaRequired && !codeSent" class="space-y-8">
-        <RadioGroup
-          default-value="email"
-          class="space-y-3"
-          @update:modelValue="updateSelectedMethod"
-        >
-          <div class="flex items-center space-x-2">
-            <RadioGroupItem id="r1" value="email" />
-            <Label for="r1"
-              >Email <strong>{{ userData.email }}</strong></Label
-            >
-          </div>
-          <div v-if="userData.phone_number" class="flex items-center space-x-2">
-            <RadioGroupItem id="r2" value="sms" />
-            <Label for="r2"
-              >Text <strong>{{ userData.phone_number }}</strong></Label
-            >
-          </div>
-          <div v-if="mfaOptions[0] !== 'none'">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger class="flex items-center space-x-2">
-                  <RadioGroupItem id="r3" value="authenticator" disabled />
-                  <Label for="r3" class="text-gray-600"
-                    >Authenticator App (Google/Microsoft Authenticator)</Label
-                  >
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Currently Not Available</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-          <div v-if="mfaOptions[1]">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger class="flex items-center space-x-2">
-                  <RadioGroupItem id="r3" value="authenticator" disabled />
-                  <Label for="r3" class="text-gray-600">
-                    Backup Code
-                  </Label>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Currently Not Available</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        </RadioGroup>
-        <div class="space-x-2 w-full flex justify-center">
-          <p class="text-xs" v-if="resendCodeTimer > 0 && !readyToSend">
-            Please wait {{ resendCodeTimer }} seconds before sending another code
-          </p>
-        </div>
-        <DialogFooter>
-          <Button
-              :disabled="resendCodeTimer > 0 && !readyToSend"
-              class="h-[30px]"
-              @click="sendVerificationCode"
+    <div>
+      <transition name="fade" mode="out-in">
+        <div key="mfa-settings" v-if="!isLoading && isMfaRequired && !codeSent" class="space-y-8">
+          <RadioGroup
+              default-value="email"
+              class="space-y-3"
+              @update:modelValue="updateSelectedMethod"
           >
-            Next
-          </Button>
-          <DialogClose as-child>
-            <Button class="h-[30px]" type="button" variant="outline"> Cancel </Button>
-          </DialogClose>
-        </DialogFooter>
-      </div>
-      <div v-else-if="!isLoading && isMfaRequired && codeSent">
-        <MfaCodeInput
-          :resend-code-timer="resendCodeTimer"
-          @codeComplete="handleCodeComplete"
-          @resendCode="handleCodeResend"
-          @changeInput="handleChangeInput"
-        />
-      </div>
-      <div v-else-if="!isLoading && !isMfaRequired">
-        <component :is="editPage" />
-      </div>
-      <div v-else-if="isLoading" class="flex items-center align-middle justify-center">
-        <Loader class="animate-spin" :size="32" />
-      </div>
-    </transition>
+            <div class="flex items-center space-x-2">
+              <RadioGroupItem id="r1" value="email" />
+              <Label for="r1">
+                Email
+                <strong>{{ userData.email }}
+              </strong>
+              </Label>
+            </div>
+            <div v-if="userData.phone_number" class="flex items-center space-x-2">
+              <RadioGroupItem id="r2" value="sms" />
+              <Label for="r2">
+                Text
+                <strong>
+                  {{ userData.phone_number }}
+                </strong>
+              </Label>
+            </div>
+            <div v-if="mfaOptions[0] !== 'none'">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger class="flex items-center space-x-2">
+                    <RadioGroupItem id="r3" value="authenticator" disabled /> <!-- Cant be implemented yet. see: https://openapi.logto.io/operation/operation-post-api-verification-codes and https://logto.productlane.com/roadmap?id=f1b1eda0-ddad-4538-bca4-15c834e7acd0 -->
+                    <Label for="r3" class="text-gray-600"
+                    >Authenticator App (Google/Microsoft Authenticator)</Label
+                    >
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Currently Not Available</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <div v-if="mfaOptions[1]">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger class="flex items-center space-x-2">
+                    <RadioGroupItem id="r3" value="authenticator" disabled /> <!-- Cant be implemented yet. see: https://openapi.logto.io/operation/operation-post-api-verification-codes and https://logto.productlane.com/roadmap?id=f1b1eda0-ddad-4538-bca4-15c834e7acd0 -->
+                    <Label for="r3" class="text-gray-600">
+                      Backup Code
+                    </Label>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Currently Not Available</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </RadioGroup>
+          <div class="space-x-2 w-full flex justify-center">
+            <p class="text-xs" v-if="resendCodeTimer > 0 && !readyToSend">
+              Please wait {{ resendCodeTimer }} seconds before sending another code
+            </p>
+          </div>
+          <DialogFooter>
+            <Button
+                :disabled="resendCodeTimer > 0 && !readyToSend"
+                class="h-[30px]"
+                @click="sendVerificationCode"
+            >
+              Next
+            </Button>
+            <DialogClose as-child>
+              <Button class="h-[30px]" type="button" variant="outline"> Cancel </Button>
+            </DialogClose>
+          </DialogFooter>
+        </div>
+        <div v-else-if="!isLoading && isMfaRequired && codeSent">
+          <MfaCodeInput
+              :resend-code-timer="resendCodeTimer"
+              @codeComplete="handleCodeComplete"
+              @resendCode="handleCodeResend"
+              @changeInput="handleChangeInput"
+          />
+        </div>
+        <div v-else-if="!isLoading && !isMfaRequired">
+          <component :is="editPage" />
+        </div>
+        <div v-else-if="isLoading" class="flex items-center align-middle justify-center">
+          <Loader class="animate-spin" :size="32" />
+        </div>
+      </transition>
+    </div>
   </DialogContent>
 </template>

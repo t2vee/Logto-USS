@@ -2,7 +2,7 @@
 import { CardDescription, CardTitle } from '@/components/ui/card/index.js'
 import {inject} from "vue";
 import {Code} from "lucide-vue-next";
-import EditDetailDialog from "@/components/Global/EditDetailDialog.vue";
+import EditDetailDialog from "@/components/Global/MFAHelpers/EditDetailDialog.vue";
 import EditDeveloperStatus from "@/components/Pages/DeveloperOptions/EditDeveloperStatus.vue";
 const userData = inject('userData')
 </script>

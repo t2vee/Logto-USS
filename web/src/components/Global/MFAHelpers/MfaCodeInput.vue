@@ -6,7 +6,7 @@ import {
   PinInputInput,
   PinInputSeparator
 } from '@/components/ui/pin-input/index.js'
-import Button from '../ui/button/Button.vue'
+import Button from '../../ui/button/Button.vue'
 
 defineProps({
   resendCodeTimer: {

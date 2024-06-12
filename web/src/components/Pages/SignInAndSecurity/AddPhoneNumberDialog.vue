@@ -8,7 +8,7 @@ import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
 import { Label } from '@/components/ui/label/index.js'
 import { PhoneMissed, Phone, Loader } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
-import MfaCodeInput from '@/components/Global/MfaCodeInput.vue'
+import MfaCodeInput from '@/components/Global/MFAHelpers/MfaCodeInput.vue'
 import { eventBus } from '@/lib/eventBus.js'
 
 const { getAccessToken } = useLogto()

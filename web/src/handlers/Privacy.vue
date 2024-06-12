@@ -2,7 +2,7 @@
 import {CardDescription, CardTitle} from '@/components/ui/card/index.js'
 import {BarChart3, Send, TextSearch, UserRoundSearch} from 'lucide-vue-next'
 import AddPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/AddPhoneNumberDialog.vue'
-import EditDetailDialog from '@/components/Global/EditDetailDialog.vue'
+import EditDetailDialog from '@/components/Global/MFAHelpers/EditDetailDialog.vue'
 </script>
 
 <template>

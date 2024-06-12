@@ -17,7 +17,7 @@ import ConnectorAlert from '@/components/Global/ConnectorAlert.vue'
 import EditAppAuthenticator from '@/components/Pages/SignInAndSecurity/EditAppAuthenticator.vue'
 import AddPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/AddPhoneNumberDialog.vue'
 import EditPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/RemovePhoneNumberDialog.vue'
-import EditDetailDialog from '@/components/Global/EditDetailDialog.vue'
+import EditDetailDialog from '@/components/Global/MFAHelpers/EditDetailDialog.vue'
 import EditEmailAddress from '@/components/Pages/SignInAndSecurity/EditEmailAddress.vue'
 
 const userData = inject('userData')

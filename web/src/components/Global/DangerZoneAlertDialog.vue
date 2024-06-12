@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onUnmounted, inject } from 'vue'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog/index.js'
-import MFAVerificationDialog from '@/components/Global/MfaVerificationDialog.vue'
+import MFAVerificationDialog from '@/components/Global/MFAHelpers/MfaVerificationDialog.vue'
 import { eventBus } from '@/lib/eventBus.js'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert/index.js'
 

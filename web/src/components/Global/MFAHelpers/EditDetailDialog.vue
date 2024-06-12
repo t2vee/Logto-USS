@@ -2,7 +2,7 @@
 import { ref, onUnmounted } from 'vue'
 import { useDark } from "@vueuse/core";
 import { Dialog, DialogTrigger } from '@/components/ui/dialog/index.js'
-import MFAVerificationDialog from '@/components/Global/MfaVerificationDialog.vue'
+import MFAVerificationDialog from '@/components/Global/MFAHelpers/MfaVerificationDialog.vue'
 import { eventBus } from '@/lib/eventBus.js'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card/index.js'
 
