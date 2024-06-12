@@ -1,8 +1,6 @@
 <script setup>
-import {AlertTriangle, OctagonPause} from "lucide-vue-next";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from '@/components/ui/accordion/index.js'
 import {CardDescription, CardTitle} from '@/components/ui/card/index.js'
-import DangerZoneAlertDialog from "@/components/Global/DangerZoneAlertDialog.vue"
 import TerminateAccount from "@/components/Pages/DangerZone/TerminateAccount.vue"
 import SuspendAccount from "@/components/Pages/DangerZone/SuspendAccount.vue"
 </script>
@@ -15,8 +13,8 @@ import SuspendAccount from "@/components/Pages/DangerZone/SuspendAccount.vue"
       <AccordionItem value="item-1">
         <AccordionTrigger class="text-red-600">I Understand. Show me Account Actions...</AccordionTrigger>
         <AccordionContent class="space-y-3">
-          <DangerZoneAlertDialog title="Suspend Your Account" desc='Here you can suspend/disable your account and access to it. To renable your account you will have to contact support.' :dialog-page="SuspendAccount" :icon="OctagonPause" />
-          <DangerZoneAlertDialog destructive title="Terminate Your Account" desc='Completely terminate your account and remove all data connected to it. This action is irreversible!' :dialog-page="TerminateAccount" :icon="AlertTriangle" />
+          <SuspendAccount />
+          <TerminateAccount />
         </AccordionContent>
       </AccordionItem>
     </Accordion>
