@@ -8,7 +8,7 @@ import axios from 'redaxios'
 import {
   DialogClose,
   DialogContent,
-  DialogDescription,
+  DialogDescription, DialogFooter,
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog/index.js'
@@ -194,29 +194,27 @@ watch(
 </script>
 
 <template>
-  <DialogContent
-    class="sm:max-w-[525px] sm:min-h-[500px] flex flex-col items-center justify-center align-middle space-y-6"
-  >
-    <transition name="slide" mode="out-in">
+  <DialogContent class="sm:max-w-[525px] sm:min-h-[400px] flex flex-col items-center justify-between align-middle">
+    <transition name="fade">
       <DialogHeader class="mb-3 flex flex-col items-center justify-center align-middle">
         <component
-          class="mr-1"
-          height="42"
-          width="42"
-          :is="!isLoading && isMfaRequired ? Shield : icon"
+            class="mr-1"
+            height="42"
+            width="42"
+            :is="isMfaRequired ? Shield : icon"
         />
         <DialogTitle class="flex items-center align-middle">{{
-          !isLoading && isMfaRequired
-            ? 'Verify Your Identity'
-            : !dataRequest
-              ? 'Edit Your ' + title
-              : title
-        }}</DialogTitle>
+            isMfaRequired
+                ? 'Verify Your Identity'
+                : !dataRequest
+                    ? 'Edit Your ' + title
+                    : title
+          }}</DialogTitle>
         <DialogDescription class="text-xs">
           {{
             !isLoading && isMfaRequired
-              ? "In order to verify your identity, we'll send you a code to your preferred method below."
-              : ''
+                ? "In order to verify your identity, we'll send you a code to your preferred method below."
+                : ''
           }}
         </DialogDescription>
       </DialogHeader>
@@ -275,16 +273,19 @@ watch(
           <p class="text-xs" v-if="resendCodeTimer > 0 && !readyToSend">
             Please wait {{ resendCodeTimer }} seconds before sending another code
           </p>
+        </div>
+        <DialogFooter>
           <Button
-            :disabled="resendCodeTimer > 0 && !readyToSend"
-            class="h-[30px]"
-            @click="sendVerificationCode"
-            >Next</Button
+              :disabled="resendCodeTimer > 0 && !readyToSend"
+              class="h-[30px]"
+              @click="sendVerificationCode"
           >
+            Next
+          </Button>
           <DialogClose as-child>
             <Button class="h-[30px]" type="button" variant="outline"> Cancel </Button>
           </DialogClose>
-        </div>
+        </DialogFooter>
       </div>
       <div v-else-if="!isLoading && isMfaRequired && codeSent">
         <MfaCodeInput
