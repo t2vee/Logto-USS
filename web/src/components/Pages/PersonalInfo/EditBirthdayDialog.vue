@@ -1,21 +1,18 @@
 <script setup>
-import { inject, ref } from 'vue'
-import { Button } from '@/components/ui/button/index.js'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
+import {inject, ref} from 'vue'
+import {Button} from '@/components/ui/button/index.js'
+import {DialogClose} from '@/components/ui/dialog/index.js'
 import Label from '../../ui/label/Label.vue'
 import axios from 'redaxios'
-import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js'
-import { useLogto } from '@logto/vue'
-import { DateFormatter, getLocalTimeZone } from '@internationalized/date'
-import { Calendar as CalendarIcon, CalendarFold } from 'lucide-vue-next'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/index.js'
-import { cn } from '@/lib/utils.js'
+import {toast} from 'vue-sonner'
+import {eventBus} from '@/lib/eventBus.js'
+import {useLogto} from '@logto/vue'
+import {DateFormatter, getLocalTimeZone} from '@internationalized/date'
+import {Calendar as CalendarIcon, CalendarFold} from 'lucide-vue-next'
+import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover/index.js'
+import {cn} from '@/lib/utils.js'
 import CalendarWithSelects from '@/components/Pages/PersonalInfo/Utils/CalendarWithSelects.vue'
-import {
-  DateFieldInput,
-  DateFieldRoot,
-} from 'radix-vue'
+import {DateFieldInput, DateFieldRoot,} from 'radix-vue'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 
 const df = new DateFormatter('en-AU', {
@@ -135,8 +132,8 @@ function allowSave() {
       <DialogClose as-child>
         <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
       </DialogClose>
-      <Button variant="link" as-child>
-        <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
+      <Button variant="link" as-child size="xs">
+        <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
       </Button>
       <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!dateSelected">
         Save
