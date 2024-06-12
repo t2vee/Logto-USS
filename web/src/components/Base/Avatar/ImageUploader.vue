@@ -95,7 +95,6 @@ defineExpose({
 </script>
 
 <template>
-  <div class="space-y-4">
     <Card>
       <CardHeader>
         <CardTitle>Upload Custom Avatar Image</CardTitle>
@@ -143,14 +142,13 @@ defineExpose({
         <p class="text-xs font-bold">Maximum 1000KB (1MB) Upload Size</p>
       </CardFooter>
     </Card>
-    <DialogFooter>
-      <Button @click="uploadFile" class="h-[30px]" :disabled="!selectedFile || isLoading">
-        <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
-        {{ isLoading ? 'Processing...' : 'Save' }}
-      </Button>
-      <DialogClose as-child>
-        <Button type="button" variant="outline" class="h-[30px]"> Close </Button>
-      </DialogClose>
-    </DialogFooter>
-  </div>
+  <DialogFooter class="right-0">
+    <DialogClose as-child>
+      <Button type="button" variant="outline" class="h-[30px]"> Close </Button>
+    </DialogClose>
+    <Button @click="uploadFile" class="h-[30px]" :disabled="!selectedFile || isLoading">
+      <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
+      {{ isLoading ? 'Processing...' : 'Save' }}
+    </Button>
+  </DialogFooter>
 </template>

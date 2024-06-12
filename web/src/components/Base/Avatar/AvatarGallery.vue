@@ -149,7 +149,7 @@ const uploadFile = async () => {
       <CardHeader>
         <CardTitle>Choose a Generated Avatar</CardTitle>
         <CardDescription>
-          Avatars based on different generation algorithm methods.
+          Avatars based on different generation algorithms.
         </CardDescription>
       </CardHeader>
       <CardContent class="space-y-2 overflow-y-auto max-h-[300px]">
@@ -167,14 +167,14 @@ const uploadFile = async () => {
         </div>
       </CardContent>
     </Card>
-    <DialogFooter>
+    <DialogFooter class="right-0">
+      <DialogClose as-child>
+        <Button type="button" variant="outline" class="h-[30px]"> Close </Button>
+      </DialogClose>
       <Button @click="uploadFile" class="h-[30px]" :disabled="!selectedAvatarId || isLoading">
         <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
         {{ isLoading ? 'Processing...' : 'Save' }}
       </Button>
-      <DialogClose as-child>
-        <Button type="button" variant="outline" class="h-[30px]"> Close </Button>
-      </DialogClose>
     </DialogFooter>
   </div>
 </template>
