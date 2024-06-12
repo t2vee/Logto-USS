@@ -26,7 +26,6 @@ const AvatarDialog = defineAsyncComponent(() => import('@/components/Base/Avatar
 const isLoading = ref(false)
 
 const removeCurrentAvatar = async () => {
-  let failed
   isLoading.value = true
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
@@ -44,15 +43,12 @@ const removeCurrentAvatar = async () => {
       toast.success('Avatar Successfully Removed', {
         description: 'Click create to add a new one to your account.'
       })
+      eventBus.emit('refreshUserData', true)
     }
   } catch (error) {
     toast.error('Error Removing Avatar:', {description: 'Service Unavailable. Try again later'})
-    failed = true
   } finally {
     isLoading.value = false
-    if (!failed) {
-      eventBus.emit('refreshUserData', true)
-    }
   }
 }
 

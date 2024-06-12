@@ -67,7 +67,6 @@ const debouncedCheckPassword = debounce(() => checkPassword(), 200)
 const debouncedCheckPasswordMatch = debounce(() => checkPasswordMatch(), 200)
 
 async function updateData() {
-  let failed = false
   isLoading.value = true
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
@@ -86,6 +85,8 @@ async function updateData() {
     )
     if (response.status === 204) {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
+      eventBus.emit('closeEditDetailDialog', false)
+      eventBus.emit('refreshUserData', true)
     }
   } catch (error) {
     console.log(error)
@@ -96,13 +97,8 @@ async function updateData() {
     } else {
       toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
     }
-    failed = true
   } finally {
     isLoading.value = false
-  }
-  if (!failed) {
-    eventBus.emit('closeEditDetailDialog', false)
-    eventBus.emit('refreshUserData', true)
   }
 }
 </script>

@@ -7,7 +7,7 @@ import { useLogto } from '@logto/vue'
 import debounce from 'lodash/debounce'
 import {Ban, UserRoundCheck, MoreHorizontal, CircleUserRound} from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
+import { DialogClose } from '@/components/ui/dialog/index.js'
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
 import ConnectorAlert from '@/components/Global/ConnectorAlert.vue'
@@ -67,7 +67,6 @@ const handleInput = (event) => {
 };
 
 async function updateData() {
-  let failed = false
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
@@ -84,6 +83,8 @@ async function updateData() {
     )
     if (response.status === 204) {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
+      eventBus.emit('closeEditDetailDialog', false)
+      eventBus.emit('refreshUserData', true)
     }
   } catch (error) {
     switch (error.response.status) {
@@ -95,11 +96,6 @@ async function updateData() {
         toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' });
         break;
     }
-    failed = true
-  }
-  if (!failed) {
-    eventBus.emit('closeEditDetailDialog', false)
-    eventBus.emit('refreshUserData', true)
   }
 }
 

@@ -30,7 +30,6 @@ const prepareFile = () => {
 
 const uploadFile = async () => {
   isLoading.value = true
-  let failed = false
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   const formData = new FormData()
   formData.append('file', selectedFile.value)
@@ -53,9 +52,10 @@ const uploadFile = async () => {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
       preview.value = null
       selectedFile.value = null
+      eventBus.emit('closeEditDetailDialog', false)
+      eventBus.emit('refreshUserData', true)
     }
   } catch (error) {
-    failed = true
     console.log('Error uploading file:', error)
     if (error.status === 406) {
       toast.warning('Please Upload a Different Image:', {
@@ -68,10 +68,6 @@ const uploadFile = async () => {
     }
   } finally {
     isLoading.value = false
-  }
-  if (!failed) {
-    eventBus.emit('closeEditDetailDialog', false)
-    eventBus.emit('refreshUserData', true)
   }
 }
 

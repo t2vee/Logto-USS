@@ -26,7 +26,6 @@ const { getAccessToken } = useLogto()
 const dateSelected = ref(false)
 
 async function updateData() {
-  let failed = false
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
@@ -43,6 +42,8 @@ async function updateData() {
     )
     if (response.status === 204) {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
+      eventBus.emit('closeEditDetailDialog', false)
+      eventBus.emit('refreshUserData', true)
     }
   } catch (error) {
     switch (error.response.status) {
@@ -55,11 +56,6 @@ async function updateData() {
       default:
         toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
     }
-    failed = true
-  }
-  if (!failed) {
-    eventBus.emit('closeEditDetailDialog', false)
-    eventBus.emit('refreshUserData', true)
   }
 }
 

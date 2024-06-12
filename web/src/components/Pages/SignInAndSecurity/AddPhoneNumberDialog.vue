@@ -126,6 +126,8 @@ const handleCodeComplete = async (code) => {
       toast.success('Successfully Verified', {
         description: `${phone.value} has been successfully added to your account.`
       })
+      eventBus.emit('closeEditDetailDialog', false)
+      eventBus.emit('refreshUserData', true)
     }
     smsVerified.value = !(response.status === 204)
   } catch (error) {
@@ -133,8 +135,6 @@ const handleCodeComplete = async (code) => {
     smsSent.value = false
   } finally {
     isLoading.value = false
-    eventBus.emit('closeEditDetailDialog', false)
-    eventBus.emit('refreshUserData', true)
   }
 }
 

@@ -106,7 +106,6 @@ async function handleChangeInput() {
 }
 
 const handleCodeComplete = async (code) => {
-  let failed;
   isLoading.value = true
   try {
     const response = await axios.post(
@@ -124,18 +123,15 @@ const handleCodeComplete = async (code) => {
       toast.success('Successfully Verified', {
         description: `${email.value} has been successfully added to your account.`
       })
+      eventBus.emit('closeEditDetailDialog', false)
+      eventBus.emit('refreshUserData', true)
     }
     emailVerified.value = !(response.status === 204)
   } catch (error) {
     toast.error('Error sending verification code:', { description: error })
     emailSent.value = false
-    failed = true;
   } finally {
     isLoading.value = false
-    if (!failed) {
-      eventBus.emit('closeEditDetailDialog', false)
-      eventBus.emit('refreshUserData', true)
-    }
   }
 }
 </script>

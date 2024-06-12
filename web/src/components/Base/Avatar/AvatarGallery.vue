@@ -109,7 +109,6 @@ const fetchGalleryAvatar = async () => {
 
 const uploadFile = async () => {
   isLoading.value = true
-  let failed = false
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   const formData = await fetchGalleryAvatar()
   try {
@@ -122,9 +121,10 @@ const uploadFile = async () => {
         }})
     if (response.status === 204) {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
+      eventBus.emit('closeEditDetailDialog', false)
+      eventBus.emit('refreshUserData', true)
     }
   } catch (error) {
-    failed = true
     console.log('Error uploading file:', error)
     if (error.response.status === 500) {
       toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
@@ -135,10 +135,6 @@ const uploadFile = async () => {
     }
   } finally {
     isLoading.value = false
-  }
-  if (!failed) {
-    eventBus.emit('closeEditDetailDialog', false)
-    eventBus.emit('refreshUserData', true)
   }
 }
 </script>
