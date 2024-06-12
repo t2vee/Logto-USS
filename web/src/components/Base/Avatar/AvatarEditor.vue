@@ -3,7 +3,6 @@ import { ref, onUnmounted, defineAsyncComponent } from 'vue'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar/index.js'
 import { Loader2, Pencil, Trash2, ImagePlus } from 'lucide-vue-next'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog/index.js'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip/index.js'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/index.js'
 import { Button } from '@/components/ui/button/index.js'
 import { eventBus } from '@/lib/eventBus.js'
@@ -67,10 +66,7 @@ onUnmounted(cleanup)
 </script>
 
 <template>
-  <TooltipProvider>
-    <Tooltip>
       <Dialog>
-        <TooltipTrigger>
           <Popover>
             <PopoverTrigger>
               <div class="relative">
@@ -78,14 +74,17 @@ onUnmounted(cleanup)
                   <AvatarImage :src="avatarUrl" alt="avatar"/>
                   <AvatarFallback>{{ userName }}</AvatarFallback>
                 </Avatar>
-                <div
-                    class="absolute bottom-[-10px] right-4 transform translate-x-1/2 -translate-y-1/2 bg-muted rounded-full p-1 border-primary-foreground border-1"
+                <Button
+                    variant="outline"
+                    size="xs"
+                    class="absolute bottom-[-5px] right-4 transform translate-x-1/2 -translate-y-1/2"
                 >
-                  <Pencil class="w-5 h-5" :color="'rgb(191 85% 86%)'"/>
-                </div>
+                  <Pencil class="pr-2"/>
+                  Edit
+                </Button>
               </div>
             </PopoverTrigger>
-            <PopoverContent class="flex w-auto gap-x-3">
+            <PopoverContent class="flex w-auto gap-x-1 p-2">
               <DialogTrigger as-child>
                 <Button
                     variant="secondary"
@@ -110,12 +109,6 @@ onUnmounted(cleanup)
               </Button>
             </PopoverContent>
           </Popover>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>Change Profile Picture</p>
-        </TooltipContent>
         <AvatarDialog/>
       </Dialog>
-    </Tooltip>
-  </TooltipProvider>
 </template>
