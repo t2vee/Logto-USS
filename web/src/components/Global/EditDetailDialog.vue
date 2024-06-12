@@ -30,6 +30,11 @@ defineProps({
   dataRequest: Boolean
 })
 
+import { useDark } from "@vueuse/core";
+const isDark = useDark({
+  selector: 'html',
+})
+
 onUnmounted(cleanup)
 </script>
 
@@ -55,7 +60,7 @@ onUnmounted(cleanup)
       >
         <CardHeader>
           <CardTitle class="flex justify-between text-lg"
-            >{{ title }}<component :is="icon" v-if="icon" color="#bdeffa"
+            >{{ title }}<component :is="icon" v-if="icon" :color="isDark ? '#bdeffa' : 'black'"
           /></CardTitle>
           <CardDescription>{{ desc }}</CardDescription>
         </CardHeader>

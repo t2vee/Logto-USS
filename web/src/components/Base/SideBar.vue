@@ -52,6 +52,10 @@ const handleNav = (navigate, page, key) => {
   }
   navigate();
 };
+import { useDark } from "@vueuse/core";
+const isDark = useDark({
+  selector: 'html',
+})
 </script>
 
 <template>
@@ -88,7 +92,7 @@ const handleNav = (navigate, page, key) => {
           class="w-[185px] text-left justify-start"
           @click="handleNav(navigate, item.href, $route.path)"
         >
-          <component :is="item.icon" v-if="item.icon" class="pr-1.5" :color="$route.path === item.href ? 'rgb(165 243 252)' : 'black'" />
+          <component :is="item.icon" v-if="item.icon" class="pr-1.5" :color="$route.path === item.href ? ( isDark ? 'rgb(165 243 252)' : 'black' ) : ( isDark ? '' : 'black' )" />
           {{ item.title }}
         </Button>
       </router-link>
