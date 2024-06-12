@@ -82,13 +82,13 @@ const handleNav = (navigate, page, key) => {
           variant="link"
           :class="
             $route.path === item.href
-              ? 'text-cyan-200 bg-muted font-bold'
-              : 'text-white hover:bg-muted'
+              ? 'text-black dark:text-cyan-200 bg-muted font-bold'
+              : 'text-black dark:text-white hover:bg-muted'
           "
           class="w-[185px] text-left justify-start"
           @click="handleNav(navigate, item.href, $route.path)"
         >
-          <component :is="item.icon" v-if="item.icon" class="pr-1.5" :color="$route.path === item.href ? 'rgb(165 243 252)' : ''" />
+          <component :is="item.icon" v-if="item.icon" class="pr-1.5" :color="$route.path === item.href ? 'rgb(165 243 252)' : 'black'" />
           {{ item.title }}
         </Button>
       </router-link>

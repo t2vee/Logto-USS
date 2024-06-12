@@ -4,6 +4,8 @@
 
 @layer base {
   :root {
+    --base: #000;
+    --base-hover: #2A2A2AFF;
     --background: 191 61% 99%;
     --foreground: 191 66% 2%;
     --muted: 161 31% 95%;
@@ -27,6 +29,8 @@
   }
 
   .dark {
+    --base: #d9d5d0;
+    --base-hover: #fff;
     --background: 191 38% 2%;
     --foreground: 191 40% 99%;
     --muted: 161 31% 5%;
@@ -56,7 +60,7 @@
   }
   a {
     &:hover {
-      @apply text-hover-base;
+      @apply text-primary;
     }
   }
   body {

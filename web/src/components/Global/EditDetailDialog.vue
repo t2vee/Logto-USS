@@ -51,7 +51,7 @@ onUnmounted(cleanup)
   <Dialog v-else v-model:open="isDialogOpen">
     <DialogTrigger as-child>
       <Card
-        class="h-32 w-full bg-gradient-to-tl from-[#6c888e] to-30% transition-all duration-200 hover:to-60% hover:border-[#abd9e2] hover:cursor-pointer"
+        class="h-32 w-full bg-gradient-to-tl from-[#6c888e] to-30% transition-all duration-400 hover:to-60% hover:border-[#abd9e2] hover:cursor-pointer shadow-md shadow-gray-900 hover:shadow-black"
       >
         <CardHeader>
           <CardTitle class="flex justify-between text-lg"

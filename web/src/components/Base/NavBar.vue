@@ -12,13 +12,21 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb/index.js'
-import {DoorOpen, LogOut} from 'lucide-vue-next';
+import {DoorOpen, LogOut, Sun, Moon} from 'lucide-vue-next';
 
 const { signOut } = useLogto()
 const route = useRoute()
 const pathName = ref('')
 pathName.value = route.name
 const onClickSignOut = () => signOut(import.meta.env.VITE_ROOT)
+
+import { useDark } from "@vueuse/core";
+const isDark = useDark({
+  selector: 'html',
+})
+function changeTheme() {
+  isDark.value = !isDark.value;
+}
 </script>
 
 <template>
@@ -40,7 +48,21 @@ const onClickSignOut = () => signOut(import.meta.env.VITE_ROOT)
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
-    <Button @click="onClickSignOut" class="h-8 rounded-xl"> Log Out<LogOut :stroke-wdth="2.25" color="black" class="pl-1.5"  /></Button>
+    <div class="flex align-middle space-x-1">
+      <Button
+          class="h-8 w-9 rounded-xl border"
+          variant="secondary"
+          size="icon"
+          @click="changeTheme"
+      >
+        <Sun v-if="isDark" color="black" />
+        <Moon v-else />
+      </Button>
+      <Button @click="onClickSignOut" class="h-8 rounded-xl border">
+        <DoorOpen :stroke-wdth="2.25" color="black" class="pr-1.5"  />
+        Log Out
+      </Button>
+    </div>
   </div>
   <div class="min-h-12"></div>
 </template>

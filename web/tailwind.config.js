@@ -21,10 +21,6 @@ module.exports = {
       },
     },
     extend: {
-      textColor: {
-        'base': '#d9d5d0',
-        'hover-base': '#fff',
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
