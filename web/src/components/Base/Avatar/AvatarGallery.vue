@@ -119,7 +119,7 @@ const uploadFile = async () => {
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'multipart/form-data'}})
+        }})
     if (response.status === 204) {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
     }
