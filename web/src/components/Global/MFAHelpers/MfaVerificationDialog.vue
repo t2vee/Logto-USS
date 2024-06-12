@@ -1,5 +1,5 @@
 <script setup>
-import {inject, onMounted, onUnmounted, ref, watch} from 'vue'
+import {inject, onMounted, onUnmounted, provide, ref, watch} from 'vue'
 import { Label } from '@/components/ui/label/index.js'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group/index.js'
 import { useLogto } from '@logto/vue'
@@ -26,7 +26,7 @@ const mfaOptions = inject('mfaMethods')
 
 defineProps({
   title: { type: String, required: true },
-  icon: { type: Function, required: true },
+  icon: { required: true },
   desc: { type: String, required: false },
   disabled: { type: Boolean, default: false },
   edit: { type: Boolean, default: false },
