@@ -1,15 +1,15 @@
 <script setup>
-import { useLogto } from '@logto/vue'
-import { ref, onMounted, provide, onUnmounted } from 'vue'
-import { CardContent } from '@/components/ui/card/index.js'
+import {useLogto} from '@logto/vue'
+import {onMounted, onUnmounted, provide, ref} from 'vue'
+import {CardContent} from '@/components/ui/card/index.js'
 import SideBar from '@/components/Base/SideBar.vue'
 import NavBar from '@/components/Base/NavBar.vue'
-import { Button } from '@/components/ui/button/index.js'
+import {Button} from '@/components/ui/button/index.js'
 import Skeleton from '@/components/ui/skeleton/Skeleton.vue'
-import { Loader, AlertOctagon } from 'lucide-vue-next'
-import { eventBus } from '@/lib/eventBus.js'
+import {AlertOctagon, Loader} from 'lucide-vue-next'
+import {eventBus} from '@/lib/eventBus.js'
 import axios from 'redaxios'
-import { toast } from 'vue-sonner'
+import {toast} from 'vue-sonner'
 import {RouterView} from "vue-router";
 
 const { fetchUserInfo, getAccessToken, isAuthenticated } = useLogto()

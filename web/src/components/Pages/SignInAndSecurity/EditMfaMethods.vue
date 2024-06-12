@@ -1,16 +1,8 @@
 <script setup>
-import { Label } from '@/components/ui/label/index.js'
-import {
-  Mails,
-  Phone,
-  TabletSmartphone,
-  Check,
-  MailCheck,
-  MailX, Fingerprint
-} from 'lucide-vue-next'
+import {Label} from '@/components/ui/label/index.js'
+import {Check, DoorOpen, Fingerprint, Mails, Phone, TabletSmartphone} from 'lucide-vue-next'
 import {inject, onMounted, ref} from 'vue'
-import { Button } from '@/components/ui/button/index.js'
-import { PhoneMissed, DoorOpen } from 'lucide-vue-next'
+import {Button} from '@/components/ui/button/index.js'
 
 import ConnectorAlert from '@/components/Global/ConnectorAlert.vue'
 import EditAppAuthenticator from '@/components/Pages/SignInAndSecurity/EditAppAuthenticator.vue'

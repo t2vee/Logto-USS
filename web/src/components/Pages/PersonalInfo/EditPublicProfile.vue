@@ -4,8 +4,8 @@ import { Label } from '@/components/ui/label/index.js'
 import axios from 'redaxios'
 import { inject, ref } from 'vue'
 import { Button } from '@/components/ui/button/index.js'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-import { Ban, MoreHorizontal, UserRoundCheck, SquareArrowOutUpRight } from 'lucide-vue-next'
+import { DialogClose } from '@/components/ui/dialog/index.js'
+import { Ban, MoreHorizontal, UserRoundCheck, SquareArrowOutUpRight, DoorOpen } from 'lucide-vue-next'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 
 const userData = inject('userData')

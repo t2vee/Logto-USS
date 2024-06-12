@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed, inject } from 'vue'
-import { useLogto } from '@logto/vue'
+import {computed, inject, ref} from 'vue'
+import {useLogto} from '@logto/vue'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,15 +12,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog/index.js'
-import { Input } from '@/components/ui/input/index.js'
-import { Label } from '@/components/ui/label/index.js'
-import { Loader, MailCheck, MailX, ArrowBigRightDash } from 'lucide-vue-next'
-import { Button } from '@/components/ui/button/index.js'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
+import {Input} from '@/components/ui/input/index.js'
+import {Label} from '@/components/ui/label/index.js'
+import {ArrowBigRightDash, Loader, MailCheck, MailX} from 'lucide-vue-next'
+import {Button} from '@/components/ui/button/index.js'
+import {DialogClose} from '@/components/ui/dialog/index.js'
 import MfaCodeInput from '@/components/Global/MFAHelpers/MfaCodeInput.vue'
 import axios from 'redaxios'
-import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js'
+import {toast} from 'vue-sonner'
+import {eventBus} from '@/lib/eventBus.js'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 
 const userData = inject('userData')

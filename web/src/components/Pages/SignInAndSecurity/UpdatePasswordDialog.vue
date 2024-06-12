@@ -1,17 +1,16 @@
 <script setup>
 import axios from 'redaxios'
 import debounce from 'lodash/debounce'
-import { Input } from '@/components/ui/input/index.js'
-import { Label } from '@/components/ui/label/index.js'
+import {Input} from '@/components/ui/input/index.js'
+import {Label} from '@/components/ui/label/index.js'
 import {inject, ref} from 'vue'
-import { useLogto } from '@logto/vue'
-import {Ban, ChevronsRight, Check, AlertCircle, CircleEllipsis, Loader2} from 'lucide-vue-next'
-import { Button } from '@/components/ui/button/index.js'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/index.js'
-import { Checkbox } from '@/components/ui/checkbox/index.js'
-import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js'
+import {useLogto} from '@logto/vue'
+import {AlertCircle, Ban, Check, ChevronsRight, CircleEllipsis, Loader2} from 'lucide-vue-next'
+import {Button} from '@/components/ui/button/index.js'
+import {DialogClose} from '@/components/ui/dialog/index.js'
+import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover/index.js'
+import {toast} from 'vue-sonner'
+import {eventBus} from '@/lib/eventBus.js'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 
 const { getAccessToken } = useLogto()

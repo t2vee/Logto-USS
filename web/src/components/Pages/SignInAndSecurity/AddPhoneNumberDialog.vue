@@ -1,15 +1,15 @@
 <script setup>
-import {ref, onMounted} from 'vue'
+import {onMounted, ref} from 'vue'
 import axios from 'redaxios'
-import { useLogto } from '@logto/vue'
-import { VueTelInput } from 'vue-tel-input'
-import { Button } from '@/components/ui/button/index.js'
-import { DialogClose } from '@/components/ui/dialog/index.js'
-import { Label } from '@/components/ui/label/index.js'
-import { PhoneMissed, Phone, Loader } from 'lucide-vue-next'
-import { toast } from 'vue-sonner'
+import {useLogto} from '@logto/vue'
+import {VueTelInput} from 'vue-tel-input'
+import {Button} from '@/components/ui/button/index.js'
+import {DialogClose} from '@/components/ui/dialog/index.js'
+import {Label} from '@/components/ui/label/index.js'
+import {Loader, Phone, PhoneMissed} from 'lucide-vue-next'
+import {toast} from 'vue-sonner'
 import MfaCodeInput from '@/components/Global/MFAHelpers/MfaCodeInput.vue'
-import { eventBus } from '@/lib/eventBus.js'
+import {eventBus} from '@/lib/eventBus.js'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 
 const { getAccessToken } = useLogto()

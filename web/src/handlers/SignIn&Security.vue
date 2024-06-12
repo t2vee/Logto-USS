@@ -1,11 +1,9 @@
 <script setup>
-import {inject, onMounted, provide, ref} from 'vue'
+import {inject, provide} from 'vue'
 import {CardDescription, CardTitle} from '@/components/ui/card/index.js'
-import {CircleEllipsis, Fingerprint, KeyRound, MailCheck, MailX, Phone, PhoneMissed} from 'lucide-vue-next'
 
 import AddPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/AddPhoneNumberDialog.vue'
 import EditPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/RemovePhoneNumberDialog.vue'
-import EditDetailDialog from '@/components/Global/MFAHelpers/EditDetailDialog.vue'
 import EditEmailAddress from '@/components/Pages/SignInAndSecurity/EditEmailAddress.vue'
 import EditMfaMethods from '@/components/Pages/SignInAndSecurity/EditMfaMethods.vue'
 import UpdatePasswordDialog from '@/components/Pages/SignInAndSecurity/UpdatePasswordDialog.vue'
