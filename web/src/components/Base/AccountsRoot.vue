@@ -53,11 +53,10 @@ async function loadData() {
         `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa/methods`,
         {headers: {Authorization: `Bearer ${await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)}`, 'Content-Type': 'application/json'}}
     )
-    let optionsNum = [];
     if (response.data[0]?.type === 'Totp') {mfaOptions.value.totp = response.data[0]}
     if (response.data[1]?.type === 'BackupCode') {mfaOptions.value.backup = response.data[1]}
   } catch (error) {
-    toast.error('Error grabbing MFA Options:', { description: 'Some account actions will be unavailable' })
+    toast.error('Error grabbing MFA Information:', { description: 'Some account actions will be unavailable' })
   }
 }
 
