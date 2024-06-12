@@ -32,7 +32,7 @@ function expandLocale(shortLocale) {
       >Manage your personal information, including phone numbers and email addresses where you can
       be reached.</CardDescription
     >
-    <div class="flex gap-4 mt-12">
+    <!--<div class="flex gap-4 mt-12">
       <EditDetailDialog
         disabled
         title="Public Profile"
@@ -46,22 +46,12 @@ function expandLocale(shortLocale) {
         :icon="CircleUserRound"
         :dialog-page="EditUsername"
       />
-    </div>
+    </div>-->
     <div class="flex gap-4 mt-4">
-      <EditDetailDialog
-        title="Full Name"
-        :desc="userData.name ? userData.name : 'Not Set'"
-        :icon="UserRound"
-        :dialog-page="EditFullName"
-      />
-      <EditDetailDialog
-        title="Birthday"
-        :desc="userData.profile?.birthdate ? userData.profile.birthdate : 'Not Set'"
-        :icon="CalendarFold"
-        :dialog-page="EditBirthdayDialog"
-      />
+      <EditFullName />
+      <EditBirthdayDialog />
     </div>
-    <div class="flex gap-4 mt-4">
+    <!--<div class="flex gap-4 mt-4">
       <EditDetailDialog
         title="Country/Region"
         :desc="userData.profile?.address?.country ?? userData.profile?.address?.country ?? 'Not Set'"
@@ -74,7 +64,7 @@ function expandLocale(shortLocale) {
         :icon="BookType"
         :dialog-page="EditLocaleSettings"
       />
-    </div>
+    </div>-->
   </div>
 </template>
 
