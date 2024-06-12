@@ -330,7 +330,7 @@ onUnmounted(cleanup)
                 @changeInput="handleChangeInput"
             />
           </div>
-          <div v-else-if="!isLoading && !isMfaRequired" class="w-full h-full">
+          <div v-else-if="!isLoading && !isMfaRequired" class="w-full h-full pt-5">
             <div class="w-full h-full flex flex-col items-center justify-center align-middle">
               <slot name="body">
                 Oh Snap!<br/>
