@@ -1,21 +1,13 @@
 <script setup>
-import { ref } from 'vue'
+import {ref} from 'vue'
 import axios from 'redaxios'
-import { useLogto } from '@logto/vue'
-import { ImageUp, Trash2 } from 'lucide-vue-next'
-import { eventBus } from '@/lib/eventBus.js'
-import { toast } from 'vue-sonner'
-import { Loader2 } from 'lucide-vue-next'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card/index.js'
-import { Button } from '@/components/ui/button/index.js'
+import {useLogto} from '@logto/vue'
+import {ImageUp, Loader2, Trash2} from 'lucide-vue-next'
+import {eventBus} from '@/lib/eventBus.js'
+import {toast} from 'vue-sonner'
+import {DialogClose, DialogFooter} from '@/components/ui/dialog/index.js'
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from '@/components/ui/card/index.js'
+import {Button} from '@/components/ui/button/index.js'
 
 const { getAccessToken } = useLogto()
 const fileInput = ref(null)

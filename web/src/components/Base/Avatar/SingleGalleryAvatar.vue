@@ -4,7 +4,7 @@ defineProps({
   selected: Boolean
 })
 
-import { CheckCircle } from 'lucide-vue-next'
+import {CheckCircle} from 'lucide-vue-next'
 </script>
 
 <template>

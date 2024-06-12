@@ -1,17 +1,17 @@
 <script setup>
-import { inject, onMounted, ref } from 'vue'
-import { Loader2 } from 'lucide-vue-next'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card/index.js'
+import {onMounted, ref} from 'vue'
+import {Loader2} from 'lucide-vue-next'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card/index.js'
 import SingleGalleryAvatar from '@/components/Base/Avatar/SingleGalleryAvatar.vue'
-import { Button } from '@/components/ui/button/index.js'
+import {Button} from '@/components/ui/button/index.js'
 import axios from 'redaxios'
-import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js'
-import { useLogto } from '@logto/vue'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
+import {toast} from 'vue-sonner'
+import {eventBus} from '@/lib/eventBus.js'
+import {useLogto} from '@logto/vue'
+import {DialogClose, DialogFooter} from '@/components/ui/dialog/index.js'
 import * as jdenticon from 'jdenticon'
 import Hashicon from 'hashicon';
-import { getAvatar as generateMonsterID } from '@/lib/identicons/monsterid.js'
+import {getAvatar as generateMonsterID} from '@/lib/identicons/monsterid.js'
 import Blockies from '@/lib/identicons/blockies.js'
 
 const avatars = ref([])

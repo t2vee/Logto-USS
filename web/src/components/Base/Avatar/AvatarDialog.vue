@@ -1,18 +1,10 @@
 <script setup>
-import { ref } from 'vue'
-import {
-  DialogClose,
-  DialogContent,
-  DialogDescription, DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog/index.js'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs/index.js'
+import {ref} from 'vue'
+import {DialogContent, DialogDescription, DialogHeader, DialogTitle} from '@/components/ui/dialog/index.js'
+import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs/index.js'
 
 import AvatarGallery from '@/components/Base/Avatar/AvatarGallery.vue'
 import ImageUploader from '@/components/Base/Avatar/ImageUploader.vue'
-import {Button} from "@/components/ui/button/index.js";
-import {Loader2} from "lucide-vue-next";
 
 
 const isLoading = ref(false)

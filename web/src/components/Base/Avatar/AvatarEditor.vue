@@ -1,14 +1,14 @@
 <script setup>
-import { ref, onUnmounted, defineAsyncComponent } from 'vue'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar/index.js'
-import { Loader2, Pencil, Trash2, ImagePlus } from 'lucide-vue-next'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog/index.js'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/index.js'
-import { Button } from '@/components/ui/button/index.js'
-import { eventBus } from '@/lib/eventBus.js'
+import {defineAsyncComponent, onUnmounted, ref} from 'vue'
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar/index.js'
+import {ImagePlus, Loader2, Pencil, Trash2} from 'lucide-vue-next'
+import {Dialog, DialogTrigger} from '@/components/ui/dialog/index.js'
+import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover/index.js'
+import {Button} from '@/components/ui/button/index.js'
+import {eventBus} from '@/lib/eventBus.js'
 import axios from 'redaxios'
-import { toast } from 'vue-sonner'
-import { useLogto } from '@logto/vue'
+import {toast} from 'vue-sonner'
+import {useLogto} from '@logto/vue'
 
 defineProps({
   avatarUrl: {
