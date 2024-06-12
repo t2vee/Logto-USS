@@ -203,19 +203,21 @@ onUnmounted(cleanup)
       </CardDescription>
     </CardHeader>
   </Card>
-  <Dialog v-else v-model:open="isDialogOpen">
+  <Dialog v-if="!disabled" v-model:open="isDialogOpen">
     <DialogTrigger as-child>
-      <Card
-          class="h-32 w-full bg-gradient-to-tl from-[#6c888e] to-30% transition-all duration-400 hover:to-60% hover:border-[#abd9e2] hover:cursor-pointer shadow-md shadow-gray-900 hover:shadow-black"
-      >
-        <CardHeader>
-          <CardTitle class="flex justify-between text-lg">
-            {{ title }}
-            <component :is="icon" v-if="icon" :color="isDark ? '#bdeffa' : 'black'"/>
-          </CardTitle>
-          <CardDescription>{{ desc }}</CardDescription>
-        </CardHeader>
-      </Card>
+      <slot>
+        <Card
+            class="h-32 w-full bg-gradient-to-tl from-[#6c888e] to-30% transition-all duration-400 hover:to-60% hover:border-[#abd9e2] hover:cursor-pointer shadow-md shadow-gray-900 hover:shadow-black"
+        >
+          <CardHeader>
+            <CardTitle class="flex justify-between text-lg">
+              {{ title }}
+              <component :is="icon" v-if="icon" :color="isDark ? '#bdeffa' : 'black'"/>
+            </CardTitle>
+            <CardDescription>{{ desc }}</CardDescription>
+          </CardHeader>
+        </Card>
+      </slot>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[525px] sm:min-h-[400px] flex flex-col items-center align-middle">
       <transition name="fade">
@@ -334,7 +336,7 @@ onUnmounted(cleanup)
             <div class="w-full h-full flex flex-col items-center justify-center align-middle">
               <slot name="body">
                 Oh Snap!<br/>
-                There was a issue loading this component!<br/>
+                There was a issue loading this component.<br/>
                 Reload the page to try again
               </slot>
               <DialogFooter>
