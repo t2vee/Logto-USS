@@ -1,7 +1,7 @@
 <script setup>
 import {inject, provide} from 'vue'
 import {CardDescription, CardTitle} from '@/components/ui/card/index.js'
-
+import {KeyRound} from 'lucide-vue-next'
 import AddPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/AddPhoneNumberDialog.vue'
 import EditPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/RemovePhoneNumberDialog.vue'
 import EditEmailAddress from '@/components/Pages/SignInAndSecurity/EditEmailAddress.vue'
@@ -31,7 +31,7 @@ provide('mfaMethods', mfaOptions)
       <EditMfaMethods />
     </div>
     <div class="flex gap-4 mt-4">
-      <MfaVerificationDialog disabled title="Recovery Steps" icon="KeyRound" desc="Not Available" />
+      <MfaVerificationDialog disabled title="Recovery Steps" :icon="KeyRound" desc="Not Available" />
     </div>
   </div>
 </template>
