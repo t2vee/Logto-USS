@@ -1,18 +1,19 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import {onMounted, ref} from 'vue'
 import axios from 'redaxios'
-import { useLogto } from '@logto/vue'
-import { VueTelInput } from 'vue-tel-input'
-import { Button } from '@/components/ui/button/index.js'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-import { Label } from '@/components/ui/label/index.js'
-import { PhoneMissed, Phone, Loader } from 'lucide-vue-next'
-import { toast } from 'vue-sonner'
-import MfaCodeInput from '@/components/Global/MfaCodeInput.vue'
-import { eventBus } from '@/lib/eventBus.js'
+import {useLogto} from '@logto/vue'
+import {VueTelInput} from 'vue-tel-input'
+import {Button} from '@/components/ui/button/index.js'
+import {DialogClose} from '@/components/ui/dialog/index.js'
+import {Label} from '@/components/ui/label/index.js'
+import {Loader, Phone, PhoneMissed} from 'lucide-vue-next'
+import {toast} from 'vue-sonner'
+import MfaCodeInput from '@/components/Global/MFAHelpers/MfaCodeInput.vue'
+import {eventBus} from '@/lib/eventBus.js'
+import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 
 const { getAccessToken } = useLogto()
-const phone = ref(0)
+const phone = ref('')
 const isNumberValid = ref(false)
 const isEditing = ref(true)
 const accessTokenRef = ref('')
@@ -55,9 +56,10 @@ function checkNumber() {
   }
 }
 
-async function sendEncryptedData() {
+async function sendVerificationSMS() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   accessTokenRef.value = accessToken
+  console.log(phone.value)
   try {
     const response = await axios.post(
       `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/push-sms`,
@@ -83,8 +85,7 @@ async function sendEncryptedData() {
     smsSent.value = false
     isLoading.value = false
     readyToSend.value = true
-    eventBus.emit('closeEditDetailDialog', false)
-    eventBus.emit('refreshUserData', true)
+    phone.value = null;
   } finally {
     isLoading.value = false
     resendCodeTimer.value = 60
@@ -141,89 +142,89 @@ async function verifyNumber() {
   if (!isNumberValid.value || !phone.value) return
   isLoading.value = true
   try {
-    await sendEncryptedData()
+    await sendVerificationSMS()
   } catch (error) {
     console.log('failed:', error)
     isLoading.value = false
   }
 }
 
-onMounted(() => {
+onMounted(() => { //this needs to be done because the css file that comes with vue-tel-input is gigantic and i had to apply manual changes and optimisations
+  isLoading.value = true
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = 'https://cdn.vstatic.net/content/lHvXlqL2OkmpAMi9x15E/mxs.app/Stylesheet/VueTelInput.css';
+  link.href = 'https://cdn.vstatic.net/content/lHvXlqL2OkmpAMi9x15E/mxs.app/Stylesheet/TelInput.min.css';
   document.head.appendChild(link);
+  isLoading.value = false
 });
 </script>
 
 <template>
-  <transition name="fade" mode="out-in">
-    <div
-      v-if="!isLoading && !smsSent"
-      class="flex flex-col gap-4 py-4 items-center align-middle space-y-10"
-    >
-      <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
-        <Label for="email" class="flex font-bold w-full justify-between">
-          Enter Number
-          <span v-if="isNumberValid && !isEditing" class="text-xs text-green-500"
-            >Valid Number</span
-          >
-          <span v-else-if="!isNumberValid && !isEditing" class="text-xs text-red-500"
-            >Invalid Number</span
-          >
-        </Label>
-        <vue-tel-input
-          v-model="phone"
-          mode="international"
-          default-country="au"
-          :dropdown-options="dropdownOptions"
-          :valid-characters-only="true"
-          :preferred-countries="['au', 'nz', 'us', 'gb', 'ca']"
-          class="w-72"
-          @validate="checkNumber"
+  <MfaVerificationDialog title="Phone Number" :icon="PhoneMissed" desc="Number Not Added">
+    <template #body>
+      <transition name="fade" mode="out-in">
+        <div
+            v-if="!isLoading && !smsSent"
+            class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle mt-5"
         >
-        </vue-tel-input>
-        <div class="absolute inset-y-0 right-0 flex items-center pt-5 pr-1">
-          <Phone v-if="isNumberValid && !isEditing" class="text-green-500" />
-          <PhoneMissed v-else-if="!isNumberValid && !isEditing" class="text-red-500" />
-        </div>
-      </div>
-      <p class="text-xs" v-if="resendCodeTimer > 0 && !readyToSend">
-        Please wait {{ resendCodeTimer }} seconds before sending another code
-      </p>
-      <DialogFooter>
-        <div class="flex space-x-8 items-center align-middle">
-          <Button variant="link" as-child>
-            <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
-          </Button>
-          <div class="space-x-2">
-            <Button
-              @click="verifyNumber"
-              class="h-[30px]"
-              :disabled="!isNumberValid || !phone || (resendCodeTimer > 0 && !readyToSend)"
+          <div class="grid w-6/8 max-w-sm items-center gap-1.5 relative">
+            <Label for="email" class="flex font-bold w-full justify-between">
+              Enter Number
+              <span v-if="isNumberValid && !isEditing" class="text-xs text-green-500">
+                Valid Number
+              </span>
+              <span v-else-if="!isNumberValid && !isEditing" class="text-xs text-red-500">
+                Invalid Number
+              </span>
+            </Label>
+            <vue-tel-input
+                v-model="phone"
+                mode="international"
+                default-country="au"
+                :dropdown-options="dropdownOptions"
+                :valid-characters-only="true"
+                :preferred-countries="['au', 'nz', 'us', 'gb', 'ca']"
+                class="w-full"
+                @validate="checkNumber"
             >
-              Verify
-            </Button>
-            <DialogClose as-child>
-              <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
-            </DialogClose>
+            </vue-tel-input>
+            <div class="absolute inset-y-0 right-0 flex items-center pt-5 pr-1">
+              <Phone v-if="isNumberValid && !isEditing" class="text-green-500" />
+              <PhoneMissed v-else-if="!isNumberValid && !isEditing" class="text-red-500" />
+            </div>
           </div>
+          <p class="text-xs" v-if="resendCodeTimer > 0 && !readyToSend">
+            Please wait {{ resendCodeTimer }} seconds before sending another code
+          </p>
         </div>
-      </DialogFooter>
-    </div>
-    <div v-else-if="isLoading" class="flex items-center align-middle">
-      <Loader class="animate-spin" :size="32" />
-      <p class="text-xl font-bold">Loading...</p>
-    </div>
-    <div v-else-if="!isLoading && !isEditing && smsSent">
-      <MfaCodeInput
-        :resend-code-timer="resendCodeTimer"
-        @codeComplete="handleCodeComplete"
-        @resendCode="handleCodeResend"
-        @changeInput="handleChangeInput"
-      />
-    </div>
-  </transition>
+        <div v-else-if="isLoading" class="flex items-center align-middle">
+          <Loader class="animate-spin" :size="32" />
+          <p class="text-xl font-bold">Loading...</p>
+        </div>
+        <div v-else-if="!isLoading && !isEditing && smsSent">
+          <MfaCodeInput
+              :resend-code-timer="resendCodeTimer"
+              @codeComplete="handleCodeComplete"
+              @resendCode="handleCodeResend"
+              @changeInput="handleChangeInput"
+          />
+        </div>
+      </transition>
+    </template>
+    <template #footer v-if="!isLoading && !smsSent">
+      <DialogClose as-child>
+        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+      </DialogClose>
+      <Button variant="link" as-child>
+        <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
+      </Button>
+      <Button
+          @click="verifyNumber"
+          class="h-[30px]"
+          :disabled="!isNumberValid || !phone || (resendCodeTimer > 0 && !readyToSend)"
+      >
+        Verify
+      </Button>
+    </template>
+  </MfaVerificationDialog>
 </template>
-
-<style scoped></style>

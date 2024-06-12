@@ -1,12 +1,7 @@
 <script setup>
-import { ref } from 'vue'
-import {
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog/index.js'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs/index.js'
+import {ref} from 'vue'
+import {DialogContent, DialogDescription, DialogHeader, DialogTitle} from '@/components/ui/dialog/index.js'
+import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs/index.js'
 
 import AvatarGallery from '@/components/Base/Avatar/AvatarGallery.vue'
 import ImageUploader from '@/components/Base/Avatar/ImageUploader.vue'
@@ -16,7 +11,7 @@ const isLoading = ref(false)
 </script>
 
 <template>
-  <DialogContent>
+  <DialogContent class="pb-16">
     <DialogHeader>
       <DialogTitle>Edit Avatar</DialogTitle>
       <DialogDescription class="text-xs">
@@ -26,21 +21,17 @@ const isLoading = ref(false)
         is set to "no one can see".
       </DialogDescription>
     </DialogHeader>
-    <Tabs default-value="upload" class="w-full">
+    <Tabs default-value="upload" class="w-full h-full">
       <TabsList class="grid w-full grid-cols-2">
         <TabsTrigger value="upload" :disabled="isLoading"> Upload Image </TabsTrigger>
         <TabsTrigger value="gallery" :disabled="isLoading"> Avatar Gallery </TabsTrigger>
       </TabsList>
-      <transition name="fade" mode="out-in">
         <TabsContent value="upload" force-mount>
           <ImageUploader v-model="isLoading" />
         </TabsContent>
-      </transition>
-      <transition name="fade" mode="out-in">
-        <TabsContent value="gallery" force-mount>
+        <TabsContent value="gallery">
           <AvatarGallery v-model="isLoading" />
         </TabsContent>
-      </transition>
     </Tabs>
   </DialogContent>
 </template>

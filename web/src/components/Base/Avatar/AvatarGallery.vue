@@ -1,17 +1,17 @@
 <script setup>
-import { inject, onMounted, ref } from 'vue'
-import { Loader2 } from 'lucide-vue-next'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card/index.js'
+import {onMounted, ref} from 'vue'
+import {Loader2} from 'lucide-vue-next'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card/index.js'
 import SingleGalleryAvatar from '@/components/Base/Avatar/SingleGalleryAvatar.vue'
-import { Button } from '@/components/ui/button/index.js'
+import {Button} from '@/components/ui/button/index.js'
 import axios from 'redaxios'
-import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js'
-import { useLogto } from '@logto/vue'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
+import {toast} from 'vue-sonner'
+import {eventBus} from '@/lib/eventBus.js'
+import {useLogto} from '@logto/vue'
+import {DialogClose, DialogFooter} from '@/components/ui/dialog/index.js'
 import * as jdenticon from 'jdenticon'
 import Hashicon from 'hashicon';
-import { getAvatar as generateMonsterID } from '@/lib/identicons/monsterid.js'
+import {getAvatar as generateMonsterID} from '@/lib/identicons/monsterid.js'
 import Blockies from '@/lib/identicons/blockies.js'
 
 const avatars = ref([])
@@ -119,7 +119,7 @@ const uploadFile = async () => {
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'multipart/form-data'}})
+        }})
     if (response.status === 204) {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
     }
@@ -149,7 +149,7 @@ const uploadFile = async () => {
       <CardHeader>
         <CardTitle>Choose a Generated Avatar</CardTitle>
         <CardDescription>
-          Avatars based on different generation algorithm methods.
+          Avatars based on different generation algorithms.
         </CardDescription>
       </CardHeader>
       <CardContent class="space-y-2 overflow-y-auto max-h-[300px]">
@@ -167,14 +167,14 @@ const uploadFile = async () => {
         </div>
       </CardContent>
     </Card>
-    <DialogFooter>
+    <DialogFooter class="right-0">
+      <DialogClose as-child>
+        <Button type="button" variant="outline" class="h-[30px]"> Close </Button>
+      </DialogClose>
       <Button @click="uploadFile" class="h-[30px]" :disabled="!selectedAvatarId || isLoading">
         <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
         {{ isLoading ? 'Processing...' : 'Save' }}
       </Button>
-      <DialogClose as-child>
-        <Button type="button" variant="outline" class="h-[30px]"> Close </Button>
-      </DialogClose>
     </DialogFooter>
   </div>
 </template>

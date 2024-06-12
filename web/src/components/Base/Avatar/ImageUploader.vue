@@ -1,21 +1,13 @@
 <script setup>
-import { ref } from 'vue'
+import {ref} from 'vue'
 import axios from 'redaxios'
-import { useLogto } from '@logto/vue'
-import { ImageUp, Trash2 } from 'lucide-vue-next'
-import { eventBus } from '@/lib/eventBus.js'
-import { toast } from 'vue-sonner'
-import { Loader2 } from 'lucide-vue-next'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card/index.js'
-import { Button } from '@/components/ui/button/index.js'
+import {useLogto} from '@logto/vue'
+import {ImageUp, Loader2, Trash2} from 'lucide-vue-next'
+import {eventBus} from '@/lib/eventBus.js'
+import {toast} from 'vue-sonner'
+import {DialogClose, DialogFooter} from '@/components/ui/dialog/index.js'
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from '@/components/ui/card/index.js'
+import {Button} from '@/components/ui/button/index.js'
 
 const { getAccessToken } = useLogto()
 const fileInput = ref(null)
@@ -95,7 +87,6 @@ defineExpose({
 </script>
 
 <template>
-  <div class="space-y-4">
     <Card>
       <CardHeader>
         <CardTitle>Upload Custom Avatar Image</CardTitle>
@@ -143,14 +134,13 @@ defineExpose({
         <p class="text-xs font-bold">Maximum 1000KB (1MB) Upload Size</p>
       </CardFooter>
     </Card>
-    <DialogFooter>
-      <Button @click="uploadFile" class="h-[30px]" :disabled="!selectedFile || isLoading">
-        <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
-        {{ isLoading ? 'Processing...' : 'Save' }}
-      </Button>
-      <DialogClose as-child>
-        <Button type="button" variant="outline" class="h-[30px]"> Close </Button>
-      </DialogClose>
-    </DialogFooter>
-  </div>
+  <DialogFooter class="right-0">
+    <DialogClose as-child>
+      <Button type="button" variant="outline" class="h-[30px]"> Close </Button>
+    </DialogClose>
+    <Button @click="uploadFile" class="h-[30px]" :disabled="!selectedFile || isLoading">
+      <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
+      {{ isLoading ? 'Processing...' : 'Save' }}
+    </Button>
+  </DialogFooter>
 </template>

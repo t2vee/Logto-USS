@@ -1,20 +1,21 @@
 <script setup>
 import axios from 'redaxios'
 import debounce from 'lodash/debounce'
-import { Input } from '@/components/ui/input/index.js'
-import { Label } from '@/components/ui/label/index.js'
-import { ref } from 'vue'
-import { useLogto } from '@logto/vue'
-import {Ban, ChevronsRight, Check, AlertCircle, Loader, Loader2} from 'lucide-vue-next'
-import { Button } from '@/components/ui/button/index.js'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-import ConnectorAlert from '@/components/Global/ConnectorAlert.vue'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/index.js'
-import { Checkbox } from '@/components/ui/checkbox/index.js'
-import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js'
+import {Input} from '@/components/ui/input/index.js'
+import {Label} from '@/components/ui/label/index.js'
+import {inject, ref} from 'vue'
+import {useLogto} from '@logto/vue'
+import {AlertCircle, Ban, Check, ChevronsRight, CircleEllipsis, Loader2} from 'lucide-vue-next'
+import {Button} from '@/components/ui/button/index.js'
+import {DialogClose} from '@/components/ui/dialog/index.js'
+import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover/index.js'
+import {toast} from 'vue-sonner'
+import {eventBus} from '@/lib/eventBus.js'
+import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 
 const { getAccessToken } = useLogto()
+
+const userData = inject('userData')
 
 const password = ref('')
 const confirmPassword = ref('')
@@ -29,7 +30,7 @@ const lowercaseCharactersCheckPassed = ref(false)
 const containsNumbersCheckPassed = ref(false)
 const specialCharactersCheckPassed = ref(false)
 
-const signOutOfAllDevices = ref(false)
+const signOutOfAllDevices = ref(false) // logto does not yet support this feature
 const isLoading = ref(false)
 
 function checkPassword() {
@@ -107,145 +108,147 @@ async function updateData() {
 </script>
 
 <template>
-  <div v-if="!isLoading" class="space-y-6">
-    <ConnectorAlert
-      custom-message="A password is not required for accounts that are authenticated externally. To change your password, head over to your account provider."
-    />
-    <div class="flex flex-col gap-4 py-4 items-center align-middle">
-      <div class="grid w-3/4 max-w-sm items-center gap-1.5">
-        <Label for="userid" class="font-bold"> Old Password </Label>
-        <Input type="password" id="userid" placeholder="Required" v-model="oldPassword" />
-      </div>
-      <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
-        <Label for="username" class="flex font-bold w-full justify-between"> New Password </Label>
-        <div>
-          <Input
-            type="password"
-            id="username"
-            v-model="password"
-            @input="debouncedCheckPassword"
-            :class="{ 'border-red-500': passwordInvalid && !passwordCheckPass }"
-            placeholder="Required"
-          />
+  <MfaVerificationDialog title="Password" :icon="CircleEllipsis" :desc="`Last Logged in at ${new Date(userData.lastSignInAt).toLocaleDateString()}`" >
+    <template #body>
+      <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle mb-16">
+        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+            <Label for="userid" class="font-bold"> Old Password </Label>
+            <Input type="password" id="userid" placeholder="Required" v-model="oldPassword" />
+          </div>
+        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+            <Label for="username" class="flex font-bold w-full justify-between"> New Password </Label>
+            <div>
+              <Input
+                  type="password"
+                  id="username"
+                  v-model="password"
+                  @input="debouncedCheckPassword"
+                  :class="{ 'border-red-500': ( passwordInvalid && !passwordCheckPass ) || ( !passwordMatches && passwordCheckPass && confirmPassword ) }"
+                  placeholder="Required"
+              />
+            </div>
+          </div>
+        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+            <Label for="username" class="flex font-bold w-full justify-between">
+              Confirm New Password
+              <span v-if="passwordInvalid && passwordCheckPass" class="text-red-500">Doesnt Match</span>
+            </Label>
+            <div>
+              <Input
+                  type="password"
+                  id="username"
+                  :disabled="!passwordCheckPass"
+                  v-model="confirmPassword"
+                  @input="debouncedCheckPasswordMatch"
+                  :class="{ 'border-red-500': !passwordMatches && passwordCheckPass && confirmPassword }"
+                  placeholder="Required"
+              />
+              <p
+                  class="text-xs text-red-500"
+                  v-if="!passwordMatches && passwordCheckPass && confirmPassword"
+              >
+                Passwords Don't Match
+              </p>
+            </div>
+          </div>
+          <!--<div class="items-top flex gap-x-2"> // logto does not yet support this feature
+            <Checkbox id="logout" :value="signOutOfAllDevices" />
+            <div class="grid gap-1.5 leading-none">
+              <label
+                  for="logout"
+                  class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Sign out of all devices after change
+              </label>
+              <p class="text-sm text-muted-foreground">
+                Warning! This will log you out of your current session
+              </p>
+            </div>
+          </div>-->
         </div>
-      </div>
-      <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
-        <Label for="username" class="flex font-bold w-full justify-between">
-          Confirm New Password
-          <span v-if="passwordInvalid && passwordCheckPass" class="text-red-500">Doesnt Match</span>
-        </Label>
-        <div>
-          <Input
-            type="password"
-            id="username"
-            :disabled="!passwordCheckPass"
-            v-model="confirmPassword"
-            @input="debouncedCheckPasswordMatch"
-            :class="{ 'border-red-500': !passwordMatches && passwordCheckPass && confirmPassword }"
-            placeholder="Required"
-          />
-          <p
-            class="text-xs text-red-500"
-            v-if="!passwordMatches && passwordCheckPass && confirmPassword"
-          >
-            Passwords Don't Match
-          </p>
-        </div>
-      </div>
-      <!--<div class="items-top flex gap-x-2">
-        <Checkbox id="logout" :value="signOutOfAllDevices" />
-        <div class="grid gap-1.5 leading-none">
-          <label
-              for="logout"
-              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Sign out of all devices after change
-          </label>
-          <p class="text-sm text-muted-foreground">
-            Warning! This will log you out of your current session
-          </p>
-        </div>
-      </div>-->
-    </div>
-    <DialogFooter>
-      <div class="flex space-x-12 items-center align-middle">
-        <Popover>
-          <PopoverTrigger as-child>
-            <Button
+
+    </template>
+    <template #footer>
+      <DialogClose as-child>
+        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+      </DialogClose>
+      <Popover>
+        <PopoverTrigger as-child>
+          <Button
               variant="link"
               :class="{ 'text-red-500': passwordInvalid && !passwordCheckPass }"
-            >
-              <AlertCircle
+          >
+            <AlertCircle
                 v-if="passwordInvalid && !passwordCheckPass"
                 class="pr-1"
                 color="darkred"
-              />
-              Password Requirements
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent class="w-120">
-            <div class="grid gap-4">
-              <ul class="text-sm space-y-2">
-                <li class="flex items-center">
-                  <component
+            />
+            Password Requirements
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent class="w-120">
+          <div class="grid gap-4">
+            <ul class="text-sm space-y-2">
+              <li class="flex items-center">
+                <component
                     :color="!password ? null : !characterLengthCheckPassed ? 'darkred' : 'green'"
                     :is="!password ? ChevronsRight : !characterLengthCheckPassed ? Ban : Check"
                     class="pr-1"
-                  />Should be a&nbsp;<strong>minimum of 10 Characters</strong>
-                </li>
-                <li class="flex items-center">
-                  <component
+                />Should be a&nbsp;<strong>minimum of 10 Characters</strong>
+              </li>
+              <li class="flex items-center">
+                <component
                     :color="
                       !password ? null : !uppercaseCharactersCheckPassed ? 'darkred' : 'green'
                     "
                     :is="!password ? ChevronsRight : !uppercaseCharactersCheckPassed ? Ban : Check"
                     class="pr-1"
-                  />Should contain&nbsp;<strong>a few Uppercase Characters</strong>
-                </li>
-                <li class="flex items-center">
-                  <component
+                />Should contain&nbsp;<strong>a few Uppercase Characters</strong>
+              </li>
+              <li class="flex items-center">
+                <component
                     :color="!password ? null : !containsNumbersCheckPassed ? 'darkred' : 'green'"
                     :is="!password ? ChevronsRight : !containsNumbersCheckPassed ? Ban : Check"
                     class="pr-1"
-                  />Should contain&nbsp;<strong>a few Numbers</strong>
-                </li>
-                <li class="flex items-center">
-                  <component
+                />Should contain&nbsp;<strong>a few Numbers</strong>
+              </li>
+              <li class="flex items-center">
+                <component
                     :color="!password ? null : !specialCharactersCheckPassed ? 'darkred' : 'green'"
                     :is="!password ? ChevronsRight : !specialCharactersCheckPassed ? Ban : Check"
                     class="pr-1"
-                  />Should contain&nbsp;<strong>non-alphanumeric characters</strong>
-                </li>
-                <li class="flex items-center">
-                  <component
+                />Should contain&nbsp;<strong>non-alphanumeric characters</strong>
+              </li>
+              <li class="flex items-center">
+                <component
                     :color="password ? 'green' : null"
                     :is="!password ? ChevronsRight : Check"
                     class="pr-1"
-                  />Should&nbsp;<strong>Not</strong>&nbsp;contain any&nbsp;<strong
-                    >Common Words</strong
-                  >
-                </li>
-              </ul>
-            </div>
-          </PopoverContent>
-        </Popover>
-        <div class="space-x-2">
-          <Button
+                />
+                Should&nbsp;
+                <strong>
+                  Not
+                </strong>
+                &nbsp;contain any&nbsp;
+                <strong>
+                  Common Words
+                </strong>
+              </li>
+            </ul>
+          </div>
+        </PopoverContent>
+      </Popover>
+        <Button
             type="submit"
             class="h-[30px]"
             @click="updateData"
             :disabled="isLoading || !passwordCheckPass || !passwordMatches || !oldPassword"
-          >
-            <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
-            {{ isLoading ? 'Saving...' : 'Save' }}
-          </Button>
-          <DialogClose as-child>
-            <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
-          </DialogClose>
-        </div>
-      </div>
-    </DialogFooter>
-  </div>
+        >
+          <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
+          {{ isLoading ? 'Saving...' : 'Save' }}
+        </Button>
+    </template>
+  </MfaVerificationDialog>
 </template>
 
 <style scoped></style>

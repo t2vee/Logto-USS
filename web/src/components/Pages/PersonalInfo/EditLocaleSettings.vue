@@ -7,14 +7,17 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select/index.js'
-import { ref, inject } from 'vue'
-import { Button } from '@/components/ui/button/index.js'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
+import {inject, ref} from 'vue'
+import {Button} from '@/components/ui/button/index.js'
+import {DialogClose} from '@/components/ui/dialog/index.js'
 import Label from '../../ui/label/Label.vue'
 import axios from 'redaxios'
-import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js'
-import { useLogto } from '@logto/vue'
+import {toast} from 'vue-sonner'
+import {eventBus} from '@/lib/eventBus.js'
+import {useLogto} from '@logto/vue'
+import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
+import {BookType} from "lucide-vue-next";
+
 const { getAccessToken } = useLogto()
 const selectedLocale = ref('')
 const userData = inject('userData')
@@ -47,45 +50,56 @@ async function updateData() {
     eventBus.emit('refreshUserData', true)
   }
 }
+
+function expandLocale(shortLocale) {
+  const localeMap = {
+    en: '(EN-US) English US',
+    'en-au': '(EN-AU) English AU'
+  }
+  if (localeMap.hasOwnProperty(shortLocale)) {
+    return localeMap[shortLocale]
+  } else {
+    return shortLocale
+  }
+}
 </script>
 
 <template>
-  <div class="space-y-10">
-    <div class="flex flex-col gap-4 py-4 items-center align-middle">
-      <div class="grid w-3/4 max-w-sm items-center gap-1.5">
-        <Label class="font-bold"> Language </Label>
-        <Select v-model="selectedLocale">
-          <SelectTrigger class="w-[280px]">
-            <SelectValue
-              :placeholder="
+  <MfaVerificationDialog title="Language" :icon="BookType" :desc="userData.profile.locale ? expandLocale(userData.profile.locale) : 'Not Set'" >
+    <template #body>
+      <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle">
+        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+          <Label class="font-bold"> Language </Label>
+          <Select v-model="selectedLocale">
+            <SelectTrigger class="w-[280px]">
+              <SelectValue
+                  :placeholder="
                 userData.locale
                   ? `(Currently) ${userData.locale.toUpperCase()}`
                   : 'Select a Language'
               "
-            />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="en-au"> (EN-AU) English AU </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
-    </div>
-    <DialogFooter>
-      <div class="flex space-x-10 items-center align-middle">
-        <Button variant="link" as-child>
-          <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
-        </Button>
-        <div class="space-x-2">
-          <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!selectedLocale">
-            Save
-          </Button>
-          <DialogClose as-child>
-            <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
-          </DialogClose>
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="en-au"> (EN-AU) English AU </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
       </div>
-    </DialogFooter>
-  </div>
+    </template>
+    <template #footer>
+      <DialogClose as-child>
+        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+      </DialogClose>
+      <Button variant="link" as-child size="xs">
+        <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
+      </Button>
+      <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!selectedLocale">
+        Save
+      </Button>
+    </template>
+  </MfaVerificationDialog>
+
 </template>

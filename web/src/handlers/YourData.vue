@@ -1,8 +1,7 @@
 <script setup>
 import { CardDescription, CardTitle } from '@/components/ui/card/index.js'
 import { HardDriveDownload } from 'lucide-vue-next'
-import AddPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/AddPhoneNumberDialog.vue'
-import EditDetailDialog from '@/components/Global/EditDetailDialog.vue'
+import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 </script>
 
 <template>
@@ -24,13 +23,6 @@ import EditDetailDialog from '@/components/Global/EditDetailDialog.vue'
         User Uploaded Media like avatars. These will be in the web optimised .webp format.
       </p>
     </CardDescription>
-    <EditDetailDialog
-      disabled
-      title="Request Your Data"
-      desc="You will receive a email with a link to your data archive. The link will be valid for up to 72 hours."
-      :icon="HardDriveDownload"
-      :dialog-page="AddPhoneNumberDialog"
-      data-request
-    />
+    <MfaVerificationDialog title="Request Your Data" :icon="HardDriveDownload" desc="You will receive a email with a link to your data archive. The link will be valid for up to 72 hours." disabled edit />
   </div>
 </template>

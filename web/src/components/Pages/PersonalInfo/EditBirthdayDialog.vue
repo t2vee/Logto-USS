@@ -1,21 +1,19 @@
 <script setup>
-import { inject, ref } from 'vue'
-import { Button } from '@/components/ui/button/index.js'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
+import {inject, ref} from 'vue'
+import {Button} from '@/components/ui/button/index.js'
+import {DialogClose} from '@/components/ui/dialog/index.js'
 import Label from '../../ui/label/Label.vue'
 import axios from 'redaxios'
-import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js'
-import { useLogto } from '@logto/vue'
-import { DateFormatter, getLocalTimeZone } from '@internationalized/date'
-import { Calendar as CalendarIcon } from 'lucide-vue-next'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/index.js'
-import { cn } from '@/lib/utils.js'
+import {toast} from 'vue-sonner'
+import {eventBus} from '@/lib/eventBus.js'
+import {useLogto} from '@logto/vue'
+import {DateFormatter, getLocalTimeZone} from '@internationalized/date'
+import {Calendar as CalendarIcon, CalendarFold} from 'lucide-vue-next'
+import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover/index.js'
+import {cn} from '@/lib/utils.js'
 import CalendarWithSelects from '@/components/Pages/PersonalInfo/Utils/CalendarWithSelects.vue'
-import {
-  DateFieldInput,
-  DateFieldRoot,
-} from 'radix-vue'
+import {DateFieldInput, DateFieldRoot,} from 'radix-vue'
+import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 
 const df = new DateFormatter('en-AU', {
   dateStyle: 'long'
@@ -71,77 +69,75 @@ function allowSave() {
 </script>
 
 <template>
-  <div class="space-y-10">
-    <div class="flex flex-col gap-4 py-4 items-center align-middle">
-      <div class="grid w-3/4 max-w-sm items-center gap-1.5">
-        <Label for="birthday" class="flex font-bold w-full justify-between">
-          Birthday
-        </Label>
-        <div>
-          <div class="flex flex-col gap-2">
-            <DateFieldRoot
-                id="date-field"
-                v-model="value"
-                v-slot="{ segments }"
-                @update:model-value="allowSave"
-                class="flex space-x-2 items-center align-middle data-[invalid]:border-red-500"
-            >
-              <template v-for="item in segments" :key="item.part">
-                <DateFieldInput
-                    v-if="item.part === 'literal'"
-                    :part="item.part"
+  <MfaVerificationDialog title="Birthday" :icon="CalendarFold" :desc="userData.profile?.birthdate ? userData.profile.birthdate : 'Not Set'">
+    <template #body>
+      <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle">
+        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+            <Label for="birthday" class="flex font-bold w-full justify-between">
+              Birthday
+            </Label>
+            <div>
+              <div class="flex flex-col gap-2">
+                <DateFieldRoot
+                    id="date-field"
+                    v-model="value"
+                    v-slot="{ segments }"
+                    @update:model-value="allowSave"
+                    class="flex space-x-2 items-center align-middle data-[invalid]:border-red-500"
                 >
-                  {{ item.value }}
-                </DateFieldInput>
-                <DateFieldInput
-                    v-else
-                    :part="item.part"
-                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {{ item.value }}
-                </DateFieldInput>
-              </template>
-            </DateFieldRoot>
+                  <template v-for="item in segments" :key="item.part">
+                    <DateFieldInput
+                        v-if="item.part === 'literal'"
+                        :part="item.part"
+                    >
+                      {{ item.value }}
+                    </DateFieldInput>
+                    <DateFieldInput
+                        v-else
+                        :part="item.part"
+                        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {{ item.value }}
+                    </DateFieldInput>
+                  </template>
+                </DateFieldRoot>
+              </div>
+            </div>
+            <Popover>
+              <PopoverTrigger as-child>
+                <Button
+                    variant="outline"
+                    :class="cn('justify-start text-left font-normal',!value && 'text-muted-foreground')">
+                  <CalendarIcon class="mr-2 h-4 w-4" />
+                  <p>
+                    <span v-if="userData.birthdate && !value">(Currently)&nbsp;</span>
+                    <span>{{
+                        value
+                            ? df.format(value.toDate(getLocalTimeZone()))
+                            : userData.birthdate
+                                ? userData.birthdate
+                                : 'Use a Calender'
+                      }}</span>
+                  </p>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent class="w-auto p-0">
+                <CalendarWithSelects v-model="value" @update:model-value="allowSave" />
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
-        <Popover>
-          <PopoverTrigger as-child>
-            <Button
-              variant="outline"
-              :class="cn('justify-start text-left font-normal',!value && 'text-muted-foreground')">
-              <CalendarIcon class="mr-2 h-4 w-4" />
-              <p>
-                <span v-if="userData.birthdate && !value">(Currently)&nbsp;</span>
-                <span>{{
-                  value
-                    ? df.format(value.toDate(getLocalTimeZone()))
-                    : userData.birthdate
-                      ? userData.birthdate
-                      : 'Use a Calender'
-                }}</span>
-              </p>
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent class="w-auto p-0">
-            <CalendarWithSelects v-model="value" @update:model-value="allowSave" />
-          </PopoverContent>
-        </Popover>
-      </div>
-    </div>
-    <DialogFooter>
-      <div class="flex space-x-10 items-center align-middle">
-        <Button variant="link" as-child>
-          <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
-        </Button>
-        <div class="space-x-2">
-          <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!dateSelected">
-            Save
-          </Button>
-          <DialogClose as-child>
-            <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
-          </DialogClose>
-        </div>
-      </div>
-    </DialogFooter>
-  </div>
+    </template>
+    <template #footer>
+      <DialogClose as-child>
+        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+      </DialogClose>
+      <Button variant="link" as-child size="xs">
+        <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
+      </Button>
+      <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!dateSelected">
+        Save
+      </Button>
+    </template>
+  </MfaVerificationDialog>
 </template>

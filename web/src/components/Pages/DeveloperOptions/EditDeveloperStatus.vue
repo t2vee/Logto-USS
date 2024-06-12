@@ -1,13 +1,14 @@
 <script setup>
 import {ref, inject} from 'vue'
 import { useLogto } from '@logto/vue'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-import { Loader2 } from 'lucide-vue-next'
+import { DialogClose } from '@/components/ui/dialog/index.js'
+import { Loader2, Code } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
 import axios from 'redaxios'
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
 import { Checkbox } from '@/components/ui/checkbox'
+import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 
 const { getAccessToken } = useLogto()
 const isLoading = ref(false)
@@ -54,42 +55,42 @@ function onCheckboxChange() {
 </script>
 
 <template>
-  <div class="flex flex-col items-center align-middle justify-center space-y-8">
-    <div class="mb-8 w-full">
-      <div class="flex flex-col items-center space-y-3">
-        <p>Currently <strong>{{ userData?.customData?.developer ? 'Enabled' : 'Disabled' }}</strong></p>
-        <div class="flex items-center space-x-2">
-          <Checkbox
-              id="enable"
-              :checked="checked"
-              :default-checked="userData?.customData?.developer"
-              @update:checked="onCheckboxChange"
-          />
-          <label
-              for="enable"
-              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Enable Developer Account
-          </label>
+  <MfaVerificationDialog title="Developer Status" :icon="Code" :desc="userData?.customData?.developer ? 'Enabled' : 'Disabled'" >
+    <template #body>
+      <div class="flex flex-col items-center align-middle justify-center space-y-8">
+        <div class="mb-8 w-full">
+          <div class="flex flex-col items-center space-y-3">
+            <p>Currently <strong>{{ userData?.customData?.developer ? 'Enabled' : 'Disabled' }}</strong></p>
+            <div class="flex items-center space-x-2">
+              <Checkbox
+                  id="enable"
+                  :checked="checked"
+                  :default-checked="userData?.customData?.developer"
+                  @update:checked="onCheckboxChange"
+              />
+              <label
+                  for="enable"
+                  class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Enable Developer Account
+              </label>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <DialogFooter>
-      <div class="flex space-x-7 items-center align-middle">
-        <div class="flex space-x-2">
-          <Button
-              @click="updateStatus"
-              class="h-[30px]"
-              :disabled="isLoading"
-          >
-            <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
-            Save
-          </Button>
-          <DialogClose as-child>
-            <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
-          </DialogClose>
-        </div>
-      </div>
-    </DialogFooter>
-  </div>
+    </template>
+    <template #footer>
+      <DialogClose as-child>
+        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+      </DialogClose>
+      <Button
+          @click="updateStatus"
+          class="h-[30px]"
+          :disabled="isLoading"
+      >
+        <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
+        Save
+      </Button>
+    </template>
+  </MfaVerificationDialog>
 </template>

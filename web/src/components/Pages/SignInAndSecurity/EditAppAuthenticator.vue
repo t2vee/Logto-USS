@@ -1,20 +1,16 @@
 <script setup>
 import {Button} from "@/components/ui/button/index.js";
-import { Input } from '@/components/ui/input/index.js'
+import {Input} from '@/components/ui/input/index.js'
 import {ref} from "vue";
 import axios from 'redaxios';
 import {toast} from "vue-sonner";
-import {Loader2, ClipboardCopy, ClipboardCheck, FileCheck, FileDown} from 'lucide-vue-next';
-import { useClipboard } from '@vueuse/core'
-import { useLogto } from '@logto/vue';
+import {ClipboardCheck, ClipboardCopy, FileDown, Loader2} from 'lucide-vue-next';
+import {useClipboard} from '@vueuse/core'
+import {useLogto} from '@logto/vue';
 import {eventBus} from "@/lib/eventBus.js";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from '@/components/ui/tooltip/index.js'
+
 const { getAccessToken } = useLogto()
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from '@/components/ui/tooltip/index.js'
 
 const props = defineProps({
   mfaMethods: {type: Object, required: true}

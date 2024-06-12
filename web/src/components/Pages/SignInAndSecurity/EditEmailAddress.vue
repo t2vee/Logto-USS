@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed, inject } from 'vue'
-import { useLogto } from '@logto/vue'
+import {computed, inject, ref} from 'vue'
+import {useLogto} from '@logto/vue'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,15 +12,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog/index.js'
-import { Input } from '@/components/ui/input/index.js'
-import { Label } from '@/components/ui/label/index.js'
-import { Loader, MailCheck, MailX, ArrowBigRightDash } from 'lucide-vue-next'
-import { Button } from '@/components/ui/button/index.js'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-import MfaCodeInput from '@/components/Global/MfaCodeInput.vue'
+import {Input} from '@/components/ui/input/index.js'
+import {Label} from '@/components/ui/label/index.js'
+import {ArrowBigRightDash, Loader, MailCheck, MailX} from 'lucide-vue-next'
+import {Button} from '@/components/ui/button/index.js'
+import {DialogClose} from '@/components/ui/dialog/index.js'
+import MfaCodeInput from '@/components/Global/MFAHelpers/MfaCodeInput.vue'
 import axios from 'redaxios'
-import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js'
+import {toast} from 'vue-sonner'
+import {eventBus} from '@/lib/eventBus.js'
+import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 
 const userData = inject('userData')
 
@@ -140,123 +141,123 @@ const handleCodeComplete = async (code) => {
 </script>
 
 <template>
-  <transition name="fade" mode="out-in">
-    <div
-      v-if="!isLoading && !emailSent"
-      class="flex flex-col gap-4 items-center align-middle space-y-10"
-    >
-      <div class="grid w-3/4 max-w-sm items-center gap-1.5 relative">
-        <Label for="email" class="flex font-bold w-full justify-between">
-          Email
-          <span v-if="isEmailValid && isEditing" class="text-xs text-green-500">Valid Email</span>
-          <span v-else-if="!isEmailValid && isEditing" class="text-xs text-red-500"
-            >Invalid Email Format</span
-          >
-        </Label>
-        <Input
-          id="email"
-          type="email"
-          v-model="email"
-          :class="{
+  <MfaVerificationDialog title="Email Address" :icon="userData.email_verified ? MailCheck : MailX" :desc="userData.email.length > 30 ? userData.email.substring(0, 30) + '...' : userData.email">
+    <template #body>
+      <transition name="fade" mode="out-in">
+        <div
+            v-if="!isLoading && !emailSent"
+            class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle mt-5"
+        >
+          <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+            <Label for="email" class="flex font-bold w-full justify-between">
+              Email
+              <span v-if="isEmailValid && isEditing" class="text-xs text-green-500">Valid Email</span>
+              <span v-else-if="!isEmailValid && isEditing" class="text-xs text-red-500"
+              >Invalid Email Format</span
+              >
+            </Label>
+            <Input
+                id="email"
+                type="email"
+                v-model="email"
+                :class="{
             'border-red-500': !isEmailValid && isEditing,
             'border-green-500': isEmailValid && isEditing
           }"
-          placeholder="Enter your email"
-        />
-        <div class="absolute inset-y-0 right-0 flex items-center pt-5 pr-3">
-          <MailCheck v-if="isEmailValid && isEditing" class="text-green-500" />
-          <MailX v-else-if="!isEmailValid && isEditing" class="text-red-500" />
+                placeholder="Enter your email"
+            />
+            <div class="absolute inset-y-0 right-0 flex items-center pt-5 pr-3">
+              <MailCheck v-if="isEmailValid && isEditing" class="text-green-500" />
+              <MailX v-else-if="!isEmailValid && isEditing" class="text-red-500" />
+            </div>
+          </div>
+          <p class="text-xs" v-if="resendCodeTimer > 0 && !readyToSend">
+            Please wait {{ resendCodeTimer }} seconds before sending another code
+          </p>
         </div>
-      </div>
-      <p class="text-xs" v-if="resendCodeTimer > 0 && !readyToSend">
-        Please wait {{ resendCodeTimer }} seconds before sending another code
-      </p>
-      <DialogFooter>
-        <div class="flex space-x-8 items-center align-middle">
-          <Button variant="link" as-child>
-            <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
-          </Button>
-          <div class="space-x-2">
-            <AlertDialog>
-              <AlertDialogTrigger as-child>
-                <Button
+        <div v-else-if="isLoading" class="flex items-center align-middle">
+          <Loader class="animate-spin" :size="32" />
+          <p class="text-xl font-bold">Loading...</p>
+        </div>
+        <div v-else-if="!isLoading && emailSent">
+          <MfaCodeInput
+              :resend-code-timer="resendCodeTimer"
+              @codeComplete="handleCodeComplete"
+              @resendCode="handleCodeResend"
+              @changeInput="handleChangeInput"
+          />
+        </div>
+      </transition>
+    </template>
+    <template #footer v-if="!isLoading && !emailSent">
+      <DialogClose as-child>
+        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+      </DialogClose>
+        <Button variant="link" as-child>
+          <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
+        </Button>
+          <AlertDialog>
+            <AlertDialogTrigger as-child>
+              <Button
                   class="h-[30px]"
                   :disabled="
                     !isEmailValid || (resendCodeTimer > 0 && !readyToSend)
                   "
-                >
-                  Verify
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                  <AlertDialogDescription class="space-y-4">
-                    Changing your email means that you will <strong>no longer</strong> be able to:
-                    <ul class="space-y-1">
-                      <li class="flex items-center align-middle">
-                        <ArrowBigRightDash /> <span class="font-bold">Login with&nbsp;</span>
-                        {{
-                          userData.email.length > 30
+              >
+                Verify
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription class="space-y-4">
+                  Changing your email means that you will <strong>no longer</strong> be able to:
+                  <ul class="space-y-1">
+                    <li class="flex items-center align-middle">
+                      <ArrowBigRightDash /> <span class="font-bold">Login with&nbsp;</span>
+                      {{
+                        userData.email.length > 30
                             ? `${userData.email.substring(0, 30)}...`
                             : userData.email
-                        }}
-                      </li>
-                      <li class="flex items-center align-middle">
-                        <ArrowBigRightDash /> <span class="font-bold">Contact us with&nbsp;</span>
-                        {{
-                          userData.email.length > 30
+                      }}
+                    </li>
+                    <li class="flex items-center align-middle">
+                      <ArrowBigRightDash /> <span class="font-bold">Contact us with&nbsp;</span>
+                      {{
+                        userData.email.length > 30
                             ? `${userData.email.substring(0, 30)}...`
                             : userData.email
-                        }}
-                      </li>
-                      <li class="flex items-center align-middle">
-                        <ArrowBigRightDash />
-                        <span class="font-bold">Receive any mail with&nbsp;</span>
-                        {{
-                          userData.email.length > 30
+                      }}
+                    </li>
+                    <li class="flex items-center align-middle">
+                      <ArrowBigRightDash />
+                      <span class="font-bold">Receive any mail with&nbsp;</span>
+                      {{
+                        userData.email.length > 30
                             ? `${userData.email.substring(0, 30)}...`
                             : userData.email
-                        }}
-                      </li>
-                      <li class="flex items-center align-middle">
-                        <ArrowBigRightDash />
-                        <span class="font-bold">Verify your identity with&nbsp;</span>
-                        {{
-                          userData.email.length > 30
+                      }}
+                    </li>
+                    <li class="flex items-center align-middle">
+                      <ArrowBigRightDash />
+                      <span class="font-bold">Verify your identity with&nbsp;</span>
+                      {{
+                        userData.email.length > 30
                             ? `${userData.email.substring(0, 30)}...`
                             : userData.email
-                        }}
-                      </li>
-                    </ul>
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction @click="sendVerificationCode">I'm Sure</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-            <DialogClose as-child>
-              <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
-            </DialogClose>
-          </div>
-        </div>
-      </DialogFooter>
-    </div>
-    <div v-else-if="isLoading" class="flex items-center align-middle">
-      <Loader class="animate-spin" :size="32" />
-      <p class="text-xl font-bold">Loading...</p>
-    </div>
-    <div v-else-if="!isLoading && emailSent">
-      <MfaCodeInput
-        :resend-code-timer="resendCodeTimer"
-        @codeComplete="handleCodeComplete"
-        @resendCode="handleCodeResend"
-        @changeInput="handleChangeInput"
-      />
-    </div>
-  </transition>
+                      }}
+                    </li>
+                  </ul>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction @click="sendVerificationCode">I'm Sure</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+    </template>
+  </MfaVerificationDialog>
 </template>
 
 <style scoped></style>
