@@ -11,7 +11,7 @@ const props = defineProps({
   <div
     :class="
       cn(
-        'flex absolute w-full justify-between bottom-4 sm:gap-x-2 px-3 align-middle items-center',
+        'flex absolute w-full justify-between bottom-4 sm:gap-x-2 px-5 align-middle items-center',
         props.class
       )
     "
