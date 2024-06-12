@@ -235,12 +235,17 @@ onUnmounted(cleanup)
                       ? 'Edit Your ' + title
                       : title
             }}</DialogTitle>
-          <DialogDescription class="text-xs">
-            {{
-              !isLoading && isMfaRequired
-                  ? "In order to verify your identity, we'll send you a code to your preferred method below."
-                  : ''
-            }}
+          <DialogDescription>
+            <div class="flex flex-col items-center align-middle text-xs">
+              {{
+                isMfaRequired
+                    ? "In order to verify your identity, we'll send you a code to your preferred method below."
+                    : ''
+              }}
+              <Button v-if="isMfaRequired" variant="link" class="text-xs">
+                What is this?
+              </Button>
+            </div>
           </DialogDescription>
         </DialogHeader>
       </transition>

@@ -38,7 +38,9 @@ function _fetchTrackedState() {
     url: `${ajaxUrl}isTracked`,
     callbackProp: 'callback',
     callback: (data) => {
+      console.log(data)
       const { value } = data
+      console.log(value)
       if (value !== undefined) {
         optedIn.value = value
       }
