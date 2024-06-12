@@ -1,39 +1,29 @@
 <script setup>
-import { ref, onUnmounted, inject } from 'vue'
+import { ref, onUnmounted } from 'vue'
+import { useDark } from "@vueuse/core";
 import { Dialog, DialogTrigger } from '@/components/ui/dialog/index.js'
 import MFAVerificationDialog from '@/components/Global/MfaVerificationDialog.vue'
 import { eventBus } from '@/lib/eventBus.js'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card/index.js'
 
-const userData = inject('userData')
+defineProps({
+  title: { type: String, required: true },
+  icon: { type: Function, required: true },
+  dialogPage: { type: Object, required: true },
+  desc: { type: String, required: false },
+  disabled: { type: Boolean, default: false },
+  edit: { type: Boolean, default: false },
+})
+
+const isDark = useDark({
+  selector: 'html',
+})
 
 const handleEvent = (data) => {
   isDialogOpen.value = data
 }
 const isDialogOpen = ref(false)
 const cleanup = eventBus.on('closeEditDetailDialog', handleEvent)
-
-defineProps({
-  title: {
-    type: String,
-    required: true
-  },
-  icon: {
-    required: true
-  },
-  dialogPage: {
-    type: Object,
-    required: true
-  },
-  desc: String,
-  disabled: Boolean,
-  dataRequest: Boolean
-})
-
-import { useDark } from "@vueuse/core";
-const isDark = useDark({
-  selector: 'html',
-})
 
 onUnmounted(cleanup)
 </script>
@@ -67,10 +57,9 @@ onUnmounted(cleanup)
       </Card>
     </DialogTrigger>
     <MFAVerificationDialog
-      :data-request="dataRequest"
+      :edit="edit"
       :is-visible="isDialogOpen"
       :edit-page="dialogPage"
-      :user-data="userData"
       :title="title"
       :icon="icon"
       @update:isVisible="isDialogOpen = $event"

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import {inject, ref, watch} from 'vue'
 import { Label } from '@/components/ui/label/index.js'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group/index.js'
 import { useLogto } from '@logto/vue'
@@ -18,18 +18,17 @@ import MfaCodeInput from '@/components/Global/MfaCodeInput.vue'
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
 
+const userData = inject('userData')
+const mfaOptions = inject('mfaMethods')
+
 const props = defineProps({
   isVisible: Boolean,
-  dataRequest: Boolean,
+  edit: Boolean,
   title: {
     type: String,
     required: true
   },
   editPage: {
-    type: Object,
-    required: true
-  },
-  userData: {
     type: Object,
     required: true
   },
@@ -42,7 +41,6 @@ const { getAccessToken } = useLogto()
 const isMfaRequired = ref(false)
 const codeSent = ref(false)
 const isLoading = ref(true)
-const mfaOptions = ref({})
 const accessTokenRef = ref('')
 const selectedMfaMethod = ref('email')
 const resendCodeTimer = ref(60)
@@ -56,20 +54,6 @@ const countdown = () => {
       clearInterval(interval)
     }
   }, 1000)
-}
-
-async function grabMfaOptions(accessToken) {
-  try {
-    return await axios.get(`${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa/methods`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      }
-    })
-  } catch (error) {
-    toast.error('Error grabbing MFA Options:', { description: 'Some account actions will be unavailable' })
-    isMfaRequired.value = error.response && error.response.status === 404
-  }
 }
 
 async function sendVerificationCode() {
@@ -165,10 +149,6 @@ const checkMFA = async () => {
         }
       }
     )
-    if (response.data.status === true) {
-      const mfaResponse = await grabMfaOptions(accessToken)
-      mfaOptions.value = mfaResponse.data
-    }
     isMfaRequired.value = response.data.status === true
   } catch (error) {
     toast.error('Error checking MFA:', { description: 'Service Unavailable. Try again later' })
@@ -206,7 +186,7 @@ watch(
         <DialogTitle class="flex items-center align-middle">{{
             isMfaRequired
                 ? 'Verify Your Identity'
-                : !dataRequest
+                : !edit
                     ? 'Edit Your ' + title
                     : title
           }}</DialogTitle>
