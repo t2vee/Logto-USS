@@ -40,8 +40,7 @@ const accessTokenRef = ref('')
 const selectedMfaMethod = ref('email')
 const resendCodeTimer = ref(60)
 const readyToSend = ref(true)
-const isDialogOpen = ref(false)
-
+const isDialogOpen = defineModel({default: false})
 
 const countdown = () => {
   const interval = setInterval(() => {
@@ -159,27 +158,19 @@ const checkMFA = async () => {
 function updateSelectedMethod(value) {
   selectedMfaMethod.value = value
 }
-
-/*watch(
-  () => isDialogOpen,
-  (newValue) => {
-    if (newValue) {
-      checkMFA().catch((error) => console.log('MFA check failed:', error))
-    }
-  }
-)*/
-
 watch(isDialogOpen, () => {
   if (isDialogOpen.value) {
     checkMFA()
   }
 })
-
 const isDark = useDark({
   selector: 'html',
   disableTransition: false,
 })
-
+const handleNav = (navigate) => {
+  handleEvent(false)
+  navigate()
+}
 const handleEvent = (data) => {
   isDialogOpen.value = data
 }
@@ -242,9 +233,15 @@ onUnmounted(cleanup)
                     ? "In order to verify your identity, we'll send you a code to your preferred method below."
                     : ''
               }}
-              <Button v-if="isMfaRequired" variant="link" class="text-xs">
-                What is this?
-              </Button>
+              <RouterLink
+                  to=""
+                  custom
+                  v-slot="{ navigate }"
+              >
+                <Button v-if="isMfaRequired" variant="link" class="text-xs" @click="handleNav(navigate)">
+                  What is this?
+                </Button>
+              </RouterLink>
             </div>
           </DialogDescription>
         </DialogHeader>

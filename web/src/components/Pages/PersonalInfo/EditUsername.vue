@@ -2,7 +2,7 @@
 import { Input } from '@/components/ui/input/index.js'
 import { Label } from '@/components/ui/label/index.js'
 import axios from 'redaxios'
-import { inject, ref, onMounted } from 'vue'
+import {inject, ref, onMounted, watch} from 'vue'
 import { useLogto } from '@logto/vue'
 import debounce from 'lodash/debounce'
 import {Ban, UserRoundCheck, MoreHorizontal, CircleUserRound} from 'lucide-vue-next'
@@ -23,6 +23,7 @@ const isAvailable = ref(false)
 const usernameChecked = ref(false)
 const waitForNextChange = ref('')
 const badWords = ref(false)
+const isDialogOpen = ref(false)
 
 const usernameRegex = new RegExp(/^[a-zA-Z0-9]{3,24}$/)
 
@@ -119,11 +120,15 @@ const checkNextUsernameChange = async () => {
   }
 }
 
-onMounted(checkNextUsernameChange)
+watch(isDialogOpen, () => {
+  if (isDialogOpen.value) {
+    checkNextUsernameChange()
+  }
+})
 </script>
 
 <template>
-  <MfaVerificationDialog title="Username" :icon="CircleUserRound" :desc="userData.username ?? userData.name ?? 'Not Set'" >
+  <MfaVerificationDialog title="Username" :icon="CircleUserRound" :desc="userData.username ?? userData.name ?? 'Not Set'" v-model="isDialogOpen">
     <template #body>
       <ConnectorAlert
           v-if="waitForNextChange"
