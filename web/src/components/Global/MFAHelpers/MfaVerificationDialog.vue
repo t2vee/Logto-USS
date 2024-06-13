@@ -1,5 +1,6 @@
 <script setup>
 import {inject, onMounted, onUnmounted, provide, ref, watch} from 'vue'
+import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
 import { Label } from '@/components/ui/label/index.js'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group/index.js'
 import { useLogto } from '@logto/vue'
@@ -9,10 +10,27 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription, DialogFooter,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
-  DialogTitle, DialogTrigger
+  DialogTitle,
+  DialogTrigger
 } from '@/components/ui/dialog/index.js'
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip/index.js'
 import { Button } from '@/components/ui/button/index.js'
 import MfaCodeInput from '@/components/Global/MFAHelpers/MfaCodeInput.vue'
@@ -40,7 +58,7 @@ const accessTokenRef = ref('')
 const selectedMfaMethod = ref('email')
 const resendCodeTimer = ref(60)
 const readyToSend = ref(true)
-const isDialogOpen = defineModel({default: false})
+const isOpen = defineModel({default: false})
 
 const countdown = () => {
   const interval = setInterval(() => {
@@ -158,8 +176,8 @@ const checkMFA = async () => {
 function updateSelectedMethod(value) {
   selectedMfaMethod.value = value
 }
-watch(isDialogOpen, () => {
-  if (isDialogOpen.value) {
+watch(isOpen, () => {
+  if (isOpen.value) {
     checkMFA()
   }
 })
@@ -167,19 +185,34 @@ const isDark = useDark({
   selector: 'html',
   disableTransition: false,
 })
-const handleNav = (navigate) => {
-  handleEvent(false)
-  navigate()
-}
 const handleEvent = (data) => {
-  isDialogOpen.value = data
+  isOpen.value = data
 }
 const cleanup = eventBus.on('closeEditDetailDialog', handleEvent)
 
 onUnmounted(cleanup)
+
+const [UseTriggerTemplate, TriggerTemplate] = createReusableTemplate()
+const isDesktop = useMediaQuery('(min-width: 768px)')
 </script>
 
 <template>
+  <UseTriggerTemplate>
+    <slot>
+      <Card
+          class="h-32 w-full bg-gradient-to-tl from-[#6c888e] to-30% transition-all duration-400 hover:to-60% hover:border-[#abd9e2] hover:cursor-pointer shadow-md shadow-gray-900 hover:shadow-black"
+      >
+        <CardHeader>
+          <CardTitle class="flex justify-between text-lg">
+            {{ title }}
+            <component :is="icon" v-if="icon" :color="isDark ? '#bdeffa' : 'black'"/>
+          </CardTitle>
+          <CardDescription>{{ desc }}</CardDescription>
+        </CardHeader>
+      </Card>
+    </slot>
+  </UseTriggerTemplate>
+
   <Card
       v-if="disabled"
       class="h-32 w-full bg-gradient-to-tl from-gray-800 to-60% hover:cursor-default"
@@ -194,23 +227,17 @@ onUnmounted(cleanup)
       </CardDescription>
     </CardHeader>
   </Card>
-  <Dialog v-if="!disabled" v-model:open="isDialogOpen">
+  <Dialog v-if="!disabled && isDesktop" v-model:open="isOpen">
     <DialogTrigger as-child>
-      <slot>
-        <Card
-            class="h-32 w-full bg-gradient-to-tl from-[#6c888e] to-30% transition-all duration-400 hover:to-60% hover:border-[#abd9e2] hover:cursor-pointer shadow-md shadow-gray-900 hover:shadow-black"
-        >
-          <CardHeader>
-            <CardTitle class="flex justify-between text-lg">
-              {{ title }}
-              <component :is="icon" v-if="icon" :color="isDark ? '#bdeffa' : 'black'"/>
-            </CardTitle>
-            <CardDescription>{{ desc }}</CardDescription>
-          </CardHeader>
-        </Card>
-      </slot>
+      <TriggerTemplate />
     </DialogTrigger>
-    <DialogContent class="sm:max-w-[525px] sm:min-h-[400px] flex flex-col items-center align-middle">
+    <DialogContent
+        class="sm:max-w-[525px] sm:min-h-[400px] flex flex-col items-center align-middle"
+        @interact-outside="event => {
+        const target = event.target;
+        if (target?.closest('[data-sonner-toaster]')) return event.preventDefault()
+      }"
+    >
       <transition name="fade">
         <DialogHeader class="mb-3 flex flex-col items-center justify-center align-middle">
           <component
@@ -233,15 +260,27 @@ onUnmounted(cleanup)
                     ? "In order to verify your identity, we'll send you a code to your preferred method below."
                     : ''
               }}
-              <RouterLink
-                  to=""
-                  custom
-                  v-slot="{ navigate }"
-              >
-                <Button v-if="isMfaRequired" variant="link" class="text-xs" @click="handleNav(navigate)">
-                  What is this?
-                </Button>
-              </RouterLink>
+              <Popover>
+                <PopoverTrigger>
+                  <Button v-if="isMfaRequired" variant="link" size="xs" class="text-xs">
+                    What is this?
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <p class="text-sm text-center">
+                    Currently you have
+                    <strong>
+                      Login Verification
+                    </strong>
+                    enabled on your account. This means that when logging in and changing details in your account, you will need to verify via a added MFA method. You can disable this feature
+                    <span>
+                      <RouterLink to="/account/security?module=loginVerification">
+                        here
+                      </RouterLink>
+                    </span>
+                  </p>
+                </PopoverContent>
+              </Popover>
             </div>
           </DialogDescription>
         </DialogHeader>
@@ -355,4 +394,24 @@ onUnmounted(cleanup)
       </div>
     </DialogContent>
   </Dialog>
+  <Drawer v-else-if="!disabled" v-model:open="isOpen">
+    <DrawerTrigger as-child>
+      <TriggerTemplate />
+    </DrawerTrigger>
+    <DrawerContent>
+      <DrawerHeader class="text-left">
+        <DrawerTitle>Edit profile</DrawerTitle>
+        <DrawerDescription>
+          Make changes to your profile here. Click save when you're done.
+        </DrawerDescription>
+      </DrawerHeader>
+      <DrawerFooter class="pt-2">
+        <DrawerClose as-child>
+          <Button variant="outline">
+            Cancel
+          </Button>
+        </DrawerClose>
+      </DrawerFooter>
+    </DrawerContent>
+  </Drawer>
 </template>

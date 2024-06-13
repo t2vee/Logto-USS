@@ -9,6 +9,7 @@ import { handler as UpdatePassword } from "./updatePassword";
 import { handler as UpdateRegionalSettings } from "./updateRegionalSettings";
 import { handler as UpdateUsername } from "./updateUsername";
 import { handler as UpdateDeveloperStatus } from "./updateDeveloperStatus";
+import { handler as UpdateVerificationStatus } from "./updateVerificationStatus";
 import removeSMS from "../mfa/new/remove-number";
 
 
@@ -23,3 +24,5 @@ UpdateUserRouter
 	.post("/username", UpdateUsername)
   .post("/remove-sms", removeSMS)
 	.post("/developer-status", UpdateDeveloperStatus)
+	.post("/login-verification", UpdateVerificationStatus)
+
