@@ -144,7 +144,7 @@ const handleCodeComplete = async (code) => {
             v-if="!isLoading && !emailSent"
             class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle mt-5"
         >
-          <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+          <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
             <Label for="email" class="flex font-bold w-full justify-between">
               Email
               <span v-if="isEmailValid && isEditing" class="text-xs text-green-500">Valid Email</span>

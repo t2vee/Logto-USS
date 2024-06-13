@@ -19,20 +19,30 @@ const emit = defineEmits(['codeComplete', 'resendCode', 'changeInput'])
 const value = ref([])
 
 const handleComplete = (e) => emit('codeComplete', e.join(''))
+import { useMediaQuery } from '@vueuse/core'
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
   <div class="flex flex-col items-center align-middle gap-3">
     <h3 class="font-bold">Input the 6 digit code sent to you</h3>
     <div>
-      <PinInput id="pin-input" v-model="value" placeholder="" @complete="handleComplete" otp type="number">
+      <PinInput
+          id="pin-input"
+          v-model="value"
+          placeholder="○"
+          @complete="handleComplete"
+          otp
+          type="number"
+          required
+      >
         <PinInputGroup class="">
           <template v-for="(id, index) in 6" :key="id">
             <PinInputInput
-              class="rounded-xl border bg-popover-foreground text-black"
+                class="text-white bg-[#2b2a33]"
               :index="index"
             />
-            <template v-if="index !== 5">
+            <template v-if="index !== 5 && isDesktop">
               <PinInputSeparator />
             </template>
           </template>

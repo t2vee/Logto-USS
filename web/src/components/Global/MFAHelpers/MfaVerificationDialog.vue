@@ -296,9 +296,9 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
                   <Tooltip>
                     <TooltipTrigger class="flex items-center space-x-2">
                       <RadioGroupItem id="r3" value="authenticator" disabled /> <!-- Cant be implemented yet. see: https://openapi.logto.io/operation/operation-post-api-verification-codes and https://logto.productlane.com/roadmap?id=f1b1eda0-ddad-4538-bca4-15c834e7acd0 -->
-                      <Label for="r3" class="text-gray-600"
-                      >Authenticator App (Google/Microsoft Authenticator)</Label
-                      >
+                      <Label for="r3" class="text-gray-600">
+                        Authenticator App {{ isDesktop ? '(Google/Microsoft Authenticator)' : '' }}
+                      </Label>
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Currently Not Available</p>
@@ -322,20 +322,38 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
                 </TooltipProvider>
               </div>
             </RadioGroup>
-            <div class="space-x-2 w-full flex justify-center">
-              <p class="text-xs" v-if="resendCodeTimer > 0 && !readyToSend">
-                Please wait {{ resendCodeTimer }} seconds before sending another code
-              </p>
-            </div>
+
           </div>
           <DialogFooter>
-            <DialogClose as-child>
+            <div v-if="!isDesktop" class="w-full space-y-3">
+              <div class="space-x-2 w-full flex justify-center">
+                <p class="text-xs" v-if="resendCodeTimer > 0 && !readyToSend">
+                  Please wait {{ resendCodeTimer }} seconds before sending another code
+                </p>
+              </div>
+              <DialogClose as-child>
+                <Button class="w-full" type="button" variant="outline">
+                  Cancel
+                  <Undo2 class="pl-1" />
+                </Button>
+              </DialogClose>
+              <Button
+                  :disabled="resendCodeTimer > 0 && !readyToSend"
+                  class="w-full"
+                  @click="sendVerificationCode"
+              >
+                Next
+                <ArrowRight class="pl-1" />
+              </Button>
+            </div>
+            <DialogClose as-child v-else>
               <Button class="h-[30px]" type="button" variant="outline">
                 Cancel
                 <Undo2 class="pl-1" />
               </Button>
             </DialogClose>
             <Button
+                v-if="isDesktop"
                 :disabled="resendCodeTimer > 0 && !readyToSend"
                 class="h-[30px]"
                 @click="sendVerificationCode"
@@ -406,7 +424,9 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
   </Dialog>
   <Drawer v-else-if="!disabled" v-model:open="isOpen">
     <DrawerTrigger as-child>
-      <TriggerTemplate />
+      <slot>
+        <TriggerTemplate />
+      </slot>
     </DrawerTrigger>
     <DrawerContent>
       <ContentTemplate />
