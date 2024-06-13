@@ -125,6 +125,10 @@ watch(isDialogOpen, () => {
     checkNextUsernameChange()
   }
 })
+
+import { useMediaQuery } from '@vueuse/core'
+const isDesktop = useMediaQuery('(min-width: 1023px)')
+
 </script>
 
 <template>
@@ -136,7 +140,7 @@ watch(isDialogOpen, () => {
           :custom-message="`You can only change your username once per month. Your next username change will be available on the ${waitForNextChange.value}`"
       />
       <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle mt-3">
-        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+        <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
           <Label for="username" class="flex font-bold w-full justify-between">
             Username
             <span v-if="badWords" class="text-xs text-red-500">Contains Bad Words</span>
@@ -172,10 +176,26 @@ watch(isDialogOpen, () => {
       </div>
     </template>
     <template #footer>
-      <DialogClose as-child>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <Button variant="link" as-child size="xs">
+          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
+        </Button>
+        <Button
+            type="submit"
+            class="w-full"
+            :disabled="waitForNextChange || !isAvailable"
+            @click="updateData"
+        >
+          Save
+        </Button>
+        <DialogClose as-child>
+          <Button type="button" variant="outline" class="w-full"> Cancel </Button>
+        </DialogClose>
+      </div>
+      <DialogClose as-child v-else>
         <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
       </DialogClose>
-      <Button variant="link" as-child size="xs">
+      <Button variant="link" as-child size="xs" v-if="isDesktop">
         <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
       </Button>
       <Button
@@ -183,6 +203,7 @@ watch(isDialogOpen, () => {
           class="h-[30px]"
           :disabled="waitForNextChange || !isAvailable"
           @click="updateData"
+          v-if="isDesktop"
       >
         Save
       </Button>

@@ -58,16 +58,20 @@ function expandLocale(shortLocale) {
     return shortLocale
   }
 }
+
+import { useMediaQuery } from '@vueuse/core'
+const isDesktop = useMediaQuery('(min-width: 1023px)')
+
 </script>
 
 <template>
   <MfaVerificationDialog title="Language" :icon="BookType" :desc="userData.profile.locale ? expandLocale(userData.profile.locale) : 'Not Set'" >
     <template #body>
       <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle">
-        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+        <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
           <Label class="font-bold"> Language </Label>
           <Select v-model="selectedLocale">
-            <SelectTrigger class="w-[280px]">
+            <SelectTrigger class="w-full">
               <SelectValue
                   :placeholder="
                 userData.locale
@@ -86,13 +90,29 @@ function expandLocale(shortLocale) {
       </div>
     </template>
     <template #footer>
-      <DialogClose as-child>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <Button variant="link" as-child size="xs">
+          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
+        </Button>
+        <Button
+            type="submit"
+            class="w-full"
+            :disabled="!selectedLocale"
+            @click="updateData"
+        >
+          Save
+        </Button>
+        <DialogClose as-child >
+          <Button type="button" variant="outline" class="w-full"> Cancel </Button>
+        </DialogClose>
+      </div>
+      <DialogClose as-child v-else>
         <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
       </DialogClose>
-      <Button variant="link" as-child size="xs">
+      <Button variant="link" as-child size="xs" v-if="isDesktop">
         <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
       </Button>
-      <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!selectedLocale">
+      <Button v-if="isDesktop" type="submit" class="h-[30px]" :onclick="updateData" :disabled="!selectedLocale">
         Save
       </Button>
     </template>

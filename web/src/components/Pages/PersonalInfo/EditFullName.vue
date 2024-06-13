@@ -75,13 +75,17 @@ const checkName = async (value) => {
 }
 
 const debouncedCheckName = debounce(() => checkName(fullName.value), 500)
+
+import { useMediaQuery } from '@vueuse/core'
+const isDesktop = useMediaQuery('(min-width: 1023px)')
+
 </script>
 
 <template>
   <MfaVerificationDialog title="Full Name" :icon="UserRound" :desc="userData.name ? userData.name : 'Not Set'">
     <template #body>
         <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle">
-          <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+          <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
             <Label for="username" class="flex font-bold w-full justify-between">
               Full Name
               <span v-if="badWords" class="text-xs text-red-500">Contains Bad Words</span>
@@ -110,17 +114,34 @@ const debouncedCheckName = debounce(() => checkName(fullName.value), 500)
         </div>
     </template>
     <template #footer>
-      <DialogClose as-child>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <Button variant="link" as-child size="xs">
+          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
+        </Button>
+        <Button
+            type="submit"
+            class="w-full"
+            :disabled="!isOk"
+            @click="updateData"
+        >
+          Save
+        </Button>
+        <DialogClose as-child>
+          <Button type="button" variant="outline" class="w-full"> Cancel </Button>
+        </DialogClose>
+      </div>
+      <DialogClose as-child v-else>
         <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
       </DialogClose>
-      <Button variant="link" as-child size="xs">
+      <Button variant="link" as-child size="xs" v-if="isDesktop">
         <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
       </Button>
       <Button
           type="submit"
           class="h-[30px]"
           :disabled="!isOk"
-          :onclick="updateData"
+          @click="updateData"
+          v-if="isDesktop"
       >
         Save
       </Button>

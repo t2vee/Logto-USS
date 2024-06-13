@@ -24,7 +24,7 @@ module.exports = {
       screens: {
         "desktop": "1023px",
         "tablet": {'max': "1023px"},
-        "phone": {'max': "588px"}
+        "phone": {'max': "588px"},
       },
       colors: {
         border: "hsl(var(--border))",

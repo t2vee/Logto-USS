@@ -193,25 +193,186 @@ const cleanup = eventBus.on('closeEditDetailDialog', handleEvent)
 onUnmounted(cleanup)
 
 const [UseTriggerTemplate, TriggerTemplate] = createReusableTemplate()
+const [UseTitleTemplate, TitleTemplate] = createReusableTemplate()
+const [UseDescriptionTemplate, DescriptionTemplate] = createReusableTemplate()
+const [UseContentTemplate, ContentTemplate] = createReusableTemplate()
+
 const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
   <UseTriggerTemplate>
-    <slot>
-      <Card
-          class="h-32 w-full bg-gradient-to-tl from-[#6c888e] to-30% transition-all duration-400 hover:to-60% hover:border-[#abd9e2] hover:cursor-pointer shadow-md shadow-gray-900 hover:shadow-black"
-      >
-        <CardHeader>
-          <CardTitle class="flex justify-between text-lg">
-            {{ title }}
-            <component :is="icon" v-if="icon" :color="isDark ? '#bdeffa' : 'black'"/>
-          </CardTitle>
-          <CardDescription>{{ desc }}</CardDescription>
-        </CardHeader>
-      </Card>
-    </slot>
+    <Card
+        class="h-32 w-full bg-gradient-to-tl from-[#6c888e] to-30% transition-all duration-400 hover:to-60% hover:border-[#abd9e2] hover:cursor-pointer shadow-md shadow-gray-900 hover:shadow-black"
+    >
+      <CardHeader>
+        <CardTitle class="flex justify-between text-lg">
+          {{ title }}
+          <component :is="icon" v-if="icon" :color="isDark ? '#bdeffa' : 'black'"/>
+        </CardTitle>
+        <CardDescription>{{ desc }}</CardDescription>
+      </CardHeader>
+    </Card>
   </UseTriggerTemplate>
+  <UseTitleTemplate>
+
+  </UseTitleTemplate>
+  <UseContentTemplate>
+    <transition name="fade">
+      <DialogHeader class="mb-3 flex flex-col items-center justify-center align-middle tablet:mt-5">
+        <component
+            class="mr-1"
+            height="42"
+            width="42"
+            :is="isMfaRequired ? Shield : icon"
+        />
+        <DialogTitle class="flex items-center align-middle">{{
+            isMfaRequired
+                ? 'Verify Your Identity'
+                : !edit
+                    ? 'Edit Your ' + title
+                    : title
+          }}</DialogTitle>
+        <DialogDescription>
+          <div class="flex flex-col items-center align-middle text-xs">
+            {{
+              isMfaRequired
+                  ? "In order to verify your identity, we'll send you a code to your preferred method below."
+                  : ''
+            }}
+            <Popover>
+              <PopoverTrigger>
+                <Button v-if="isMfaRequired" variant="link" size="xs" class="text-xs">
+                  What is this?
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <p class="text-sm text-center">
+                  Currently you have
+                  <strong>
+                    Login Verification
+                  </strong>
+                  enabled on your account. This means that when logging in and changing details in your account, you will need to verify via a added MFA method. You can disable this feature
+                  <span>
+                      <RouterLink to="/account/security?module=loginVerification">
+                        here
+                      </RouterLink>
+                    </span>
+                </p>
+              </PopoverContent>
+            </Popover>
+          </div>
+        </DialogDescription>
+      </DialogHeader>
+    </transition>
+    <div class="w-full h-[500px] desktop:h-full phone:px-8 tablet:px-22">
+      <transition name="fade" mode="out-in">
+        <div key="mfa-settings" v-if="!isLoading && isMfaRequired && !codeSent" class="w-full h-full flex flex-col items-center justify-center align-middle">
+          <div class="">
+            <RadioGroup
+                default-value="email"
+                class="space-y-3"
+                @update:modelValue="updateSelectedMethod"
+            >
+              <div class="flex items-center space-x-2">
+                <RadioGroupItem id="r1" value="email" />
+                <Label for="r1">
+                  Email
+                  <strong>{{ userData.email }}
+                  </strong>
+                </Label>
+              </div>
+              <div v-if="userData.phone_number" class="flex items-center space-x-2">
+                <RadioGroupItem id="r2" value="sms" />
+                <Label for="r2">
+                  Text
+                  <strong>
+                    {{ userData.phone_number }}
+                  </strong>
+                </Label>
+              </div>
+              <div v-if="mfaOptions[0] !== 'none'">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger class="flex items-center space-x-2">
+                      <RadioGroupItem id="r3" value="authenticator" disabled /> <!-- Cant be implemented yet. see: https://openapi.logto.io/operation/operation-post-api-verification-codes and https://logto.productlane.com/roadmap?id=f1b1eda0-ddad-4538-bca4-15c834e7acd0 -->
+                      <Label for="r3" class="text-gray-600"
+                      >Authenticator App (Google/Microsoft Authenticator)</Label
+                      >
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Currently Not Available</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              <div v-if="mfaOptions[1]">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger class="flex items-center space-x-2">
+                      <RadioGroupItem id="r4" value="codes" disabled /> <!-- Cant be implemented yet. see: https://openapi.logto.io/operation/operation-post-api-verification-codes and https://logto.productlane.com/roadmap?id=f1b1eda0-ddad-4538-bca4-15c834e7acd0 -->
+                      <Label for="r3" class="text-gray-600">
+                        Backup Code
+                      </Label>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Currently Not Available</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            </RadioGroup>
+            <div class="space-x-2 w-full flex justify-center">
+              <p class="text-xs" v-if="resendCodeTimer > 0 && !readyToSend">
+                Please wait {{ resendCodeTimer }} seconds before sending another code
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose as-child>
+              <Button class="h-[30px]" type="button" variant="outline">
+                Cancel
+                <Undo2 class="pl-1" />
+              </Button>
+            </DialogClose>
+            <Button
+                :disabled="resendCodeTimer > 0 && !readyToSend"
+                class="h-[30px]"
+                @click="sendVerificationCode"
+            >
+              Next
+              <ArrowRight class="pl-1" />
+            </Button>
+          </DialogFooter>
+        </div>
+        <div v-else-if="!isLoading && isMfaRequired && codeSent">
+          <MfaCodeInput
+              :resend-code-timer="resendCodeTimer"
+              @codeComplete="handleCodeComplete"
+              @resendCode="handleCodeResend"
+              @changeInput="handleChangeInput"
+          />
+        </div>
+        <div v-else-if="!isLoading && !isMfaRequired" class="w-full h-full pt-5">
+          <div class="w-full h-full flex flex-col items-center justify-center align-middle">
+            <slot name="body">
+              Oh Snap!<br/>
+              There was a issue loading this component.<br/>
+              Reload the page to try again
+            </slot>
+            <DialogFooter>
+              <slot name="footer">
+
+              </slot>
+            </DialogFooter>
+          </div>
+        </div>
+        <div v-else-if="isLoading" class="flex items-center align-middle justify-center">
+          <Loader class="animate-spin" :size="32" />
+        </div>
+      </transition>
+    </div>
+  </UseContentTemplate>
 
   <Card
       v-if="disabled"
@@ -229,7 +390,9 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
   </Card>
   <Dialog v-if="!disabled && isDesktop" v-model:open="isOpen">
     <DialogTrigger as-child>
-      <TriggerTemplate />
+      <slot>
+        <TriggerTemplate />
+      </slot>
     </DialogTrigger>
     <DialogContent
         class="sm:max-w-[525px] sm:min-h-[400px] flex flex-col items-center align-middle"
@@ -238,160 +401,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         if (target?.closest('[data-sonner-toaster]')) return event.preventDefault()
       }"
     >
-      <transition name="fade">
-        <DialogHeader class="mb-3 flex flex-col items-center justify-center align-middle">
-          <component
-              class="mr-1"
-              height="42"
-              width="42"
-              :is="isMfaRequired ? Shield : icon"
-          />
-          <DialogTitle class="flex items-center align-middle">{{
-              isMfaRequired
-                  ? 'Verify Your Identity'
-                  : !edit
-                      ? 'Edit Your ' + title
-                      : title
-            }}</DialogTitle>
-          <DialogDescription>
-            <div class="flex flex-col items-center align-middle text-xs">
-              {{
-                isMfaRequired
-                    ? "In order to verify your identity, we'll send you a code to your preferred method below."
-                    : ''
-              }}
-              <Popover>
-                <PopoverTrigger>
-                  <Button v-if="isMfaRequired" variant="link" size="xs" class="text-xs">
-                    What is this?
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <p class="text-sm text-center">
-                    Currently you have
-                    <strong>
-                      Login Verification
-                    </strong>
-                    enabled on your account. This means that when logging in and changing details in your account, you will need to verify via a added MFA method. You can disable this feature
-                    <span>
-                      <RouterLink to="/account/security?module=loginVerification">
-                        here
-                      </RouterLink>
-                    </span>
-                  </p>
-                </PopoverContent>
-              </Popover>
-            </div>
-          </DialogDescription>
-        </DialogHeader>
-      </transition>
-      <div class="w-full h-full">
-        <transition name="fade" mode="out-in">
-          <div key="mfa-settings" v-if="!isLoading && isMfaRequired && !codeSent" class="w-full h-full flex flex-col items-center justify-center align-middle">
-            <div class="">
-              <RadioGroup
-                  default-value="email"
-                  class="space-y-3"
-                  @update:modelValue="updateSelectedMethod"
-              >
-                <div class="flex items-center space-x-2">
-                  <RadioGroupItem id="r1" value="email" />
-                  <Label for="r1">
-                    Email
-                    <strong>{{ userData.email }}
-                    </strong>
-                  </Label>
-                </div>
-                <div v-if="userData.phone_number" class="flex items-center space-x-2">
-                  <RadioGroupItem id="r2" value="sms" />
-                  <Label for="r2">
-                    Text
-                    <strong>
-                      {{ userData.phone_number }}
-                    </strong>
-                  </Label>
-                </div>
-                <div v-if="mfaOptions[0] !== 'none'">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger class="flex items-center space-x-2">
-                        <RadioGroupItem id="r3" value="authenticator" disabled /> <!-- Cant be implemented yet. see: https://openapi.logto.io/operation/operation-post-api-verification-codes and https://logto.productlane.com/roadmap?id=f1b1eda0-ddad-4538-bca4-15c834e7acd0 -->
-                        <Label for="r3" class="text-gray-600"
-                        >Authenticator App (Google/Microsoft Authenticator)</Label
-                        >
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Currently Not Available</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-                <div v-if="mfaOptions[1]">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger class="flex items-center space-x-2">
-                        <RadioGroupItem id="r4" value="codes" disabled /> <!-- Cant be implemented yet. see: https://openapi.logto.io/operation/operation-post-api-verification-codes and https://logto.productlane.com/roadmap?id=f1b1eda0-ddad-4538-bca4-15c834e7acd0 -->
-                        <Label for="r3" class="text-gray-600">
-                          Backup Code
-                        </Label>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Currently Not Available</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-              </RadioGroup>
-              <div class="space-x-2 w-full flex justify-center">
-                <p class="text-xs" v-if="resendCodeTimer > 0 && !readyToSend">
-                  Please wait {{ resendCodeTimer }} seconds before sending another code
-                </p>
-              </div>
-            </div>
-            <DialogFooter>
-              <DialogClose as-child>
-                <Button class="h-[30px]" type="button" variant="outline">
-                  Cancel
-                  <Undo2 class="pl-1" />
-                </Button>
-              </DialogClose>
-              <Button
-                  :disabled="resendCodeTimer > 0 && !readyToSend"
-                  class="h-[30px]"
-                  @click="sendVerificationCode"
-              >
-                Next
-                <ArrowRight class="pl-1" />
-              </Button>
-            </DialogFooter>
-          </div>
-          <div v-else-if="!isLoading && isMfaRequired && codeSent">
-            <MfaCodeInput
-                :resend-code-timer="resendCodeTimer"
-                @codeComplete="handleCodeComplete"
-                @resendCode="handleCodeResend"
-                @changeInput="handleChangeInput"
-            />
-          </div>
-          <div v-else-if="!isLoading && !isMfaRequired" class="w-full h-full pt-5">
-            <div class="w-full h-full flex flex-col items-center justify-center align-middle">
-              <slot name="body">
-                Oh Snap!<br/>
-                There was a issue loading this component.<br/>
-                Reload the page to try again
-              </slot>
-              <DialogFooter>
-                <slot name="footer">
-
-                </slot>
-              </DialogFooter>
-            </div>
-          </div>
-          <div v-else-if="isLoading" class="flex items-center align-middle justify-center">
-            <Loader class="animate-spin" :size="32" />
-          </div>
-        </transition>
-      </div>
+      <ContentTemplate />
     </DialogContent>
   </Dialog>
   <Drawer v-else-if="!disabled" v-model:open="isOpen">
@@ -399,19 +409,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
       <TriggerTemplate />
     </DrawerTrigger>
     <DrawerContent>
-      <DrawerHeader class="text-left">
-        <DrawerTitle>Edit profile</DrawerTitle>
-        <DrawerDescription>
-          Make changes to your profile here. Click save when you're done.
-        </DrawerDescription>
-      </DrawerHeader>
-      <DrawerFooter class="pt-2">
-        <DrawerClose as-child>
-          <Button variant="outline">
-            Cancel
-          </Button>
-        </DrawerClose>
-      </DrawerFooter>
+      <ContentTemplate />
     </DrawerContent>
   </Drawer>
 </template>

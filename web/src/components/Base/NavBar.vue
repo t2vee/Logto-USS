@@ -40,13 +40,10 @@ const isOpen = ref(false)
 
 <template>
   <div v-if="isDesktop" class="min-h-12 min-w-[852px]"></div>
-  <div class="w-screen desktop:w-[600px] phone:px-12 tablet:px-32 "></div>
   <div class="w-full h-12 flex align-middle items-center justify-between border-b-2 mobile:py-5 phone:px-12 tablet:px-32">
     <Sheet v-if="!isDesktop" v-model:open="isOpen">
       <SheetTrigger as-child>
-        <Button size="icon">
-          <Menu />
-        </Button>
+        <Menu />
       </SheetTrigger>
       <SheetContent side="left">
         <SideBar v-model="isOpen" />
@@ -68,9 +65,9 @@ const isOpen = ref(false)
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
-    <div class="flex align-middle space-x-1">
+    <div class="flex align-middle desktop:space-x-1">
       <Button
-          class="desktop:h-8 w-9 rounded-xl border"
+          class="desktop:h-8 w-9 rounded-xl border tablet:rounded-sm"
           variant="secondary"
           size="icon"
           @click="changeTheme"
@@ -78,7 +75,7 @@ const isOpen = ref(false)
         <Sun v-if="isDark" color="black" />
         <Moon v-else />
       </Button>
-      <Button @click="onClickSignOut" class="desktop:h-8 rounded-xl border">
+      <Button @click="onClickSignOut" class="desktop:h-8 rounded-xl border tablet:rounded-sm">
         <DoorOpen :stroke-wdth="2.25" color="black" class="pr-1.5"  />
         Log Out
       </Button>

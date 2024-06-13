@@ -62,13 +62,16 @@ async function updateData() {
 function allowSave() {
   dateSelected.value = !!value.value
 }
+
+import { useMediaQuery } from '@vueuse/core'
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
   <MfaVerificationDialog title="Birthday" :icon="CalendarFold" :desc="userData.profile?.birthdate ? userData.profile.birthdate : 'Not Set'">
     <template #body>
       <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle">
-        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+        <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
             <Label for="birthday" class="flex font-bold w-full justify-between">
               Birthday
             </Label>
@@ -125,13 +128,29 @@ function allowSave() {
         </div>
     </template>
     <template #footer>
-      <DialogClose as-child>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <Button variant="link" as-child size="xs">
+          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
+        </Button>
+        <Button
+            type="submit"
+            class="w-full"
+            :disabled="!dateSelected"
+            @click="updateData"
+        >
+          Save
+        </Button>
+        <DialogClose as-child>
+          <Button type="button" variant="outline" class="w-full"> Cancel </Button>
+        </DialogClose>
+      </div>
+      <DialogClose as-child v-else>
         <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
       </DialogClose>
-      <Button variant="link" as-child size="xs">
+      <Button variant="link" as-child size="xs" v-if="isDesktop">
         <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
       </Button>
-      <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!dateSelected">
+      <Button v-if="isDesktop" type="submit" class="h-[30px]" :onclick="updateData" :disabled="!dateSelected">
         Save
       </Button>
     </template>
