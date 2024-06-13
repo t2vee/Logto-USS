@@ -21,6 +21,11 @@ module.exports = {
       },
     },
     extend: {
+      screens: {
+        "desktop": "1023px",
+        "tablet": {'max': "1023px"},
+        "phone": {'max': "588px"}
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

@@ -12,7 +12,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb/index.js'
-import {DoorOpen, LogOut, Sun, Moon} from 'lucide-vue-next';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import {DoorOpen, LogOut, Sun, Moon, Menu} from 'lucide-vue-next';
 
 const { signOut } = useLogto()
 const route = useRoute()
@@ -20,20 +25,35 @@ const pathName = ref('')
 pathName.value = route.name
 const onClickSignOut = () => signOut(import.meta.env.VITE_ROOT)
 
-import { useDark } from "@vueuse/core";
+import { useDark, useMediaQuery } from "@vueuse/core";
+import SideBar from "@/components/Base/SideBar.vue";
 const isDark = useDark({
   selector: 'html',
 })
 function changeTheme() {
   isDark.value = !isDark.value;
 }
+const isDesktop = useMediaQuery('(min-width: 1023px)')
+
+const isOpen = ref(false)
 </script>
 
 <template>
-  <div class="min-h-12 min-w-[852px]"></div>
-  <div class="w-full h-12 flex align-middle items-center justify-between">
-    <CardTitle class="text-xl">Account Dashboard</CardTitle>
-    <Breadcrumb>
+  <div v-if="isDesktop" class="min-h-12 min-w-[852px]"></div>
+  <div class="w-screen desktop:w-[600px] phone:px-12 tablet:px-32 "></div>
+  <div class="w-full h-12 flex align-middle items-center justify-between border-b-2 mobile:py-5 phone:px-12 tablet:px-32">
+    <Sheet v-if="!isDesktop" v-model:open="isOpen">
+      <SheetTrigger as-child>
+        <Button size="icon">
+          <Menu />
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left">
+        <SideBar v-model="isOpen" />
+      </SheetContent>
+    </Sheet>
+    <CardTitle class="text-xl" v-if="isDesktop">My Account Dashboard</CardTitle>
+    <Breadcrumb v-if="isDesktop">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="/"> Home </BreadcrumbLink>
@@ -50,7 +70,7 @@ function changeTheme() {
     </Breadcrumb>
     <div class="flex align-middle space-x-1">
       <Button
-          class="h-8 w-9 rounded-xl border"
+          class="desktop:h-8 w-9 rounded-xl border"
           variant="secondary"
           size="icon"
           @click="changeTheme"
@@ -58,7 +78,7 @@ function changeTheme() {
         <Sun v-if="isDark" color="black" />
         <Moon v-else />
       </Button>
-      <Button @click="onClickSignOut" class="h-8 rounded-xl border">
+      <Button @click="onClickSignOut" class="desktop:h-8 rounded-xl border">
         <DoorOpen :stroke-wdth="2.25" color="black" class="pr-1.5"  />
         Log Out
       </Button>

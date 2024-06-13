@@ -193,7 +193,7 @@ const cleanup = eventBus.on('closeEditDetailDialog', handleEvent)
 onUnmounted(cleanup)
 
 const [UseTriggerTemplate, TriggerTemplate] = createReusableTemplate()
-const isDesktop = useMediaQuery('(min-width: 768px)')
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>

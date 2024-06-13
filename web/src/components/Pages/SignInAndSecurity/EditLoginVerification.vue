@@ -65,7 +65,7 @@ function onCheckboxChange() {
   <MfaVerificationDialog
       title="Login Verification"
       :icon="KeyRound"
-      desc="If enabled will require code verification on login and when changing any account details. It is currently: Enabled"
+      :desc="userData?.customData?.loginVerification === 'disabled' ? 'Disabled' : 'Enabled'"
   >
     <template #body>
       <div class="flex flex-col items-center align-middle justify-center space-y-8">

@@ -72,7 +72,7 @@ onMounted(countdown)
           <OctagonPause color="#f67a3c"/>
           <AlertTitle class="flex justify-between text-lg text-destructive">Suspend Your Account</AlertTitle>
         </div>
-        <AlertDescription class="text-destructive">Here you can suspend/disable your account and access to it. To renable your account you will have to contact support.</AlertDescription>
+        <AlertDescription class="text-destructive">Here you can suspend your account and access to it. To renable your account you will have to contact support.</AlertDescription>
       </Alert>
     </template>
     <template #body>

@@ -2,8 +2,10 @@
 import {inject, ref} from 'vue'
 
 import Button from '../ui/button/Button.vue'
-import {AlertTriangle, Cable, CircleUserRound, Code, Cookie, LifeBuoy, UserCog} from 'lucide-vue-next'
+import {AlertTriangle, Cable, CircleUserRound, Code, Cookie, LifeBuoy, Cog} from 'lucide-vue-next'
 import AvatarEditor from '@/components/Base/Avatar/AvatarEditor.vue'
+
+const sheetOpen = defineModel()
 
 const userData = inject('userData')
 
@@ -16,7 +18,7 @@ const sidebarNavItems = ref([
   },
   {
     title: 'Sign-In & Security',
-    icon: UserCog,
+    icon: Cog,
     href: '/account/security'
   },
   {
@@ -49,6 +51,9 @@ const sidebarNavItems = ref([
 const handleNav = (navigate, page, key) => {
   if (page !== key) {
     isLoading.value = page;
+  }
+  if (sheetOpen.value) {
+    sheetOpen.value = false
   }
   navigate();
 };

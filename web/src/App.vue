@@ -8,8 +8,8 @@ import AnalyticsOptNotify from '@/components/Global/AnalyticsOptNotify.vue'
 <template>
   <RouterView />
   <AnalyticsOptNotify />
-  <Toaster class="pointer-events-auto" />
-  <SonnerToaster position="bottom-center" richColors theme="dark"></SonnerToaster>
+  <Toaster />
+  <SonnerToaster class="pointer-events-auto" position="bottom-center" richColors theme="dark"></SonnerToaster>
 </template>
 
 <style scoped></style>

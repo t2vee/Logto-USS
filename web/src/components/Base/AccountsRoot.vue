@@ -78,14 +78,18 @@ provide('mfaMethods', mfaOptions)
 const cleanup = eventBus.on('refreshUserData', handleRefresh)
 eventBus.on('AccountLoading', handleLoading)
 onUnmounted(cleanup)
+
+import {useMediaQuery} from "@vueuse/core";
+
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
   <div class="flex flex-col items-center">
-    <div class="flex flex-col h-screen max-w-[1000px] items-center">
+    <div class="flex flex-col h-screen desktop:max-w-[1000px] items-center">
       <NavBar />
       <div v-if="!fetchFailure && !isLoading" class="flex justify-between gap-6">
-        <SideBar />
+        <SideBar v-if="isDesktop" />
         <div class="flex-1 flex-grow overflow-auto">
           <CardContent>
             <RouterView v-if="!isSubPageLoading" />
@@ -122,9 +126,9 @@ onUnmounted(cleanup)
         <Loader class="animate-spin" />
         Loading User Information...
       </div>
-      <div class="flex w-full items-center align-middle justify-between">
+      <div class="flex w-full items-center align-middle justify-between phone:px-12 tablet:px-32">
         <p class="text-xs text-gray-500 mt-8">
-          MXS Account Dashboard @ 2024 - Web Version {{ webBuild }}
+          MXS Account Dashboard @ 2024 {{ isDesktop ? '-' : '' }}<br v-if="!isDesktop" /> Web Version {{ webBuild }}
         </p>
         <a class="text-xs text-gray-500 mt-8" :href="support">Contact Support</a>
       </div>

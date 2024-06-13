@@ -6,27 +6,29 @@ import EditRegionalSettings from '@/components/Pages/PersonalInfo/EditRegionalSe
 import EditLocaleSettings from '@/components/Pages/PersonalInfo/EditLocaleSettings.vue'
 import EditFullName from '@/components/Pages/PersonalInfo/EditFullName.vue'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
-import {DoorClosed} from "lucide-vue-next";
-
+import {DoorClosed, CircleUserRound} from "lucide-vue-next";
 </script>
 
 <template>
-  <div class="w-[600px]">
-    <CardTitle class="my-4">Personal Information</CardTitle>
+  <div class="w-screen desktop:w-[600px] phone:px-12 tablet:px-32 ">
+    <CardTitle class="my-4 flex">
+      <CircleUserRound class="mr-1" />
+      Personal Information
+    </CardTitle>
     <CardDescription>
       Manage your personal information, including phone numbers and email addresses where you can
       be reached.
     </CardDescription>
-    <div class="flex gap-4 mt-12">
+    <div class="desktop:flex space-y-4 desktop:space-y-0 desktop:gap-4 mt-12">
       <!--<EditPublicProfile/>-->
       <MfaVerificationDialog disabled title="Public Profile" :icon="DoorClosed" desc="Open for more details" />
       <EditUsername />
     </div>
-    <div class="flex gap-4 mt-4">
+    <div class="desktop:flex space-y-4 desktop:space-y-0 desktop:gap-4 mt-4">
       <EditFullName />
       <EditBirthdayDialog />
     </div>
-    <div class="flex gap-4 mt-4">
+    <div class="desktop:flex space-y-4 desktop:space-y-0 desktop:gap-4 mt-4">
       <EditRegionalSettings />
       <EditLocaleSettings />
     </div>
