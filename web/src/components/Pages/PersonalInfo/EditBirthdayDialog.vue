@@ -63,11 +63,28 @@ function allowSave() {
   dateSelected.value = !!value.value
 }
 
-import { useMediaQuery } from '@vueuse/core'
+import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
+import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
 const isDesktop = useMediaQuery('(min-width: 1023px)')
+const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
 </script>
 
 <template>
+  <UseFooterTemplate>
+    <PrivacyFooter v-if="!isDesktop" />
+    <DialogClose as-child>
+      <Button type="button" variant="outline" class="desktop:h-[30px] tablet:w-full">
+        <Undo2 class="w-4 h-4 mr-2" />
+        Cancel
+      </Button>
+    </DialogClose>
+    <PrivacyFooter v-if="isDesktop" />
+    <Button type="submit" class="desktop:h-[30px] tablet:w-full" :onclick="updateData" :disabled="!dateSelected">
+      <Save class="w-4 h-4 mr-2" />
+      Save
+    </Button>
+  </UseFooterTemplate>
+
   <MfaVerificationDialog title="Birthday" :icon="CalendarFold" :desc="userData.profile?.birthdate ? userData.profile.birthdate : 'Not Set'">
     <template #body>
       <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle">
@@ -127,40 +144,11 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           </div>
         </div>
     </template>
-    <template #footer>
-      <div v-if="!isDesktop" class="w-full space-y-2">
-        <Button variant="link" as-child size="xs">
-          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
-        </Button>
-        <DialogClose as-child>
-          <Button type="button" variant="outline" class="w-full">
-            <Undo2 class="w-4 h-4 mr-2" />
-            Cancel
-          </Button>
-        </DialogClose>
-        <Button
-            type="submit"
-            class="w-full"
-            :disabled="!dateSelected"
-            @click="updateData"
-        >
-          <Save class="w-4 h-4 mr-2" />
-          Save
-        </Button>
-      </div>
-      <DialogClose as-child v-else>
-        <Button type="button" variant="outline" class="h-[30px]">
-          <Undo2 class="w-4 h-4 mr-2" />
-          Cancel
-        </Button>
-      </DialogClose>
-      <Button variant="link" as-child size="xs" v-if="isDesktop">
-        <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
-      </Button>
-      <Button v-if="isDesktop" type="submit" class="h-[30px]" :onclick="updateData" :disabled="!dateSelected">
-        <Save class="w-4 h-4 mr-2" />
-        Save
-      </Button>
+    <template #footer v-if="isDesktop">
+      <FooterTemplate />
+    </template>
+    <template #drawerFooter v-else>
+      <FooterTemplate />
     </template>
   </MfaVerificationDialog>
 </template>

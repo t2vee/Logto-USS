@@ -158,9 +158,8 @@ onMounted(() => { //this needs to be done because the css file that comes with v
   isLoading.value = false
 });
 
-const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
-
 import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
+const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
 import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
 const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>

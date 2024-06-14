@@ -2,7 +2,7 @@
 import { Input } from '@/components/ui/input/index.js'
 import { Label } from '@/components/ui/label/index.js'
 import axios from 'redaxios'
-import {inject, ref, onMounted, watch} from 'vue'
+import {inject, ref, watch} from 'vue'
 import { useLogto } from '@logto/vue'
 import debounce from 'lodash/debounce'
 import {Ban, UserRoundCheck, MoreHorizontal, CircleUserRound, Save, Undo2} from 'lucide-vue-next'
@@ -126,15 +126,35 @@ watch(isDialogOpen, () => {
   }
 })
 
-import { useMediaQuery } from '@vueuse/core'
+import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
+import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
 const isDesktop = useMediaQuery('(min-width: 1023px)')
-
+const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
 </script>
 
 <template>
+  <UseFooterTemplate>
+    <PrivacyFooter v-if="!isDesktop" />
+    <DialogClose as-child>
+      <Button type="button" variant="outline" class="desktop:h-[30px] tablet:w-full">
+        <Undo2 class="w-4 h-4 mr-2" />
+        Cancel
+      </Button>
+    </DialogClose>
+    <PrivacyFooter v-if="isDesktop" />
+    <Button
+        type="submit"
+        class="desktop:h-[30px] tablet:w-full"
+        :disabled="waitForNextChange || !isAvailable"
+        @click="updateData"
+    >
+      <Save class="w-4 h-4 mr-2" />
+      Save
+    </Button>
+  </UseFooterTemplate>
+
   <MfaVerificationDialog title="Username" :icon="CircleUserRound" :desc="userData.username ?? userData.name ?? 'Not Set'" v-model="isDialogOpen">
     <template #body>
-
       <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle mt-3 phone:px-0 tablet:px-10">
         <ConnectorAlert
             v-if="waitForNextChange"
@@ -176,46 +196,11 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         </p>
       </div>
     </template>
-    <template #footer>
-      <div v-if="!isDesktop" class="w-full space-y-2">
-        <Button variant="link" as-child size="xs">
-          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
-        </Button>
-        <DialogClose as-child>
-          <Button type="button" variant="outline" class="w-full">
-            <Undo2 class="w-4 h-4 mr-2" />
-            Cancel
-          </Button>
-        </DialogClose>
-        <Button
-            type="submit"
-            class="w-full"
-            :disabled="waitForNextChange || !isAvailable"
-            @click="updateData"
-        >
-          <Save class="w-4 h-4 mr-2" />
-          Save
-        </Button>
-      </div>
-      <DialogClose as-child v-else>
-        <Button type="button" variant="outline" class="h-[30px]">
-          <Undo2 class="w-4 h-4 mr-2" />
-          Cancel
-        </Button>
-      </DialogClose>
-      <Button variant="link" as-child size="xs" v-if="isDesktop">
-        <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
-      </Button>
-      <Button
-          type="submit"
-          class="h-[30px]"
-          :disabled="waitForNextChange || !isAvailable"
-          @click="updateData"
-          v-if="isDesktop"
-      >
-        <Save class="w-4 h-4 mr-2" />
-        Save
-      </Button>
+    <template #footer v-if="isDesktop">
+      <FooterTemplate />
+    </template>
+    <template #drawerFooter v-else>
+      <FooterTemplate />
     </template>
   </MfaVerificationDialog>
 </template>
