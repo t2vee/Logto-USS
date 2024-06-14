@@ -261,10 +261,10 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         </DialogDescription>
       </DialogHeader>
     </transition>
-    <div class="w-full h-[500px] desktop:h-full phone:px-8 tablet:px-22">
+    <div class="w-full desktop:h-full phone:px-8 tablet:px-22" :class="{ 'h-[200px]': isLoading }">
       <transition name="fade" mode="out-in">
         <div key="mfa-settings" v-if="!isLoading && isMfaRequired && !codeSent" class="w-full h-full flex flex-col items-center justify-center align-middle">
-          <div class="">
+          <div>
             <RadioGroup
                 default-value="email"
                 class="space-y-3"
@@ -374,11 +374,12 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
               There was a issue loading this component.<br/>
               Reload the page to try again
             </slot>
-            <DialogFooter>
-              <slot name="footer">
-
-              </slot>
+            <DialogFooter v-if="isDesktop">
+              <slot name="footer" />
             </DialogFooter>
+            <DrawerFooter v-else class="w-full px-0">
+              <slot name="drawerFooter" />
+            </DrawerFooter>
           </div>
         </div>
         <div v-else-if="isLoading" class="flex items-center align-middle justify-center">
@@ -425,7 +426,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         <TriggerTemplate />
       </slot>
     </DrawerTrigger>
-    <DrawerContent>
+    <DrawerContent class="w-full">
       <ContentTemplate />
     </DrawerContent>
   </Drawer>

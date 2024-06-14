@@ -23,6 +23,7 @@ import {toast} from 'vue-sonner'
 import {eventBus} from '@/lib/eventBus.js'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
+import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
 
 const userData = inject('userData')
 
@@ -137,16 +138,17 @@ const handleCodeComplete = async (code) => {
 }
 
 const [UseAlertDialogTemplate, AlertDialogTemplate] = createReusableTemplate()
+const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
 const isDesktop = useMediaQuery('(min-width: 1023px)')
 
 </script>
 
 <template>
-  <UseAlertDialogTemplate v-slot="{ buttonClass }">
+  <UseAlertDialogTemplate>
     <AlertDialog>
       <AlertDialogTrigger as-child>
         <Button
-            :class="buttonClass"
+            class="desktop:h-[30px] tablet:w-full"
             :disabled="
                     !isEmailValid || (resendCodeTimer > 0 && !readyToSend)
                   "
@@ -206,6 +208,18 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
     </AlertDialog>
   </UseAlertDialogTemplate>
 
+  <UseFooterTemplate>
+    <PrivacyFooter v-if="!isDesktop" />
+    <DialogClose as-child>
+      <Button type="button" variant="outline" class="desktop:h-[30px] tablet:w-full">
+        <Undo2 class="w-4 h-4 mr-2" />
+        Cancel
+      </Button>
+    </DialogClose>
+    <PrivacyFooter v-if="isDesktop" />
+    <AlertDialogTemplate />
+  </UseFooterTemplate>
+
   <MfaVerificationDialog title="Email Address" :icon="userData.email_verified ? MailCheck : MailX" :desc="userData.email.length > 30 ? userData.email.substring(0, 30) + '...' : userData.email">
     <template #body>
       <transition name="fade" mode="out-in">
@@ -254,26 +268,11 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         </div>
       </transition>
     </template>
-    <template #footer v-if="!isLoading && !emailSent">
-      <div v-if="!isDesktop" class="w-full space-y-2">
-        <Button variant="link" as-child class="text-sm">
-          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
-        </Button>
-        <DialogClose as-child>
-          <Button type="button" variant="outline" class="w-full">
-            <Undo2 class="w-4 h-4 mr-2" />
-            Cancel
-          </Button>
-        </DialogClose>
-        <AlertDialogTemplate button-class="w-full" />
-      </div>
-      <DialogClose as-child v-else>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
-      </DialogClose>
-      <Button variant="link" as-child v-if="isDesktop">
-        <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
-      </Button>
-      <AlertDialogTemplate v-if="isDesktop" button-class="h-[30px]" />
+    <template #footer v-if="!isLoading && !emailSent && isDesktop">
+      <FooterTemplate />
+    </template>
+    <template #drawerFooter v-else-if="!isLoading && !emailSent">
+      <FooterTemplate />
     </template>
   </MfaVerificationDialog>
 </template>
