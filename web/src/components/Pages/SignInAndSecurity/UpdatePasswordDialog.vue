@@ -5,7 +5,7 @@ import {Input} from '@/components/ui/input/index.js'
 import {Label} from '@/components/ui/label/index.js'
 import {inject, ref} from 'vue'
 import {useLogto} from '@logto/vue'
-import {AlertCircle, Ban, Check, ChevronsRight, CircleEllipsis, Loader2} from 'lucide-vue-next'
+import {AlertCircle, Ban, Check, ChevronsRight, CircleEllipsis, Loader2, Save, Undo2} from 'lucide-vue-next'
 import {Button} from '@/components/ui/button/index.js'
 import {DialogClose} from '@/components/ui/dialog/index.js'
 import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover/index.js'
@@ -240,7 +240,10 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
       <div v-if="!isDesktop" class="w-full space-y-2">
         <PopoverTemplate />
         <DialogClose as-child>
-          <Button type="button" variant="outline" class="w-full"> Cancel </Button>
+          <Button type="button" variant="outline" class="w-full">
+            <Undo2 class="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
         </DialogClose>
         <Button
             type="submit"
@@ -249,11 +252,15 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
             :disabled="isLoading || !passwordCheckPass || !passwordMatches || !oldPassword"
         >
           <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
+          <Save v-else class="w-4 h-4 mr-2" />
           {{ isLoading ? 'Saving...' : 'Save' }}
         </Button>
       </div>
       <DialogClose as-child v-else>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+        <Button type="button" variant="outline" class="h-[30px]">
+          <Undo2 class="w-4 h-4 mr-2" />
+          Cancel
+        </Button>
       </DialogClose>
       <PopoverTemplate v-if="isDesktop" />
       <Button
@@ -264,6 +271,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           :disabled="isLoading || !passwordCheckPass || !passwordMatches || !oldPassword"
       >
         <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
+        <Save v-else class="w-4 h-4 mr-2" />
         {{ isLoading ? 'Saving...' : 'Save' }}
       </Button>
     </template>

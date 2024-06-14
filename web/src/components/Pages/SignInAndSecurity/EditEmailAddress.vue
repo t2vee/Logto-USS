@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/alert-dialog/index.js'
 import {Input} from '@/components/ui/input/index.js'
 import {Label} from '@/components/ui/label/index.js'
-import {ArrowBigRightDash, Loader, MailCheck, MailX} from 'lucide-vue-next'
+import {ArrowBigRightDash, Loader, MailCheck, MailX, ShieldEllipsis, Undo2} from 'lucide-vue-next'
 import {Button} from '@/components/ui/button/index.js'
 import {DialogClose} from '@/components/ui/dialog/index.js'
 import MfaCodeInput from '@/components/Global/MFAHelpers/MfaCodeInput.vue'
@@ -151,6 +151,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
                     !isEmailValid || (resendCodeTimer > 0 && !readyToSend)
                   "
         >
+          <ShieldEllipsis class="w-4 h-4 mr-2" />
           Verify
         </Button>
       </AlertDialogTrigger>
@@ -259,7 +260,10 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
         </Button>
         <DialogClose as-child>
-          <Button type="button" variant="outline" class="w-full"> Cancel </Button>
+          <Button type="button" variant="outline" class="w-full">
+            <Undo2 class="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
         </DialogClose>
         <AlertDialogTemplate button-class="w-full" />
       </div>

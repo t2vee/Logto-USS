@@ -16,7 +16,7 @@ import {toast} from 'vue-sonner'
 import {eventBus} from '@/lib/eventBus.js'
 import {useLogto} from '@logto/vue'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
-import {BookType} from "lucide-vue-next";
+import {BookType, Save, Undo2} from "lucide-vue-next";
 
 const { getAccessToken } = useLogto()
 const selectedLocale = ref('')
@@ -94,25 +94,33 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         <Button variant="link" as-child size="xs">
           <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
         </Button>
+        <DialogClose as-child >
+          <Button type="button" variant="outline" class="w-full">
+            <Undo2 class="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
+        </DialogClose>
         <Button
             type="submit"
             class="w-full"
             :disabled="!selectedLocale"
             @click="updateData"
         >
+          <Save class="w-4 h-4 mr-2" />
           Save
         </Button>
-        <DialogClose as-child >
-          <Button type="button" variant="outline" class="w-full"> Cancel </Button>
-        </DialogClose>
       </div>
       <DialogClose as-child v-else>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+        <Button type="button" variant="outline" class="h-[30px]">
+          <Undo2 class="w-4 h-4 mr-2" />
+          Cancel
+        </Button>
       </DialogClose>
       <Button variant="link" as-child size="xs" v-if="isDesktop">
         <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
       </Button>
       <Button v-if="isDesktop" type="submit" class="h-[30px]" :onclick="updateData" :disabled="!selectedLocale">
+        <Save class="w-4 h-4 mr-2" />
         Save
       </Button>
     </template>

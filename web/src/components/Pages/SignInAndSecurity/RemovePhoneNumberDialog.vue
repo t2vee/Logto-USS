@@ -2,7 +2,7 @@
 import {inject, ref} from 'vue'
 import {useLogto} from '@logto/vue'
 import {DialogClose} from '@/components/ui/dialog/index.js'
-import {Loader2, Phone} from 'lucide-vue-next'
+import {Loader2, Phone, Save, Undo2} from 'lucide-vue-next'
 import {Button} from '@/components/ui/button/index.js'
 import axios from 'redaxios'
 import {toast} from 'vue-sonner'
@@ -65,7 +65,10 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
     <template #footer>
       <div v-if="!isDesktop" class="w-full space-y-2">
         <DialogClose as-child>
-          <Button type="button" variant="outline" class="w-full"> Cancel </Button>
+          <Button type="button" variant="outline" class="w-full">
+            <Undo2 class="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
         </DialogClose>
         <Button
             @click="removeNumber"
@@ -74,11 +77,15 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
             :disabled="isLoading"
         >
           <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
+          <Save v-else class="w-4 h-4 mr-2" />
           Remove
         </Button>
       </div>
       <DialogClose as-child v-else>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+        <Button type="button" variant="outline" class="h-[30px]">
+          <Undo2 class="w-4 h-4 mr-2" />
+          Cancel
+        </Button>
       </DialogClose>
       <Button
           v-if="isDesktop"
@@ -88,6 +95,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           :disabled="isLoading"
       >
         <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
+        <Save v-else class="w-4 h-4 mr-2" />
         Remove
       </Button>
     </template>

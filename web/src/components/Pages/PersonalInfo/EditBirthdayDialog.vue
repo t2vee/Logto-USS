@@ -8,7 +8,7 @@ import {toast} from 'vue-sonner'
 import {eventBus} from '@/lib/eventBus.js'
 import {useLogto} from '@logto/vue'
 import {DateFormatter, getLocalTimeZone} from '@internationalized/date'
-import {Calendar as CalendarIcon, CalendarFold} from 'lucide-vue-next'
+import {Calendar as CalendarIcon, CalendarFold, Save, Undo2} from 'lucide-vue-next'
 import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover/index.js'
 import {cn} from '@/lib/utils.js'
 import CalendarWithSelects from '@/components/Pages/PersonalInfo/Utils/CalendarWithSelects.vue'
@@ -132,25 +132,33 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         <Button variant="link" as-child size="xs">
           <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
         </Button>
+        <DialogClose as-child>
+          <Button type="button" variant="outline" class="w-full">
+            <Undo2 class="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
+        </DialogClose>
         <Button
             type="submit"
             class="w-full"
             :disabled="!dateSelected"
             @click="updateData"
         >
+          <Save class="w-4 h-4 mr-2" />
           Save
         </Button>
-        <DialogClose as-child>
-          <Button type="button" variant="outline" class="w-full"> Cancel </Button>
-        </DialogClose>
       </div>
       <DialogClose as-child v-else>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+        <Button type="button" variant="outline" class="h-[30px]">
+          <Undo2 class="w-4 h-4 mr-2" />
+          Cancel
+        </Button>
       </DialogClose>
       <Button variant="link" as-child size="xs" v-if="isDesktop">
         <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
       </Button>
       <Button v-if="isDesktop" type="submit" class="h-[30px]" :onclick="updateData" :disabled="!dateSelected">
+        <Save class="w-4 h-4 mr-2" />
         Save
       </Button>
     </template>

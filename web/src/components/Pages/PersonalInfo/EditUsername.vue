@@ -5,7 +5,7 @@ import axios from 'redaxios'
 import {inject, ref, onMounted, watch} from 'vue'
 import { useLogto } from '@logto/vue'
 import debounce from 'lodash/debounce'
-import {Ban, UserRoundCheck, MoreHorizontal, CircleUserRound} from 'lucide-vue-next'
+import {Ban, UserRoundCheck, MoreHorizontal, CircleUserRound, Save, Undo2} from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
 import { DialogClose } from '@/components/ui/dialog/index.js'
 import { toast } from 'vue-sonner'
@@ -181,20 +181,27 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         <Button variant="link" as-child size="xs">
           <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
         </Button>
+        <DialogClose as-child>
+          <Button type="button" variant="outline" class="w-full">
+            <Undo2 class="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
+        </DialogClose>
         <Button
             type="submit"
             class="w-full"
             :disabled="waitForNextChange || !isAvailable"
             @click="updateData"
         >
+          <Save class="w-4 h-4 mr-2" />
           Save
         </Button>
-        <DialogClose as-child>
-          <Button type="button" variant="outline" class="w-full"> Cancel </Button>
-        </DialogClose>
       </div>
       <DialogClose as-child v-else>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+        <Button type="button" variant="outline" class="h-[30px]">
+          <Undo2 class="w-4 h-4 mr-2" />
+          Cancel
+        </Button>
       </DialogClose>
       <Button variant="link" as-child size="xs" v-if="isDesktop">
         <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
@@ -206,6 +213,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           @click="updateData"
           v-if="isDesktop"
       >
+        <Save class="w-4 h-4 mr-2" />
         Save
       </Button>
     </template>
