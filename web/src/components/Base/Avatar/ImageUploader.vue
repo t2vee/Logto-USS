@@ -149,7 +149,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         </div>
       </CardContent>
       <CardFooter>
-        <p class="text-xs font-bold">Maximum 1000KB (1MB) Upload Size</p>
+        <p class="text-xs font-bold">Maximum 8000KB (8MB) Upload Size</p>
       </CardFooter>
     </Card>
   <DrawerFooter v-if="!isDesktop" class="w-full px-0">
