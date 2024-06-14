@@ -5,7 +5,7 @@ import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificatio
 </script>
 
 <template>
-  <div class="w-screen desktop:w-[600px] phone:px-12 tablet:px-32 ">
+  <div class="w-screen desktop:w-[600px] phone:px-4 tablet:px-32 ">
     <CardTitle class="my-4 flex">
       <LifeBuoy class="mr-1" />
       Download Your Data

@@ -40,7 +40,7 @@ const isSheetOpen = ref(false)
 
 <template>
   <div v-if="isDesktop" class="min-h-12 min-w-[852px]"></div>
-  <div class="w-full h-12 flex align-middle items-center justify-between border-b-2 mobile:py-5 phone:px-12 tablet:px-32">
+  <div class="w-full h-12 flex align-middle items-center justify-between border-b-2 mobile:py-5 phone:px-8 tablet:px-32">
     <Sheet v-if="!isDesktop" v-model:open="isSheetOpen">
       <SheetTrigger as-child>
         <Menu />

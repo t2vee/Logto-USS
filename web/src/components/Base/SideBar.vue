@@ -70,7 +70,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
       :avatar-url="userData.avatar"
       :user-name="userData.username ? userData.username : userData.name"
     />
-    <strong>{{ userData.name ? userData.name : userData.username }}</strong>
+    <strong class="text-center">{{ userData.name ? userData.name : userData.username }}</strong>
     <p class="text-sm text-gray-500">
       {{
         userData.email.length > 20

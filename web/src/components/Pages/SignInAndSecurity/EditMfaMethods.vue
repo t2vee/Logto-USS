@@ -10,7 +10,7 @@ import AddPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/AddPhoneN
 import EditPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/RemovePhoneNumberDialog.vue'
 import EditEmailAddress from '@/components/Pages/SignInAndSecurity/EditEmailAddress.vue'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
-import {useMediaQuery} from "@vueuse/core";
+import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
 
 const userData = inject('userData')
 const mfaOptions = inject('mfaMethods')
@@ -45,9 +45,23 @@ async function parseMfaOptions() {
 
 onMounted(parseMfaOptions)
 const isDesktop = useMediaQuery('(min-width: 1023px)')
+const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
 </script>
 
 <template>
+  <UseFooterTemplate>
+    <div></div>
+    <Transition name="fade" mode="out-in" duration="100">
+      <div v-if="!removeFooter && (emailActive || phoneActive || appActive)" class="tablet:w-full">
+        <Button variant="secondary" class="desktop:h-[30px] tablet:w-full" @click="resetDefault">
+          <Undo2 :stroke-wdth="1.5" color="black" class="pr-1" />
+          Go Back
+        </Button>
+      </div>
+      <div v-else-if="!emailActive || !phoneActive || !appActive"></div>
+    </Transition>
+  </UseFooterTemplate>
+
   <MfaVerificationDialog title="Account Security" :icon="Fingerprint" :desc="`${mfaOptionsNum.length} MFA Method${mfaOptionsNum.length === 1 ? '' : 's'} Set Up`">
     <template #body>
       <Transition name="fade" mode="out-in" duration="100">
@@ -59,16 +73,16 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           <EditEmailAddress />
         </div>
         <div v-else-if="phoneActive" class="space-y-3 flex flex-col items-center mb-10">
-          <p class="text-sm w-2/3 text-center">
+          <p class="text-sm desktop:w-2/3 tablet:w-full text-center">
             When a phone number is added to your account it is used <strong>only</strong> for MFA. To
             {{ userData.phone_number ? 'disable' : 'enable' }} MFA via SMS,
             {{ userData.phone_number ? 'remove' : 'add' }} your number below:
           </p>
-          <div class="w-2/3">
+          <div class="desktop:w-2/3 tablet:w-full">
             <component :is="userData.phone_number ? EditPhoneNumberDialog : AddPhoneNumberDialog" />
           </div>
         </div>
-        <div v-else-if="appActive" class="mb-10">
+        <div v-else-if="appActive" class="desktop:mb-10">
           <EditAppAuthenticator v-model="removeFooter" :mfa-methods="mfaOptions" />
         </div>
         <div v-else class="flex flex-col items-center max-w-[350px] mt-[-30px] gap-y-3">
@@ -158,17 +172,11 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         </div>
       </Transition>
     </template>
-    <template #footer>
-      <div></div>
-      <Transition name="fade" mode="out-in" duration="100">
-        <div v-if="!removeFooter && (emailActive || phoneActive || appActive)" class="tablet:w-full">
-          <Button variant="secondary" class="desktop:h-[30px] tablet:w-full" @click="resetDefault">
-            <Undo2 :stroke-wdth="1.5" color="black" class="pr-1" />
-            Go Back
-          </Button>
-        </div>
-        <div v-else-if="!emailActive || !phoneActive || !appActive"></div>
-      </Transition>
+    <template #footer v-if="isDesktop">
+      <FooterTemplate />
+    </template>
+    <template #drawerFooter v-else>
+      <FooterTemplate />
     </template>
   </MfaVerificationDialog>
 </template>

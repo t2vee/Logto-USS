@@ -12,7 +12,7 @@ import axios from 'redaxios'
 import {toast} from 'vue-sonner'
 import {RouterView} from "vue-router";
 
-const { fetchUserInfo, getAccessToken, isAuthenticated } = useLogto()
+const { fetchUserInfo, getAccessToken } = useLogto()
 const userInfo = ref(null)
 const isLoading = ref(true)
 const isSubPageLoading = ref(false)
@@ -23,7 +23,6 @@ const support = `mailto:${import.meta.env.VITE_SUPPORT_EMAIL}`
 const webBuild = `prod/${import.meta.env.VITE_COMMIT_HASH.length > 7 ? import.meta.env.VITE_COMMIT_HASH.substring(0, 7) : import.meta.env.VITE_COMMIT_HASH}`
 
 async function loadData() {
-  if (!isAuthenticated) { window.location.replace("/oauth/login") }
   fetchFailure.value = false
   isLoading.value = true
   try {
@@ -45,8 +44,6 @@ async function loadData() {
       description: 'Service Unavailable. Try again later'
     })
     fetchFailure.value = true
-  } finally {
-    isLoading.value = false
   }
   try {
     const response = await axios.get(
@@ -57,11 +54,17 @@ async function loadData() {
     if (response.data[1]?.type === 'BackupCode') {mfaOptions.value.backup = response.data[1]}
   } catch (error) {
     toast.error('Error grabbing MFA Information:', { description: 'Some account actions will be unavailable' })
+    fetchFailure.value = true
+  } finally {
+    isLoading.value = false
   }
 }
 
 const handleRefresh = (data) => {
   if (data) {
+    if (!isDesktop.value) {
+      window.location.reload();
+    }
     loadData()
   }
 }
@@ -86,7 +89,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
 
 <template>
   <div class="flex flex-col items-center">
-    <div class="flex flex-col h-screen desktop:max-w-[1000px] items-center">
+    <div class="flex flex-col h-screen desktop:max-w-[1000px] tablet:w-screen items-center">
       <NavBar />
       <div v-if="!fetchFailure && !isLoading" class="flex justify-between gap-6">
         <SideBar v-if="isDesktop" />
@@ -94,7 +97,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           <CardContent>
             <RouterView v-if="!isSubPageLoading" />
             <div v-if="isSubPageLoading"
-                 class="w-screen desktop:w-[600px] phone:px-12 tablet:px-32">
+                 class="w-screen desktop:w-[600px] phone:px-4 tablet:px-32">
               <div class="space-y-2">
                 <Skeleton class="h-8 desktop:w-[300px]" />
                 <Skeleton class="h-4 desktop:w-[525px]" />
@@ -113,8 +116,8 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         </div>
       </div>
       <div
-        v-else-if="fetchFailure && !isLoading"
-        class="flex flex-col items-center justify-center gap-y-3"
+          v-else-if="fetchFailure && !isLoading"
+          class="flex flex-col items-center justify-center gap-y-3"
       >
         <AlertOctagon :size="72" color="darkred" />
         <p class="text-red-700 text-xl">Failed to grab User information</p>
@@ -127,11 +130,11 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         <Loader class="animate-spin" />
         Loading User Information...
       </div>
-      <div class="flex w-full items-center align-middle justify-between phone:px-12 tablet:px-32">
-        <p class="text-xs text-gray-500 mt-8">
+      <div class="flex desktop:w-full phone:flex-col items-center align-middle justify-between phone:px-4 tablet:px-32">
+        <p class="text-xs text-gray-500 mt-8 tablet:text-center">
           MXS Account Dashboard @ 2024 {{ isDesktop ? '-' : '' }}<br v-if="!isDesktop" /> Web Version {{ webBuild }}
         </p>
-        <a class="text-xs text-gray-500 mt-8" :href="support">Contact Support</a>
+        <a class="text-xs text-gray-500 mt-8 dark:text-primary" :href="support">Contact Support</a>
       </div>
     </div>
   </div>

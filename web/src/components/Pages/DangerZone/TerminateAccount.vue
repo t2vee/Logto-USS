@@ -105,8 +105,8 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel class="h-[30px]">Cancel</AlertDialogCancel>
-          <AlertDialogAction class="h-[30px] bg-red-600 hover:bg-red-800" @click="terminateAccount">Terminate</AlertDialogAction>
+          <AlertDialogCancel class="desktop:h-[30px]">Cancel</AlertDialogCancel>
+          <AlertDialogAction class="desktop:h-[30px] bg-red-600 hover:bg-red-800" @click="terminateAccount">Terminate</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -140,11 +140,11 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         </div>
       </div>
     </template>
-    <template #footer>
-      <div v-if="!isDesktop" class="w-full space-y-2">
-        <FooterTemplate />
-      </div>
-      <FooterTemplate v-else />
+    <template #footer v-if="isDesktop">
+      <FooterTemplate />
+    </template>
+    <template #drawerFooter v-else>
+      <FooterTemplate />
     </template>
   </MfaVerificationDialog>
 </template>

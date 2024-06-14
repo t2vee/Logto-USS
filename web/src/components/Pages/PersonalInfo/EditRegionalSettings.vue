@@ -58,19 +58,41 @@ async function updateData() {
       })
     if (response.status === 204) {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
-      eventBus.emit('closeEditDetailDialog', false)
-      if (isDesktop) {eventBus.emit('refreshUserData', true)}
+      eventBus.emit('refreshUserData', true)
     }
   } catch (error) {
     toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
   }
 }
 
-import { useMediaQuery } from '@vueuse/core'
+import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
+import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
+
+const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
 const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
+  <UseFooterTemplate>
+    <PrivacyFooter v-if="!isDesktop" />
+    <DialogClose as-child>
+      <Button type="button" variant="outline" class="desktop:h-[30px] tablet:w-full">
+        <Undo2 class="w-4 h-4 mr-2" />
+        Cancel
+      </Button>
+    </DialogClose>
+    <PrivacyFooter v-if="isDesktop" />
+    <Button
+        type="submit"
+        class="desktop:h-[30px] tablet:w-full"
+        @click="updateData"
+        :disabled="!selectedTimezone || !selectedCountry"
+    >
+      <Save class="w-4 h-4 mr-2" />
+      Save
+    </Button>
+  </UseFooterTemplate>
+
   <MfaVerificationDialog title="Country/Region" :icon="Earth" :desc="userData.profile?.address?.country ?? userData.profile?.address?.country ?? 'Not Set'" >
     <template #body>
       <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle">
@@ -156,46 +178,11 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         </div>
       </div>
     </template>
-    <template #footer>
-      <div v-if="!isDesktop" class="w-full space-y-2">
-        <Button variant="link" as-child size="xs">
-          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
-        </Button>
-        <DialogClose as-child>
-          <Button type="button" variant="outline" class="w-full">
-            <Undo2 class="w-4 h-4 mr-2" />
-            Cancel
-          </Button>
-        </DialogClose>
-        <Button
-            type="submit"
-            class="w-full"
-            :disabled="!selectedTimezone || !selectedCountry"
-            @click="updateData"
-        >
-          <Save class="w-4 h-4 mr-2" />
-          Save
-        </Button>
-      </div>
-      <DialogClose as-child v-else>
-        <Button type="button" variant="outline" class="h-[30px]">
-          <Undo2 class="w-4 h-4 mr-2" />
-          Cancel
-        </Button>
-      </DialogClose>
-      <Button variant="link" as-child size="xs" v-if="isDesktop">
-        <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
-      </Button>
-        <Button
-            v-if="isDesktop"
-            type="submit"
-            class="h-[30px]"
-            @click="updateData"
-            :disabled="!selectedTimezone || !selectedCountry"
-        >
-          <Save class="w-4 h-4 mr-2" />
-          Save
-        </Button>
+    <template #footer v-if="isDesktop">
+      <FooterTemplate />
+    </template>
+    <template #drawerFooter v-else>
+      <FooterTemplate />
     </template>
   </MfaVerificationDialog>
 </template>

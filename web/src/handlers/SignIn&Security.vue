@@ -16,7 +16,7 @@ provide('mfaMethods', mfaOptions)
 </script>
 
 <template>
-  <div class="w-screen desktop:w-[600px] phone:px-12 tablet:px-32 ">
+  <div class="w-screen desktop:w-[600px] phone:px-4 tablet:px-32 ">
     <CardTitle class="flex my-4">
       <Cog class="mr-1" />
       Sign-In and Security

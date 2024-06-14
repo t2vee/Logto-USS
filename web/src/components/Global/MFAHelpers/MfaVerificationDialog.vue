@@ -1,10 +1,10 @@
 <script setup>
-import {inject, onMounted, onUnmounted, provide, ref, watch} from 'vue'
-import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
-import { Label } from '@/components/ui/label/index.js'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group/index.js'
-import { useLogto } from '@logto/vue'
-import { Loader, Shield, Undo2, ArrowRight } from 'lucide-vue-next'
+import {inject, onUnmounted, ref, watch} from 'vue'
+import {createReusableTemplate, useDark, useMediaQuery} from '@vueuse/core'
+import {Label} from '@/components/ui/label/index.js'
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group/index.js'
+import {useLogto} from '@logto/vue'
+import {ArrowRight, Loader, Shield, Undo2} from 'lucide-vue-next'
 import axios from 'redaxios'
 import {
   Dialog,
@@ -16,28 +16,14 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog/index.js'
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip/index.js'
-import { Button } from '@/components/ui/button/index.js'
+import {Drawer, DrawerContent, DrawerFooter, DrawerTrigger,} from '@/components/ui/drawer'
+import {Popover, PopoverContent, PopoverTrigger,} from '@/components/ui/popover'
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from '@/components/ui/tooltip/index.js'
+import {Button} from '@/components/ui/button/index.js'
 import MfaCodeInput from '@/components/Global/MFAHelpers/MfaCodeInput.vue'
-import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js'
+import {toast} from 'vue-sonner'
+import {eventBus} from '@/lib/eventBus.js'
 import {Card, CardDescription, CardHeader, CardTitle} from "@/components/ui/card/index.js";
-import {useDark} from "@vueuse/core";
 
 const userData = inject('userData')
 const mfaOptions = inject('mfaMethods')
@@ -261,10 +247,10 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         </DialogDescription>
       </DialogHeader>
     </transition>
-    <div class="w-full h-[500px] desktop:h-full phone:px-8 tablet:px-22">
+    <div class="w-full desktop:h-full phone:px-8 tablet:px-22" :class="{ 'h-[200px]': isLoading }">
       <transition name="fade" mode="out-in">
         <div key="mfa-settings" v-if="!isLoading && isMfaRequired && !codeSent" class="w-full h-full flex flex-col items-center justify-center align-middle">
-          <div class="">
+          <div>
             <RadioGroup
                 default-value="email"
                 class="space-y-3"
@@ -374,11 +360,12 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
               There was a issue loading this component.<br/>
               Reload the page to try again
             </slot>
-            <DialogFooter>
-              <slot name="footer">
-
-              </slot>
+            <DialogFooter v-if="isDesktop">
+              <slot name="footer" />
             </DialogFooter>
+            <DrawerFooter v-else class="w-full px-0">
+              <slot name="drawerFooter" />
+            </DrawerFooter>
           </div>
         </div>
         <div v-else-if="isLoading" class="flex items-center align-middle justify-center">
@@ -425,7 +412,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         <TriggerTemplate />
       </slot>
     </DrawerTrigger>
-    <DrawerContent>
+    <DrawerContent class="w-full">
       <ContentTemplate />
     </DrawerContent>
   </Drawer>
