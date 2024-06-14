@@ -8,12 +8,13 @@ import {toast} from 'vue-sonner'
 import {DialogClose, DialogFooter} from '@/components/ui/dialog/index.js'
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from '@/components/ui/card/index.js'
 import {Button} from '@/components/ui/button/index.js'
-import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
+import {createReusableTemplate, useMediaQuery, useDropZone} from "@vueuse/core";
 import {DrawerFooter} from "@/components/ui/drawer/index.js";
 
 const { getAccessToken } = useLogto()
 const fileInput = ref(null)
 const preview = ref(null)
+const dropZone = ref()
 let selectedFile = ref(null)
 
 const isLoading = defineModel(false)
@@ -37,7 +38,7 @@ const uploadFile = async () => {
   formData.append('file', selectedFile.value)
   formData.set(
     'file',
-    fileInput.value.files[0],
+      selectedFile.value,
     `image.${selectedFile.value.name.split('.').pop()}`
   )
   try {
@@ -82,6 +83,19 @@ defineExpose({
   prepareFile
 })
 
+function onImageDrop(files) {
+  fileInput.value.droppedFiles = files[0]
+  if (files.length > 0) {
+    selectedFile.value = files[0]
+    preview.value = URL.createObjectURL(files[0])
+  }
+}
+
+const { isOverDropZone } = useDropZone(dropZone, {
+  onDrop: onImageDrop,
+  dataTypes: ['image/jpeg', 'image/png']
+})
+
 const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
 const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
@@ -112,11 +126,10 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
       </CardHeader>
       <CardContent class="space-y-2">
         <div
+          ref="dropZone"
           @click="openFileDialog"
-          @dragover.prevent="dragOver"
-          @drop.prevent="handleDrop"
-          @dragleave.prevent="dragLeave"
           class="flex flex-col justify-center items-center w-full h-64 tablet:h-36 rounded-lg border-2 border-dashed border-gray-400 cursor-pointer hover:border-gray-600 space-y-4 relative"
+          :class="{ 'border-gray-600': isOverDropZone }"
         >
           <div
             v-if="preview"

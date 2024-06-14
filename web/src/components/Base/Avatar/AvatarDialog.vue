@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from 'vue'
-import {DialogContent, DialogDescription, DialogHeader, DialogTitle} from '@/components/ui/dialog/index.js'
+import {DialogDescription, DialogHeader, DialogTitle} from '@/components/ui/dialog/index.js'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs/index.js'
 import {
   Popover,
