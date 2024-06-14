@@ -12,7 +12,7 @@ const allowUploadMimeTypes = [
 	"image/png",
 ];
 function validateFile(file) {
-	return allowUploadMimeTypes.includes(file.type) && file.size <= 8388608;
+	return allowUploadMimeTypes.includes(file.type) && file.size <= 1073741824;
 }
 
 export const handler = async (request, env, ctx) => {
