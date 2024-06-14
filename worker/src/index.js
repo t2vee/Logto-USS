@@ -10,7 +10,6 @@ import initialiseRequest from './middleware/initialiseRequest'
 import checkVerificationCodeMiddleware from "./middleware/checkVerificationCodeMiddleware";
 // HANDLERS
 import { HandlerRouter } from './handlers'
-import HandleSpotifyUserInfoEndpoint from './handlers/handleSpotifyUserInfoEndpoint'
 
 
 const { preflight, corsify } = cors({
@@ -24,7 +23,6 @@ const router = AutoRouter({
 	finally: [corsify],
 });
 
-router.get('/api/v1/oauth-user-info/endpoint/api-spotify-com/v1/me', HandleSpotifyUserInfoEndpoint)
 router
 	.all('*', checkTokenMiddleware)
 	.all('*', attachAccessToken)
