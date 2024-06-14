@@ -8,7 +8,7 @@ import {toast} from 'vue-sonner'
 import {eventBus} from '@/lib/eventBus.js'
 import {useLogto} from '@logto/vue'
 import {DateFormatter, getLocalTimeZone} from '@internationalized/date'
-import {Calendar as CalendarIcon, CalendarFold} from 'lucide-vue-next'
+import {Calendar as CalendarIcon, CalendarFold, Save, Undo2} from 'lucide-vue-next'
 import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover/index.js'
 import {cn} from '@/lib/utils.js'
 import CalendarWithSelects from '@/components/Pages/PersonalInfo/Utils/CalendarWithSelects.vue'
@@ -43,7 +43,7 @@ async function updateData() {
     if (response.status === 204) {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
       eventBus.emit('closeEditDetailDialog', false)
-      eventBus.emit('refreshUserData', true)
+      if (isDesktop) {eventBus.emit('refreshUserData', true)}
     }
   } catch (error) {
     switch (error.response.status) {
@@ -62,13 +62,16 @@ async function updateData() {
 function allowSave() {
   dateSelected.value = !!value.value
 }
+
+import { useMediaQuery } from '@vueuse/core'
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
   <MfaVerificationDialog title="Birthday" :icon="CalendarFold" :desc="userData.profile?.birthdate ? userData.profile.birthdate : 'Not Set'">
     <template #body>
       <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle">
-        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+        <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
             <Label for="birthday" class="flex font-bold w-full justify-between">
               Birthday
             </Label>
@@ -125,13 +128,37 @@ function allowSave() {
         </div>
     </template>
     <template #footer>
-      <DialogClose as-child>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <Button variant="link" as-child size="xs">
+          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
+        </Button>
+        <DialogClose as-child>
+          <Button type="button" variant="outline" class="w-full">
+            <Undo2 class="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
+        </DialogClose>
+        <Button
+            type="submit"
+            class="w-full"
+            :disabled="!dateSelected"
+            @click="updateData"
+        >
+          <Save class="w-4 h-4 mr-2" />
+          Save
+        </Button>
+      </div>
+      <DialogClose as-child v-else>
+        <Button type="button" variant="outline" class="h-[30px]">
+          <Undo2 class="w-4 h-4 mr-2" />
+          Cancel
+        </Button>
       </DialogClose>
-      <Button variant="link" as-child size="xs">
+      <Button variant="link" as-child size="xs" v-if="isDesktop">
         <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
       </Button>
-      <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!dateSelected">
+      <Button v-if="isDesktop" type="submit" class="h-[30px]" :onclick="updateData" :disabled="!dateSelected">
+        <Save class="w-4 h-4 mr-2" />
         Save
       </Button>
     </template>

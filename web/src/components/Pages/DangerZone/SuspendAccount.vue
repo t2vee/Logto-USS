@@ -2,13 +2,14 @@
 import {ref, inject, onMounted} from 'vue'
 import { useLogto } from '@logto/vue'
 import { DialogClose } from '@/components/ui/dialog/index.js'
-import {Loader2, OctagonPause} from 'lucide-vue-next'
+import {Loader2, OctagonPause, Save, Undo2} from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
 import axios from 'redaxios'
 import { toast } from 'vue-sonner'
 import {CardDescription, CardTitle} from "@/components/ui/card/index.js";
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert/index.js";
+import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
 
 const { getAccessToken, signOut } = useLogto()
 const userData = inject('userData')
@@ -62,17 +63,38 @@ const countdown = () => {
 }
 
 onMounted(countdown)
+const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
+  <UseFooterTemplate>
+    <DialogClose as-child>
+      <Button type="button" variant="outline" class="desktop:h-[30px] tablet:w-full">
+        <Undo2 class="w-4 h-4 mr-2" />
+        Cancel
+      </Button>
+    </DialogClose>
+    <Button
+        @click="deactivateAccount"
+        variant="destructive"
+        class="desktop:h-[30px] tablet:w-full"
+        :disabled="s > 0 || isLoading"
+    >
+      <Loader2 v-if="s > 0 || isLoading" class="w-4 h-4 mr-2 animate-spin" />
+      <OctagonPause v-else class="w-4 h-4 mr-2" />
+      {{ s > 0 ? s : 'Suspend' }}
+    </Button>
+  </UseFooterTemplate>
+
   <MfaVerificationDialog title="Suspend Your Account" edit :icon="OctagonPause">
     <template #default>
-      <Alert :class="`h-32 w-full bg-gradient-to-tl from-[#c2480c] to-30% transition-all duration-200 hover:to-60% hover:border-destructive hover:cursor-pointer`">
+      <Alert :class="`desktop:h-32 tablet:h-42 w-full bg-gradient-to-tl from-[#c2480c] to-30% transition-all duration-200 hover:to-60% hover:border-destructive hover:cursor-pointer`">
         <div class="flex items-center align-middle space-x-3">
           <OctagonPause color="#f67a3c"/>
           <AlertTitle class="flex justify-between text-lg text-destructive">Suspend Your Account</AlertTitle>
         </div>
-        <AlertDescription class="text-destructive">Here you can suspend/disable your account and access to it. To renable your account you will have to contact support.</AlertDescription>
+        <AlertDescription class="text-destructive">Here you can suspend your account and access to it. To renable your account you will have to contact support.</AlertDescription>
       </Alert>
     </template>
     <template #body>
@@ -101,18 +123,10 @@ onMounted(countdown)
       </div>
     </template>
     <template #footer>
-      <DialogClose as-child>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
-      </DialogClose>
-      <Button
-          @click="deactivateAccount"
-          variant="destructive"
-          class="h-[30px]"
-          :disabled="s > 0 || isLoading"
-      >
-        <Loader2 v-if="s > 0 || isLoading" class="w-4 h-4 mr-2 animate-spin" />
-        {{ s > 0 ? s : 'Deactivate' }}
-      </Button>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <FooterTemplate />
+      </div>
+      <FooterTemplate v-else />
     </template>
   </MfaVerificationDialog>
 </template>

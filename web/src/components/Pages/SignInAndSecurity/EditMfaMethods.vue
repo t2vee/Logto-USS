@@ -1,6 +1,6 @@
 <script setup>
 import {Label} from '@/components/ui/label/index.js'
-import {Check, DoorOpen, Fingerprint, Mails, Phone, TabletSmartphone} from 'lucide-vue-next'
+import {Check, Undo2, Fingerprint, Mails, Phone, TabletSmartphone} from 'lucide-vue-next'
 import {inject, onMounted, ref} from 'vue'
 import {Button} from '@/components/ui/button/index.js'
 
@@ -10,6 +10,7 @@ import AddPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/AddPhoneN
 import EditPhoneNumberDialog from '@/components/Pages/SignInAndSecurity/RemovePhoneNumberDialog.vue'
 import EditEmailAddress from '@/components/Pages/SignInAndSecurity/EditEmailAddress.vue'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
+import {useMediaQuery} from "@vueuse/core";
 
 const userData = inject('userData')
 const mfaOptions = inject('mfaMethods')
@@ -43,6 +44,7 @@ async function parseMfaOptions() {
 }
 
 onMounted(parseMfaOptions)
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
@@ -94,7 +96,7 @@ onMounted(parseMfaOptions)
                       :size="16"
                       :color="emailMouseOver? 'rgba(161 85% 86%)': userData.email_verified? 'rgb(34 197 94)': ''"
                   />
-                  Email Address
+                  Email {{ isDesktop ? 'Address': '' }}
                 </div>
               </Label>
             </div>
@@ -159,9 +161,9 @@ onMounted(parseMfaOptions)
     <template #footer>
       <div></div>
       <Transition name="fade" mode="out-in" duration="100">
-        <div v-if="!removeFooter && (emailActive || phoneActive || appActive)">
-          <Button variant="secondary" class="h-[30px]" @click="resetDefault">
-            <DoorOpen :stroke-wdth="1.5" color="black" class="pr-1" />
+        <div v-if="!removeFooter && (emailActive || phoneActive || appActive)" class="tablet:w-full">
+          <Button variant="secondary" class="desktop:h-[30px] tablet:w-full" @click="resetDefault">
+            <Undo2 :stroke-wdth="1.5" color="black" class="pr-1" />
             Go Back
           </Button>
         </div>

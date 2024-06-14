@@ -88,6 +88,10 @@ const beginAuthorizationFlow = () => {
 };
 
 onUnmounted(cleanup)
+
+import {useMediaQuery} from "@vueuse/core";
+
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
@@ -111,8 +115,8 @@ onUnmounted(cleanup)
           <ChevronDown :class="{ 'rotate-180': isOpen }" />
         </div>
       </CollapsibleTrigger>
-      <CollapsibleContent class="flex" v-if="!linked">
-        <div class="w-1/2 p-2">
+      <CollapsibleContent class="desktop:flex" v-if="!linked">
+        <div class="w-full desktop:w-1/2 p-2">
           <p class="text-gray-400 text-sm">
             Click "Link" to visit {{ service }} and link your {{ service }} to your current account. Please
             note that as part of linking these accounts, {{ service }} will share some of your data
@@ -135,15 +139,15 @@ onUnmounted(cleanup)
           </Button>
         </div>
       </CollapsibleContent>
-      <CollapsibleContent v-else class="flex">
-        <div class="w-1/2 p-2">
+      <CollapsibleContent v-else class="desktop:flex">
+        <div class="w-full desktop:w-1/2 p-2">
           <p class="text-gray-400 text-sm">
             Click to immediately remove the connector from your account.
           </p>
         </div>
         <div class="w-1/2 flex flex-col items-center align-middle justify-center gap-y-2">
           <Button variant="destructive" @click="removeConnector">
-            Remove Connector
+            Remove {{ isDesktop ? 'Connector' : '' }}
           </Button>
         </div>
       </CollapsibleContent>

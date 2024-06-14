@@ -2,12 +2,14 @@
 import {ref} from 'vue'
 import axios from 'redaxios'
 import {useLogto} from '@logto/vue'
-import {ImageUp, Loader2, Trash2} from 'lucide-vue-next'
+import {ImageUp, Loader2, Save, Trash2, Undo2} from 'lucide-vue-next'
 import {eventBus} from '@/lib/eventBus.js'
 import {toast} from 'vue-sonner'
 import {DialogClose, DialogFooter} from '@/components/ui/dialog/index.js'
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from '@/components/ui/card/index.js'
 import {Button} from '@/components/ui/button/index.js'
+import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
+import {DrawerFooter} from "@/components/ui/drawer/index.js";
 
 const { getAccessToken } = useLogto()
 const fileInput = ref(null)
@@ -80,9 +82,26 @@ const clearPreview = () => {
 defineExpose({
   prepareFile
 })
+
+const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
+  <UseFooterTemplate>
+    <DialogClose as-child>
+      <Button type="button" variant="outline" class="desktop:h-[30px]">
+        <Undo2 class="w-4 h-4 mr-2" />
+        Cancel
+      </Button>
+    </DialogClose>
+    <Button @click="uploadFile" class="desktop:h-[30px]" :disabled="!selectedFile || isLoading">
+      <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
+      <Save v-else class="w-4 h-4 mr-2" />
+      {{ isLoading ? 'Processing...' : 'Save' }}
+    </Button>
+  </UseFooterTemplate>
+
     <Card>
       <CardHeader>
         <CardTitle>Upload Custom Avatar Image</CardTitle>
@@ -94,7 +113,7 @@ defineExpose({
           @dragover.prevent="dragOver"
           @drop.prevent="handleDrop"
           @dragleave.prevent="dragLeave"
-          class="flex flex-col justify-center items-center w-full h-64 rounded-lg border-2 border-dashed border-gray-400 cursor-pointer hover:border-gray-600 space-y-4 relative"
+          class="flex flex-col justify-center items-center w-full h-64 tablet:h-32 rounded-lg border-2 border-dashed border-gray-400 cursor-pointer hover:border-gray-600 space-y-4 relative"
         >
           <div
             v-if="preview"
@@ -130,13 +149,10 @@ defineExpose({
         <p class="text-xs font-bold">Maximum 1000KB (1MB) Upload Size</p>
       </CardFooter>
     </Card>
-  <DialogFooter class="right-0">
-    <DialogClose as-child>
-      <Button type="button" variant="outline" class="h-[30px]"> Close </Button>
-    </DialogClose>
-    <Button @click="uploadFile" class="h-[30px]" :disabled="!selectedFile || isLoading">
-      <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
-      {{ isLoading ? 'Processing...' : 'Save' }}
-    </Button>
+  <DrawerFooter v-if="!isDesktop" class="w-full">
+    <FooterTemplate />
+  </DrawerFooter>
+  <DialogFooter v-else class="right-0">
+    <FooterTemplate />
   </DialogFooter>
 </template>

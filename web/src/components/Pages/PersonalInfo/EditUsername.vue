@@ -5,7 +5,7 @@ import axios from 'redaxios'
 import {inject, ref, onMounted, watch} from 'vue'
 import { useLogto } from '@logto/vue'
 import debounce from 'lodash/debounce'
-import {Ban, UserRoundCheck, MoreHorizontal, CircleUserRound} from 'lucide-vue-next'
+import {Ban, UserRoundCheck, MoreHorizontal, CircleUserRound, Save, Undo2} from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
 import { DialogClose } from '@/components/ui/dialog/index.js'
 import { toast } from 'vue-sonner'
@@ -85,7 +85,7 @@ async function updateData() {
     if (response.status === 204) {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
       eventBus.emit('closeEditDetailDialog', false)
-      eventBus.emit('refreshUserData', true)
+      if (isDesktop) {eventBus.emit('refreshUserData', true)}
     }
   } catch (error) {
     switch (error.response.status) {
@@ -125,18 +125,23 @@ watch(isDialogOpen, () => {
     checkNextUsernameChange()
   }
 })
+
+import { useMediaQuery } from '@vueuse/core'
+const isDesktop = useMediaQuery('(min-width: 1023px)')
+
 </script>
 
 <template>
   <MfaVerificationDialog title="Username" :icon="CircleUserRound" :desc="userData.username ?? userData.name ?? 'Not Set'" v-model="isDialogOpen">
     <template #body>
-      <ConnectorAlert
-          v-if="waitForNextChange"
-          :custom-title="`Cant Change Username Until ${waitForNextChange.value}`"
-          :custom-message="`You can only change your username once per month. Your next username change will be available on the ${waitForNextChange.value}`"
-      />
-      <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle mt-3">
-        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+
+      <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle mt-3 phone:px-0 tablet:px-10">
+        <ConnectorAlert
+            v-if="waitForNextChange"
+            :custom-title="`Cant Change Username Until ${waitForNextChange.value}`"
+            :custom-message="`You can only change your username once per month. Your next username change will be available on the ${waitForNextChange.value}`"
+        />
+        <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
           <Label for="username" class="flex font-bold w-full justify-between">
             Username
             <span v-if="badWords" class="text-xs text-red-500">Contains Bad Words</span>
@@ -172,10 +177,33 @@ watch(isDialogOpen, () => {
       </div>
     </template>
     <template #footer>
-      <DialogClose as-child>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <Button variant="link" as-child size="xs">
+          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
+        </Button>
+        <DialogClose as-child>
+          <Button type="button" variant="outline" class="w-full">
+            <Undo2 class="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
+        </DialogClose>
+        <Button
+            type="submit"
+            class="w-full"
+            :disabled="waitForNextChange || !isAvailable"
+            @click="updateData"
+        >
+          <Save class="w-4 h-4 mr-2" />
+          Save
+        </Button>
+      </div>
+      <DialogClose as-child v-else>
+        <Button type="button" variant="outline" class="h-[30px]">
+          <Undo2 class="w-4 h-4 mr-2" />
+          Cancel
+        </Button>
       </DialogClose>
-      <Button variant="link" as-child size="xs">
+      <Button variant="link" as-child size="xs" v-if="isDesktop">
         <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
       </Button>
       <Button
@@ -183,7 +211,9 @@ watch(isDialogOpen, () => {
           class="h-[30px]"
           :disabled="waitForNextChange || !isAvailable"
           @click="updateData"
+          v-if="isDesktop"
       >
+        <Save class="w-4 h-4 mr-2" />
         Save
       </Button>
     </template>

@@ -16,7 +16,7 @@ import {toast} from 'vue-sonner'
 import {eventBus} from '@/lib/eventBus.js'
 import {useLogto} from '@logto/vue'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
-import {BookType} from "lucide-vue-next";
+import {BookType, Save, Undo2} from "lucide-vue-next";
 
 const { getAccessToken } = useLogto()
 const selectedLocale = ref('')
@@ -40,7 +40,7 @@ async function updateData() {
     if (response.status === 204) {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
       eventBus.emit('closeEditDetailDialog', false)
-      eventBus.emit('refreshUserData', true)
+      if (isDesktop) {eventBus.emit('refreshUserData', true)}
     }
   } catch (error) {
     toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
@@ -58,16 +58,20 @@ function expandLocale(shortLocale) {
     return shortLocale
   }
 }
+
+import { useMediaQuery } from '@vueuse/core'
+const isDesktop = useMediaQuery('(min-width: 1023px)')
+
 </script>
 
 <template>
   <MfaVerificationDialog title="Language" :icon="BookType" :desc="userData.profile.locale ? expandLocale(userData.profile.locale) : 'Not Set'" >
     <template #body>
       <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle">
-        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+        <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
           <Label class="font-bold"> Language </Label>
           <Select v-model="selectedLocale">
-            <SelectTrigger class="w-[280px]">
+            <SelectTrigger class="w-full">
               <SelectValue
                   :placeholder="
                 userData.locale
@@ -86,13 +90,37 @@ function expandLocale(shortLocale) {
       </div>
     </template>
     <template #footer>
-      <DialogClose as-child>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <Button variant="link" as-child size="xs">
+          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
+        </Button>
+        <DialogClose as-child >
+          <Button type="button" variant="outline" class="w-full">
+            <Undo2 class="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
+        </DialogClose>
+        <Button
+            type="submit"
+            class="w-full"
+            :disabled="!selectedLocale"
+            @click="updateData"
+        >
+          <Save class="w-4 h-4 mr-2" />
+          Save
+        </Button>
+      </div>
+      <DialogClose as-child v-else>
+        <Button type="button" variant="outline" class="h-[30px]">
+          <Undo2 class="w-4 h-4 mr-2" />
+          Cancel
+        </Button>
       </DialogClose>
-      <Button variant="link" as-child size="xs">
+      <Button variant="link" as-child size="xs" v-if="isDesktop">
         <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
       </Button>
-      <Button type="submit" class="h-[30px]" :onclick="updateData" :disabled="!selectedLocale">
+      <Button v-if="isDesktop" type="submit" class="h-[30px]" :onclick="updateData" :disabled="!selectedLocale">
+        <Save class="w-4 h-4 mr-2" />
         Save
       </Button>
     </template>

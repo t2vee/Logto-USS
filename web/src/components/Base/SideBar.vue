@@ -2,8 +2,10 @@
 import {inject, ref} from 'vue'
 
 import Button from '../ui/button/Button.vue'
-import {AlertTriangle, Cable, CircleUserRound, Code, Cookie, LifeBuoy, UserCog} from 'lucide-vue-next'
+import {AlertTriangle, Cable, CircleUserRound, Code, Cookie, LifeBuoy, Cog} from 'lucide-vue-next'
 import AvatarEditor from '@/components/Base/Avatar/AvatarEditor.vue'
+
+const sheetOpen = defineModel()
 
 const userData = inject('userData')
 
@@ -16,7 +18,7 @@ const sidebarNavItems = ref([
   },
   {
     title: 'Sign-In & Security',
-    icon: UserCog,
+    icon: Cog,
     href: '/account/security'
   },
   {
@@ -50,16 +52,20 @@ const handleNav = (navigate, page, key) => {
   if (page !== key) {
     isLoading.value = page;
   }
+  if (sheetOpen.value) {
+    sheetOpen.value = false
+  }
   navigate();
 };
-import { useDark } from "@vueuse/core";
+import { useDark, useMediaQuery } from "@vueuse/core";
 const isDark = useDark({
   selector: 'html',
 })
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
-  <div class="flex flex-col h-full items-center w-[175px]">
+  <div class="flex flex-col h-full items-center desktop:w-[175px]">
     <AvatarEditor
       :avatar-url="userData.avatar"
       :user-name="userData.username ? userData.username : userData.name"
@@ -73,7 +79,7 @@ const isDark = useDark({
       }}
     </p>
     <p class="text-xs text-gray-700 mb-8">{{ userData.sub }}</p>
-    <nav class="flex flex-col space-x-0 space-y-1">
+    <nav class="flex flex-col space-x-0 desktop:space-y-1 tablet:space-y-4">
       <router-link
         v-for="item in sidebarNavItems"
         :key="item.title"
@@ -84,12 +90,13 @@ const isDark = useDark({
         <Button
           as="button"
           variant="link"
+          :size="isDesktop ? 'default' : 'lg'"
           :class="
             $route.path === item.href
               ? 'text-black dark:text-cyan-200 bg-muted font-bold'
               : 'text-black dark:text-white hover:bg-muted'
           "
-          class="w-[185px] text-left justify-start"
+          class="desktop:w-[185px] tablet:text-xl text-left justify-start"
           @click="handleNav(navigate, item.href, $route.path)"
         >
           <component :is="item.icon" v-if="item.icon" class="pr-1.5" :color="$route.path === item.href ? ( isDark ? 'rgb(165 243 252)' : 'black' ) : ( isDark ? '' : 'black' )" />

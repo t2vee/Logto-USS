@@ -1,8 +1,8 @@
 <script setup>
 import {ref, onMounted} from 'vue'
 import { useLogto } from '@logto/vue'
-import { DialogClose, DialogFooter } from '@/components/ui/dialog/index.js'
-import { Loader2, AlertTriangle } from 'lucide-vue-next'
+import { DialogClose } from '@/components/ui/dialog/index.js'
+import {Loader2, AlertTriangle, Undo2, OctagonPause} from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
 import axios from 'redaxios'
 import { toast } from 'vue-sonner'
@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/alert-dialog/index.js'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert/index.js";
+import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
 
 const { getAccessToken, signOut } = useLogto()
 
@@ -71,9 +72,46 @@ const countdown = () => {
 }
 
 onMounted(countdown)
+
+const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
+  <UseFooterTemplate>
+    <DialogClose as-child>
+      <Button type="button" variant="outline" class="desktop:h-[30px] tablet:w-full">
+        <Undo2 class="w-4 h-4 mr-2" />
+        Cancel
+      </Button>
+    </DialogClose>
+    <AlertDialog>
+      <AlertDialogTrigger as-child>
+        <Button
+            class="desktop:h-[30px] tablet:w-full bg-red-600 hover:bg-red-800"
+            :disabled="s > 0 || isLoading"
+        >
+          <Loader2 v-if="s > 0 || isLoading" class="w-4 h-4 mr-2 animate-spin" />
+          <AlertTriangle v-else class="w-4 h-4 mr-2" />
+          {{ s > 0 ? s : 'Confirm' }}
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This is your last chance. This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel class="h-[30px]">Cancel</AlertDialogCancel>
+          <AlertDialogAction class="h-[30px] bg-red-600 hover:bg-red-800" @click="terminateAccount">Terminate</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  </UseFooterTemplate>
+
   <MfaVerificationDialog title="Terminate Your Account" edit :icon="AlertTriangle">
     <template #default>
       <Alert :class="`h-32 w-full bg-gradient-to-tl from-[#7a1414] to-30% transition-all duration-200 hover:to-60% hover:border-[#dc2626] hover:cursor-pointer`">
@@ -103,33 +141,10 @@ onMounted(countdown)
       </div>
     </template>
     <template #footer>
-      <DialogClose as-child>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
-      </DialogClose>
-      <AlertDialog>
-        <AlertDialogTrigger as-child>
-          <Button
-              class="h-[30px] bg-red-600 hover:bg-red-800"
-              :disabled="s > 0 || isLoading"
-          >
-            <Loader2 v-if="s > 0 || isLoading" class="w-4 h-4 mr-2 animate-spin" />
-            {{ s > 0 ? s : 'Confirm' }}
-          </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This is your last chance. This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel class="h-[30px]">Cancel</AlertDialogCancel>
-            <AlertDialogAction class="h-[30px] bg-red-600 hover:bg-red-800" @click="terminateAccount">Terminate</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <FooterTemplate />
+      </div>
+      <FooterTemplate v-else />
     </template>
   </MfaVerificationDialog>
 </template>

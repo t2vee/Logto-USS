@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/alert-dialog/index.js'
 import {Input} from '@/components/ui/input/index.js'
 import {Label} from '@/components/ui/label/index.js'
-import {ArrowBigRightDash, Loader, MailCheck, MailX} from 'lucide-vue-next'
+import {ArrowBigRightDash, Loader, MailCheck, MailX, ShieldEllipsis, Undo2} from 'lucide-vue-next'
 import {Button} from '@/components/ui/button/index.js'
 import {DialogClose} from '@/components/ui/dialog/index.js'
 import MfaCodeInput from '@/components/Global/MFAHelpers/MfaCodeInput.vue'
@@ -22,6 +22,7 @@ import axios from 'redaxios'
 import {toast} from 'vue-sonner'
 import {eventBus} from '@/lib/eventBus.js'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
+import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
 
 const userData = inject('userData')
 
@@ -124,7 +125,7 @@ const handleCodeComplete = async (code) => {
         description: `${email.value} has been successfully added to your account.`
       })
       eventBus.emit('closeEditDetailDialog', false)
-      eventBus.emit('refreshUserData', true)
+      if (isDesktop) {eventBus.emit('refreshUserData', true)}
     }
     emailVerified.value = !(response.status === 204)
   } catch (error) {
@@ -134,9 +135,77 @@ const handleCodeComplete = async (code) => {
     isLoading.value = false
   }
 }
+
+const [UseAlertDialogTemplate, AlertDialogTemplate] = createReusableTemplate()
+const isDesktop = useMediaQuery('(min-width: 1023px)')
+
 </script>
 
 <template>
+  <UseAlertDialogTemplate v-slot="{ buttonClass }">
+    <AlertDialog>
+      <AlertDialogTrigger as-child>
+        <Button
+            :class="buttonClass"
+            :disabled="
+                    !isEmailValid || (resendCodeTimer > 0 && !readyToSend)
+                  "
+        >
+          <ShieldEllipsis class="w-4 h-4 mr-2" />
+          Verify
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription class="space-y-4">
+            Changing your email means that you will <strong>no longer</strong> be able to:
+            <ul class="space-y-1">
+              <li class="flex items-center align-middle">
+                <ArrowBigRightDash /> <span class="font-bold">Login with&nbsp;</span>
+                {{
+                  userData.email.length > 30
+                      ? `${userData.email.substring(0, 30)}...`
+                      : userData.email
+                }}
+              </li>
+              <li class="flex items-center align-middle">
+                <ArrowBigRightDash /> <span class="font-bold">Contact us with&nbsp;</span>
+                {{
+                  userData.email.length > 30
+                      ? `${userData.email.substring(0, 30)}...`
+                      : userData.email
+                }}
+              </li>
+              <li class="flex items-center align-middle">
+                <ArrowBigRightDash />
+                <span class="font-bold">Receive any mail with&nbsp;</span>
+                {{
+                  userData.email.length > 30
+                      ? `${userData.email.substring(0, 30)}...`
+                      : userData.email
+                }}
+              </li>
+              <li class="flex items-center align-middle">
+                <ArrowBigRightDash />
+                <span class="font-bold">Verify your identity with&nbsp;</span>
+                {{
+                  userData.email.length > 30
+                      ? `${userData.email.substring(0, 30)}...`
+                      : userData.email
+                }}
+              </li>
+            </ul>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction @click="sendVerificationCode">I'm Sure</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  </UseAlertDialogTemplate>
+
   <MfaVerificationDialog title="Email Address" :icon="userData.email_verified ? MailCheck : MailX" :desc="userData.email.length > 30 ? userData.email.substring(0, 30) + '...' : userData.email">
     <template #body>
       <transition name="fade" mode="out-in">
@@ -144,13 +213,13 @@ const handleCodeComplete = async (code) => {
             v-if="!isLoading && !emailSent"
             class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle mt-5"
         >
-          <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+          <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
             <Label for="email" class="flex font-bold w-full justify-between">
               Email
               <span v-if="isEmailValid && isEditing" class="text-xs text-green-500">Valid Email</span>
-              <span v-else-if="!isEmailValid && isEditing" class="text-xs text-red-500"
-              >Invalid Email Format</span
-              >
+              <span v-else-if="!isEmailValid && isEditing" class="text-xs text-red-500">
+                Invalid Email Format
+              </span>
             </Label>
             <Input
                 id="email"
@@ -186,72 +255,25 @@ const handleCodeComplete = async (code) => {
       </transition>
     </template>
     <template #footer v-if="!isLoading && !emailSent">
-      <DialogClose as-child>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <Button variant="link" as-child class="text-sm">
+          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
+        </Button>
+        <DialogClose as-child>
+          <Button type="button" variant="outline" class="w-full">
+            <Undo2 class="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
+        </DialogClose>
+        <AlertDialogTemplate button-class="w-full" />
+      </div>
+      <DialogClose as-child v-else>
         <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
       </DialogClose>
-        <Button variant="link" as-child>
-          <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
-        </Button>
-          <AlertDialog>
-            <AlertDialogTrigger as-child>
-              <Button
-                  class="h-[30px]"
-                  :disabled="
-                    !isEmailValid || (resendCodeTimer > 0 && !readyToSend)
-                  "
-              >
-                Verify
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription class="space-y-4">
-                  Changing your email means that you will <strong>no longer</strong> be able to:
-                  <ul class="space-y-1">
-                    <li class="flex items-center align-middle">
-                      <ArrowBigRightDash /> <span class="font-bold">Login with&nbsp;</span>
-                      {{
-                        userData.email.length > 30
-                            ? `${userData.email.substring(0, 30)}...`
-                            : userData.email
-                      }}
-                    </li>
-                    <li class="flex items-center align-middle">
-                      <ArrowBigRightDash /> <span class="font-bold">Contact us with&nbsp;</span>
-                      {{
-                        userData.email.length > 30
-                            ? `${userData.email.substring(0, 30)}...`
-                            : userData.email
-                      }}
-                    </li>
-                    <li class="flex items-center align-middle">
-                      <ArrowBigRightDash />
-                      <span class="font-bold">Receive any mail with&nbsp;</span>
-                      {{
-                        userData.email.length > 30
-                            ? `${userData.email.substring(0, 30)}...`
-                            : userData.email
-                      }}
-                    </li>
-                    <li class="flex items-center align-middle">
-                      <ArrowBigRightDash />
-                      <span class="font-bold">Verify your identity with&nbsp;</span>
-                      {{
-                        userData.email.length > 30
-                            ? `${userData.email.substring(0, 30)}...`
-                            : userData.email
-                      }}
-                    </li>
-                  </ul>
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction @click="sendVerificationCode">I'm Sure</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+      <Button variant="link" as-child v-if="isDesktop">
+        <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
+      </Button>
+      <AlertDialogTemplate v-if="isDesktop" button-class="h-[30px]" />
     </template>
   </MfaVerificationDialog>
 </template>

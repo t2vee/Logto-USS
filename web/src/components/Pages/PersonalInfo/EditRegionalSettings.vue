@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/select/index.js'
 import countries from '@/lib/data/countries.json.js'
 import timezones from '@/lib/data/timezones.json.js'
-import {Check, ChevronsUpDown, Earth} from 'lucide-vue-next'
+import {Check, ChevronsUpDown, Earth, Save, Undo2} from 'lucide-vue-next'
 import {inject, ref} from 'vue'
 import {cn} from '@/lib/utils.js'
 import {
@@ -59,19 +59,22 @@ async function updateData() {
     if (response.status === 204) {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
       eventBus.emit('closeEditDetailDialog', false)
-      eventBus.emit('refreshUserData', true)
+      if (isDesktop) {eventBus.emit('refreshUserData', true)}
     }
   } catch (error) {
     toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
   }
 }
+
+import { useMediaQuery } from '@vueuse/core'
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
   <MfaVerificationDialog title="Country/Region" :icon="Earth" :desc="userData.profile?.address?.country ?? userData.profile?.address?.country ?? 'Not Set'" >
     <template #body>
       <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle">
-        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+        <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
           <Label class="font-bold">
             Country/Region
           </Label>
@@ -125,10 +128,10 @@ async function updateData() {
             </PopoverContent>
           </Popover>
         </div>
-        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+        <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
           <Label class="font-bold"> Timezone <span class="text-xs text-gray-500 font-light">(Required)</span></Label>
           <Select v-model="selectedTimezone">
-            <SelectTrigger class="w-[280px]">
+            <SelectTrigger class="w-full">
               <SelectValue
                   :placeholder="
                 userData['profile.address.locality']
@@ -154,18 +157,43 @@ async function updateData() {
       </div>
     </template>
     <template #footer>
-      <DialogClose as-child>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <Button variant="link" as-child size="xs">
+          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
+        </Button>
+        <DialogClose as-child>
+          <Button type="button" variant="outline" class="w-full">
+            <Undo2 class="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
+        </DialogClose>
+        <Button
+            type="submit"
+            class="w-full"
+            :disabled="!selectedTimezone || !selectedCountry"
+            @click="updateData"
+        >
+          <Save class="w-4 h-4 mr-2" />
+          Save
+        </Button>
+      </div>
+      <DialogClose as-child v-else>
+        <Button type="button" variant="outline" class="h-[30px]">
+          <Undo2 class="w-4 h-4 mr-2" />
+          Cancel
+        </Button>
       </DialogClose>
-      <Button variant="link" as-child size="xs">
+      <Button variant="link" as-child size="xs" v-if="isDesktop">
         <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
       </Button>
         <Button
+            v-if="isDesktop"
             type="submit"
             class="h-[30px]"
             @click="updateData"
             :disabled="!selectedTimezone || !selectedCountry"
         >
+          <Save class="w-4 h-4 mr-2" />
           Save
         </Button>
     </template>

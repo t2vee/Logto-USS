@@ -6,7 +6,7 @@ import {VueTelInput} from 'vue-tel-input'
 import {Button} from '@/components/ui/button/index.js'
 import {DialogClose} from '@/components/ui/dialog/index.js'
 import {Label} from '@/components/ui/label/index.js'
-import {Loader, Phone, PhoneMissed} from 'lucide-vue-next'
+import {Loader, Phone, PhoneMissed, ShieldEllipsis, Undo2} from 'lucide-vue-next'
 import {toast} from 'vue-sonner'
 import MfaCodeInput from '@/components/Global/MFAHelpers/MfaCodeInput.vue'
 import {eventBus} from '@/lib/eventBus.js'
@@ -127,7 +127,7 @@ const handleCodeComplete = async (code) => {
         description: `${phone.value} has been successfully added to your account.`
       })
       eventBus.emit('closeEditDetailDialog', false)
-      eventBus.emit('refreshUserData', true)
+      if (isDesktop) {eventBus.emit('refreshUserData', true)}
     }
     smsVerified.value = !(response.status === 204)
   } catch (error) {
@@ -157,6 +157,9 @@ onMounted(() => { //this needs to be done because the css file that comes with v
   document.head.appendChild(link);
   isLoading.value = false
 });
+
+import { useMediaQuery } from '@vueuse/core'
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
@@ -212,17 +215,41 @@ onMounted(() => { //this needs to be done because the css file that comes with v
       </transition>
     </template>
     <template #footer v-if="!isLoading && !smsSent">
-      <DialogClose as-child>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <Button variant="link" as-child size="xs">
+          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
+        </Button>
+        <DialogClose as-child>
+          <Button type="button" variant="outline" class="w-full">
+            <Undo2 class="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
+        </DialogClose>
+        <Button
+            @click="verifyNumber"
+            class="w-full"
+            :disabled="!isNumberValid || !phone || (resendCodeTimer > 0 && !readyToSend)"
+        >
+          <ShieldEllipsis class="w-4 h-4 mr-2" />
+          Verify
+        </Button>
+      </div>
+      <DialogClose as-child v-else>
+        <Button type="button" variant="outline" class="h-[30px]">
+          <Undo2 class="w-4 h-4 mr-2" />
+          Cancel
+        </Button>
       </DialogClose>
-      <Button variant="link" as-child>
+      <Button variant="link" as-child v-if="isDesktop">
         <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
       </Button>
       <Button
+          v-if="isDesktop"
           @click="verifyNumber"
           class="h-[30px]"
           :disabled="!isNumberValid || !phone || (resendCodeTimer > 0 && !readyToSend)"
       >
+        <ShieldEllipsis class="w-4 h-4 mr-2" />
         Verify
       </Button>
     </template>
