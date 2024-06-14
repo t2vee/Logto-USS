@@ -159,17 +159,19 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
     </Button>
   </UseFooterTemplate>
 
-  <div class="space-y-4">
+  <div class="desktop:space-y-4">
     <Card class="desktop:h-[420px]">
       <CardHeader>
-        <CardTitle>Choose a Generated Avatar</CardTitle>
+        <CardTitle class="tablet:text-lg">
+          Choose a Generated Avatar
+        </CardTitle>
         <CardDescription>
           Avatars based on different generation algorithms.
         </CardDescription>
       </CardHeader>
-      <CardContent class="space-y-2 overflow-y-auto max-h-[300px]">
+      <CardContent class="space-y-2 overflow-y-auto max-h-[200px]">
         <div class="p-4 flex flex-col items-center align-middle">
-          <div class="grid desktop:grid-cols-8 tablet:grid-cols-4 gap-4">
+          <div class="grid desktop:grid-cols-8 tablet:grid-cols-4 desktop:gap-4 tablet:gap-6">
             <SingleGalleryAvatar
               v-for="(avatar, index) in avatars"
               :key="`${avatar.id}-${index}`"
@@ -182,7 +184,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         </div>
       </CardContent>
     </Card>
-    <DrawerFooter v-if="!isDesktop" class="w-full">
+    <DrawerFooter v-if="!isDesktop" class="w-full px-0">
       <FooterTemplate />
     </DrawerFooter>
     <DialogFooter v-else class="right-0">

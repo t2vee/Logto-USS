@@ -104,8 +104,12 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
 
     <Card>
       <CardHeader>
-        <CardTitle>Upload Custom Avatar Image</CardTitle>
-        <CardDescription> Supports PNG, JPG File Types. </CardDescription>
+        <CardTitle class="tablet:text-lg">
+          Upload Custom Avatar Image
+        </CardTitle>
+        <CardDescription>
+          Supports PNG, JPG File Types.
+        </CardDescription>
       </CardHeader>
       <CardContent class="space-y-2">
         <div
@@ -113,7 +117,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           @dragover.prevent="dragOver"
           @drop.prevent="handleDrop"
           @dragleave.prevent="dragLeave"
-          class="flex flex-col justify-center items-center w-full h-64 tablet:h-32 rounded-lg border-2 border-dashed border-gray-400 cursor-pointer hover:border-gray-600 space-y-4 relative"
+          class="flex flex-col justify-center items-center w-full h-64 tablet:h-36 rounded-lg border-2 border-dashed border-gray-400 cursor-pointer hover:border-gray-600 space-y-4 relative"
         >
           <div
             v-if="preview"
@@ -149,7 +153,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         <p class="text-xs font-bold">Maximum 1000KB (1MB) Upload Size</p>
       </CardFooter>
     </Card>
-  <DrawerFooter v-if="!isDesktop" class="w-full">
+  <DrawerFooter v-if="!isDesktop" class="w-full px-0">
     <FooterTemplate />
   </DrawerFooter>
   <DialogFooter v-else class="right-0">
