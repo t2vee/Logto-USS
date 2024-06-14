@@ -10,7 +10,7 @@ import {DoorClosed, CircleUserRound} from "lucide-vue-next";
 </script>
 
 <template>
-  <div class="w-screen desktop:w-[600px] phone:px-12 tablet:px-32 ">
+  <div class="w-screen desktop:w-[600px] phone:px-4 tablet:px-32 ">
     <CardTitle class="my-4 flex">
       <CircleUserRound class="mr-1" />
       Personal Information

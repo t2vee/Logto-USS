@@ -10,7 +10,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
-  <div class="w-screen desktop:w-[600px] phone:px-12 tablet:px-32 desktop:space-y-5">
+  <div class="w-screen desktop:w-[600px] phone:px-4 tablet:px-32 desktop:space-y-5">
     <CardTitle class="my-4 flex">
       <AlertTriangle :size="isDesktop ? 22 : 54" class="mr-5 desktop:mr-1" />
       You are entering the Danger Zone

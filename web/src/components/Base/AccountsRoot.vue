@@ -94,7 +94,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           <CardContent>
             <RouterView v-if="!isSubPageLoading" />
             <div v-if="isSubPageLoading"
-                 class="w-screen desktop:w-[600px] phone:px-12 tablet:px-32">
+                 class="w-screen desktop:w-[600px] phone:px-4 tablet:px-32">
               <div class="space-y-2">
                 <Skeleton class="h-8 desktop:w-[300px]" />
                 <Skeleton class="h-4 desktop:w-[525px]" />
@@ -127,7 +127,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         <Loader class="animate-spin" />
         Loading User Information...
       </div>
-      <div class="flex w-full items-center align-middle justify-between phone:px-12 tablet:px-32">
+      <div class="flex w-full items-center align-middle justify-between phone:px-4 tablet:px-32">
         <p class="text-xs text-gray-500 mt-8">
           MXS Account Dashboard @ 2024 {{ isDesktop ? '-' : '' }}<br v-if="!isDesktop" /> Web Version {{ webBuild }}
         </p>
