@@ -13,6 +13,7 @@ import {toast} from 'vue-sonner'
 import {eventBus} from '@/lib/eventBus.js'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
+import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
 
 const { getAccessToken } = useLogto()
 
@@ -103,6 +104,7 @@ async function updateData() {
   }
 }
 const [UsePopoverTemplate, PopoverTemplate] = createReusableTemplate()
+const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
 const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
@@ -176,9 +178,30 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
     </Popover>
   </UsePopoverTemplate>
 
+  <UseFooterTemplate>
+    <PopoverTemplate v-if="!isDesktop" />
+    <DialogClose as-child>
+      <Button type="button" variant="outline" class="desktop:h-[30px] tablet:w-full">
+        <Undo2 class="w-4 h-4 mr-2" />
+        Cancel
+      </Button>
+    </DialogClose>
+    <PopoverTemplate v-if="isDesktop" />
+    <Button
+        type="submit"
+        class="desktop:h-[30px] tablet:w-full"
+        @click="updateData"
+        :disabled="isLoading || !passwordCheckPass || !passwordMatches || !oldPassword"
+    >
+      <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
+      <Save v-else class="w-4 h-4 mr-2" />
+      {{ isLoading ? 'Saving...' : 'Save' }}
+    </Button>
+  </UseFooterTemplate>
+
   <MfaVerificationDialog title="Password" :icon="CircleEllipsis" :desc="`Last Logged in at ${new Date(userData.lastSignInAt).toLocaleDateString()}`" >
     <template #body>
-      <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle mb-16">
+      <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle desktop:mb-16">
         <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
             <Label for="userid" class="font-bold"> Old Password </Label>
             <Input type="password" id="userid" placeholder="Required" v-model="oldPassword" />
@@ -274,6 +297,12 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         <Save v-else class="w-4 h-4 mr-2" />
         {{ isLoading ? 'Saving...' : 'Save' }}
       </Button>
+    </template>
+    <template #footer v-if="isDesktop">
+      <FooterTemplate />
+    </template>
+    <template #drawerFooter v-else>
+      <FooterTemplate />
     </template>
   </MfaVerificationDialog>
 </template>

@@ -158,11 +158,33 @@ onMounted(() => { //this needs to be done because the css file that comes with v
   isLoading.value = false
 });
 
-import { useMediaQuery } from '@vueuse/core'
+const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
+
+import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
+import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
 const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
+  <UseFooterTemplate>
+    <PrivacyFooter v-if="!isDesktop" />
+    <DialogClose as-child>
+      <Button type="button" variant="outline" class="desktop:h-[30px] tablet:w-full">
+        <Undo2 class="w-4 h-4 mr-2" />
+        Cancel
+      </Button>
+    </DialogClose>
+    <PrivacyFooter v-if="isDesktop" />
+    <Button
+        @click="verifyNumber"
+        class="desktop:h-[30px] tablet:w-full"
+        :disabled="!isNumberValid || !phone || (resendCodeTimer > 0 && !readyToSend)"
+    >
+      <ShieldEllipsis class="w-4 h-4 mr-2" />
+      Verify
+    </Button>
+  </UseFooterTemplate>
+
   <MfaVerificationDialog title="Phone Number" :icon="PhoneMissed" desc="Number Not Added">
     <template #body>
       <transition name="fade" mode="out-in">
@@ -214,44 +236,11 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         </div>
       </transition>
     </template>
-    <template #footer v-if="!isLoading && !smsSent">
-      <div v-if="!isDesktop" class="w-full space-y-2">
-        <Button variant="link" as-child size="xs">
-          <a target="_blank" href="/legal" class="text-sm"> Privacy and Cookies Policy </a>
-        </Button>
-        <DialogClose as-child>
-          <Button type="button" variant="outline" class="w-full">
-            <Undo2 class="w-4 h-4 mr-2" />
-            Cancel
-          </Button>
-        </DialogClose>
-        <Button
-            @click="verifyNumber"
-            class="w-full"
-            :disabled="!isNumberValid || !phone || (resendCodeTimer > 0 && !readyToSend)"
-        >
-          <ShieldEllipsis class="w-4 h-4 mr-2" />
-          Verify
-        </Button>
-      </div>
-      <DialogClose as-child v-else>
-        <Button type="button" variant="outline" class="h-[30px]">
-          <Undo2 class="w-4 h-4 mr-2" />
-          Cancel
-        </Button>
-      </DialogClose>
-      <Button variant="link" as-child v-if="isDesktop">
-        <a target="_blank" href="/legal"> Privacy and Cookies Policy </a>
-      </Button>
-      <Button
-          v-if="isDesktop"
-          @click="verifyNumber"
-          class="h-[30px]"
-          :disabled="!isNumberValid || !phone || (resendCodeTimer > 0 && !readyToSend)"
-      >
-        <ShieldEllipsis class="w-4 h-4 mr-2" />
-        Verify
-      </Button>
+    <template #footer v-if="!isLoading && !smsSent && isDesktop">
+      <FooterTemplate />
+    </template>
+    <template #drawerFooter v-else-if="!isLoading && !smsSent">
+      <FooterTemplate />
     </template>
   </MfaVerificationDialog>
 </template>

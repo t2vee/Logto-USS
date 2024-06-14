@@ -99,7 +99,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
 
 <template>
   <div class="space-y-3 flex flex-col items-center mt-[-30px] mb-10">
-    <p class="text-sm w-2/3 text-center" v-if="Boolean(!mfaMethods.totp) && !mfaSetup">
+    <p class="text-sm desktop:w-2/3 tablet:w-full text-center" v-if="Boolean(!mfaMethods.totp) && !mfaSetup">
       Use a app authenticator to greatly increase the security of your account. Some popular 2FA solutions are Google/Microsoft Authenticator.
     </p>
     <div v-if="mfaMethods.totp" class="flex flex-col items-center gap-y-2">
