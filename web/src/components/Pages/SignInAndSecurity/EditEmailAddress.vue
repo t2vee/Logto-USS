@@ -125,8 +125,7 @@ const handleCodeComplete = async (code) => {
       toast.success('Successfully Verified', {
         description: `${email.value} has been successfully added to your account.`
       })
-      eventBus.emit('closeEditDetailDialog', false)
-      if (isDesktop) {eventBus.emit('refreshUserData', true)}
+      eventBus.emit('refreshUserData', true)
     }
     emailVerified.value = !(response.status === 204)
   } catch (error) {

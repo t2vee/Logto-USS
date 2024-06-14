@@ -54,7 +54,6 @@ const uploadFile = async () => {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
       preview.value = null
       selectedFile.value = null
-      eventBus.emit('closeEditDetailDialog', false)
       eventBus.emit('refreshUserData', true)
     }
   } catch (error) {

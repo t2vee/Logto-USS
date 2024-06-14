@@ -32,8 +32,7 @@ async function removeNumber() {
         description: 'You can now add a new number to your account.'
       })
       isLoading.value = false
-      eventBus.emit('closeEditDetailDialog', false)
-      if (isDesktop) {eventBus.emit('refreshUserData', true)}
+      eventBus.emit('refreshUserData', true)
     }
   } catch (error) {
     toast.error('Error Removing Number:', { description: 'Service Unavailable. Try again later' })
