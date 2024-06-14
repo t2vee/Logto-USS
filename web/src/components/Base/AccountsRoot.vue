@@ -85,52 +85,54 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
-  <div class="flex flex-col h-screen desktop:max-w-[1000px] tablet:w-screen items-center">
-    <NavBar />
-    <div v-if="!fetchFailure && !isLoading" class="flex justify-between gap-6">
-      <SideBar v-if="isDesktop" />
-      <div class="flex-1 flex-grow overflow-auto">
-        <CardContent>
-          <RouterView v-if="!isSubPageLoading" />
-          <div v-if="isSubPageLoading"
-               class="w-screen desktop:w-[600px] phone:px-4 tablet:px-32">
-            <div class="space-y-2">
-              <Skeleton class="h-8 desktop:w-[300px]" />
-              <Skeleton class="h-4 desktop:w-[525px]" />
-              <Skeleton class="h-4 desktop:w-[200px] w-3/4" />
+  <div class="flex flex-col items-center">
+    <div class="flex flex-col h-screen desktop:max-w-[1000px] tablet:w-screen items-center">
+      <NavBar />
+      <div v-if="!fetchFailure && !isLoading" class="flex justify-between gap-6">
+        <SideBar v-if="isDesktop" />
+        <div class="flex-1 flex-grow overflow-auto">
+          <CardContent>
+            <RouterView v-if="!isSubPageLoading" />
+            <div v-if="isSubPageLoading"
+                 class="w-screen desktop:w-[600px] phone:px-4 tablet:px-32">
+              <div class="space-y-2">
+                <Skeleton class="h-8 desktop:w-[300px]" />
+                <Skeleton class="h-4 desktop:w-[525px]" />
+                <Skeleton class="h-4 desktop:w-[200px] w-3/4" />
+              </div>
+              <div class="desktop:flex space-y-4 desktop:space-y-0 desktop:gap-4 mt-12">
+                <Skeleton class="h-[150px] w-[250px] rounded-xl" />
+                <Skeleton class="h-[150px] w-[250px] rounded-xl" />
+              </div>
+              <div class="desktop:flex space-y-4 desktop:space-y-0 desktop:gap-4 mt-12">
+                <Skeleton class="h-[150px] w-[250px] rounded-xl" />
+                <Skeleton class="h-[150px] w-[250px] rounded-xl" />
+              </div>
             </div>
-            <div class="desktop:flex space-y-4 desktop:space-y-0 desktop:gap-4 mt-12">
-              <Skeleton class="h-[150px] w-[250px] rounded-xl" />
-              <Skeleton class="h-[150px] w-[250px] rounded-xl" />
-            </div>
-            <div class="desktop:flex space-y-4 desktop:space-y-0 desktop:gap-4 mt-12">
-              <Skeleton class="h-[150px] w-[250px] rounded-xl" />
-              <Skeleton class="h-[150px] w-[250px] rounded-xl" />
-            </div>
-          </div>
-        </CardContent>
+          </CardContent>
+        </div>
       </div>
-    </div>
-    <div
-        v-else-if="fetchFailure && !isLoading"
-        class="flex flex-col items-center justify-center gap-y-3"
-    >
-      <AlertOctagon :size="72" color="darkred" />
-      <p class="text-red-700 text-xl">Failed to grab User information</p>
-      <Button @click="loadData" variant="outline" class="h-8 w-20"> Retry </Button>
-    </div>
-    <div
-        v-else-if="isLoading"
-        class="flex items-center justify-center"
-    >
-      <Loader class="animate-spin" />
-      Loading User Information...
-    </div>
-    <div class="flex phone:flex-col items-center align-middle justify-between phone:px-4 tablet:px-32">
-      <p class="text-xs text-gray-500 mt-8 tablet:text-center">
-        MXS Account Dashboard @ 2024 {{ isDesktop ? '-' : '' }}<br v-if="!isDesktop" /> Web Version {{ webBuild }}
-      </p>
-      <a class="text-xs text-gray-500 mt-8 dark:text-primary" :href="support">Contact Support</a>
+      <div
+          v-else-if="fetchFailure && !isLoading"
+          class="flex flex-col items-center justify-center gap-y-3"
+      >
+        <AlertOctagon :size="72" color="darkred" />
+        <p class="text-red-700 text-xl">Failed to grab User information</p>
+        <Button @click="loadData" variant="outline" class="h-8 w-20"> Retry </Button>
+      </div>
+      <div
+          v-else-if="isLoading"
+          class="flex items-center justify-center"
+      >
+        <Loader class="animate-spin" />
+        Loading User Information...
+      </div>
+      <div class="flex desktop:w-full phone:flex-col items-center align-middle justify-between phone:px-4 tablet:px-32">
+        <p class="text-xs text-gray-500 mt-8 tablet:text-center">
+          MXS Account Dashboard @ 2024 {{ isDesktop ? '-' : '' }}<br v-if="!isDesktop" /> Web Version {{ webBuild }}
+        </p>
+        <a class="text-xs text-gray-500 mt-8 dark:text-primary" :href="support">Contact Support</a>
+      </div>
     </div>
   </div>
 </template>
