@@ -1,6 +1,6 @@
 <script setup>
 import {onMounted, ref} from 'vue'
-import {Loader2} from 'lucide-vue-next'
+import {Loader2, Save, Undo2} from 'lucide-vue-next'
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card/index.js'
 import SingleGalleryAvatar from '@/components/Base/Avatar/SingleGalleryAvatar.vue'
 import {Button} from '@/components/ui/button/index.js'
@@ -13,6 +13,8 @@ import * as jdenticon from 'jdenticon'
 import Hashicon from 'hashicon';
 import {getAvatar as generateMonsterID} from '@/lib/identicons/monsterid.js'
 import Blockies from '@/lib/identicons/blockies.js'
+import {DrawerFooter} from "@/components/ui/drawer/index.js";
+import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
 
 const avatars = ref([])
 const { getAccessToken } = useLogto()
@@ -137,11 +139,28 @@ const uploadFile = async () => {
     isLoading.value = false
   }
 }
+
+const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
+  <UseFooterTemplate>
+    <DialogClose as-child>
+      <Button type="button" variant="outline" class="desktop:h-[30px]">
+        <Undo2 class="w-4 h-4 mr-2" />
+        Cancel
+      </Button>
+    </DialogClose>
+    <Button @click="uploadFile" class="desktop:h-[30px]" :disabled="!selectedAvatarId || isLoading">
+      <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
+      <Save v-else class="w-4 h-4 mr-2" />
+      {{ isLoading ? 'Processing...' : 'Save' }}
+    </Button>
+  </UseFooterTemplate>
+
   <div class="space-y-4">
-    <Card class="h-[420px]">
+    <Card class="desktop:h-[420px]">
       <CardHeader>
         <CardTitle>Choose a Generated Avatar</CardTitle>
         <CardDescription>
@@ -150,7 +169,7 @@ const uploadFile = async () => {
       </CardHeader>
       <CardContent class="space-y-2 overflow-y-auto max-h-[300px]">
         <div class="p-4 flex flex-col items-center align-middle">
-          <div class="grid grid-cols-8 gap-4">
+          <div class="grid desktop:grid-cols-8 tablet:grid-cols-4 gap-4">
             <SingleGalleryAvatar
               v-for="(avatar, index) in avatars"
               :key="`${avatar.id}-${index}`"
@@ -163,14 +182,11 @@ const uploadFile = async () => {
         </div>
       </CardContent>
     </Card>
-    <DialogFooter class="right-0">
-      <DialogClose as-child>
-        <Button type="button" variant="outline" class="h-[30px]"> Close </Button>
-      </DialogClose>
-      <Button @click="uploadFile" class="h-[30px]" :disabled="!selectedAvatarId || isLoading">
-        <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
-        {{ isLoading ? 'Processing...' : 'Save' }}
-      </Button>
+    <DrawerFooter v-if="!isDesktop" class="w-full">
+      <FooterTemplate />
+    </DrawerFooter>
+    <DialogFooter v-else class="right-0">
+      <FooterTemplate />
     </DialogFooter>
   </div>
 </template>

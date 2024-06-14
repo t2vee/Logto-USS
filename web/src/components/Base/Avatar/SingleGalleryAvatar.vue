@@ -9,7 +9,7 @@ import {CheckCircle} from 'lucide-vue-next'
 
 <template>
   <div class="relative cursor-pointer" :class="{ 'ring-4 ring-white rounded-lg': selected }">
-    <img :src="imageUrl" alt="Avatar" class="rounded-lg object-cover" />
+    <img :src="imageUrl" alt="Avatar" class="rounded-lg object-cover tablet:w-12 tablet:h-12" />
     <div
       v-if="selected"
       class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 rounded-lg"

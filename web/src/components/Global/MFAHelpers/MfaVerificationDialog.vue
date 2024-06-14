@@ -193,8 +193,6 @@ const cleanup = eventBus.on('closeEditDetailDialog', handleEvent)
 onUnmounted(cleanup)
 
 const [UseTriggerTemplate, TriggerTemplate] = createReusableTemplate()
-const [UseTitleTemplate, TitleTemplate] = createReusableTemplate()
-const [UseDescriptionTemplate, DescriptionTemplate] = createReusableTemplate()
 const [UseContentTemplate, ContentTemplate] = createReusableTemplate()
 
 const isDesktop = useMediaQuery('(min-width: 1023px)')
@@ -214,9 +212,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
       </CardHeader>
     </Card>
   </UseTriggerTemplate>
-  <UseTitleTemplate>
 
-  </UseTitleTemplate>
   <UseContentTemplate>
     <transition name="fade">
       <DialogHeader class="mb-3 flex flex-col items-center justify-center align-middle tablet:mt-5">
@@ -406,6 +402,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
       </CardDescription>
     </CardHeader>
   </Card>
+
   <Dialog v-if="!disabled && isDesktop" v-model:open="isOpen">
     <DialogTrigger as-child>
       <slot>

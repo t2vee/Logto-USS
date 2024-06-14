@@ -35,18 +35,18 @@ function changeTheme() {
 }
 const isDesktop = useMediaQuery('(min-width: 1023px)')
 
-const isOpen = ref(false)
+const isSheetOpen = ref(false)
 </script>
 
 <template>
   <div v-if="isDesktop" class="min-h-12 min-w-[852px]"></div>
   <div class="w-full h-12 flex align-middle items-center justify-between border-b-2 mobile:py-5 phone:px-12 tablet:px-32">
-    <Sheet v-if="!isDesktop" v-model:open="isOpen">
+    <Sheet v-if="!isDesktop" v-model:open="isSheetOpen">
       <SheetTrigger as-child>
         <Menu />
       </SheetTrigger>
       <SheetContent side="left">
-        <SideBar v-model="isOpen" />
+        <SideBar v-model="isSheetOpen"/>
       </SheetContent>
     </Sheet>
     <CardTitle class="text-xl" v-if="isDesktop">My Account Dashboard</CardTitle>

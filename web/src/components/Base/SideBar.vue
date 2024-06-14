@@ -62,7 +62,6 @@ const isDark = useDark({
   selector: 'html',
 })
 const isDesktop = useMediaQuery('(min-width: 1023px)')
-
 </script>
 
 <template>
