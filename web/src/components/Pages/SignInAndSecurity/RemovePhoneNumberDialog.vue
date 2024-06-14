@@ -33,7 +33,7 @@ async function removeNumber() {
       })
       isLoading.value = false
       eventBus.emit('closeEditDetailDialog', false)
-      eventBus.emit('refreshUserData', true)
+      if (isDesktop) {eventBus.emit('refreshUserData', true)}
     }
   } catch (error) {
     toast.error('Error Removing Number:', { description: 'Service Unavailable. Try again later' })

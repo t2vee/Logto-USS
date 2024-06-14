@@ -125,7 +125,7 @@ const handleCodeComplete = async (code) => {
         description: `${email.value} has been successfully added to your account.`
       })
       eventBus.emit('closeEditDetailDialog', false)
-      eventBus.emit('refreshUserData', true)
+      if (isDesktop) {eventBus.emit('refreshUserData', true)}
     }
     emailVerified.value = !(response.status === 204)
   } catch (error) {

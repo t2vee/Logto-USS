@@ -5,7 +5,7 @@ import {ref} from "vue";
 import axios from 'redaxios';
 import {toast} from "vue-sonner";
 import {ClipboardCheck, ClipboardCopy, FileDown, Loader2} from 'lucide-vue-next';
-import {useClipboard} from '@vueuse/core'
+import {useClipboard, useMediaQuery} from '@vueuse/core'
 import {useLogto} from '@logto/vue';
 import {eventBus} from "@/lib/eventBus.js";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from '@/components/ui/tooltip/index.js'
@@ -92,8 +92,9 @@ const downloadFile = () => {
 
 function complete() {
   eventBus.emit('closeEditDetailDialog', false)
-  eventBus.emit('refreshUserData', true)
+  if (isDesktop) {eventBus.emit('refreshUserData', true)}
 }
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>

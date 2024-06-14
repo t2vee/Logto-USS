@@ -44,7 +44,7 @@ async function updateStatus() {
       toast.success('Login Verification Disabled Successfully')
     }
     eventBus.emit('closeEditDetailDialog', false)
-    eventBus.emit('refreshUserData', true)
+    if (isDesktop) {eventBus.emit('refreshUserData', true)}
   } catch (error) {
     toast.error('Error Saving Changes:', {
       description: 'Service Unavailable. Try again later',

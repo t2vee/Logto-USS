@@ -87,7 +87,7 @@ async function updateData() {
     if (response.status === 204) {
       toast.success('Success!', { description: 'Your changes were saved successfully.' })
       eventBus.emit('closeEditDetailDialog', false)
-      eventBus.emit('refreshUserData', true)
+      if (isDesktop) {eventBus.emit('refreshUserData', true)}
     }
   } catch (error) {
     console.log(error)
