@@ -2,13 +2,14 @@
 import {ref, inject} from 'vue'
 import { useLogto } from '@logto/vue'
 import { DialogClose } from '@/components/ui/dialog/index.js'
-import { Loader2, Code } from 'lucide-vue-next'
+import {Loader2, Code, Undo2, Save} from 'lucide-vue-next'
 import { Button } from '@/components/ui/button/index.js'
 import axios from 'redaxios'
 import { toast } from 'vue-sonner'
 import { eventBus } from '@/lib/eventBus.js'
 import { Checkbox } from '@/components/ui/checkbox'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
+import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
 
 const { getAccessToken } = useLogto()
 const isLoading = ref(false)
@@ -56,9 +57,30 @@ async function updateStatus() {
 function onCheckboxChange() {
   checked.value = !checked.value;
 }
+
+const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
+  <UseFooterTemplate>
+    <DialogClose as-child>
+      <Button type="button" variant="outline" class="desktop:h-[30px] tablet:w-full">
+        <Undo2 class="w-4 h-4 mr-2" />
+        Cancel
+      </Button>
+    </DialogClose>
+    <Button
+        @click="updateStatus"
+        class="desktop:h-[30px] tablet:w-full"
+        :disabled="isLoading"
+    >
+      <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
+      <Save v-else class="w-4 h-4 mr-2" />
+      Save
+    </Button>
+  </UseFooterTemplate>
+
   <MfaVerificationDialog title="Developer Status" :icon="Code" :desc="userData?.customData?.developer ? 'Enabled' : 'Disabled'" >
     <template #body>
       <div class="flex flex-col items-center align-middle justify-center space-y-8">
@@ -84,17 +106,10 @@ function onCheckboxChange() {
       </div>
     </template>
     <template #footer>
-      <DialogClose as-child>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
-      </DialogClose>
-      <Button
-          @click="updateStatus"
-          class="h-[30px]"
-          :disabled="isLoading"
-      >
-        <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
-        Save
-      </Button>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <FooterTemplate />
+      </div>
+      <FooterTemplate v-else />
     </template>
   </MfaVerificationDialog>
 </template>
