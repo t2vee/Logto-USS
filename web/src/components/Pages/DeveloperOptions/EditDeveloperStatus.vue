@@ -105,11 +105,11 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         </div>
       </div>
     </template>
-    <template #footer>
-      <div v-if="!isDesktop" class="w-full space-y-2">
-        <FooterTemplate />
-      </div>
-      <FooterTemplate v-else />
+    <template #footer v-if="isDesktop">
+      <FooterTemplate />
+    </template>
+    <template #drawerFooter v-else>
+      <FooterTemplate />
     </template>
   </MfaVerificationDialog>
 </template>
