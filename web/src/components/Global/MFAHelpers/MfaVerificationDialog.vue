@@ -1,10 +1,10 @@
 <script setup>
-import {inject, onMounted, onUnmounted, provide, ref, watch} from 'vue'
-import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
-import { Label } from '@/components/ui/label/index.js'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group/index.js'
-import { useLogto } from '@logto/vue'
-import { Loader, Shield, Undo2, ArrowRight } from 'lucide-vue-next'
+import {inject, onUnmounted, ref, watch} from 'vue'
+import {createReusableTemplate, useDark, useMediaQuery} from '@vueuse/core'
+import {Label} from '@/components/ui/label/index.js'
+import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group/index.js'
+import {useLogto} from '@logto/vue'
+import {ArrowRight, Loader, Shield, Undo2} from 'lucide-vue-next'
 import axios from 'redaxios'
 import {
   Dialog,
@@ -16,28 +16,14 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog/index.js'
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip/index.js'
-import { Button } from '@/components/ui/button/index.js'
+import {Drawer, DrawerContent, DrawerFooter, DrawerTrigger,} from '@/components/ui/drawer'
+import {Popover, PopoverContent, PopoverTrigger,} from '@/components/ui/popover'
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from '@/components/ui/tooltip/index.js'
+import {Button} from '@/components/ui/button/index.js'
 import MfaCodeInput from '@/components/Global/MFAHelpers/MfaCodeInput.vue'
-import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js'
+import {toast} from 'vue-sonner'
+import {eventBus} from '@/lib/eventBus.js'
 import {Card, CardDescription, CardHeader, CardTitle} from "@/components/ui/card/index.js";
-import {useDark} from "@vueuse/core";
 
 const userData = inject('userData')
 const mfaOptions = inject('mfaMethods')

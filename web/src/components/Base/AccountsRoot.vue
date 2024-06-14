@@ -12,7 +12,7 @@ import axios from 'redaxios'
 import {toast} from 'vue-sonner'
 import {RouterView} from "vue-router";
 
-const { fetchUserInfo, getAccessToken, isAuthenticated } = useLogto()
+const { fetchUserInfo, getAccessToken } = useLogto()
 const userInfo = ref(null)
 const isLoading = ref(true)
 const isSubPageLoading = ref(false)
@@ -23,7 +23,6 @@ const support = `mailto:${import.meta.env.VITE_SUPPORT_EMAIL}`
 const webBuild = `prod/${import.meta.env.VITE_COMMIT_HASH.length > 7 ? import.meta.env.VITE_COMMIT_HASH.substring(0, 7) : import.meta.env.VITE_COMMIT_HASH}`
 
 async function loadData() {
-  if (!isAuthenticated) { window.location.replace("/oauth/login") }
   fetchFailure.value = false
   isLoading.value = true
   try {
@@ -45,8 +44,6 @@ async function loadData() {
       description: 'Service Unavailable. Try again later'
     })
     fetchFailure.value = true
-  } finally {
-    isLoading.value = false
   }
   try {
     const response = await axios.get(
@@ -57,11 +54,17 @@ async function loadData() {
     if (response.data[1]?.type === 'BackupCode') {mfaOptions.value.backup = response.data[1]}
   } catch (error) {
     toast.error('Error grabbing MFA Information:', { description: 'Some account actions will be unavailable' })
+    fetchFailure.value = true
+  } finally {
+    isLoading.value = false
   }
 }
 
 const handleRefresh = (data) => {
   if (data) {
+    if (!isDesktop.value) {
+      window.location.reload();
+    }
     loadData()
   }
 }
