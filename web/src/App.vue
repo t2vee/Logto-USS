@@ -9,10 +9,10 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
+  <SonnerToaster class="pointer-events-auto" :position="isDesktop ? 'bottom-center' : 'top-center'" richColors theme="dark"></SonnerToaster>
   <RouterView />
   <AnalyticsOptNotify />
   <Toaster />
-  <SonnerToaster class="pointer-events-auto" :position="isDesktop ? 'bottom-center' : 'top-center'" richColors theme="dark"></SonnerToaster>
 </template>
 
 <style scoped></style>

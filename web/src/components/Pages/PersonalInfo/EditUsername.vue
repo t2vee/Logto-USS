@@ -134,12 +134,13 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
 <template>
   <MfaVerificationDialog title="Username" :icon="CircleUserRound" :desc="userData.username ?? userData.name ?? 'Not Set'" v-model="isDialogOpen">
     <template #body>
-      <ConnectorAlert
-          v-if="waitForNextChange"
-          :custom-title="`Cant Change Username Until ${waitForNextChange.value}`"
-          :custom-message="`You can only change your username once per month. Your next username change will be available on the ${waitForNextChange.value}`"
-      />
-      <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle mt-3">
+
+      <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle mt-3 phone:px-0 tablet:px-10">
+        <ConnectorAlert
+            v-if="waitForNextChange"
+            :custom-title="`Cant Change Username Until ${waitForNextChange.value}`"
+            :custom-message="`You can only change your username once per month. Your next username change will be available on the ${waitForNextChange.value}`"
+        />
         <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
           <Label for="username" class="flex font-bold w-full justify-between">
             Username

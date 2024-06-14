@@ -12,6 +12,7 @@ import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover/i
 import {toast} from 'vue-sonner'
 import {eventBus} from '@/lib/eventBus.js'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
+import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
 
 const { getAccessToken } = useLogto()
 
@@ -101,17 +102,88 @@ async function updateData() {
     isLoading.value = false
   }
 }
+const [UsePopoverTemplate, PopoverTemplate] = createReusableTemplate()
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
+  <UsePopoverTemplate>
+    <Popover>
+      <PopoverTrigger as-child>
+        <Button
+            variant="link"
+            :class="{ 'text-red-500': passwordInvalid && !passwordCheckPass }"
+        >
+          <AlertCircle
+              v-if="passwordInvalid && !passwordCheckPass"
+              class="pr-1"
+              color="darkred"
+          />
+          Password Requirements
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent class="w-120">
+        <div class="grid gap-4">
+          <ul class="text-sm space-y-2">
+            <li class="flex items-center">
+              <component
+                  :color="!password ? null : !characterLengthCheckPassed ? 'darkred' : 'green'"
+                  :is="!password ? ChevronsRight : !characterLengthCheckPassed ? Ban : Check"
+                  class="pr-1"
+              />Should be a&nbsp;<strong>minimum of 10 Characters</strong>
+            </li>
+            <li class="flex items-center">
+              <component
+                  :color="
+                      !password ? null : !uppercaseCharactersCheckPassed ? 'darkred' : 'green'
+                    "
+                  :is="!password ? ChevronsRight : !uppercaseCharactersCheckPassed ? Ban : Check"
+                  class="pr-1"
+              />Should contain&nbsp;<strong>a few Uppercase Characters</strong>
+            </li>
+            <li class="flex items-center">
+              <component
+                  :color="!password ? null : !containsNumbersCheckPassed ? 'darkred' : 'green'"
+                  :is="!password ? ChevronsRight : !containsNumbersCheckPassed ? Ban : Check"
+                  class="pr-1"
+              />Should contain&nbsp;<strong>a few Numbers</strong>
+            </li>
+            <li class="flex items-center">
+              <component
+                  :color="!password ? null : !specialCharactersCheckPassed ? 'darkred' : 'green'"
+                  :is="!password ? ChevronsRight : !specialCharactersCheckPassed ? Ban : Check"
+                  class="pr-1"
+              />Should contain&nbsp;<strong>non-alphanumeric characters</strong>
+            </li>
+            <li class="flex items-center">
+              <component
+                  :color="password ? 'green' : null"
+                  :is="!password ? ChevronsRight : Check"
+                  class="pr-1"
+              />
+              Should&nbsp;
+              <strong>
+                Not
+              </strong>
+              &nbsp;contain any&nbsp;
+              <strong>
+                Common Words
+              </strong>
+            </li>
+          </ul>
+        </div>
+      </PopoverContent>
+    </Popover>
+  </UsePopoverTemplate>
+
   <MfaVerificationDialog title="Password" :icon="CircleEllipsis" :desc="`Last Logged in at ${new Date(userData.lastSignInAt).toLocaleDateString()}`" >
     <template #body>
       <div class="w-full h-full flex flex-col gap-4 pb-4 items-center align-middle mb-16">
-        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+        <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
             <Label for="userid" class="font-bold"> Old Password </Label>
             <Input type="password" id="userid" placeholder="Required" v-model="oldPassword" />
           </div>
-        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+        <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
             <Label for="username" class="flex font-bold w-full justify-between"> New Password </Label>
             <div>
               <Input
@@ -124,7 +196,7 @@ async function updateData() {
               />
             </div>
           </div>
-        <div class="grid w-3/5 max-w-sm items-center gap-1.5 relative">
+        <div class="grid tablet:w-full desktop:w-3/5 max-w-sm items-center gap-1.5 relative">
             <Label for="username" class="flex font-bold w-full justify-between">
               Confirm New Password
               <span v-if="passwordInvalid && passwordCheckPass" class="text-red-500">Doesnt Match</span>
@@ -165,84 +237,35 @@ async function updateData() {
 
     </template>
     <template #footer>
-      <DialogClose as-child>
-        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
-      </DialogClose>
-      <Popover>
-        <PopoverTrigger as-child>
-          <Button
-              variant="link"
-              :class="{ 'text-red-500': passwordInvalid && !passwordCheckPass }"
-          >
-            <AlertCircle
-                v-if="passwordInvalid && !passwordCheckPass"
-                class="pr-1"
-                color="darkred"
-            />
-            Password Requirements
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent class="w-120">
-          <div class="grid gap-4">
-            <ul class="text-sm space-y-2">
-              <li class="flex items-center">
-                <component
-                    :color="!password ? null : !characterLengthCheckPassed ? 'darkred' : 'green'"
-                    :is="!password ? ChevronsRight : !characterLengthCheckPassed ? Ban : Check"
-                    class="pr-1"
-                />Should be a&nbsp;<strong>minimum of 10 Characters</strong>
-              </li>
-              <li class="flex items-center">
-                <component
-                    :color="
-                      !password ? null : !uppercaseCharactersCheckPassed ? 'darkred' : 'green'
-                    "
-                    :is="!password ? ChevronsRight : !uppercaseCharactersCheckPassed ? Ban : Check"
-                    class="pr-1"
-                />Should contain&nbsp;<strong>a few Uppercase Characters</strong>
-              </li>
-              <li class="flex items-center">
-                <component
-                    :color="!password ? null : !containsNumbersCheckPassed ? 'darkred' : 'green'"
-                    :is="!password ? ChevronsRight : !containsNumbersCheckPassed ? Ban : Check"
-                    class="pr-1"
-                />Should contain&nbsp;<strong>a few Numbers</strong>
-              </li>
-              <li class="flex items-center">
-                <component
-                    :color="!password ? null : !specialCharactersCheckPassed ? 'darkred' : 'green'"
-                    :is="!password ? ChevronsRight : !specialCharactersCheckPassed ? Ban : Check"
-                    class="pr-1"
-                />Should contain&nbsp;<strong>non-alphanumeric characters</strong>
-              </li>
-              <li class="flex items-center">
-                <component
-                    :color="password ? 'green' : null"
-                    :is="!password ? ChevronsRight : Check"
-                    class="pr-1"
-                />
-                Should&nbsp;
-                <strong>
-                  Not
-                </strong>
-                &nbsp;contain any&nbsp;
-                <strong>
-                  Common Words
-                </strong>
-              </li>
-            </ul>
-          </div>
-        </PopoverContent>
-      </Popover>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <PopoverTemplate />
+        <DialogClose as-child>
+          <Button type="button" variant="outline" class="w-full"> Cancel </Button>
+        </DialogClose>
         <Button
             type="submit"
-            class="h-[30px]"
+            class="w-full"
             @click="updateData"
             :disabled="isLoading || !passwordCheckPass || !passwordMatches || !oldPassword"
         >
           <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
           {{ isLoading ? 'Saving...' : 'Save' }}
         </Button>
+      </div>
+      <DialogClose as-child v-else>
+        <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
+      </DialogClose>
+      <PopoverTemplate v-if="isDesktop" />
+      <Button
+          v-if="isDesktop"
+          type="submit"
+          class="h-[30px]"
+          @click="updateData"
+          :disabled="isLoading || !passwordCheckPass || !passwordMatches || !oldPassword"
+      >
+        <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
+        {{ isLoading ? 'Saving...' : 'Save' }}
+      </Button>
     </template>
   </MfaVerificationDialog>
 </template>

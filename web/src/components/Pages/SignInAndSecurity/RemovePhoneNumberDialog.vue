@@ -39,6 +39,9 @@ async function removeNumber() {
     toast.error('Error Removing Number:', { description: 'Service Unavailable. Try again later' })
   }
 }
+
+import { useMediaQuery } from '@vueuse/core'
+const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>
@@ -58,11 +61,27 @@ async function removeNumber() {
         </div>
       </div>
     </template>
+
     <template #footer>
-      <DialogClose as-child>
+      <div v-if="!isDesktop" class="w-full space-y-2">
+        <DialogClose as-child>
+          <Button type="button" variant="outline" class="w-full"> Cancel </Button>
+        </DialogClose>
+        <Button
+            @click="removeNumber"
+            variant="destructive"
+            class="w-full"
+            :disabled="isLoading"
+        >
+          <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
+          Remove
+        </Button>
+      </div>
+      <DialogClose as-child v-else>
         <Button type="button" variant="outline" class="h-[30px]"> Cancel </Button>
       </DialogClose>
       <Button
+          v-if="isDesktop"
           @click="removeNumber"
           variant="destructive"
           class="h-[30px]"
