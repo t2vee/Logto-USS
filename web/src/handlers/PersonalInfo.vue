@@ -20,7 +20,7 @@ import {DoorClosed, CircleUserRound} from "lucide-vue-next";
       be reached.
     </CardDescription>
     <div class="desktop:flex space-y-4 desktop:space-y-0 desktop:gap-4 mt-12">
-      <!--<EditPublicProfile/>-->
+      <!--<EditPublicProfile/> not implemented yet -->
       <MfaVerificationDialog disabled title="Public Profile" :icon="DoorClosed" desc="Open for more details" />
       <EditUsername />
     </div>
