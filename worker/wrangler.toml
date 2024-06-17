@@ -11,13 +11,22 @@ kv_namespaces = [
 	{ binding = "UsernameChangeTimelimit", id = "72523871c5484c7683abdd7b6d39c04d" }
 ]
 
+[[d1_databases]]
+binding = "DB"
+database_name = "prod-user-changes-history"
+database_id = "64faf190-645d-4dfa-8099-3664784c13e2"
+
 [vars]
 AVATAR_API = "https://check.mxs.app"
 CORS = "https://myid.mxs.app"
 ISSUER = "https://id.mxs.app/oidc"
 JWKS_URI = "https://id.mxs.app/oidc/jwks"
 LOGTO_DOMAIN = "https://id.mxs.app"
+
 ENABLE_NSFW_CHECK = 1
+ENABLE_BAD_WORDS_CHECK = 1
+ENABLE_DATA_VALIDATION = 1
+ENABLE_DATA_HISTORY = 1
 
 [placement]
 mode = "smart"
