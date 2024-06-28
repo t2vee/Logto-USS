@@ -6,7 +6,7 @@ import { status, json, error } from 'itty-router';
 
 export const handler = async (request, env, ctx) => {
 	try {
-		const value = await env.UsernameChangeTimelimit.get(ctx.userid);
+		const value = await env.UsernameChangeTimelimit_DEMO.get(ctx.userid);
 		return value ? json({value}) : status(204);
 	} catch (e) {
 		console.error(e)

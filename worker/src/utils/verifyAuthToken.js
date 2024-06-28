@@ -20,8 +20,10 @@ export default async function verifyAuthToken(request, env) {
 		const JWKS = createRemoteJWKSet(new URL(env.JWKS_URI));
 		const { payload } = await jwtVerify(token, JWKS, {
 			issuer: env.ISSUER,
-			audience: 'https://default.logto.app/api',
+			audience: env.LOGTO_CORE_RESOURCE,
 		});
+		console.log("verified")
+		console.log(env.LOGTO_CORE_RESOURCE)
 		return payload;
 	} catch (error) {
 		throw typeof error === 'string' ? { message: error, status: 401 } : error;

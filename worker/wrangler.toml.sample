@@ -9,9 +9,9 @@ minify = true # dont edit
 # Required kv namespaces for the api to work. create them in the dashboard or using wrangler and put the ids here
 # MAKE SURE TO USE THE EXACT NAMES BELOW
 kv_namespaces = [
-	{ binding = "MFARequiredTokens", id = "" },
-	{ binding = "LogtoAccessToken", id = "" },
-	{ binding = "UsernameChangeTimelimit", id = "" }
+	{ binding = "MFARequiredTokens_DEMO", id = "" },
+	{ binding = "LogtoAccessToken_DEMO", id = "" },
+	{ binding = "UsernameChangeTimelimit_DEMO", id = "" }
 ]
 
 [vars]

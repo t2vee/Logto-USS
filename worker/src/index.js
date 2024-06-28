@@ -13,7 +13,7 @@ import { HandlerRouter } from './handlers'
 
 
 const { preflight, corsify } = cors({
-	origin: 'https://myid.mxs.app',
+	origin: 'https://demo-id.mxs.app',
 	credentials: true,
 	allowMethods: ['GET', 'POST'],
 	maxAge: 15000
@@ -33,4 +33,8 @@ router
 	.all("/api/v2/*", HandlerRouter.fetch)
 	.all('*', () => error(404, 'this is not the route you are looking for'))
 
-export default { ...router }
+export default { async scheduled(event, env, ctx) {
+		console.log("cron processed");
+	}, ...router
+}
+

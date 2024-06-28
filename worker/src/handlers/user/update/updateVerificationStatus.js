@@ -12,9 +12,9 @@ export const handler = async (request, env, ctx) => {
 			{data: { "customData": {"loginVerification": requestData.enable ? 'enabled' : 'disabled' } }
 			});
 		if (requestData.enable) {
-			await env.MFARequiredTokens.delete(ctx.userid);
+			await env.MFARequiredTokens_DEMO.delete(ctx.userid);
 		} else {
-			await env.MFARequiredTokens.put(ctx.userid, false);
+			await env.MFARequiredTokens_DEMO.put(ctx.userid, false);
 		}
 		return requestData.enable ? status(204) : json('')
 	} catch (e) {
