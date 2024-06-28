@@ -124,8 +124,10 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           </p>
         </div>
         <div class="w-1/2 flex flex-col items-center align-middle justify-center gap-y-2">
+          <p class="text-xs text-gray-500">action not available in demo instance</p>
+
           <Button
-              :disabled="disabled"
+              disabled
               @click="beginAuthorizationFlow"
           >
             <Link color="black" class="mr-1" />

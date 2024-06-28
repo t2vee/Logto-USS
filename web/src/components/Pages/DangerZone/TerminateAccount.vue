@@ -89,7 +89,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
       <AlertDialogTrigger as-child>
         <Button
             class="desktop:h-[30px] tablet:w-full bg-red-600 hover:bg-red-800"
-            :disabled="s > 0 || isLoading"
+            disabled
         >
           <Loader2 v-if="s > 0 || isLoading" class="w-4 h-4 mr-2 animate-spin" />
           <AlertTriangle v-else class="w-4 h-4 mr-2" />
@@ -139,6 +139,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           <br />
         </div>
       </div>
+      <p class="text-xs text-gray-500">action not available in demo instance</p>
     </template>
     <template #footer v-if="isDesktop">
       <FooterTemplate />

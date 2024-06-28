@@ -176,7 +176,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
     <Button
         @click="verifyNumber"
         class="desktop:h-[30px] tablet:w-full"
-        :disabled="!isNumberValid || !phone || (resendCodeTimer > 0 && !readyToSend)"
+        disabled
     >
       <ShieldEllipsis class="w-4 h-4 mr-2" />
       Verify
@@ -233,6 +233,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           />
         </div>
       </transition>
+      <p class="text-xs text-gray-500">action not available in demo instance</p>
     </template>
     <template #footer v-if="!isLoading && !smsSent && isDesktop">
       <FooterTemplate />

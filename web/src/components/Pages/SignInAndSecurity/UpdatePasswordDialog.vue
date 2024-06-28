@@ -190,7 +190,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         type="submit"
         class="desktop:h-[30px] tablet:w-full"
         @click="updateData"
-        :disabled="isLoading || !passwordCheckPass || !passwordMatches || !oldPassword"
+        disabled
     >
       <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
       <Save v-else class="w-4 h-4 mr-2" />
@@ -241,61 +241,23 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
               </p>
             </div>
           </div>
-          <!--<div class="items-top flex gap-x-2"> // logto does not yet support this feature
-            <Checkbox id="logout" :value="signOutOfAllDevices" />
-            <div class="grid gap-1.5 leading-none">
-              <label
-                  for="logout"
-                  class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Sign out of all devices after change
-              </label>
-              <p class="text-sm text-muted-foreground">
-                Warning! This will log you out of your current session
-              </p>
-            </div>
-          </div>-->
-        </div>
+        <p class="text-xs text-gray-500">action not available in demo instance</p>
 
-    </template>
-    <template #footer>
-      <div v-if="!isDesktop" class="w-full space-y-2">
-        <PopoverTemplate />
-        <DialogClose as-child>
-          <Button type="button" variant="outline" class="w-full">
-            <Undo2 class="w-4 h-4 mr-2" />
-            Cancel
-          </Button>
-        </DialogClose>
-        <Button
-            type="submit"
-            class="w-full"
-            @click="updateData"
-            :disabled="isLoading || !passwordCheckPass || !passwordMatches || !oldPassword"
-        >
-          <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
-          <Save v-else class="w-4 h-4 mr-2" />
-          {{ isLoading ? 'Saving...' : 'Save' }}
-        </Button>
-      </div>
-      <DialogClose as-child v-else>
-        <Button type="button" variant="outline" class="h-[30px]">
-          <Undo2 class="w-4 h-4 mr-2" />
-          Cancel
-        </Button>
-      </DialogClose>
-      <PopoverTemplate v-if="isDesktop" />
-      <Button
-          v-if="isDesktop"
-          type="submit"
-          class="h-[30px]"
-          @click="updateData"
-          :disabled="isLoading || !passwordCheckPass || !passwordMatches || !oldPassword"
-      >
-        <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
-        <Save v-else class="w-4 h-4 mr-2" />
-        {{ isLoading ? 'Saving...' : 'Save' }}
-      </Button>
+        <!--<div class="items-top flex gap-x-2"> // logto does not yet support this feature
+          <Checkbox id="logout" :value="signOutOfAllDevices" />
+          <div class="grid gap-1.5 leading-none">
+            <label
+                for="logout"
+                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Sign out of all devices after change
+            </label>
+            <p class="text-sm text-muted-foreground">
+              Warning! This will log you out of your current session
+            </p>
+          </div>
+        </div>-->
+        </div>
     </template>
     <template #footer v-if="isDesktop">
       <FooterTemplate />

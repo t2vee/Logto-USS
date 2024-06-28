@@ -79,7 +79,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         @click="deactivateAccount"
         variant="destructive"
         class="desktop:h-[30px] tablet:w-full"
-        :disabled="s > 0 || isLoading"
+        disabled
     >
       <Loader2 v-if="s > 0 || isLoading" class="w-4 h-4 mr-2 animate-spin" />
       <OctagonPause v-else class="w-4 h-4 mr-2" />
@@ -121,6 +121,8 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           </div>
         </div>
       </div>
+      <p class="text-xs text-gray-500">action not available in demo instance</p>
+
     </template>
     <template #footer v-if="isDesktop">
       <FooterTemplate />

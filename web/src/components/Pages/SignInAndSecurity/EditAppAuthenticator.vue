@@ -102,6 +102,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
     <p class="text-sm desktop:w-2/3 tablet:w-full text-center" v-if="Boolean(!mfaMethods.totp) && !mfaSetup">
       Use a app authenticator to greatly increase the security of your account. Some popular 2FA solutions are Google/Microsoft Authenticator.
     </p>
+    <p class="text-xs text-gray-500">action not available in demo instance</p>
     <div v-if="mfaMethods.totp" class="flex flex-col items-center gap-y-2">
       <p>You currently have a App Authenticator setup.</p>
       <p class="text-xs">Created at {{ mfaMethods.totp.createdAt }}</p>
@@ -112,7 +113,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
     </div>
     <div v-else>
       <div v-if="!mfaSetup">
-        <Button class="desktop:h-[30px]" @click="setupAppAuthenticator" :disabled="isLoading">
+        <Button class="desktop:h-[30px]" @click="setupAppAuthenticator" disabled>
           <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
           {{ isLoading ? 'Generating...' : 'Setup App Authenticator' }}
         </Button>

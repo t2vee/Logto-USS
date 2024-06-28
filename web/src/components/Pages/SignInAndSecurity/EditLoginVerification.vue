@@ -110,6 +110,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
           </div>
         </div>
       </div>
+      <p class="text-xs text-gray-500">Has no effect in demo instance</p>
     </template>
     <template #footer v-if="isDesktop">
       <FooterTemplate />
