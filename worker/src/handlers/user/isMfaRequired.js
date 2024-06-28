@@ -6,10 +6,8 @@ import { error, json } from 'itty-router'
 
 export const handler = async (request, env, ctx) => {
 	try {
-		const value = await env.MFARequiredTokens.get(ctx.userid);
-		return value
-			? json({ status: false })
-			: json({ status: true });
+		//const value = await env.MFARequiredTokens.get(ctx.userid);
+		return json({ status: false });
 	} catch (e) {
 		console.error(e)
 		return error(418)
