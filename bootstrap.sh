@@ -1,32 +1,17 @@
 #!/usr/bin/env bash
-# Define the options
-options=(
-"Enable workers.dev Domain           (Default: False)"
-"Enable NSFW avatar image checking   (Default: False)"
-"Enable explicit word checking       (Default: True)"
-"Enable Data Validation              (Default: True)"
-"Enable Data History                 (Default: False)"
-)
 
-# Create an array to hold the whiptail options
-whiptail_options=(
+worker_options=(
 "Enable workers.dev Domain           (Default: False)" "" "OFF"
 "Enable NSFW avatar image checking   (Default: False)" "" "OFF"
 "Enable explicit word checking       (Default: True)" "" "ON"
 "Enable Data Validation              (Default: True)" "" "ON"
 "Enable Data History                 (Default: False)" "" "OFF"
 )
-# Populate the whiptail options array
-#for option in "${options[@]}"; do
-#  whiptail_options+=("$option" "" "OFF")
-#done
 
-# Display the checklist using whiptail
 selected=$(whiptail --title "Enable Features For The Service Worker" --checklist \
 "Choose options using spacebar to select and enter to confirm" 20 78 10 \
-"${whiptail_options[@]}" 3>&1 1>&2 2>&3)
+"${worker_options[@]}" 3>&1 1>&2 2>&3)
 
-# Check if the user pressed Cancel or OK
 exitstatus=$?
 if [ $exitstatus = 0 ]; then
   echo "Selected options are: $selected"
