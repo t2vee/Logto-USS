@@ -34,7 +34,11 @@ router
 	.all('*', () => error(404, 'this is not the route you are looking for'))
 
 export default { async scheduled(event, env, ctx) {
-		console.log("cron processed");
+		console.log("cron triggered")
+	//await ctx.Http.patch(
+	//		`/api/users/${ctx.userid}`,
+	//		{data: {"username":"demouser","primaryEmail":"demo@example.org","primaryPhone":null,"name":null,"avatar":"https://logtoeu.blob.core.windows.net/public-blobs/v32424/b4y2f9pjhuus1yvwq9p3f/2024/06/28/xo2cq1n6/e2dbd922-4d04-40ac-bd12-eae6f4ad5913__thgjnul6yufh__1719600780428.webp","customData":{},"identities":{},"profile":{},"isSuspended":false}
+	//		});
 	}, ...router
 }
 
