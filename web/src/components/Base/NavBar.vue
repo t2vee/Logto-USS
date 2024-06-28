@@ -17,6 +17,8 @@ import {
   SheetContent,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { AlertCircle } from 'lucide-vue-next'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import {DoorOpen, LogOut, Sun, Moon, Menu} from 'lucide-vue-next';
 
 const { signOut } = useLogto()
@@ -81,5 +83,11 @@ const isSheetOpen = ref(false)
       </Button>
     </div>
   </div>
+  <Alert variant="destructive">
+    <AlertCircle class="w-4 h-4" />
+    <AlertTitle>
+      You are on a demo instance. Changes are reset every 2 hours.
+    </AlertTitle>
+  </Alert>
   <div class="min-h-12"></div>
 </template>
