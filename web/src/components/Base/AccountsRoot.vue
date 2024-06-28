@@ -20,7 +20,7 @@ const fetchFailure = ref(false)
 const mfaOptions = ref({})
 
 const support = `mailto:${import.meta.env.VITE_SUPPORT_EMAIL}`
-const webBuild = `prod/${import.meta.env.VITE_COMMIT_HASH.length > 7 ? import.meta.env.VITE_COMMIT_HASH.substring(0, 7) : import.meta.env.VITE_COMMIT_HASH}`
+const webBuild = `demo-dashboard/${import.meta.env.VITE_COMMIT_HASH.length > 7 ? import.meta.env.VITE_COMMIT_HASH.substring(0, 7) : import.meta.env.VITE_COMMIT_HASH}`
 
 async function loadData() {
   fetchFailure.value = false
