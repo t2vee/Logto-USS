@@ -11,8 +11,10 @@ Why not use page functions instead of 2 separate applications?
   - like for example using the cloudflare workerd runtime to run locally with docker
 
 ## demo
-because of the way verification works i dont have a demo setup yet.  
-however you are welcome to make a account for the build i have at [myid.mxs.app](https://myid.mxs.app), then delete your account from the "Account Actions" then "Terminate Account".
+You can access the demo at [logto-demo-account-dashboard.pages.dev](https://logto-demo-account-dashboard.pages.dev/).  
+and can login with 
+- Username: demo@example.org
+- Password: demopassword
 
 ## design
 my design inspiration came from a few different account management dashboards but prodominiently
