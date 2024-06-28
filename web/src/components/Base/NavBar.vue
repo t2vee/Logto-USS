@@ -86,7 +86,7 @@ const isSheetOpen = ref(false)
   <Alert variant="destructive">
     <AlertCircle class="w-4 h-4" />
     <AlertTitle>
-      You are on a demo instance. Changes are reset every 2 hours.
+      You are on a demo instance. Some actions will be unavailable. Changes are reset every 2 hours.
     </AlertTitle>
   </Alert>
   <div class="min-h-12"></div>
