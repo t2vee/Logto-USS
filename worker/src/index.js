@@ -13,7 +13,7 @@ import { HandlerRouter } from './handlers'
 
 
 const { preflight, corsify } = cors({
-	origin: 'https://demo-id.mxs.app',
+	origin: 'https://logto-demo-account-dashboard.pages.dev',
 	credentials: true,
 	allowMethods: ['GET', 'POST'],
 	maxAge: 15000

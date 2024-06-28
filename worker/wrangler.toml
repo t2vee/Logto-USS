@@ -2,7 +2,6 @@ name = "mxs-demo-account-worker"
 main = "src/index.js"
 compatibility_flags = [ "nodejs_compat" ]
 compatibility_date = "2024-03-04"
-workers_dev = false
 minify = true
 
 kv_namespaces = [
@@ -13,7 +12,7 @@ kv_namespaces = [
 
 [vars]
 AVATAR_API = "https://check.mxs.app"
-CORS = "https://demo-id.mxs.app"
+CORS = "https://logto-demo-account-dashboard.pages.dev"
 ISSUER = "https://logto-development.mxs.app/oidc"
 JWKS_URI = "https://logto-development.mxs.app/oidc/jwks"
 LOGTO_DOMAIN = "https://logto-development.mxs.app"

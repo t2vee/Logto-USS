@@ -10,6 +10,7 @@ export const handler = async (request, env, ctx) => {
 			`/api/users/${encodeURIComponent(ctx.userid)}`, {
 				resTo400: 'ERR_USR_DOES_NOT_EXIST',
 			});
+		console.log('User ID:', userData.sub)
 		return json(userData);
 	} catch (e) {
 		console.error('Error in grabbing User Data:' + e)
