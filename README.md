@@ -11,7 +11,7 @@ Why not use page functions instead of 2 separate applications?
   - like for example using the cloudflare workerd runtime to run locally with docker
 
 ## demo
-You can access the demo at [logto-demo-account-dashboard.pages.dev](https://logto-demo-account-dashboard.pages.dev/).  
+You can access the demo at [logto-demo-account-dashboard.pages.dev](https://logto-demo-account-dashboard.pages.dev/account/aboutme).  
 and can login with 
 - Username: demo@example.org
 - Password: demopassword
