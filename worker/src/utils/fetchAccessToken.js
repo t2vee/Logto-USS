@@ -15,11 +15,11 @@ export default async function fetchAccessToken(env) {
 		'Authorization': `Basic ${credentials}`,
 		'Content-Type': 'application/x-www-form-urlencoded'
 	};
-	const body = 'grant_type=client_credentials&resource=https://default.logto.app/api&scope=all';
+	const body = `grant_type=client_credentials&resource=${env.LOGTO_DEFAULT_RESOURCE}&scope=all`;
 	try {
 		const response = await fetch(url, { method: 'POST', headers, body });
 		if (!response.ok) {
-			throw { message: 'Failed to fetch access token due to network error', status: response.status };
+			throw { message: 'Failed to fetch access token', status: response.status };
 		}
 		const data = await response.json();
 		if (!data.access_token) {
