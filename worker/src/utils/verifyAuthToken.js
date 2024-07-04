@@ -17,10 +17,10 @@ import { createRemoteJWKSet, jwtVerify } from 'jose';
 export default async function verifyAuthToken(request, env) {
 	try {
 		const token = extractBearerTokenFromHeaders(request.headers);
-		const JWKS = createRemoteJWKSet(new URL(env.JWKS_URI));
+		const JWKS = createRemoteJWKSet(new URL(`${env.LOGTO_DOMAIN}/oidc/jwks`));
 		const { payload } = await jwtVerify(token, JWKS, {
-			issuer: env.ISSUER,
-			audience: 'https://default.logto.app/api',
+			issuer: `${env.LOGTO_DOMAIN}/oidc`,
+			audience: env.LOGTO_DEFAULT_RESOURCE,
 		});
 		return payload;
 	} catch (error) {
