@@ -16,9 +16,8 @@ kv_namespaces = [
 
 [vars]
 CORS = "" # the domain of the web dashboard
-ISSUER = "" # the logto domain plus '/oidc'
-JWKS_URI = "" # the logto domain plus '/oidc/jwks'
 LOGTO_DOMAIN = "" # the domain of your logto installation
+LOGTO_DEFAULT_RESOURCE = "" # if you are running Logto OSS this should be 'https://default.logto.app/api'
 ENABLE_NSFW_CHECK = 0 # any truthy value
 AVATAR_API = "" # must be valid if ENABLE_NSFW_CHECK is true
 

@@ -2,12 +2,6 @@
 // Use of this source code is governed by an MPL license.
 
 
-/**
- * Fetches an access token from the authentication server.
- *
- * @returns {Promise<string|null>} A promise that resolves with the access token as a string if successful, or null if an error occurs.
- * @throws {{ message: string, status: number }} Throws an error object with a message and status code if fetching the access token fails.
- */
 export default async function fetchAccessToken(env) {
 	const url = `${env.LOGTO_DOMAIN}/oidc/token`;
 	const credentials = btoa(`${env.LOGTO_APP_ID}:${env.LOGTO_APP_SECRET}`);
