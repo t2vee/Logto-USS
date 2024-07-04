@@ -14,9 +14,8 @@ kv_namespaces = [
 [vars]
 AVATAR_API = "https://check.mxs.app"
 CORS = "https://myid.mxs.app"
-ISSUER = "https://id.mxs.app/oidc"
-JWKS_URI = "https://id.mxs.app/oidc/jwks"
 LOGTO_DOMAIN = "https://id.mxs.app"
+LOGTO_DEFAULT_RESOURCE = "https://default.logto.app/api"
 ENABLE_NSFW_CHECK = 1
 
 [placement]
