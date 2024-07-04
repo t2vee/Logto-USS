@@ -10,7 +10,7 @@ export default async (req, env, ctx) => {
 	let expiry = await env.LogtoAccessToken.get("token_expiry");
 	const now = Math.floor(Date.now() / 1000);
 	if (!accessToken || !expiry || parseInt(expiry) <= now) {
-		console.log("[MIDDLEWARE] Access token expired. Fetching New Token...");
+		console.log("[MIDDLEWARE] Access token non-existent or expired. Fetching New Token...");
 		try {
 			const accessTokenResponse = await fetchAccessToken(env);
 			await env.LogtoAccessToken.put("access_token", accessTokenResponse.access_token, { expirationTtl: accessTokenResponse.expires_in });
