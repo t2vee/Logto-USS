@@ -21,8 +21,8 @@ export default defineConfig({
         dir: 'dist',
         hashCharacters: 'hex',
         entryFileNames: 'core.js',
-        assetFileNames: '[hash:7].css',
-        chunkFileNames: "[hash:7].js",
+        assetFileNames: 'paint.[hash:7].css',
+        chunkFileNames: "chunk.[hash:7].js",
         manualChunks: undefined,
       }
     }
