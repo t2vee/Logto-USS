@@ -3,7 +3,6 @@
 
 
 import { error, status } from 'itty-router'
-import { DangerZoneRouter } from './index'
 
 
 export const handler = async (request, env, ctx) => {
@@ -13,5 +12,5 @@ export const handler = async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return error(e)
-}
+	}
 }

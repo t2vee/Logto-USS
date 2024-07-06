@@ -13,5 +13,5 @@ export const handler = async (request, env, ctx) => {
 	} catch (e) {
 		console.error(e)
 		return error(e)
-}
+	}
 }
