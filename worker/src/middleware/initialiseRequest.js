@@ -10,7 +10,7 @@ export default async (req, env, ctx) => {
 		ctx.Validate = createDataValidator(env)
 		ctx.Http = createHttpClient(env, ctx.accesstoken)
 	} catch (e) {
-
+		console.error('[MIDDLEWARE] FAILED to Initialise Request Context');
 	}
 	console.log('[MIDDLEWARE] Request Context Initialised');
 }
