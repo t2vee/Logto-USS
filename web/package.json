@@ -24,6 +24,7 @@
     "esm-seedrandom": "^3.0.5",
     "hashicon": "^0.3.0",
     "http-jsonp": "^1.1.1",
+    "is-email": "^1.0.2",
     "jdenticon": "^3.3.0",
     "lodash": "^4.17.21",
     "lucide-vue-next": "^0.378.0",
