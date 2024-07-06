@@ -2,6 +2,7 @@ name = "mxs-myid"
 type = "javascript"
 compatibility_flags = [ "nodejs_compat" ]
 compatibility_date = "2024-03-04"
+pages_build_output_dir = "./dist"
 
 kv_namespaces = [
 	{ binding = "MFARequiredTokens", id = "305251b3e929457fadad216a3fe20f36" },
@@ -15,17 +16,16 @@ CORS = "https://myid.mxs.app"
 LOGTO_DOMAIN = "https://id.mxs.app"
 LOGTO_DEFAULT_RESOURCE = "https://default.logto.app/api"
 ENABLE_NSFW_CHECK = 1
-
-[site]
-bucket = "./dist"
-entry-point = "./functions"
-
-[[build.upload]]
-format = "modules"
-directory = "./dist"
-
-[[build.upload.include]]
-pattern = "dist/**"
+VITE_API_WORKER_ENDPOINT = "https://api.id.mxs.app"
+VITE_LEGAL_URL = "https://cookiesandyou.com"
+VITE_LOGTO_APPID = "yw2r46h73tzfk8z4bo1go"
+VITE_LOGTO_CORE_RESOURCE = "https://default.logto.app/api"
+VITE_LOGTO_ENDPOINT = "https://id.mxs.app/"
+VITE_LOGTO_RESOURCES = '["https://default.logto.app/api", "https://myaccount.mxs.app"]'
+VITE_MATOMO_ENDPOINT = "https://insights.vee.city"
+VITE_MATOMO_SITE_ID = 2
+VITE_ROOT = "https://myid.mxs.app"
+VITE_SUPPORT_EMAIL = "support@mxs.email"
 
 [placement]
 mode = "smart"

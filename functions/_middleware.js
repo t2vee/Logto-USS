@@ -1,10 +1,10 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
-import fetchAccessToken from "../worker/utils/fetchAccessToken";
-import verifyAuthToken from "../worker/utils/verifyAuthToken";
-import { createDataValidator } from '../worker/libs/DataValidator'
-import { createHttpClient } from '../worker/libs/HttpClient'
+import fetchAccessToken from "../api/utils/fetchAccessToken";
+import verifyAuthToken from "../api/utils/verifyAuthToken";
+import { createDataValidator } from '../api/libs/DataValidator'
+import { createHttpClient } from '../api/libs/HttpClient'
 
 
 const errorHandling = async (ctx) => {
