@@ -1,7 +1,6 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
-
 import { error, json } from 'itty-router'
 
 export const handler = async (request, env, ctx) => {
