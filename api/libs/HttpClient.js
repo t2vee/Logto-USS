@@ -5,9 +5,11 @@ const _500 = 'ERR_SERVICE_FAILURE';
 const _403 = 'ERR_INTERNAL_MISCONFIG';
 
 class StatusError extends Error {
-	constructor(status, message) {
-		super(message);
-		this.statusCode = status;
+	status;
+	constructor(status = 500, body) {
+		super(typeof body === 'object' ? body.error : body)
+		typeof body === 'object' && Object.assign(this, body)
+		this.status = status
 	}
 }
 
