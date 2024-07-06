@@ -20,5 +20,6 @@ export const handler = async (request, env, ctx) => {
 		return json(r);
 	} catch (e) {
 		console.error(e)
-		return error(e)}
+		return error(e)
+	}
 }
