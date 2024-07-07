@@ -11,7 +11,7 @@ kv_namespaces = [
 
 [vars]
 AVATAR_API = "https://check.mxs.app"
-CORS = "https://myid.mxs.app"
+CORS = "https://dashboard-functions-dev.pages.dev"
 LOGTO_DOMAIN = "https://id.mxs.app"
 LOGTO_DEFAULT_RESOURCE = "https://default.logto.app/api"
 ENABLE_NSFW_CHECK = 1
@@ -23,7 +23,7 @@ VITE_LOGTO_ENDPOINT = "https://id.mxs.app/"
 VITE_LOGTO_RESOURCES = '["https://default.logto.app/api", "https://myaccount.mxs.app"]'
 VITE_MATOMO_ENDPOINT = "https://insights.vee.city"
 VITE_MATOMO_SITE_ID = 2
-VITE_ROOT = "https://myid.mxs.app"
+VITE_ROOT = "https://dashboard-functions-dev.pages.dev"
 VITE_SUPPORT_EMAIL = "support@mxs.email"
 
 [placement]
