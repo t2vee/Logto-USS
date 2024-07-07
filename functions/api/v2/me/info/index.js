@@ -3,13 +3,15 @@
 
 import { error, json } from '../../../../../api/libs/itty/responses/index.js';
 
-export async function onRequest(ctx) {
-    console.log(1)
-  console.log(ctx.data.Http)
+export async function onRequestGet(ctx) {
+  try {
     const userData = await ctx.data.Http.get(
-      `/api/users/${encodeURIComponent(ctx.userid)}`, {
-          resTo400: 'ERR_USR_DOES_NOT_EXIST',
+      `/api/users/${encodeURIComponent(ctx.data.userid)}`, {
+        resTo400: 'ERR_USR_DOES_NOT_EXIST',
       });
-    console.log(10)
     return json(userData);
+  } catch (e) {
+    console.error('Error in grabbing User Data:' + e);
+    return error(e);
+  }
 }
