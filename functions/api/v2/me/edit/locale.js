@@ -8,7 +8,7 @@ export async function onRequestPost(ctx) {
         const requestData = await ctx.request.json();
         ctx.data.Validate.locale(requestData);
         await ctx.data.Http.patch(
-            `/api/users/${ctx.userid}/profile`,
+            `/api/users/${ctx.data.userid}/profile`,
             {data: {
                     "profile": {
                         "locale": requestData.locale

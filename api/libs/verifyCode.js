@@ -8,7 +8,7 @@ export default async (env, request, ctx, type, detail = undefined) => {
 	try {
 		if (!detail) {
 			const userData = await ctx.data.Http.get(
-				`/api/users/${encodeURIComponent(ctx.userid)}`, {
+				`/api/users/${encodeURIComponent(ctx.data.userid)}`, {
 				});
 			detail = type === 'email' ? userData.primaryEmail : await prepareNumber(userData.primaryPhone);
 		}
@@ -19,7 +19,7 @@ export default async (env, request, ctx, type, detail = undefined) => {
 					{'email': detail, "verificationCode": ctx.data.verificationCode}
 					: {'phone': detail, "verificationCode": ctx.data.verificationCode},
 			});
-		await env.MFARequiredTokens.put(ctx.userid, false, {expirationTtl: 9000});
+		await env.MFARequiredTokens.put(ctx.data.userid, false, {expirationTtl: 9000});
 		return status(204)
 	} catch (e) {
 		console.error(e)

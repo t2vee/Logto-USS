@@ -6,7 +6,7 @@ import { error, status } from '../../../../../api/libs/itty/responses';
 export async function onRequestPost(ctx) {
     try {
         await ctx.data.Http.patch(
-            `/api/users/${ctx.userid}`,
+            `/api/users/${ctx.data.userid}`,
             {data: {"primaryPhone": null}}
         );
         return status(204)

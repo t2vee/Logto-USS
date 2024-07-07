@@ -15,7 +15,7 @@ export async function onRequestPost(ctx) {
             return error(e)
         }
         await ctx.data.Http.patch(
-            `/api/users/${ctx.userid}`,
+            `/api/users/${ctx.data.userid}`,
             {
                 data: {"primaryEmail": requestData.email},
                 resTo400: 'ERR_INVALID_EMAIL',

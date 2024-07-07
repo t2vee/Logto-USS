@@ -5,7 +5,7 @@ import { error, json } from '../../../../../api/libs/itty/responses';
 
 export async function onRequestGet(ctx) {
     try {
-        const uri = `/api/users/${ctx.userid}/mfa-verifications`
+        const uri = `/api/users/${ctx.data.userid}/mfa-verifications`
         const totp = await ctx.data.Http.post(uri, {data: {"type": "Totp"},});
         const code = await ctx.data.Http.post(uri, {data: {"type": "BackupCode"},});
         return json({

@@ -5,7 +5,7 @@ import { error, status } from '../../../../../api/libs/itty/responses';
 
 export async function onRequestGet(ctx) {
     try {
-        await ctx.data.Http.delete(`/api/users/${ctx.userid}`, {})
+        await ctx.data.Http.delete(`/api/users/${ctx.data.userid}`, {})
         return status(204)
     } catch (e) {
         console.error(e)

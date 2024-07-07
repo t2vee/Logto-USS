@@ -7,7 +7,7 @@ export async function onRequestPost(ctx) {
     if (!ctx.request.params || !ctx.request.params.connector) { return error(400, 'ERR_NO_TYPE_PROVIDED'); }
     try {
         await ctx.data.Http.delete(
-            `/api/users/${ctx.userid}/identities/${ctx.request.params.connector}`,
+            `/api/users/${ctx.data.userid}/identities/${ctx.request.params.connector}`,
             {});
         return status(204)
     } catch (e) {

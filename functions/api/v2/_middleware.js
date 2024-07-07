@@ -41,7 +41,7 @@ const initialiseApiAccessToken = async (ctx) => {
 const authenticationCheck = async (ctx) => {
     try {
         const tokenInfo = await verifyAuthToken(ctx.request, ctx.env);
-        ctx.userid = tokenInfo.sub;
+        ctx.data.userid = tokenInfo.sub;
         console.log('[MIDDLEWARE] Stage 2 - Bearer Token Check Succeeded')
     } catch (e) {
         console.log('[MIDDLEWARE] Bearer Token Check FAILED')

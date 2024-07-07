@@ -5,7 +5,7 @@ import { error, status } from '../../../../../api/libs/itty/responses';
 
 export async function onRequestGet(ctx) {
     try {
-        const uri = `/api/users/${ctx.userid}/mfa-verifications/`;
+        const uri = `/api/users/${ctx.data.userid}/mfa-verifications/`;
         const requestData = await ctx.request.json();
         await ctx.data.Http.delete(uri + requestData.appid, {});
         await ctx.data.Http.delete(uri + requestData.backupid, {});

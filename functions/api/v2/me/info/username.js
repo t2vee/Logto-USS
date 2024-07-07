@@ -5,7 +5,7 @@ import { status, error, json } from '../../../../../api/libs/itty/responses/inde
 
 export async function onRequestGet(ctx) {
     try {
-        const value = await ctx.env.UsernameChangeTimelimit.get(ctx.userid);
+        const value = await ctx.env.UsernameChangeTimelimit.get(ctx.data.userid);
         return value ? json({value}) : status(204);
     } catch (e) {
         console.error(e)

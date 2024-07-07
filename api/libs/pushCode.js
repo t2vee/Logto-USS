@@ -8,7 +8,7 @@ export default async (request, env, ctx, type, detail = undefined) => {
 	try {
 		if (!detail) {
 			const userData = await ctx.data.Http.get(
-				`/api/users/${encodeURIComponent(ctx.userid)}`, {
+				`/api/users/${encodeURIComponent(ctx.data.userid)}`, {
 				});
 			detail = type === 'email' ? userData.primaryEmail : await prepareNumber(userData.primaryPhone);
 		}

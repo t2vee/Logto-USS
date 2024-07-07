@@ -14,7 +14,7 @@ export async function onRequestPost(ctx) {
             "connectorData": requestData.connectorData,
         }
         const r = await ctx.data.Http.post(
-            `/api/users/${ctx.userid}/identities`,
+            `/api/users/${ctx.data.userid}/identities`,
             {data: uriParams});
         return json(r);
     } catch (e) {

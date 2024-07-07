@@ -8,7 +8,7 @@ export async function onRequestPost(ctx) {
         const requestData = await ctx.request.json();
         ctx.data.Validate.developer(requestData);
         await ctx.data.Http.patch(
-            `/api/users/${ctx.userid}/custom-data`,
+            `/api/users/${ctx.data.userid}/custom-data`,
             {data: { "customData": {"developer": requestData.enable } }
             });
         return requestData.enable ? status(204) : json('')

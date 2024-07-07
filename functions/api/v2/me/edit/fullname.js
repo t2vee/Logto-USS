@@ -8,7 +8,7 @@ export async function onRequestPost(ctx) {
         const requestData = await ctx.request.json();
         ctx.data.Validate.fullName(requestData);
         await ctx.data.Http.patch(
-            `/api/users/${ctx.userid}`,
+            `/api/users/${ctx.data.userid}`,
             {data: {"name": requestData.name}
             });
         return status(204)
