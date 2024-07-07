@@ -7,13 +7,13 @@ import { createDataValidator } from '../api/libs/DataValidator'
 import { createHttpClient } from '../api/libs/HttpClient'
 
 
-const errorHandling = async (ctx) => {
+/*const errorHandling = async (ctx) => {
     try {
         return await ctx.next();
     } catch (err) {
         return new Response(`${err.message}`, { status: 500 });
     }
-}
+}*/
 
 const initialiseApiAccessToken = async (ctx) => {
     let accessToken = await ctx.env.LogtoAccessToken.get("access_token");
@@ -72,7 +72,7 @@ const initialiseRequestLibs = async (ctx) => {
 
 
 export const onRequest = [
-    errorHandling,
+    //errorHandling,
     initialiseApiAccessToken,
     authenticationCheck,
     validateVerificationCode,
