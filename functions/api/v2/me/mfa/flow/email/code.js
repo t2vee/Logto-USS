@@ -2,7 +2,15 @@
 // Use of this source code is governed by an MPL license.
 
 import verifyCode from "../../../../../../../api/libs/verifyCode.js";
+import { error, status } from '../../../../../../../api/libs/itty/responses/index.js'
 
 export async function onRequestPost(ctx) {
-    return verifyCode(ctx, 'email')
+    try {
+        await verifyCode(ctx, 'email')
+        await ctx.env.MfaStatus.put(ctx.data.userid, false, {expirationTtl: 900});
+        return status(204)
+    } catch (e) {
+        console.error(e)
+        return error(e)
+    }
 }
