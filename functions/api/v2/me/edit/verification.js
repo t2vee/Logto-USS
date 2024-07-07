@@ -12,9 +12,9 @@ export async function onRequestPost(ctx) {
             {data: { "customData": {"loginVerification": requestData.enable ? 'enabled' : 'disabled' } }
             });
         if (requestData.enable) {
-            await ctx.env.MFARequiredTokens.delete(ctx.data.userid);
+            await ctx.env.MfaStatus.delete(ctx.data.userid);
         } else {
-            await ctx.env.MFARequiredTokens.put(ctx.data.userid, false);
+            await ctx.env.MfaStatus.put(ctx.data.userid, false);
         }
         return requestData.enable ? status(204) : json('')
     } catch (e) {

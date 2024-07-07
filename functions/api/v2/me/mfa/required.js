@@ -5,7 +5,7 @@ import { error, json } from '../../../../../api/libs/itty/responses/index.js';
 
 export async function onRequestGet(ctx) {
     try {
-        const value = await ctx.env.MFARequiredTokens.get(ctx.data.userid);
+        const value = await ctx.env.MfaStatus.get(ctx.data.userid);
         return value
             ? json({ status: false })
             : json({ status: true });

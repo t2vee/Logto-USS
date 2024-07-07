@@ -66,7 +66,6 @@ const validateVerificationCode = async (ctx) => {
 
 const initialiseRequestLibs = async (ctx) => {
     try {
-        console.log(ctx.data.accesstoken)
         ctx.data.Validate = createDataValidator(ctx.env)
         ctx.data.Http = createHttpClient(ctx.env, ctx.data.accesstoken)
     } catch (e) {
