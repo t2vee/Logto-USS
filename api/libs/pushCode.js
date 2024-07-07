@@ -2,7 +2,7 @@
 // Use of this source code is governed by an MPL license.
 
 import prepareNumber from "../utils/prepareNumber";
-import { status, error } from 'itty-router';
+import { error, status } from '../libs/itty/responses';
 
 export default async (request, env, ctx, type, detail = undefined) => {
 	try {

@@ -1,7 +1,7 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
-import { status, error } from 'itty-router';
+import { error, status } from '../libs/itty/responses';
 import prepareNumber from "../utils/prepareNumber";
 
 export default async (env, request, ctx, type, detail = undefined) => {
