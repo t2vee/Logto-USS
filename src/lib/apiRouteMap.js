@@ -55,5 +55,8 @@ export const API = {
     ME: {
       INFO: '/api/v2/me/info',
       USERNAME_CHANGE: '/api/v2/me/info/username',
+    },
+    UTILS: {
+        CHECK_USERNAME_EXISTS: (username) => `/api/v2/utils/check-username-exists/${username}`
     }
 };
