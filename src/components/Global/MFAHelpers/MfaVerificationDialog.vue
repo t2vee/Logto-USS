@@ -111,7 +111,7 @@ const handleCodeComplete = async (code) => {
   isLoading.value = true
   try {
     const response = await axios.post(
-      `${selectedMfaMethod.value === 'email' ? API.MFA.FLOW.EMAIL.PUSH : API.MFA.FLOW.SMS.PUSH}?verification-code=${code}`,
+      `${selectedMfaMethod.value === 'email' ? API.MFA.FLOW.EMAIL.VERIFY : API.MFA.FLOW.SMS.VERIFY}?verification-code=${code}`,
       {},
       {
         headers: {

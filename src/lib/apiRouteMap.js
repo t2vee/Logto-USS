@@ -44,7 +44,7 @@ export const API = {
         NEW: {
             EMAIL: {
                 PUSH: '/api/v2/me/mfa/new/email',
-                VERIFY: '/api/v2/me/mfa/new/code',
+                VERIFY: '/api/v2/me/mfa/new/email/code',
             },
             SMS: {
                 PUSH: '/api/v2/me/mfa/new/sms',
