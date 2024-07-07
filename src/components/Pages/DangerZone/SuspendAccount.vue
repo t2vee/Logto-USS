@@ -1,15 +1,16 @@
 <script setup>
-import {ref, inject, onMounted} from 'vue'
-import { useLogto } from '@logto/vue'
-import { DialogClose } from '@/components/ui/dialog/index.js'
-import {Loader2, OctagonPause, Save, Undo2} from 'lucide-vue-next'
-import { Button } from '@/components/ui/button/index.js'
+import {inject, onMounted, ref} from 'vue'
+import {useLogto} from '@logto/vue'
+import {DialogClose} from '@/components/ui/dialog/index.js'
+import {Loader2, OctagonPause, Undo2} from 'lucide-vue-next'
+import {Button} from '@/components/ui/button/index.js'
 import axios from 'redaxios'
-import { toast } from 'vue-sonner'
+import {toast} from 'vue-sonner'
 import {CardDescription, CardTitle} from "@/components/ui/card/index.js";
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert/index.js";
 import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
+import {API} from "@/lib/apiRouteMap.js";
 
 const { getAccessToken, signOut } = useLogto()
 const userData = inject('userData')
@@ -25,7 +26,7 @@ async function deactivateAccount() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/dangerzone/suspendme`,
+        API.DANGERZONE.SUSPEND,
         {},
         {
           headers: {

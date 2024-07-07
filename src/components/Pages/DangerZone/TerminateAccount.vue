@@ -1,11 +1,11 @@
 <script setup>
-import {ref, onMounted} from 'vue'
-import { useLogto } from '@logto/vue'
-import { DialogClose } from '@/components/ui/dialog/index.js'
-import {Loader2, AlertTriangle, Undo2, OctagonPause} from 'lucide-vue-next'
-import { Button } from '@/components/ui/button/index.js'
+import {onMounted, ref} from 'vue'
+import {useLogto} from '@logto/vue'
+import {DialogClose} from '@/components/ui/dialog/index.js'
+import {AlertTriangle, Loader2, Undo2} from 'lucide-vue-next'
+import {Button} from '@/components/ui/button/index.js'
 import axios from 'redaxios'
-import { toast } from 'vue-sonner'
+import {toast} from 'vue-sonner'
 import {CardDescription, CardTitle} from "@/components/ui/card/index.js";
 import {
   AlertDialog,
@@ -21,6 +21,7 @@ import {
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert/index.js";
 import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
+import {API} from "@/lib/apiRouteMap.js";
 
 const { getAccessToken, signOut } = useLogto()
 
@@ -34,7 +35,7 @@ async function terminateAccount() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/dangerzone/terminate`,
+        API.DANGERZONE.TERMINATE,
         {},
         {
           headers: {
