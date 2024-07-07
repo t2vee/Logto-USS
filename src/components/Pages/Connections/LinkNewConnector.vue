@@ -1,9 +1,10 @@
 <script setup>
 import axios from 'redaxios';
 import {onMounted, ref} from "vue";
-import { useRoute } from 'vue-router'
-import { useLogto } from '@logto/vue'
-import { LoaderCircle } from "lucide-vue-next";
+import {useRoute} from 'vue-router'
+import {useLogto} from '@logto/vue'
+import {LoaderCircle} from "lucide-vue-next";
+import {API} from "@/lib/apiRouteMap.js";
 
 const route = useRoute()
 const { getAccessToken } = useLogto();
@@ -14,7 +15,7 @@ const redirectToBuiltUri = async () => {
   loaderText.value = 'Grabbing Connector Info...';
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/connectors/build-uri/${route.params.connector}`,
+        API.CONNECTORS.BUILD_URI(route.params.connector),
         {
           "redirectUri": `${import.meta.env.VITE_ROOT}/callback/connectors/${route.params.connector}`
         },
@@ -34,7 +35,7 @@ const linkConnectorToAccount = async () => {
   loaderText.value = 'Linking Connector...';
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/connectors/link/${route.params.connector}`,
+        API.CONNECTORS.BUILD_URI(route.params.connector),
         {
           "connectorData": {
             "code": route.query.code,

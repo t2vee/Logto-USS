@@ -1,13 +1,15 @@
 <script setup>
-import { ref, onUnmounted } from 'vue'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible/index.js'
-import { Card } from '@/components/ui/card/index.js'
-import {Link2, Link2Off, ChevronDown, Loader2} from 'lucide-vue-next'
-import { Button } from '@/components/ui/button/index.js'
-import { eventBus } from '@/lib/eventBus.js'
+import {onUnmounted, ref} from 'vue'
+import {Collapsible, CollapsibleContent, CollapsibleTrigger} from '@/components/ui/collapsible/index.js'
+import {Card} from '@/components/ui/card/index.js'
+import {ChevronDown, Link2, Link2Off, Loader2} from 'lucide-vue-next'
+import {Button} from '@/components/ui/button/index.js'
+import {eventBus} from '@/lib/eventBus.js'
 import axios from 'redaxios';
 import {toast} from "vue-sonner";
-import { useLogto } from '@logto/vue'
+import {useLogto} from '@logto/vue'
+import {useMediaQuery} from "@vueuse/core";
+import {API} from "@/lib/apiRouteMap.js";
 
 const { getAccessToken } = useLogto()
 const isLoading = ref(false)
@@ -39,7 +41,7 @@ async function removeConnector() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/connectors/remove/${props.service.toLowerCase()}`,
+        API.CONNECTORS.REMOVE(props.service.toLowerCase()),
         {},
         {
           headers: {
@@ -88,8 +90,6 @@ const beginAuthorizationFlow = () => {
 };
 
 onUnmounted(cleanup)
-
-import {useMediaQuery} from "@vueuse/core";
 
 const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
