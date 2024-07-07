@@ -6,8 +6,8 @@ import { error, status } from '../../../../../api/libs/itty/responses';
 export async function onRequestPost(ctx) {
     try {
         const requestData = await ctx.request.json();
-        ctx.Validate.regional(requestData);
-        await ctx.http.patch(
+        ctx.data.Validate.regional(requestData);
+        await ctx.data.Http.patch(
             `/api/users/${ctx.userid}/profile`,
             {data: {
                     "profile": {

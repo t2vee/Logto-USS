@@ -7,17 +7,17 @@ import prepareNumber from "../utils/prepareNumber";
 export default async (env, request, ctx, type, detail = undefined) => {
 	try {
 		if (!detail) {
-			const userData = await ctx.http.get(
+			const userData = await ctx.data.Http.get(
 				`/api/users/${encodeURIComponent(ctx.userid)}`, {
 				});
 			detail = type === 'email' ? userData.primaryEmail : await prepareNumber(userData.primaryPhone);
 		}
-		await ctx.http.post(
+		await ctx.data.Http.post(
 			'/api/verification-codes/verify',
 			{
 				data: type === 'email' ?
-					{'email': detail, "verificationCode": ctx.verificationCode}
-					: {'phone': detail, "verificationCode": ctx.verificationCode},
+					{'email': detail, "verificationCode": ctx.data.verificationCode}
+					: {'phone': detail, "verificationCode": ctx.data.verificationCode},
 			});
 		await env.MFARequiredTokens.put(ctx.userid, false, {expirationTtl: 9000});
 		return status(204)

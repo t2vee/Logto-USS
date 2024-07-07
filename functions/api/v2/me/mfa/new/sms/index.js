@@ -8,7 +8,7 @@ import { error } from '../../../../../../../api/libs/itty/responses';
 export async function onRequestPost(ctx) {
     const requestData = await ctx.request.json();
     try {
-        ctx.Validate.phone(requestData);
+        ctx.data.Validate.phone(requestData);
     } catch (e) {
         console.error(e)
         return error(e)

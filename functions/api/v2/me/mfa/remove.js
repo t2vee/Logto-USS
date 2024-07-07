@@ -7,8 +7,8 @@ export async function onRequestGet(ctx) {
     try {
         const uri = `/api/users/${ctx.userid}/mfa-verifications/`;
         const requestData = await ctx.request.json();
-        await ctx.http.delete(uri + requestData.appid, {});
-        await ctx.http.delete(uri + requestData.backupid, {});
+        await ctx.data.Http.delete(uri + requestData.appid, {});
+        await ctx.data.Http.delete(uri + requestData.backupid, {});
         return status(204)
     } catch (e) {
         console.error(e)

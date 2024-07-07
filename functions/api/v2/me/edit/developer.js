@@ -6,8 +6,8 @@ import { error, status, json } from '../../../../../api/libs/itty/responses';
 export async function onRequestPost(ctx) {
     try {
         const requestData = await ctx.request.json();
-        ctx.Validate.developer(requestData);
-        await ctx.http.patch(
+        ctx.data.Validate.developer(requestData);
+        await ctx.data.Http.patch(
             `/api/users/${ctx.userid}/custom-data`,
             {data: { "customData": {"developer": requestData.enable } }
             });

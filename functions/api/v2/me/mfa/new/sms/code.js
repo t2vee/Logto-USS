@@ -7,7 +7,7 @@ import { error, status } from '../../../../../../../api/libs/itty/responses';
 export async function onRequestPost(ctx) {
     try {
         const requestData = await ctx.request.json();
-        ctx.Validate.phone(requestData);
+        ctx.data.Validate.phone(requestData);
         const phone = requestData.encryptedPhoneNumber;
         try {
             await verifyCode(ctx.env, ctx.request, ctx, 'phone', phone)
@@ -15,7 +15,7 @@ export async function onRequestPost(ctx) {
             console.error(e)
             return error(e)
         }
-        await ctx.http.patch(
+        await ctx.data.Http.patch(
             `/api/users/${ctx.userid}`,
             {
                 data: {"primaryPhone": phone},

@@ -25,14 +25,14 @@ const initialiseApiAccessToken = async (ctx) => {
             const accessTokenResponse = await fetchAccessToken(ctx.env);
             await ctx.env.LogtoAccessToken.put("access_token", accessTokenResponse.access_token, { expirationTtl: accessTokenResponse.expires_in });
             await ctx.env.LogtoAccessToken.put("token_expiry", (now + accessTokenResponse.expires_in).toString(), { expirationTtl: accessTokenResponse.expires_in });
-            ctx.accesstoken = accessTokenResponse.access_token;
+            ctx.data.accesstoken = accessTokenResponse.access_token;
         } catch (err) {
             console.log('Failed to fetch AccessToken', err);
-            ctx.accesstoken = null;
+            ctx.data.accesstoken = null;
             return new Response('INTERNAL_MIDDLEWARE_ERROR', { status: 500 });
         }
     } else {
-        ctx.accesstoken = accessToken;
+        ctx.data.accesstoken = accessToken;
     }
     console.log('[MIDDLEWARE] Stage 1 - Request Tokens Setup Complete')
     return await ctx.next()
@@ -58,7 +58,7 @@ const validateVerificationCode = async (ctx) => {
         if (!verificationCodePattern.test(verificationCode)) {
             return new Response('ERR_CODE_INVALID', { status: 400 });
         }
-        ctx.verificationCode = verificationCode;
+        ctx.data.verificationCode = verificationCode;
     }
     console.log('[MIDDLEWARE] Stage 3 - Verification Code Check Succeeded')
     return await ctx.next()
@@ -66,9 +66,9 @@ const validateVerificationCode = async (ctx) => {
 
 const initialiseRequestLibs = async (ctx) => {
     try {
-        console.log(ctx.accesstoken)
-        ctx.Validate = createDataValidator(ctx.env)
-        ctx.http = createHttpClient(ctx.env, ctx.accesstoken)
+        console.log(ctx.data.accesstoken)
+        ctx.data.Validate = createDataValidator(ctx.env)
+        ctx.data.Http = createHttpClient(ctx.env, ctx.data.accesstoken)
     } catch (e) {
         console.error('[MIDDLEWARE] FAILED to Initialise Request Context');
         return new Response('INTERNAL_MIDDLEWARE_ERROR', { status: 500 });

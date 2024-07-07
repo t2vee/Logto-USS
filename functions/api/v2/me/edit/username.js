@@ -6,9 +6,9 @@ import { error, status } from '../../../../../api/libs/itty/responses';
 export async function onRequestPost(ctx) {
     try {
         const requestData = await ctx.request.json();
-        ctx.Validate.username(requestData);
+        ctx.data.Validate.username(requestData);
         if (await ctx.env.UsernameChangeTimelimit.get(ctx.userid)) {return error(400, `ERR_CANNOT_YET_CHANGE`)}
-        await ctx.http.patch(
+        await ctx.data.Http.patch(
             `/api/users/${ctx.userid}`,
             {data: {"username": requestData.username}
             });

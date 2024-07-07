@@ -5,7 +5,7 @@ import { error, json } from '../../../../../api/libs/itty/responses';
 
 export async function onRequestGet(ctx) {
     try {
-        const r = await ctx.http.get(`/api/users/${encodeURIComponent(ctx.userid)}/mfa-verifications`, {});
+        const r = await ctx.data.Http.get(`/api/users/${encodeURIComponent(ctx.userid)}/mfa-verifications`, {});
         return r.length === 0 ?
             json(["none"]) :
             json(r)
