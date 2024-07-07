@@ -35,7 +35,7 @@ const linkConnectorToAccount = async () => {
   loaderText.value = 'Linking Connector...';
   try {
     const response = await axios.post(
-        API.CONNECTORS.BUILD_URI(route.params.connector),
+        API.CONNECTORS.LINK(route.params.connector),
         {
           "connectorData": {
             "code": route.query.code,
