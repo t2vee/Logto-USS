@@ -1,53 +1,51 @@
-name = "mxs-myid"
-type = "javascript"
+name = "logto-account-dashboard"
 compatibility_flags = [ "nodejs_compat" ]
 compatibility_date = "2024-03-04"
 pages_build_output_dir = "./dist"
 
 kv_namespaces = [
-	{ binding = "MfaStatus", id = "305251b3e929457fadad216a3fe20f36" },
-	{ binding = "LogtoAccessToken", id = "317e47e4c54c460da74f8d7755e6beee" },
-	{ binding = "UsernameChangeTimelimit", id = "72523871c5484c7683abdd7b6d39c04d" }
+	{ binding = "MfaStatus", id = "" },
+	{ binding = "LogtoAccessToken", id = "" },
+	{ binding = "UsernameChangeTimelimit", id = "" }
 ]
 
 [vars]
-AVATAR_API = "https://check.mxs.app"
-CORS = "https://myid.mxs.app"
-LOGTO_DOMAIN = "https://id.mxs.app"
-LOGTO_DEFAULT_RESOURCE = "https://default.logto.app/api"
-ENABLE_NSFW_CHECK = 1
-VITE_API_WORKER_ENDPOINT = "https://api.id.mxs.app"
-VITE_LEGAL_URL = "https://cookiesandyou.com"
-VITE_LOGTO_APPID = "yw2r46h73tzfk8z4bo1go"
-VITE_LOGTO_CORE_RESOURCE = "https://default.logto.app/api"
-VITE_LOGTO_ENDPOINT = "https://id.mxs.app/"
-VITE_LOGTO_RESOURCES = '["https://default.logto.app/api", "https://myaccount.mxs.app"]'
-VITE_MATOMO_ENDPOINT = "https://insights.vee.city"
-VITE_MATOMO_SITE_ID = 2
-VITE_ROOT = "https://myid.mxs.app"
-VITE_SUPPORT_EMAIL = "support@mxs.email"
-## All of the required logto values
+### WEB CLIENT VARIABLES
+## All the required logto values
 # the url of your logto service. if you are using logto cloud it may look like https://[your_tenant].logto.app
-VITE_LOGTO_ENDPOINT=Requried
+VITE_LOGTO_ENDPOINT = Requried
 # the appid of your CLIENT SPA application
-VITE_LOGTO_APPID=Requried
+VITE_LOGTO_APPID = Requried
 # the logto core resource, do not change <= this is only temporary
-VITE_LOGTO_CORE_RESOURCE=https://default.logto.app/api
+VITE_LOGTO_CORE_RESOURCE = https://default.logto.app/api
 # the resources the user should have access to use the dashboard. Should be in array format. e.g: '["https://default.logto.app/api", "https://myresouce.logto.app"]'
-VITE_LOGTO_RESOURCES='[]'
+VITE_LOGTO_RESOURCES = '["https://default.logto.app/api"]' # <= do not change (temporary)
 
 ## Extra endpoints
-# the endpoint of the account worker
-VITE_API_WORKER_ENDPOINT=Requried
+# the url that the dashboard is served from
+VITE_ROOT = Required
 # the endpoint of a matomo installation. if omitted matomo tracking will be disabled
-VITE_MATOMO_ENDPOINT=Optional
-VITE_MATOMO_SITE_ID=Optional
+VITE_MATOMO_ENDPOINT = Optional
+VITE_MATOMO_SITE_ID = Optional
 
 ## Extra customisable options
 # the email in the footer of the dashboard
-VITE_SUPPORT_EMAIL=Requried
+VITE_SUPPORT_EMAIL = Requried
 # the url that users can visit to view the privacy policy/terms of service of your brand. needs to be a full url
-VITE_LEGAL_URL=Requried
+VITE_LEGAL_URL = Requried
+
+### WORKER VARIABLES
+## Required Logto values
+# THESE SHOULD NOT BE SET IN THE WRANGLER.TOML!!
+# Please set these values using the wrangler cli: https://developers.cloudflare.com/workers/wrangler/commands/#secret
+LOGTO_APP_ID = Required - Set via wrangler cli!
+LOGTO_APP_SECRET = Required - Set via wrangler cli!
+LOGTO_DOMAIN = "https://id.mxs.app"
+LOGTO_DEFAULT_RESOURCE = "https://default.logto.app/api"
+
+# settings for avatar nsfw checking. use in conjunction with https://github.com/t2vee/nsfwjs-avatar-service
+AVATAR_API = ""
+ENABLE_NSFW_CHECK = 1
 
 [placement]
 mode = "smart"
