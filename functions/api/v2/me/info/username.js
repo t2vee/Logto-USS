@@ -1,7 +1,7 @@
 // Copyright (c) 2024 t2vee. All rights reserved.
 // Use of this source code is governed by an MPL license.
 
-import { status, error, json } from '../../../../api/libs/itty/responses';
+import { status, error, json } from '../../../../../api/libs/itty/responses/index.js';
 
 export async function onRequestGet(ctx) {
     try {
