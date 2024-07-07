@@ -8,7 +8,7 @@ export async function onRequestPost(ctx) {
         const requestData = await ctx.request.json();
         ctx.Validate.username(requestData);
         if (await ctx.env.UsernameChangeTimelimit.get(ctx.userid)) {return error(400, `ERR_CANNOT_YET_CHANGE`)}
-        await ctx.Http.patch(
+        await ctx.http.patch(
             `/api/users/${ctx.userid}`,
             {data: {"username": requestData.username}
             });

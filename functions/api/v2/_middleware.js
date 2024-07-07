@@ -66,8 +66,9 @@ const validateVerificationCode = async (ctx) => {
 
 const initialiseRequestLibs = async (ctx) => {
     try {
+        console.log(ctx.accesstoken)
         ctx.Validate = createDataValidator(ctx.env)
-        ctx.Http = createHttpClient(ctx.env, ctx.accesstoken)
+        ctx.http = createHttpClient(ctx.env, ctx.accesstoken)
     } catch (e) {
         console.error('[MIDDLEWARE] FAILED to Initialise Request Context');
         return new Response('INTERNAL_MIDDLEWARE_ERROR', { status: 500 });

@@ -7,12 +7,12 @@ import { error, status } from '../libs/itty/responses';
 export default async (request, env, ctx, type, detail = undefined) => {
 	try {
 		if (!detail) {
-			const userData = await ctx.Http.get(
+			const userData = await ctx.http.get(
 				`/api/users/${encodeURIComponent(ctx.userid)}`, {
 				});
 			detail = type === 'email' ? userData.primaryEmail : await prepareNumber(userData.primaryPhone);
 		}
-		await ctx.Http.post(
+		await ctx.http.post(
 			'/api/verification-codes',
 			{
 				data: type === 'email' ?

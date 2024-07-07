@@ -14,7 +14,7 @@ export async function onRequestPost(ctx) {
             console.error(e)
             return error(e)
         }
-        await ctx.Http.patch(
+        await ctx.http.patch(
             `/api/users/${ctx.userid}`,
             {
                 data: {"primaryEmail": requestData.email},

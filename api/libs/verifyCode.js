@@ -7,12 +7,12 @@ import prepareNumber from "../utils/prepareNumber";
 export default async (env, request, ctx, type, detail = undefined) => {
 	try {
 		if (!detail) {
-			const userData = await ctx.Http.get(
+			const userData = await ctx.http.get(
 				`/api/users/${encodeURIComponent(ctx.userid)}`, {
 				});
 			detail = type === 'email' ? userData.primaryEmail : await prepareNumber(userData.primaryPhone);
 		}
-		await ctx.Http.post(
+		await ctx.http.post(
 			'/api/verification-codes/verify',
 			{
 				data: type === 'email' ?

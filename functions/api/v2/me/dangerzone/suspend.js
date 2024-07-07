@@ -5,7 +5,7 @@ import { error, status } from '../../../../../api/libs/itty/responses';
 
 export async function onRequestGet(ctx) {
     try {
-        await ctx.Http.patch(`/api/users/${ctx.userid}/is-suspended`, {
+        await ctx.http.patch(`/api/users/${ctx.userid}/is-suspended`, {
             body: {"isSuspended": true},
         })
         return status(204)

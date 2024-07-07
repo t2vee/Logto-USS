@@ -26,7 +26,7 @@ export async function onRequestPost(ctx) {
         const i = await processAvatar(ctx.env, file)
         if (!i) {return error(500, "ERR_IMG_PROCESS_FAILED");}
         const uploadResponse = await uploadAvatar(ctx.env, ctx.accesstoken, i, ctx.userid);
-        await ctx.Http.patch(
+        await ctx.http.patch(
             `/api/users/${ctx.userid}`,
             {data: {"avatar": uploadResponse.url,}
             });

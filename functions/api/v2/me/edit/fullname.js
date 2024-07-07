@@ -7,7 +7,7 @@ export async function onRequestPost(ctx) {
     try {
         const requestData = await ctx.request.json();
         ctx.Validate.fullName(requestData);
-        await ctx.Http.patch(
+        await ctx.http.patch(
             `/api/users/${ctx.userid}`,
             {data: {"name": requestData.name}
             });

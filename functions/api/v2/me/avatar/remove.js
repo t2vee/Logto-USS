@@ -5,7 +5,7 @@ import {error, status} from '../../../../../api/libs/itty/responses';
 
 export async function onRequestPost(ctx) {
     try {
-        await ctx.Http.patch(
+        await ctx.http.patch(
             `/api/users/${ctx.userid}`,
             {data: {"avatar": null}
             });

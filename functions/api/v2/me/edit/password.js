@@ -8,14 +8,14 @@ export async function onRequestPost(ctx) {
         const requestData = await ctx.request.json();
         ctx.Validate.password(requestData);
         try {
-            await ctx.Http.post(
+            await ctx.http.post(
                 `/api/users/${ctx.userid}/password/verify`,
                 {data: { "password": requestData.oldPassword }
                 });
         } catch (err) {
             return error(406,'old password does not match!')
         }
-        await ctx.Http.patch(
+        await ctx.http.patch(
             `/api/users/${ctx.userid}/password`,
             {data: { "password": requestData.password }
             });

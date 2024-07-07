@@ -11,9 +11,9 @@ export async function onRequestPost(ctx) {
             "state": Array.from(crypto.getRandomValues(new Uint32Array(ctx.userid.length)), dec => ('0' + dec.toString(16)).substr(-2)).join(''),
             "redirectUri": requestData.redirectUri,
         }
-        const connectorResponse = await ctx.Http.get(`/api/connectors`, {});
+        const connectorResponse = await ctx.http.get(`/api/connectors`, {});
         const connectorID = connectorResponse.find(item => item.target.toLowerCase() === ctx.request.params.connector.toLowerCase());
-        const r = await ctx.Http.post(
+        const r = await ctx.http.post(
             `/api/connectors/${connectorID.id}/authorization-uri`,
             {data: uriParams});
         return json(r)
