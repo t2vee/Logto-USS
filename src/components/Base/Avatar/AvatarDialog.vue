@@ -2,11 +2,7 @@
 import {ref} from 'vue'
 import {DialogDescription, DialogHeader, DialogTitle} from '@/components/ui/dialog/index.js'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs/index.js'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
+import {Popover, PopoverContent, PopoverTrigger,} from '@/components/ui/popover'
 
 import AvatarGallery from '@/components/Base/Avatar/AvatarGallery.vue'
 import ImageUploader from '@/components/Base/Avatar/ImageUploader.vue'

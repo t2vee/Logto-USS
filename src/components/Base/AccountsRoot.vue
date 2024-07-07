@@ -11,6 +11,8 @@ import {eventBus} from '@/lib/eventBus.js'
 import axios from 'redaxios'
 import {toast} from 'vue-sonner'
 import {RouterView} from "vue-router";
+import {useMediaQuery} from "@vueuse/core";
+import {API} from "@/lib/apiRouteMap.js";
 
 const { fetchUserInfo, getAccessToken } = useLogto()
 const userInfo = ref(null)
@@ -29,7 +31,7 @@ async function loadData() {
     const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
     const logtoRepsonse = await fetchUserInfo()
     const response = await axios.get(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/info`,
+      API.ME.INFO,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -47,7 +49,7 @@ async function loadData() {
   }
   try {
     const response = await axios.get(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa/methods`,
+        API.MFA.METHODS,
         {headers: {Authorization: `Bearer ${await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)}`, 'Content-Type': 'application/json'}}
     )
     if (response.data[0]?.type === 'Totp') {mfaOptions.value.totp = response.data[0]}
@@ -81,8 +83,6 @@ provide('mfaMethods', mfaOptions)
 const cleanup = eventBus.on('refreshUserData', handleRefresh)
 eventBus.on('AccountLoading', handleLoading)
 onUnmounted(cleanup)
-
-import {useMediaQuery} from "@vueuse/core";
 
 const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>

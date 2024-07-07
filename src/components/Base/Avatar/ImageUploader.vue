@@ -8,8 +8,9 @@ import {toast} from 'vue-sonner'
 import {DialogClose, DialogFooter} from '@/components/ui/dialog/index.js'
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from '@/components/ui/card/index.js'
 import {Button} from '@/components/ui/button/index.js'
-import {createReusableTemplate, useMediaQuery, useDropZone} from "@vueuse/core";
+import {createReusableTemplate, useDropZone, useMediaQuery} from "@vueuse/core";
 import {DrawerFooter} from "@/components/ui/drawer/index.js";
+import {API} from "@/lib/apiRouteMap.js";
 
 const { getAccessToken } = useLogto()
 const fileInput = ref(null)
@@ -43,7 +44,7 @@ const uploadFile = async () => {
   )
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/avatar/upload`,
+      API.AVATAR.UPLOAD,
       formData,
       {
         headers: {

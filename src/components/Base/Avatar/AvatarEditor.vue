@@ -1,5 +1,5 @@
 <script setup>
-import {defineAsyncComponent, onUnmounted, ref, watch} from 'vue'
+import {defineAsyncComponent, onUnmounted, ref} from 'vue'
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar/index.js'
 import {ImagePlus, Loader2, Pencil, Trash2} from 'lucide-vue-next'
 import {Dialog, DialogContent, DialogTrigger} from '@/components/ui/dialog/index.js'
@@ -11,6 +11,7 @@ import {toast} from 'vue-sonner'
 import {useLogto} from '@logto/vue'
 import {Drawer, DrawerContent, DrawerTrigger} from "@/components/ui/drawer/index.js";
 import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
+import {API} from "@/lib/apiRouteMap.js";
 
 defineProps({
   avatarUrl: {
@@ -32,7 +33,7 @@ const removeCurrentAvatar = async () => {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/avatar/remove`,
+        API.AVATAR.REMOVE,
         {},
         {
           headers: {

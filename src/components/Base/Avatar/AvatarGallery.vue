@@ -15,6 +15,7 @@ import {getAvatar as generateMonsterID} from '@/lib/identicons/monsterid.js'
 import Blockies from '@/lib/identicons/blockies.js'
 import {DrawerFooter} from "@/components/ui/drawer/index.js";
 import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
+import {API} from "@/lib/apiRouteMap.js";
 
 const avatars = ref([])
 const { getAccessToken } = useLogto()
@@ -115,7 +116,7 @@ const uploadFile = async () => {
   const formData = await fetchGalleryAvatar()
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/avatar/upload`,
+      API.AVATAR.UPLOAD,
       formData,
       {
         headers: {
