@@ -1,6 +1,6 @@
 <script setup>
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert/index.js'
-import { AlertCircle } from 'lucide-vue-next'
+import {Alert, AlertDescription, AlertTitle} from '@/components/ui/alert/index.js'
+import {AlertCircle} from 'lucide-vue-next'
 
 defineProps({
   customTitle: {

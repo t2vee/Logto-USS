@@ -1,7 +1,7 @@
 <script setup>
-import { computed } from 'vue'
-import { DiscordIcon, GitHubIcon, GoogleIcon } from 'vue3-simple-icons'
-import { Card } from '@/components/ui/card/index.js'
+import {computed} from 'vue'
+import {DiscordIcon, GitHubIcon, GoogleIcon} from 'vue3-simple-icons'
+import {Card} from '@/components/ui/card/index.js'
 
 const props = defineProps({
   userConnector: {

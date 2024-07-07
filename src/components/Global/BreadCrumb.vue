@@ -1,7 +1,6 @@
 <script setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import Button from '../ui/button/Button.vue'
+import {computed} from 'vue'
+import {useRoute} from 'vue-router'
 
 const route = useRoute()
 

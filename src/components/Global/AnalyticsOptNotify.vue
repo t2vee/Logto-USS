@@ -1,11 +1,11 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-import { Cookie, Loader } from 'lucide-vue-next'
+import {ref} from 'vue'
+import {Cookie, Loader} from 'lucide-vue-next'
 import {
+  Toast as ToastRoot,
   ToastAction,
   ToastDescription,
   ToastProvider,
-  Toast as ToastRoot,
   ToastTitle,
   ToastViewport
 } from '@/components/ui/Custom/toast/index.js'
