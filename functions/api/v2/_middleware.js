@@ -58,9 +58,9 @@ const validateVerificationCode = async (ctx) => {
         if (!verificationCodePattern.test(verificationCode)) {
             return new Response('ERR_CODE_INVALID', { status: 400 });
         }
-        console.log('[MIDDLEWARE] Stage 3 - Verification Code Check Succeeded')
         ctx.verificationCode = verificationCode;
     }
+    console.log('[MIDDLEWARE] Stage 3 - Verification Code Check Succeeded')
     return await ctx.next()
 }
 
