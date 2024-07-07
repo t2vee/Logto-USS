@@ -17,6 +17,9 @@ import {eventBus} from '@/lib/eventBus.js'
 import {useLogto} from '@logto/vue'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 import {BookType, Save, Undo2} from "lucide-vue-next";
+import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
+import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
+import {API} from "@/lib/apiRouteMap.js";
 
 const { getAccessToken } = useLogto()
 const selectedLocale = ref('')
@@ -26,7 +29,7 @@ async function updateData() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/language`,
+      API.EDIT.LOCALE,
       {
         locale: selectedLocale.value
       },
@@ -57,9 +60,6 @@ function expandLocale(shortLocale) {
     return shortLocale
   }
 }
-
-import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
-import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
 
 const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
 const isDesktop = useMediaQuery('(min-width: 1023px)')

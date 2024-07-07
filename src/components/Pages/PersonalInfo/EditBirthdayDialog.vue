@@ -14,6 +14,9 @@ import {cn} from '@/lib/utils.js'
 import CalendarWithSelects from '@/components/Pages/PersonalInfo/Utils/CalendarWithSelects.vue'
 import {DateFieldInput, DateFieldRoot,} from 'radix-vue'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
+import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
+import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
+import {API} from "@/lib/apiRouteMap.js";
 
 const df = new DateFormatter('en-AU', {
   dateStyle: 'long'
@@ -29,7 +32,7 @@ async function updateData() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/birthday`,
+      API.EDIT.BIRTHDAY,
       {
         birthday: df.format(value.value.toDate(getLocalTimeZone()))
       },
@@ -62,8 +65,6 @@ function allowSave() {
   dateSelected.value = !!value.value
 }
 
-import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
-import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
 const isDesktop = useMediaQuery('(min-width: 1023px)')
 const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
 </script>

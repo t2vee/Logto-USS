@@ -30,6 +30,8 @@ import axios from 'redaxios'
 import {toast} from 'vue-sonner'
 import {eventBus} from '@/lib/eventBus.js'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
+import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
+import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
 
 const { getAccessToken } = useLogto()
 const userData = inject('userData')
@@ -48,7 +50,7 @@ async function updateData() {
       payload.country = selectedCountry.value
     }
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/regional-settings`,
+      API.EDIT.REGIONAL,
       payload,
       {
         headers: {
@@ -64,9 +66,6 @@ async function updateData() {
     toast.error('Error saving changes:', { description: 'Service Unavailable. Try again later' })
   }
 }
-
-import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
-import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
 
 const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
 const isDesktop = useMediaQuery('(min-width: 1023px)')

@@ -11,6 +11,9 @@ import {eventBus} from '@/lib/eventBus.js'
 import debounce from 'lodash/debounce'
 import {Ban, MoreHorizontal, Save, Undo2, UserRound, UserRoundCheck} from 'lucide-vue-next'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
+import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
+import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
+import {API} from "@/lib/apiRouteMap.js";
 
 const userData = inject('userData')
 const { getAccessToken } = useLogto()
@@ -25,7 +28,7 @@ async function updateData() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/full-name`,
+      API.EDIT.FULLNAME,
       {
         name: fullName.value
       },
@@ -74,9 +77,6 @@ const checkName = async (value) => {
 }
 
 const debouncedCheckName = debounce(() => checkName(fullName.value), 500)
-
-import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
-import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
 
 const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
 const isDesktop = useMediaQuery('(min-width: 1023px)')

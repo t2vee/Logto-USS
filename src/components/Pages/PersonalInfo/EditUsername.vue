@@ -1,17 +1,20 @@
 <script setup>
-import { Input } from '@/components/ui/input/index.js'
-import { Label } from '@/components/ui/label/index.js'
+import {Input} from '@/components/ui/input/index.js'
+import {Label} from '@/components/ui/label/index.js'
 import axios from 'redaxios'
 import {inject, ref, watch} from 'vue'
-import { useLogto } from '@logto/vue'
+import {useLogto} from '@logto/vue'
 import debounce from 'lodash/debounce'
-import {Ban, UserRoundCheck, MoreHorizontal, CircleUserRound, Save, Undo2} from 'lucide-vue-next'
-import { Button } from '@/components/ui/button/index.js'
-import { DialogClose } from '@/components/ui/dialog/index.js'
-import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js'
+import {Ban, CircleUserRound, MoreHorizontal, Save, Undo2, UserRoundCheck} from 'lucide-vue-next'
+import {Button} from '@/components/ui/button/index.js'
+import {DialogClose} from '@/components/ui/dialog/index.js'
+import {toast} from 'vue-sonner'
+import {eventBus} from '@/lib/eventBus.js'
 import ConnectorAlert from '@/components/Global/ConnectorAlert.vue'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
+import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
+import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
+import {API} from "@/lib/apiRouteMap.js";
 
 const userData = inject('userData')
 
@@ -40,7 +43,7 @@ const checkUsernameAvailability = async (value) => {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/utils/check-username-exists/${value}`,
+      API.UTILS.CHECK_USERNAME_EXISTS(value),
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -71,7 +74,7 @@ async function updateData() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/username`,
+      API.EDIT.USERNAME,
       {
         username: username.value
       },
@@ -103,7 +106,7 @@ const checkNextUsernameChange = async () => {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/can-change-username`,
+      API.ME.USERNAME_CHANGE,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -125,8 +128,6 @@ watch(isDialogOpen, () => {
   }
 })
 
-import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
-import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
 const isDesktop = useMediaQuery('(min-width: 1023px)')
 const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
 </script>
