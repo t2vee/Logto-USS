@@ -3,8 +3,9 @@
 A personal "My Account" dashboard built specially for use with the Logto Authentication Platform.  
 
 ~~Why not use page functions instead of 2 separate applications?~~
-~~- this is so this application stack can be run on platforms other than cloudflare.~~
-  ~~- like for example using the cloudflare workerd runtime to run locally with docker~~
+- ~~this is so this application stack can be run on platforms other than cloudflare.~~
+  - ~~like for example using the cloudflare workerd runtime to run locally with docker~~
+    
 have now migrated the 2 projects together for easier development, project management and app deployment.
 
 ## demo
@@ -25,7 +26,7 @@ with a few others like wargaming, github, reddit and spotify
 
 
 ## OUTDATED. deployment via github actions will be avaliable soon
-~~### install via cloudflare~~
+### ~~install via cloudflare~~
 1. [Fork this repository](https://github.com/t2vee/Logto-Account-Dashboard/fork)
 2. Setup the web client first by [creating a pages project in cloudflare](https://dash.cloudflare.com/?to=/:account/workers-and-pages/create/pages)
 3. Connect it to your aforementioned forked repository
