@@ -3,6 +3,9 @@ compatibility_flags = [ "nodejs_compat" ]
 compatibility_date = "2024-03-04"
 pages_build_output_dir = "./dist"
 
+[placement]
+mode = "smart"
+
 kv_namespaces = [
 	{ binding = "MfaStatus", id = "eccf18449d6d4268912c4050655e210d" },
 	{ binding = "LogtoAccessToken", id = "6204a2072c4d465599a24afe88d47ebe" },
@@ -24,20 +27,26 @@ VITE_MATOMO_SITE_ID = 2
 VITE_ROOT = "https://myid.mxs.app"
 VITE_SUPPORT_EMAIL = "support@mxs.email"
 
-[env.preview.vars]
-AVATAR_API = "https://check.mxs.app"
-LOGTO_DOMAIN = "https://id.mxs.app"
-LOGTO_DEFAULT_RESOURCE = "https://default.logto.app/api"
-ENABLE_NSFW_CHECK = 1
-VITE_LEGAL_URL = "https://cookiesandyou.com"
-VITE_LOGTO_APPID = "yw2r46h73tzfk8z4bo1go"
-VITE_LOGTO_CORE_RESOURCE = "https://default.logto.app/api"
-VITE_LOGTO_ENDPOINT = "https://id.mxs.app/"
-VITE_LOGTO_RESOURCES = '["https://default.logto.app/api"]'
-VITE_MATOMO_ENDPOINT = "https://insights.vee.city"
-VITE_MATOMO_SITE_ID = 2
-VITE_ROOT = "https://client-feature-autoconfigure.mxs-myid.pages.dev"
-VITE_SUPPORT_EMAIL = "support@mxs.email"
+[env.preview]
 
-[placement]
-mode = "smart"
+vars = [
+	{ AVATAR_API = "https://check.mxs.app" },
+	{ LOGTO_DOMAIN = "https://id.mxs.app" },
+	{ LOGTO_DEFAULT_RESOURCE = "https://default.logto.app/api" },
+	{ ENABLE_NSFW_CHECK = 1 },
+	{ VITE_LEGAL_URL = "https://cookiesandyou.com" },
+	{ VITE_LOGTO_APPID = "yw2r46h73tzfk8z4bo1go" },
+	{ VITE_LOGTO_CORE_RESOURCE = "https://default.logto.app/api" },
+	{ VITE_LOGTO_ENDPOINT = "https://id.mxs.app/" },
+	{ VITE_LOGTO_RESOURCES = '["https://default.logto.app/api"]' },
+	{ VITE_MATOMO_ENDPOINT = "https://insights.vee.city" },
+	{ VITE_MATOMO_SITE_ID = 2 },
+	{ VITE_ROOT = "https://client-feature-autoconfigure.mxs-myid.pages.dev" },
+	{ VITE_SUPPORT_EMAIL = "support@mxs.email" },
+]
+
+kv_namespaces = [
+	{ binding = "MfaStatus", id = "7696201da7e842e5826e391de1f0b3fa" },
+	{ binding = "LogtoAccessToken", id = "fe6c2ac15a6743869528cb2c6254338a" },
+	{ binding = "UsernameChangeTimelimit", id = "e3ad6f39d4494b12aa98a1a37f94fa10" }
+]
