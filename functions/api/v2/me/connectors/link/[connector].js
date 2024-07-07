@@ -5,10 +5,10 @@ import {error, json} from '../../../../../../api/libs/itty/responses';
 
 export async function onRequestPost(ctx) {
     try {
-        if (!ctx.request.params || !ctx.request.params.connector) { return error(400, 'ERR_NO_TYPE_PROVIDED'); }
+        if (!ctx.params || !ctx.params.connector) { return error(400, 'ERR_NO_TYPE_PROVIDED'); }
         const requestData = await ctx.request.json();
         const connectorResponse = await ctx.data.Http.get(`/api/connectors`, {});
-        const connectorID = connectorResponse.find(item => item.target.toLowerCase() === ctx.request.params.connector.toLowerCase());
+        const connectorID = connectorResponse.find(item => item.target.toLowerCase() === ctx.params.connector.toLowerCase());
         const uriParams = {
             "connectorId": connectorID.id,
             "connectorData": requestData.connectorData,

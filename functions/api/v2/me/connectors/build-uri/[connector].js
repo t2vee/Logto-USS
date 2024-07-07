@@ -5,14 +5,14 @@ import {error, json} from '../../../../../../api/libs/itty/responses';
 
 export async function onRequestPost(ctx) {
     try {
-        if (!ctx.request.params || !ctx.request.params.connector) { return error(400, 'ERR_NO_TYPE_PROVIDED'); }
+        if (!ctx.params || !ctx.params.connector) { return error(400, 'ERR_NO_TYPE_PROVIDED'); }
         const requestData = await ctx.request.json();
         const uriParams = {
             "state": Array.from(crypto.getRandomValues(new Uint32Array(ctx.data.userid.length)), dec => ('0' + dec.toString(16)).substr(-2)).join(''),
             "redirectUri": requestData.redirectUri,
         }
         const connectorResponse = await ctx.data.Http.get(`/api/connectors`, {});
-        const connectorID = connectorResponse.find(item => item.target.toLowerCase() === ctx.request.params.connector.toLowerCase());
+        const connectorID = connectorResponse.find(item => item.target.toLowerCase() === ctx.params.connector.toLowerCase());
         const r = await ctx.data.Http.post(
             `/api/connectors/${connectorID.id}/authorization-uri`,
             {data: uriParams});
