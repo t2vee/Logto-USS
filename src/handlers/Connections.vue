@@ -57,9 +57,9 @@ onMounted(loadConnectorConfig)
     <div class="my-10" v-if="!isLoading">
       <div v-for="(connector) in connectorConfig" :key="connector.id">
         <ConnectorCard
-          :linked="Boolean(userData.identities[connector.target])"
+          :linked="Boolean(userData.identities[connector.target.toLowerCase()])"
           :icon="connector.logo"
-          :service="connector.name"
+          :service="connector.name.en"
         />
       </div>
     </div>
