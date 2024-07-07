@@ -1,14 +1,11 @@
 # Logto Account Dashboard
 
-A personal "My Account" dashboard built specially for use with the Logto Authentication Platform.
+A personal "My Account" dashboard built specially for use with the Logto Authentication Platform.  
 
-It is made up of 2 core components.  
-- The vue3 web client
-- The M2M api on cloudflare workers
-
-Why not use page functions instead of 2 separate applications?
-- this is so this application stack can be run on platforms other than cloudflare. 
-  - like for example using the cloudflare workerd runtime to run locally with docker
+~~Why not use page functions instead of 2 separate applications?~~
+~~- this is so this application stack can be run on platforms other than cloudflare.~~
+  ~~- like for example using the cloudflare workerd runtime to run locally with docker~~
+have now migrated the 2 projects together for easier development, project management and app deployment.
 
 ## demo
 You can access the demo at [logto-demo-account-dashboard.pages.dev](https://logto-demo-account-dashboard.pages.dev/account/aboutme).  
@@ -26,7 +23,9 @@ with a few others like wargaming, github, reddit and spotify
 ## quick screenshot
 ![img.png](.github/images/img.png)
 
-## install via cloudflare
+
+## OUTDATED. deployment via github actions will be avaliable soon
+~~### install via cloudflare~~
 1. [Fork this repository](https://github.com/t2vee/Logto-Account-Dashboard/fork)
 2. Setup the web client first by [creating a pages project in cloudflare](https://dash.cloudflare.com/?to=/:account/workers-and-pages/create/pages)
 3. Connect it to your aforementioned forked repository
