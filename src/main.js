@@ -21,7 +21,7 @@ const logtoConfig = {
     UserScope.Organizations,
     UserScope.CustomData
   ],
-  resources: import.meta.env.VITE_LOGTO_CORE_RESOURCE
+  resources: JSON.parse(import.meta.env.VITE_LOGTO_RESOURCES)
 }
 
 app.use(router)
