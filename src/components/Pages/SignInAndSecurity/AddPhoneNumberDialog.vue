@@ -11,6 +11,9 @@ import {toast} from 'vue-sonner'
 import MfaCodeInput from '@/components/Global/MFAHelpers/MfaCodeInput.vue'
 import {eventBus} from '@/lib/eventBus.js'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
+import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
+import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
+import {API} from "@/lib/apiRouteMap.js";
 
 const { getAccessToken } = useLogto()
 const phone = ref('')
@@ -62,7 +65,7 @@ async function sendVerificationSMS() {
   console.log(phone.value)
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/push-sms`,
+        API.MFA.NEW.SMS.PUSH,
       {
         encryptedPhoneNumber: phone.value
       },
@@ -112,7 +115,7 @@ const handleCodeComplete = async (code) => {
   isLoading.value = true
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/verify-sms?verification-code=${code}`,
+      `${API.MFA.NEW.SMS.VERIFY}?verification-code=${code}`,
       { encryptedPhoneNumber: phone.value },
       {
         headers: {
@@ -152,14 +155,12 @@ onMounted(() => { //this needs to be done because the css file that comes with v
   isLoading.value = true
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = 'https://cdn.vstatic.net/content/lHvXlqL2OkmpAMi9x15E/mxs.app/Stylesheet/TelInput.min.css';
+  link.href = 'https://cdn.vstatic.net/content/lHvXlqL2OkmpAMi9x15E/mxs.app/Stylesheet/TelInput.min.css'; // TODO desperately needs to be fixed
   document.head.appendChild(link);
   isLoading.value = false
 });
 
-import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
 const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
-import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
 const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 

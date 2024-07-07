@@ -1,6 +1,6 @@
 <script setup>
 import {Label} from '@/components/ui/label/index.js'
-import {Check, Undo2, Fingerprint, Mails, Phone, TabletSmartphone} from 'lucide-vue-next'
+import {Check, Fingerprint, Mails, Phone, TabletSmartphone, Undo2} from 'lucide-vue-next'
 import {inject, onMounted, ref} from 'vue'
 import {Button} from '@/components/ui/button/index.js'
 
@@ -15,7 +15,7 @@ import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
 const userData = inject('userData')
 const mfaOptions = inject('mfaMethods')
 
-// i hate this but im also lazy so and also lucide makes it impossible to dynamically color icons. like bruh let me use tailwind
+// i hate this but im also lazy so <= also lucide makes it impossible to dynamically color icons. like bruh let me use tailwind
 const emailMouseOver = ref(false)
 const phoneMouseOver = ref(false)
 const appMouseOver = ref(false)

@@ -9,6 +9,7 @@ import {useClipboard, useMediaQuery} from '@vueuse/core'
 import {useLogto} from '@logto/vue';
 import {eventBus} from "@/lib/eventBus.js";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from '@/components/ui/tooltip/index.js'
+import {API} from "@/lib/apiRouteMap.js";
 
 const { getAccessToken } = useLogto()
 
@@ -30,7 +31,7 @@ async function setupAppAuthenticator() {
   isLoading.value = true;
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa/create`,
+        API.MFA.CREATE,
         {},
         { headers: {
             Authorization: `Bearer ${await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)}`,
@@ -56,7 +57,7 @@ async function deleteAppAuthenticator() {
   isLoading.value = true;
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa/remove`,
+        API.MFA.REMOVE,
         {
           "appid": props.mfaMethods.totp.id,
           "backupid": props.mfaMethods.backup.id,

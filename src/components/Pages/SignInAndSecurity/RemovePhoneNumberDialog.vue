@@ -8,6 +8,8 @@ import axios from 'redaxios'
 import {toast} from 'vue-sonner'
 import {eventBus} from '@/lib/eventBus.js'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
+import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
+import {API} from "@/lib/apiRouteMap.js";
 
 const { getAccessToken } = useLogto()
 const isLoading = ref(false)
@@ -18,7 +20,7 @@ async function removeNumber() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/remove-sms`,
+      API.EDIT.REMOVE_SMS,
       {},
       {
         headers: {
@@ -39,7 +41,6 @@ async function removeNumber() {
   }
 }
 
-import {createReusableTemplate, useMediaQuery} from '@vueuse/core'
 const isDesktop = useMediaQuery('(min-width: 1023px)')
 const [UseFooterTemplate, FooterTemplate] = createReusableTemplate()
 

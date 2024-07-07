@@ -5,16 +5,17 @@ Use of this source code is governed by an MPL license. -->
 import {inject, ref} from "vue";
 import axios from 'redaxios'
 import {useLogto} from "@logto/vue";
-import { toast } from 'vue-sonner'
-import { eventBus } from '@/lib/eventBus.js'
+import {toast} from 'vue-sonner'
+import {eventBus} from '@/lib/eventBus.js'
 
 import {Checkbox} from "@/components/ui/checkbox/index.js";
 import {DialogClose} from "@/components/ui/dialog/index.js";
 import {Button} from "@/components/ui/button/index.js";
-import {KeyRound, Loader2, Undo2, Save} from "lucide-vue-next";
+import {KeyRound, Loader2, Save, Undo2} from "lucide-vue-next";
 
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
+import {API} from "@/lib/apiRouteMap.js";
 
 const userData = inject('userData')
 
@@ -27,7 +28,7 @@ async function updateStatus() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
-        `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/login-verification`,
+        API.EDIT.VERIFICATION,
         {
           enable: checked.value
         },

@@ -13,7 +13,7 @@ import {toast} from 'vue-sonner'
 import {eventBus} from '@/lib/eventBus.js'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
-import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
+import {API} from "@/lib/apiRouteMap.js";
 
 const { getAccessToken } = useLogto()
 
@@ -73,7 +73,7 @@ async function updateData() {
   const accessToken = await getAccessToken(import.meta.env.VITE_LOGTO_CORE_RESOURCE)
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/edit/password`,
+      API.EDIT.PASSWORD,
       {
         oldPassword: oldPassword.value,
         password: password.value
@@ -256,46 +256,6 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
             </div>
           </div>-->
         </div>
-
-    </template>
-    <template #footer>
-      <div v-if="!isDesktop" class="w-full space-y-2">
-        <PopoverTemplate />
-        <DialogClose as-child>
-          <Button type="button" variant="outline" class="w-full">
-            <Undo2 class="w-4 h-4 mr-2" />
-            Cancel
-          </Button>
-        </DialogClose>
-        <Button
-            type="submit"
-            class="w-full"
-            @click="updateData"
-            :disabled="isLoading || !passwordCheckPass || !passwordMatches || !oldPassword"
-        >
-          <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
-          <Save v-else class="w-4 h-4 mr-2" />
-          {{ isLoading ? 'Saving...' : 'Save' }}
-        </Button>
-      </div>
-      <DialogClose as-child v-else>
-        <Button type="button" variant="outline" class="h-[30px]">
-          <Undo2 class="w-4 h-4 mr-2" />
-          Cancel
-        </Button>
-      </DialogClose>
-      <PopoverTemplate v-if="isDesktop" />
-      <Button
-          v-if="isDesktop"
-          type="submit"
-          class="h-[30px]"
-          @click="updateData"
-          :disabled="isLoading || !passwordCheckPass || !passwordMatches || !oldPassword"
-      >
-        <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" color="black" />
-        <Save v-else class="w-4 h-4 mr-2" />
-        {{ isLoading ? 'Saving...' : 'Save' }}
-      </Button>
     </template>
     <template #footer v-if="isDesktop">
       <FooterTemplate />

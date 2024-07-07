@@ -24,6 +24,7 @@ import {eventBus} from '@/lib/eventBus.js'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 import {createReusableTemplate, useMediaQuery} from "@vueuse/core";
 import PrivacyFooter from "@/components/Global/PrivacyFooter.vue";
+import {API} from "@/lib/apiRouteMap.js";
 
 const userData = inject('userData')
 
@@ -64,7 +65,7 @@ async function sendVerificationCode() {
   accessTokenRef.value = accessToken
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/push-email`,
+        API.MFA.NEW.EMAIL.PUSH,
       {
         email: email.value
       },
@@ -111,7 +112,7 @@ const handleCodeComplete = async (code) => {
   isLoading.value = true
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/verify/verify-email?verification-code=${code}`,
+      `${API.MFA.NEW.EMAIL.VERIFY}?verification-code=${code}`,
       { email: email.value },
       {
         headers: {
