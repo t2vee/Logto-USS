@@ -4,14 +4,9 @@
 import { error, json } from '../../../../../api/libs/itty/responses/index.js';
 
 export async function onRequestGet(ctx) {
-    try {
-        const userData = await ctx.Http.get(
-            `/api/users/${encodeURIComponent(ctx.userid)}`, {
-                resTo400: 'ERR_USR_DOES_NOT_EXIST',
-            });
-        return json(userData);
-    } catch (e) {
-        console.error('Error in grabbing User Data:' + e)
-        return error(e)
-    }
+    const userData = await ctx.Http.get(
+      `/api/users/${encodeURIComponent(ctx.userid)}`, {
+          resTo400: 'ERR_USR_DOES_NOT_EXIST',
+      });
+    return json(userData);
 }
