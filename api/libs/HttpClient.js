@@ -60,6 +60,7 @@ class HttpClient {
 	}
 
 	async get(url, {params = undefined, headers = {}, resTo400= undefined}) {
+		console.log(2)
 		return this.#_request('GET', url, params, headers, resTo400);
 	}
 

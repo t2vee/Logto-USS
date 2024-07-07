@@ -34,7 +34,7 @@ const initialiseApiAccessToken = async (ctx) => {
     } else {
         ctx.accesstoken = accessToken;
     }
-    console.log('[MIDDLEWARE] Request Tokens Setup Complete')
+    console.log('[MIDDLEWARE] Stage 1 - Request Tokens Setup Complete')
     return await ctx.next()
 }
 
@@ -42,7 +42,7 @@ const authenticationCheck = async (ctx) => {
     try {
         const tokenInfo = await verifyAuthToken(ctx.request, ctx.env);
         ctx.userid = tokenInfo.sub;
-        console.log('[MIDDLEWARE] Bearer Token Check Succeeded')
+        console.log('[MIDDLEWARE] Stage 2 - Bearer Token Check Succeeded')
     } catch (e) {
         console.log('[MIDDLEWARE] Bearer Token Check FAILED')
         return new Response('ERR_FAILED_TO_VERIFY_TOKEN', { status: e.statusCode });
@@ -58,7 +58,7 @@ const validateVerificationCode = async (ctx) => {
         if (!verificationCodePattern.test(verificationCode)) {
             return new Response('ERR_CODE_INVALID', { status: 400 });
         }
-        console.log('[MIDDLEWARE] Verification Code Check Succeeded')
+        console.log('[MIDDLEWARE] Stage 3 - Verification Code Check Succeeded')
         ctx.verificationCode = verificationCode;
     }
     return await ctx.next()
@@ -72,7 +72,7 @@ const initialiseRequestLibs = async (ctx) => {
         console.error('[MIDDLEWARE] FAILED to Initialise Request Context');
         return new Response('INTERNAL_MIDDLEWARE_ERROR', { status: 500 });
     }
-    console.log('[MIDDLEWARE] Request Context Initialised');
+    console.log('[MIDDLEWARE] Stage 4 - Request Context Initialised');
     return await ctx.next()
 }
 
