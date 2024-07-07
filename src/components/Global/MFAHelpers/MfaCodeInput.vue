@@ -42,9 +42,6 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
                 class="text-white bg-[#2b2a33]"
               :index="index"
             />
-            <template v-if="index !== 5 && isDesktop">
-              <PinInputSeparator />
-            </template>
           </template>
         </PinInputGroup>
       </PinInput>
