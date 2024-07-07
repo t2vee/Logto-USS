@@ -4,5 +4,5 @@
 import verifyCode from "../../../../../../../api/libs/verifyCode.js";
 
 export async function onRequestPost(ctx) {
-    return verifyCode(ctx.env, ctx.request, ctx, 'email')
+    return verifyCode(ctx, 'email')
 }

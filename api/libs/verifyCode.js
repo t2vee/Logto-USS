@@ -4,7 +4,7 @@
 import { error, status } from '../libs/itty/responses';
 import prepareNumber from "../utils/prepareNumber";
 
-export default async (env, request, ctx, type, detail = undefined) => {
+export default async (ctx, type, detail = undefined) => {
 	try {
 		if (!detail) {
 			const userData = await ctx.data.Http.get(
@@ -19,7 +19,7 @@ export default async (env, request, ctx, type, detail = undefined) => {
 					{'email': detail, "verificationCode": ctx.data.verificationCode}
 					: {'phone': detail, "verificationCode": ctx.data.verificationCode},
 			});
-		await env.MfaStatus.put(ctx.data.userid, false, {expirationTtl: 9000});
+		await ctx.env.MfaStatus.put(ctx.data.userid, false, {expirationTtl: 900});
 		return status(204)
 	} catch (e) {
 		console.error(e)
