@@ -101,7 +101,8 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
     <Collapsible v-model:open="isOpen" @update:open="closeOther">
       <CollapsibleTrigger class="flex items-center align-middle justify-between w-full">
         <div class="flex gap-x-4">
-          <component :is="icon" color="white" />
+          <component v-if="icon instanceof Function" :is="icon" color="white" />
+          <img v-else :src="icon" :alt="service" />
           <p>{{ service }}</p>
         </div>
         <div class="flex gap-x-3">

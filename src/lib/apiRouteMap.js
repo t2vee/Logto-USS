@@ -57,6 +57,7 @@ export const API = {
       USERNAME_CHANGE: '/api/v2/me/info/username',
     },
     UTILS: {
+        CONNECTOR_CONFIG: '/api/v2/utils/connector-config',
         CHECK_USERNAME_EXISTS: (username) => `/api/v2/utils/check-username-exists/${username}`
     }
 };
