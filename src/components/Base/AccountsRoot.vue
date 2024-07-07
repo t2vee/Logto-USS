@@ -106,7 +106,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
                 <Skeleton class="h-[150px] w-[250px] rounded-xl" />
                 <Skeleton class="h-[150px] w-[250px] rounded-xl" />
               </div>
-              <div class="desktop:flex space-y-4 desktop:space-y-0 desktop:gap-4">
+              <div class="desktop:flex space-y-4 desktop:space-y-0 desktop:gap-4 mt-6">
                 <Skeleton class="h-[150px] w-[250px] rounded-xl" />
                 <Skeleton class="h-[150px] w-[250px] rounded-xl" />
               </div>

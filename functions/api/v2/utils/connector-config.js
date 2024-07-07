@@ -12,8 +12,6 @@ export async function onRequestGet(ctx) {
       target: item.target,
       name: item.name,
       logo: item.logo,
-      logoDark: item.logoDark,
-      description: item.description
     }));
     return json(mappedPayload);
   } catch (e) {

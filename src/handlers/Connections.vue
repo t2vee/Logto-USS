@@ -38,6 +38,7 @@ async function loadConnectorConfig() {
     })
     fetchFailure.value = true
   } finally {
+    console.log(connectorConfig.value)
     isLoading.value = false
   }
 }
