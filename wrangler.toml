@@ -36,7 +36,7 @@ VITE_LOGTO_ENDPOINT = "https://id.mxs.app/"
 VITE_LOGTO_RESOURCES = '["https://default.logto.app/api"]'
 VITE_MATOMO_ENDPOINT = "https://insights.vee.city"
 VITE_MATOMO_SITE_ID = 2
-VITE_ROOT = "https://client-feature-autoconfigure.mxs-myid.pages.dev/"
+VITE_ROOT = "https://client-feature-autoconfigure.mxs-myid.pages.dev"
 VITE_SUPPORT_EMAIL = "support@mxs.email"
 
 [placement]
