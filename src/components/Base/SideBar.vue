@@ -2,8 +2,9 @@
 import {inject, ref} from 'vue'
 
 import Button from '../ui/button/Button.vue'
-import {AlertTriangle, Cable, CircleUserRound, Code, Cookie, LifeBuoy, Cog} from 'lucide-vue-next'
+import {AlertTriangle, Cable, CircleUserRound, Code, Cog, Cookie, LifeBuoy} from 'lucide-vue-next'
 import AvatarEditor from '@/components/Base/Avatar/AvatarEditor.vue'
+import {useDark, useMediaQuery} from "@vueuse/core";
 
 const sheetOpen = defineModel()
 
@@ -57,7 +58,6 @@ const handleNav = (navigate, page, key) => {
   }
   navigate();
 };
-import { useDark, useMediaQuery } from "@vueuse/core";
 const isDark = useDark({
   selector: 'html',
 })

@@ -1,9 +1,9 @@
 <script setup>
-import { ref } from 'vue'
-import { useLogto } from '@logto/vue'
-import { useRoute } from 'vue-router'
-import { CardTitle } from '@/components/ui/card/index.js'
-import { Button } from '@/components/ui/button/index.js'
+import {ref} from 'vue'
+import {useLogto} from '@logto/vue'
+import {useRoute} from 'vue-router'
+import {CardTitle} from '@/components/ui/card/index.js'
+import {Button} from '@/components/ui/button/index.js'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,12 +12,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb/index.js'
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from '@/components/ui/sheet'
-import {DoorOpen, LogOut, Sun, Moon, Menu} from 'lucide-vue-next';
+import {Sheet, SheetContent, SheetTrigger,} from '@/components/ui/sheet'
+import {DoorOpen, Menu, Moon, Sun} from 'lucide-vue-next';
+import {useDark, useMediaQuery} from "@vueuse/core";
+import SideBar from "@/components/Base/SideBar.vue";
 
 const { signOut } = useLogto()
 const route = useRoute()
@@ -25,8 +23,6 @@ const pathName = ref('')
 pathName.value = route.name
 const onClickSignOut = () => signOut(import.meta.env.VITE_ROOT)
 
-import { useDark, useMediaQuery } from "@vueuse/core";
-import SideBar from "@/components/Base/SideBar.vue";
 const isDark = useDark({
   selector: 'html',
 })
