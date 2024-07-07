@@ -26,6 +26,28 @@ VITE_MATOMO_ENDPOINT = "https://insights.vee.city"
 VITE_MATOMO_SITE_ID = 2
 VITE_ROOT = "https://myid.mxs.app"
 VITE_SUPPORT_EMAIL = "support@mxs.email"
+## All of the required logto values
+# the url of your logto service. if you are using logto cloud it may look like https://[your_tenant].logto.app
+VITE_LOGTO_ENDPOINT=Requried
+# the appid of your CLIENT SPA application
+VITE_LOGTO_APPID=Requried
+# the logto core resource, do not change <= this is only temporary
+VITE_LOGTO_CORE_RESOURCE=https://default.logto.app/api
+# the resources the user should have access to use the dashboard. Should be in array format. e.g: '["https://default.logto.app/api", "https://myresouce.logto.app"]'
+VITE_LOGTO_RESOURCES='[]'
+
+## Extra endpoints
+# the endpoint of the account worker
+VITE_API_WORKER_ENDPOINT=Requried
+# the endpoint of a matomo installation. if omitted matomo tracking will be disabled
+VITE_MATOMO_ENDPOINT=Optional
+VITE_MATOMO_SITE_ID=Optional
+
+## Extra customisable options
+# the email in the footer of the dashboard
+VITE_SUPPORT_EMAIL=Requried
+# the url that users can visit to view the privacy policy/terms of service of your brand. needs to be a full url
+VITE_LEGAL_URL=Requried
 
 [placement]
 mode = "smart"
