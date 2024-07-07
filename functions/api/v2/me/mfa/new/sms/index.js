@@ -2,7 +2,7 @@
 // Use of this source code is governed by an MPL license.
 
 import pushCode from "../../../../../../../api/libs/pushCode.js";
-import prepareNumber from "../../../../../../../worker/src/utils/prepareNumber.js";
+import prepareNumber from "../../../../../../../api/utils/prepareNumber.js";
 import { error } from '../../../../../../../api/libs/itty/responses';
 
 export async function onRequestPost(ctx) {
