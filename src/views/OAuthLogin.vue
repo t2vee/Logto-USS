@@ -1,6 +1,6 @@
 <script setup>
 import {onMounted} from "vue";
-import { useLogto } from '@logto/vue';
+import {useLogto} from '@logto/vue';
 
 const { signIn } = useLogto();
 

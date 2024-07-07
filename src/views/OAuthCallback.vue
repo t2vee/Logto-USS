@@ -1,7 +1,7 @@
 <script setup>
-import { useHandleSignInCallback } from '@logto/vue'
-import { useRouter } from 'vue-router'
-import { UserCheck } from 'lucide-vue-next'
+import {useHandleSignInCallback} from '@logto/vue'
+import {useRouter} from 'vue-router'
+import {UserCheck} from 'lucide-vue-next'
 
 const router = useRouter()
 

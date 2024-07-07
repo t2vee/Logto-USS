@@ -6,7 +6,7 @@ import EditRegionalSettings from '@/components/Pages/PersonalInfo/EditRegionalSe
 import EditLocaleSettings from '@/components/Pages/PersonalInfo/EditLocaleSettings.vue'
 import EditFullName from '@/components/Pages/PersonalInfo/EditFullName.vue'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
-import {DoorClosed, CircleUserRound} from "lucide-vue-next";
+import {CircleUserRound, DoorClosed} from "lucide-vue-next";
 </script>
 
 <template>

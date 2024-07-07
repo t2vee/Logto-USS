@@ -1,7 +1,7 @@
 <script setup>
 import {inject} from 'vue'
-import { Card, CardDescription, CardTitle } from '@/components/ui/card/index.js'
-import { GoogleIcon, DiscordIcon, SpotifyIcon, GitHubIcon } from 'vue3-simple-icons';
+import {Card, CardDescription, CardTitle} from '@/components/ui/card/index.js'
+import {DiscordIcon, GitHubIcon, GoogleIcon, SpotifyIcon} from 'vue3-simple-icons';
 import ConnectorCard from '@/components/Pages/Connections/ConnectorCard.vue'
 import {Cable} from "lucide-vue-next";
 

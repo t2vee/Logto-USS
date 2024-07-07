@@ -1,5 +1,5 @@
 <script setup>
-import { CardDescription, CardTitle } from '@/components/ui/card/index.js'
+import {CardDescription, CardTitle} from '@/components/ui/card/index.js'
 import EditDeveloperStatus from "@/components/Pages/DeveloperOptions/EditDeveloperStatus.vue";
 import {Code} from "lucide-vue-next";
 </script>

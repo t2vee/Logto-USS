@@ -1,6 +1,6 @@
 <script setup>
-import { CardDescription, CardTitle } from '@/components/ui/card/index.js'
-import {LifeBuoy, HardDriveDownload} from 'lucide-vue-next'
+import {CardDescription, CardTitle} from '@/components/ui/card/index.js'
+import {HardDriveDownload, LifeBuoy} from 'lucide-vue-next'
 import MfaVerificationDialog from "@/components/Global/MFAHelpers/MfaVerificationDialog.vue";
 </script>
 
