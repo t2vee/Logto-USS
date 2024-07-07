@@ -2,8 +2,7 @@
 // Use of this source code is governed by an MPL license.
 
 
-import { error } from 'itty-router'
-import { status } from 'itty-router';
+import { error, status } from 'itty-router'
 
 export const handler = async (request, env, ctx) => {
 	try {
