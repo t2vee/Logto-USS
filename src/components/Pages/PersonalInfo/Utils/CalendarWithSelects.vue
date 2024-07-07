@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type HTMLAttributes, type Ref, computed, toRef } from 'vue'
+import {computed, type HTMLAttributes, type Ref} from 'vue'
 import {
   CalendarRoot,
   type CalendarRootEmits,
@@ -7,9 +7,9 @@ import {
   useDateFormatter,
   useForwardPropsEmits
 } from 'radix-vue'
-import { createDecade, createYear, toDate } from 'radix-vue/date'
-import { type DateValue, getLocalTimeZone, today } from '@internationalized/date'
-import { useVModel } from '@vueuse/core'
+import {createDecade, createYear, toDate} from 'radix-vue/date'
+import {type DateValue, getLocalTimeZone, today} from '@internationalized/date'
+import {useVModel} from '@vueuse/core'
 import {
   CalendarCell,
   CalendarCellTrigger,
@@ -21,14 +21,9 @@ import {
   CalendarHeader,
   CalendarHeading
 } from '@/components/ui/calendar'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
-import { cn } from '@/lib/utils'
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import {cn} from '@/lib/utils'
+
 
 const props = withDefaults(defineProps<CalendarRootProps & { class?: HTMLAttributes['class'] }>(), {
   modelValue: undefined,

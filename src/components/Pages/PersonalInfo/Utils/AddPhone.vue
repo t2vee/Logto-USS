@@ -1,6 +1,6 @@
 <script setup>
-import { Button } from '@/components/ui/button/index.js'
-import { Plus } from 'lucide-vue-next'
+import {Button} from '@/components/ui/button/index.js'
+import {Plus} from 'lucide-vue-next'
 </script>
 
 <template>

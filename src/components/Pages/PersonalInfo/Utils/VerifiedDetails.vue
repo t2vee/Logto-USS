@@ -1,6 +1,6 @@
 <script setup>
-import { computed } from 'vue'
-import { MailCheck, MailWarning, PhoneMissed, Phone } from 'lucide-vue-next'
+import {computed} from 'vue'
+import {MailCheck, MailWarning, Phone, PhoneMissed} from 'lucide-vue-next'
 
 const props = defineProps({
   detailVerified: {
