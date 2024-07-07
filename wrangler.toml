@@ -1,29 +1,27 @@
-name = "dashboard-functions-dev"
+name = "mxs-myid"
 compatibility_flags = [ "nodejs_compat" ]
 compatibility_date = "2024-03-04"
 pages_build_output_dir = "./dist"
 
 kv_namespaces = [
-	{ binding = "MfaStatus", id = "5f61515d81a94331a760ced530915137" },
-	{ binding = "LogtoAccessToken", id = "9c627893c72b455fb32d4ff9fb58525b" },
-	{ binding = "UsernameChangeTimelimit", id = "940a29afb5e64fd5a13e9ffc6637c189" }
+	{ binding = "MfaStatus", id = "eccf18449d6d4268912c4050655e210d" },
+	{ binding = "LogtoAccessToken", id = "6204a2072c4d465599a24afe88d47ebe" },
+	{ binding = "UsernameChangeTimelimit", id = "a763c7ba685346c89d37b3ffce90c7c5" }
 ]
 
 [vars]
 AVATAR_API = "https://check.mxs.app"
-CORS = "https://dashboard-functions-dev.pages.dev"
 LOGTO_DOMAIN = "https://id.mxs.app"
 LOGTO_DEFAULT_RESOURCE = "https://default.logto.app/api"
 ENABLE_NSFW_CHECK = 1
-VITE_API_WORKER_ENDPOINT = "https://api.id.mxs.app"
 VITE_LEGAL_URL = "https://cookiesandyou.com"
 VITE_LOGTO_APPID = "yw2r46h73tzfk8z4bo1go"
 VITE_LOGTO_CORE_RESOURCE = "https://default.logto.app/api"
 VITE_LOGTO_ENDPOINT = "https://id.mxs.app/"
-VITE_LOGTO_RESOURCES = '["https://default.logto.app/api", "https://myaccount.mxs.app"]'
+VITE_LOGTO_RESOURCES = '["https://default.logto.app/api"]'
 VITE_MATOMO_ENDPOINT = "https://insights.vee.city"
 VITE_MATOMO_SITE_ID = 2
-VITE_ROOT = "https://dashboard-functions-dev.pages.dev"
+VITE_ROOT = "https://myid.mxs.app"
 VITE_SUPPORT_EMAIL = "support@mxs.email"
 
 [placement]
