@@ -65,7 +65,7 @@ async function loadData() {
 const handleRefresh = (data) => {
   if (data) {
     if (!isDesktop.value) {
-      window.location.reload();
+      window.location.reload(); // provide mobile compatibility for refreshing user data without breaking the ui
     }
     loadData()
   }
@@ -96,8 +96,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
         <div class="flex-1 flex-grow overflow-auto">
           <CardContent>
             <RouterView v-if="!isSubPageLoading" />
-            <div v-if="isSubPageLoading"
-                 class="w-screen desktop:w-[600px] phone:px-4 tablet:px-32">
+            <div v-if="isSubPageLoading" class="w-screen desktop:w-[600px] phone:px-4 tablet:px-32">
               <div class="space-y-2">
                 <Skeleton class="h-8 desktop:w-[300px]" />
                 <Skeleton class="h-4 desktop:w-[525px]" />
@@ -107,7 +106,7 @@ const isDesktop = useMediaQuery('(min-width: 1023px)')
                 <Skeleton class="h-[150px] w-[250px] rounded-xl" />
                 <Skeleton class="h-[150px] w-[250px] rounded-xl" />
               </div>
-              <div class="desktop:flex space-y-4 desktop:space-y-0 desktop:gap-4 mt-12">
+              <div class="desktop:flex space-y-4 desktop:space-y-0 desktop:gap-4">
                 <Skeleton class="h-[150px] w-[250px] rounded-xl" />
                 <Skeleton class="h-[150px] w-[250px] rounded-xl" />
               </div>
