@@ -1,11 +1,6 @@
 <script setup>
-import { ref } from 'vue'
-import {
-  PinInput,
-  PinInputGroup,
-  PinInputInput,
-  PinInputSeparator
-} from '@/components/ui/pin-input/index.js'
+import {ref} from 'vue'
+import {PinInput, PinInputGroup, PinInputInput} from '@/components/ui/pin-input/index.js'
 import Button from '../../ui/button/Button.vue'
 
 defineProps({
@@ -19,8 +14,6 @@ const emit = defineEmits(['codeComplete', 'resendCode', 'changeInput'])
 const value = ref([])
 
 const handleComplete = (e) => emit('codeComplete', e.join(''))
-import { useMediaQuery } from '@vueuse/core'
-const isDesktop = useMediaQuery('(min-width: 1023px)')
 </script>
 
 <template>

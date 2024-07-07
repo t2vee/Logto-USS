@@ -24,6 +24,7 @@ import MfaCodeInput from '@/components/Global/MFAHelpers/MfaCodeInput.vue'
 import {toast} from 'vue-sonner'
 import {eventBus} from '@/lib/eventBus.js'
 import {Card, CardDescription, CardHeader, CardTitle} from "@/components/ui/card/index.js";
+import {API} from "@/lib/apiRouteMap.js";
 
 const userData = inject('userData')
 const mfaOptions = inject('mfaMethods')
@@ -61,7 +62,7 @@ async function sendVerificationCode() {
   let failed = false
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa-flow/push-${selectedMfaMethod.value}`,
+        selectedMfaMethod.value === 'email' ? API.MFA.FLOW.EMAIL.PUSH : API.MFA.FLOW.SMS.PUSH,
       {},
       {
         headers: {
@@ -110,7 +111,7 @@ const handleCodeComplete = async (code) => {
   isLoading.value = true
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/mfa-flow/verify-${selectedMfaMethod.value}-code?verification-code=${code}`,
+      `${selectedMfaMethod.value === 'email' ? API.MFA.FLOW.EMAIL.PUSH : API.MFA.FLOW.SMS.PUSH}?verification-code=${code}`,
       {},
       {
         headers: {
@@ -141,7 +142,7 @@ const checkMFA = async () => {
   accessTokenRef.value = accessToken
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_WORKER_ENDPOINT}/api/v2/me/is-mfa-required`,
+      API.MFA.REQUIRED,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
