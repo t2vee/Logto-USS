@@ -9,7 +9,7 @@ kv_namespaces = [
 	{ binding = "UsernameChangeTimelimit", id = "a763c7ba685346c89d37b3ffce90c7c5" }
 ]
 
-[vars.production]
+[env.production.vars]
 AVATAR_API = "https://check.mxs.app"
 LOGTO_DOMAIN = "https://id.mxs.app"
 LOGTO_DEFAULT_RESOURCE = "https://default.logto.app/api"
@@ -24,7 +24,7 @@ VITE_MATOMO_SITE_ID = 2
 VITE_ROOT = "https://myid.mxs.app"
 VITE_SUPPORT_EMAIL = "support@mxs.email"
 
-[vars.preview]
+[env.preview.vars]
 AVATAR_API = "https://check.mxs.app"
 LOGTO_DOMAIN = "https://id.mxs.app"
 LOGTO_DEFAULT_RESOURCE = "https://default.logto.app/api"
