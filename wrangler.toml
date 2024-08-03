@@ -10,19 +10,19 @@ kv_namespaces = [
 ]
 
 [vars]
-AVATAR_API = "https://check.mxs.app"
-LOGTO_DOMAIN = "https://id.mxs.app"
+AVATAR_API = "https://check.vee.city"
+LOGTO_DOMAIN = "https://id.chai.pub"
 LOGTO_DEFAULT_RESOURCE = "https://default.logto.app/api"
 ENABLE_NSFW_CHECK = 1
 VITE_LEGAL_URL = "https://cookiesandyou.com"
 VITE_LOGTO_APPID = "yw2r46h73tzfk8z4bo1go"
 VITE_LOGTO_CORE_RESOURCE = "https://default.logto.app/api"
-VITE_LOGTO_ENDPOINT = "https://id.mxs.app/"
+VITE_LOGTO_ENDPOINT = "https://id.chai.pub/"
 VITE_LOGTO_RESOURCES = '["https://default.logto.app/api"]'
 VITE_MATOMO_ENDPOINT = "https://insights.vee.city"
 VITE_MATOMO_SITE_ID = 2
-VITE_ROOT = "https://myid.mxs.app"
-VITE_SUPPORT_EMAIL = "support@mxs.email"
+VITE_ROOT = "https://myid.chai.pub"
+VITE_SUPPORT_EMAIL = "talk@chai.pub"
 
 [placement]
 mode = "smart"
