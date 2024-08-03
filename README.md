@@ -25,7 +25,8 @@ with a few others like wargaming, github, reddit and spotify
 2. Read through the `wrangler.sample.toml` and modify the values accordingly
    - You may need to use the wrangler CLI to add some values like secrets and KV bindings. These can also be added through the cloudflare dashboard
    - Read more about using wrangler in the [WRANGLER.md](https://github.com/t2vee/Logto-USS/blob/main/WRANGLER.md)
-3. Time to deploy the dashboard! Head over the the [Cloudflare Pages Deploy Page](https://dash.cloudflare.com/?to=/:account/pages/new/provider/github)
+3. Once filled out remove the old `wrangler.toml` and rename `wrangler.sample.toml` to `wrangler.toml`
+4. Time to deploy the dashboard! Head over the the [Cloudflare Pages Deploy Page](https://dash.cloudflare.com/?to=/:account/pages/new/provider/github)
    - Follow the instructions to connecting your github account and selecting your forked repository.
 
 ## install via docker (not yet ready)
