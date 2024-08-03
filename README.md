@@ -1,5 +1,8 @@
 # Logto-USS (User Self Service)
 
+> [!WARNING]  
+> This app is not reccomended for use in production just yet!
+
 A personal "My Account" dashboard built specially for use with the Logto Authentication Platform.  
 Uses cloudflare pages + pages functions for a performant application with no server required!
 
@@ -19,6 +22,8 @@ with a few others like wargaming, github, reddit and spotify
 ## quick screenshot
 ![img.png](.github/images/img.png)
 
+> [!WARNING]  
+> There are currently a lot of things I want to work on like configuration/customization and a lot of bug fixes, so at the moment **I would not recommend using it in production** however I am open to contribution!
 
 ### Installing and Configuring your dashboard
 1. [Fork this repository](https://github.com/t2vee/Logto-USS/fork)
