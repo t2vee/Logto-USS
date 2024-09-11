@@ -4,25 +4,10 @@ compatibility_date = "2024-03-04"
 pages_build_output_dir = "./dist"
 
 kv_namespaces = [
-	{ binding = "MfaStatus", id = "eccf18449d6d4268912c4050655e210d" },
-	{ binding = "LogtoAccessToken", id = "6204a2072c4d465599a24afe88d47ebe" },
-	{ binding = "UsernameChangeTimelimit", id = "a763c7ba685346c89d37b3ffce90c7c5" }
+	{ binding = "MfaStatus", id = "52c4f6065c8846c89ab71cb40419e342" },
+	{ binding = "LogtoAccessToken", id = "ca2385bd7474479cb34d8e661e9c6194" },
+	{ binding = "UsernameChangeTimelimit", id = "102d5b07a70543f193e11f8bd42d8dfd" }
 ]
-
-[vars]
-AVATAR_API = "https://check.vee.city"
-LOGTO_DOMAIN = "https://id.chai.pub"
-LOGTO_DEFAULT_RESOURCE = "https://default.logto.app/api"
-ENABLE_NSFW_CHECK = 1
-VITE_LEGAL_URL = "https://cookiesandyou.com"
-VITE_LOGTO_APPID = "3ibpo180hpft3qjrkrt00"
-VITE_LOGTO_CORE_RESOURCE = "https://default.logto.app/api"
-VITE_LOGTO_ENDPOINT = "https://id.chai.pub/"
-VITE_LOGTO_RESOURCES = '["https://default.logto.app/api"]'
-VITE_MATOMO_ENDPOINT = "https://insights.vee.city"
-VITE_MATOMO_SITE_ID = 2
-VITE_ROOT = "https://myid.chai.pub"
-VITE_SUPPORT_EMAIL = "talk@chai.pub"
 
 [placement]
 mode = "smart"
